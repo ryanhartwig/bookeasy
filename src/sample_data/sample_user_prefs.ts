@@ -9,4 +9,4 @@ export const sample_user_prefs: UserPrefs = {
   notification_reminder: false,
   notification_overview: false,
   notification_overview_time: null,
-}
+};

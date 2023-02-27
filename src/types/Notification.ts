@@ -3,4 +3,4 @@ export interface Notification {
   text: string,
   link: string | null,
   seen: boolean,
-}
+};

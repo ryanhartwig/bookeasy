@@ -20,4 +20,4 @@ export const sample_clients: Client[] = [{
   id: 'ethanblackwood',
   name: 'Ethan Blackwood',
   email: 'ethan.blackwood@gmail.com',
-}]
+}];
