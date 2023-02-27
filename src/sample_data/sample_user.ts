@@ -1,8 +1,9 @@
 import type { User } from "../types/User";
 
-export const user: User = {
-  id: 'user_1',
+export const sample_user: User = {
+  id: 'christinabronson',
   own_business_id: null,
   name: 'Christina Bronson',
   email: 'christina.bronson@gmail.com',
+  business_ids: ['johnsonteam'],
 };

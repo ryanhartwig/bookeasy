@@ -4,4 +4,5 @@ export interface User {
   name: string,
   email: string,
   phone?: number,
-}
+  business_ids: string[],
+};
