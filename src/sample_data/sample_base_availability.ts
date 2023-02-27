@@ -11,4 +11,6 @@ export const sample_base_availability: BaseAvailability = {
   friday: '',
   saturday: '',
   sunday: '',
+  recurring: [],
+  time_off: [],
 }
