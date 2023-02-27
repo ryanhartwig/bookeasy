@@ -5,4 +5,5 @@ export interface Service {
   duration: number,
   provider: string,
   cost: number,
+  is_video: boolean,
 };
