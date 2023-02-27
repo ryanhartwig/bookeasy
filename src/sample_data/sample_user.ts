@@ -5,4 +5,5 @@ export const sample_user: User = {
   own_business_id: null,
   name: 'Christina Bronson',
   email: 'christina.bronson@gmail.com',
+  business_ids: ['johnsonteam'],
 };
