@@ -1,18 +1,12 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { useMemo, useState } from 'react'
-
-const inter = Inter({ subsets: ['latin'] })
+import { Navigator } from './components/Navigator'
+import { Content } from './Content'
 
 export default function Home() {
 
-  const [title, setTitle] = useState<string>('Create Next App');
 
-  useMemo(() => setTimeout(() => setTitle('test'), 1000), []);
-    
-  return (
+  return (        
     <>
       <Head>
         <title>Book it</title>
@@ -21,7 +15,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        
+        <Navigator />
+        <Content />
       </main>
     </>
   )

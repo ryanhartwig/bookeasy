@@ -1,12 +1,6 @@
 .main {
   display: flex;
 
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 6rem;
-
   /* Fit to mobile safe-area */
   position: absolute;
 
@@ -20,3 +14,30 @@
   background-color: #EDF0F2;
 }
 
+.Navigator {
+  overflow: hidden;
+  background: #1F1F1F;
+
+  flex-shrink: 0;
+  flex-grow: 0;
+  
+  width: 206px;
+}
+
+.Content {
+  width: 100%;
+}
+
+.Header {
+  background: white;
+  overflow: hidden;
+  
+  height: 54px;
+  width: 100%;
+
+  padding: 0 25px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
