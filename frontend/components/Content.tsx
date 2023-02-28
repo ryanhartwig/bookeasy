@@ -1,4 +1,4 @@
-import { Header } from "./components/Header"
+import { Header } from "./Header"
 import styles from '@/styles/Home.module.css';
 
 export const Content = () => {

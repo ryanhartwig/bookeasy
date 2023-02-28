@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
-import { Navigator } from './components/Navigator'
-import { Content } from './Content'
+import { Navigator } from '../components/Navigator'
+import { Content } from '../components/Content'
 
 export default function Home() {
 
