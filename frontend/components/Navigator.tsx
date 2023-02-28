@@ -6,13 +6,23 @@ import * as bookit from '@/assets/logo_temp.svg';
 import Link from 'next/link';
 
 export const Navigator = () => {
-  
+
 
   return (
     <div className={styles.Navigator}>
       <div className={styles.Navigator_logo}>
         <Image className={styles.Navigator_logo_icon} src={bookit} alt="Book it logo" />
-        <span><Link href="/home/dashboard">book it.</Link></span>
+        <span>book it.</span>
+      </div>
+      <div className={styles.Navigator_links}>
+        <Link href="dashboard"><p>Dashboard</p></Link>
+        <Link href="calendar"><p>Calendar</p></Link>
+        <Link href="clients"><p>Clients</p></Link>
+        <Link href="services"><p>Services</p></Link>
+        <Link href="business"><p>My Business</p></Link>
+        <Link href="teams"><p>Teams</p></Link>
+        <hr />
+        <Link href="settings"><p>Settings</p></Link>
       </div>
     </div>
   )
