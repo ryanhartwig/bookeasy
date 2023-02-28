@@ -14,20 +14,46 @@
   background-color: #EDF0F2;
 }
 
+/* Left navigation bar */
 .Navigator {
   overflow: hidden;
   background: #1F1F1F;
 
   flex-shrink: 0;
   flex-grow: 0;
+
+  color: var(--font-on-dark);
+  font-size: 24px;
+  font-weight: 400;
   
   width: 206px;
 }
+.Navigator_logo {
+  height: 54px;
 
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid #464646;
+}
+.Navigator_logo span {
+  position: relative;
+  left: -22px;
+}
+.Navigator_logo_icon {
+  position: relative;
+  left: -12px;
+
+  width: 84px;
+  height: 63px;
+}
+
+/* Right side content */
 .Content {
   width: 100%;
 }
 
+/* Title and avatar w/notifications */
 .Header {
   background: white;
   overflow: hidden;
@@ -40,4 +66,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  border-bottom: 1px solid #DDDDDD;
 }
