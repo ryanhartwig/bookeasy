@@ -6,7 +6,7 @@ import * as bookit from '@/assets/logo_temp.svg';
 import Link from 'next/link';
 
 export const Navigator = () => {
-
+  
 
   return (
     <div className={styles.Navigator}>
