@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
+import '@/styles/home.css';
 
-import styles from '@/styles/Home.module.css';
 import { Navigator } from '../components/Navigator';
 import { Header } from '../components/Header';
 
@@ -8,9 +8,9 @@ export default function RootLayout({children}: { children: React.ReactNode}) {
   return (
     <html lang="en">
       <body>
-        <main className={styles.main}>
+        <main className='main'>
           <Navigator />
-          <div className={styles.Content}>
+          <div className='Content'>
             <Header />
             {children}
           </div>
