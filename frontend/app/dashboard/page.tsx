@@ -1,5 +1,12 @@
+import { SecondaryHeader } from "@/components/SecondaryHeader"
+
 export default function Page() {
   return (
-    <p>dashboard</p>
+    <div className="Dashboard">
+      <SecondaryHeader>
+        
+      </SecondaryHeader>
+      <p></p>
+    </div>
   )
 }

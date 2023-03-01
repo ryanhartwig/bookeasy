@@ -11,8 +11,6 @@ import navlinks from '@/data/navlinks';
 export const Navigator = () => {
   const path = usePathname();
 
-  useEffect(() => {console.log(path)}, [path]);
-
   return (
     <div className='Navigator'>
       <div className='Navigator_logo'>
