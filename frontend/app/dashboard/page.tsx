@@ -1,6 +1,7 @@
 import styles from './dashboard.module.css';
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
+import { sample_appointments } from '@/sample_data/sample_appointments';
 
 export default function Page() {
 
@@ -29,9 +30,11 @@ export default function Page() {
             <p className={styles.headerLarge}>{start} - {end}</p>
           </div>
           <div>
+            <p className={styles.headerLarge}>{sample_appointments.length}</p>
             <p style={{fontWeight: 100}}>Appointments</p>
           </div>
           <div>
+            <p className={styles.headerLarge}>$0.00</p>
             <p style={{fontWeight: 100}}>Projected</p>
           </div>
         </div>
