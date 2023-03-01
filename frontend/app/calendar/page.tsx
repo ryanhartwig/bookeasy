@@ -1,5 +1,12 @@
+import { SecondaryHeader } from "@/components/SecondaryHeader";
+
 export default function Page() {
+  
+  
   return (
-    <p>calendar</p>
+    <div className="Calendar">
+      <SecondaryHeader>
+      </SecondaryHeader>
+    </div>
   )
 }
