@@ -1,9 +1,17 @@
+"use client";
+
 import Image from 'next/image';
 import * as bookit from '@/assets/logo_temp.svg';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import navlinks from '@/data/navlinks';
 
 export const Navigator = () => {
+  const path = usePathname();
+
+  useEffect(() => {console.log(path)}, [path]);
 
   return (
     <div className='Navigator'>
@@ -12,14 +20,11 @@ export const Navigator = () => {
         <span>book it.</span>
       </div>
       <div className='Navigator_links'>
-        <Link href="dashboard"><p>Dashboard</p></Link>
-        <Link href="calendar"><p>Calendar</p></Link>
-        <Link href="clients"><p>Clients</p></Link>
-        <Link href="services"><p>Services</p></Link>
-        <Link href="business"><p>My Business</p></Link>
-        <Link href="teams"><p>Teams</p></Link>
+        { navlinks.map(([name, url]) => (
+          <Link href={url}><p className={path === `/${url}` ? 'active' : ''} >{name}</p></Link>
+        ))}
         <hr />
-        <Link href="settings"><p>Settings</p></Link>
+        <Link href="settings"><p className={path === '/settings' ? 'active' : ''} >Settings</p></Link>
       </div>
     </div>
   )

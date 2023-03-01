@@ -54,7 +54,11 @@
 
   padding: 15px 40px;
   margin: 10px 0;
-  /* background: #d9d9d917; */
+
+  transition: background-color 200ms;
+}
+.Navigator_links p.active {
+  background: #d9d9d917;
 }
 
 /* Right side content */
