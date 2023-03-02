@@ -2,7 +2,11 @@
 
 .card {
   background: white;
-  width: 200px; 
-  height: 200px;
+  min-width: 100px; 
+  min-height: 100px;
+
+  width: fit-content;
+  height: fit-content;
+  
   @include globalutil.shadow;
 }

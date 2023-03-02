@@ -30,3 +30,14 @@
     font-weight: 100;
   }
 }
+
+.appointments {
+  display: flex;
+  align-items: center;
+}
+
+.appointment {
+  height: 180px;
+  width: 260px;
+  border-left: 8px solid transparent;
+}

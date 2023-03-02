@@ -31,9 +31,15 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <p>Today</p>
-        <Card>
-          
-        </Card>
+        <div className={styles.apppointments}>
+          {sample_appointments.map(app => 
+            <Card key={app.id}>
+              <div className={styles.appointment}>
+              </div>
+            </Card>
+          )}
+
+        </div>
         <p>This Week</p>
       </div>
     </div>
