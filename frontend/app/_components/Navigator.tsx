@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import * as bookit from '@/assets/logo_temp.svg';
+import * as bookit from '@/public/assets/logo_temp.svg';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
