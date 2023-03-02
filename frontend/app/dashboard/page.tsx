@@ -26,7 +26,10 @@ export default function Page() {
           </div>
         </div>
       </SecondaryHeader>
-      <p></p>
+      <div className={styles.content}>
+        <p>Today</p>
+        <p>This Week</p>
+      </div>
     </div>
   )
 }
