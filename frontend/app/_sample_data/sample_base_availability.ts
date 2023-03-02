@@ -1,4 +1,4 @@
-import type { BaseAvailability } from "../types/BaseAvailability";
+import type { BaseAvailability } from "../_types/BaseAvailability";
 
 export const sample_base_availability: BaseAvailability = {
   business_id: 'christinabronson',

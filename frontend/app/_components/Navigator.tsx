@@ -4,9 +4,8 @@ import Image from 'next/image';
 import * as bookit from '@/assets/logo_temp.svg';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import navlinks from '@/data/navlinks';
+import navlinks from '@/app/_data/navlinks';
 
 export const Navigator = () => {
   const path = usePathname();

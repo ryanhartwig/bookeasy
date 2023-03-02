@@ -1,8 +1,8 @@
 import styles from './dashboard.module.scss';
 
-import { SecondaryHeader } from "@/components/SecondaryHeader"
-import { sample_appointments } from '@/sample_data/sample_appointments';
-import { getCurrentWeek } from '@/helpers/getCurrentWeek';
+import { SecondaryHeader } from "@/app/_components/SecondaryHeader"
+import { sample_appointments } from '@/app/_sample_data/sample_appointments';
+import { getCurrentWeek } from '@/app/_helpers/getCurrentWeek';
 
 export default function Page() {
 

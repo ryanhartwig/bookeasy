@@ -1,4 +1,4 @@
-import type { Appointment } from "../types/Appointment";
+import type { Appointment } from "../_types/Appointment";
 
 const sampleStart = new Date();
 sampleStart.setDate(sampleStart.getDate() + 5);

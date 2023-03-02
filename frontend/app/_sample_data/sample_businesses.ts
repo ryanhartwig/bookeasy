@@ -1,4 +1,4 @@
-import type { Business } from "../types/Business";
+import type { Business } from "../_types/Business";
 
 export const sample_businesses: Business[] = [{
   id: 'christinabronson',

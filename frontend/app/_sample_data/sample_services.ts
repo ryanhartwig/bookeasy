@@ -1,4 +1,4 @@
-import type { Service } from "../types/Service";
+import type { Service } from "../_types/Service";
 
 export const sample_services: Service[] = [{
   id: 'initialconsult',

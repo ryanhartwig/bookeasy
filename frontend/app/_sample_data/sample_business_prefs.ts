@@ -1,4 +1,4 @@
-import type { BusinessPrefs } from "../types/BusinessPrefs"
+import type { BusinessPrefs } from "../_types/BusinessPrefs"
 
 export const sample_business_prefs: BusinessPrefs[] = [{
   business_id: 'johnsonteam',
