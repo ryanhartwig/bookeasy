@@ -3,10 +3,13 @@ import styles from './dashboard.module.scss';
 import { SecondaryHeader } from "@/app/_components/SecondaryHeader"
 import { sample_appointments } from '@/app/_sample_data/sample_appointments';
 import { getCurrentWeek } from '@/app/_helpers/getCurrentWeek';
+import { Card } from '../_components/UI/Card';
 
 export default function Page() {
 
   const [start, end] = getCurrentWeek();
+
+
   
   return (
     <div className="Dashboard">
@@ -28,6 +31,9 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <p>Today</p>
+        <Card>
+          
+        </Card>
         <p>This Week</p>
       </div>
     </div>

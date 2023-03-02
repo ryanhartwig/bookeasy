@@ -1,3 +1,5 @@
+import styles from './card.module.scss';
+
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 interface CardProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
@@ -8,7 +10,7 @@ export const Card: React.FC<CardProps> = ({children, ...props}) => {
 
 
   return (
-    <div {...props} className={''}>
+    <div {...props} className={styles.card}>
     </div>
   )
 }
