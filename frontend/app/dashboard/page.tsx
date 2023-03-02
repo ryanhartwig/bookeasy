@@ -1,4 +1,4 @@
-import styles from './dashboard.module.css';
+import styles from './dashboard.module.scss';
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { sample_appointments } from '@/sample_data/sample_appointments';
