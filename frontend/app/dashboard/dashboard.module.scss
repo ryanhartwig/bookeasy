@@ -31,13 +31,22 @@
   }
 }
 
+/* Appointment Cards */
 .appointments {
   display: flex;
   align-items: center;
 }
-
 .appointment {
+  padding: 5px;
+  
   height: 180px;
   width: 260px;
   border-left: 8px solid transparent;
+}
+.app_header {
+  display: flex;
+  justify-content: space-between;
+}
+p.alt {
+  font-size: 14px;
 }
