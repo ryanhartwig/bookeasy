@@ -5,7 +5,7 @@ import * as bookit from '@/public/assets/logo_temp.svg';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import navlinks from '@/app/_data/navlinks';
+import navlinks from '@/_data/navlinks';
 
 export const Navigator = () => {
   const path = usePathname();
@@ -18,7 +18,7 @@ export const Navigator = () => {
       </div>
       <div className='Navigator_links'>
         { navlinks.map(([name, url]) => (
-          <Link href={url}><p className={path === `/${url}` ? 'active' : ''} >{name}</p></Link>
+          <Link key={name} href={url}><p className={path === `/${url}` ? 'active' : ''} >{name}</p></Link>
         ))}
         <hr />
         <Link href="settings"><p className={path === '/settings' ? 'active' : ''} >Settings</p></Link>
