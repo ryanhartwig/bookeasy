@@ -1,8 +1,8 @@
 import '@/styles/globals.css'
 import '@/styles/home.css';
 
-import { Navigator } from './_components/Navigator';
-import { Header } from './_components/Header';
+import { Navigator } from '../_components/Navigator';
+import { Header } from '../_components/Header';
 
 export default function RootLayout({children}: { children: React.ReactNode}) {
   return (

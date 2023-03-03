@@ -1,4 +1,4 @@
-import { SecondaryHeader } from "@/app/_components/SecondaryHeader";
+import { SecondaryHeader } from "@/_components/SecondaryHeader";
 
 export default function Page() {
   

@@ -1,11 +1,11 @@
 import styles from './dashboard.module.scss';
 
-import { SecondaryHeader } from "@/app/_components/SecondaryHeader"
-import { sample_appointments } from '@/app/_sample_data/sample_appointments';
-import { getCurrentWeek } from '@/app/_helpers/getCurrentWeek';
-import { Card } from '../_components/UI/Card';
-import { sample_services } from '../_sample_data/sample_services';
-import { Service } from '../_types/Service';
+import { SecondaryHeader } from "@/_components/SecondaryHeader"
+import { sample_appointments } from '@/_sample_data/sample_appointments';
+import { getCurrentWeek } from '@/_helpers/getCurrentWeek';
+import { Card } from '../../_components/UI/Card';
+import { sample_services } from '@/_sample_data/sample_services';
+import { Service } from '@/_types/Service';
 
 export default function Page() {
 
