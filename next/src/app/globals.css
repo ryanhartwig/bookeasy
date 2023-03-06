@@ -2,6 +2,7 @@
 
 html {
   --font-on-dark: #F2F2F2;
+  --font-on-light: #242424
   --ds: 0px 2px 5px rgba(0, 0, 0, 0.25);
   --dividers: #DDDDDD;
 }
@@ -19,6 +20,7 @@ body {
   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  color: var(--font-on-light);
 }
 
 a {
