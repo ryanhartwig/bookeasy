@@ -7,6 +7,8 @@ import { Appointment } from '@/types/Appointment';
 import { sample_services } from '@/sample_data/sample_services';
 import { formatTime } from '@/helpers/formatTime';
 
+import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
+
 interface AppointmentsProps {
   appointments: Appointment[],
 }
@@ -42,7 +44,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
               <div>
                 <div className={styles.action}>
                   <div style={{backgroundColor: '#B54078', width: 44}}>
-
+                    <BsCameraVideo className={styles.action_icon} />
                   </div>
 
                   <p>Enter Session</p>
@@ -53,14 +55,14 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
               <div>
                 <div className={styles.action}>
                   <div style={{backgroundColor: '#55BDAA'}}>
-
+                    <BsCalendar className={styles.action_icon} size={12} />
                   </div>
 
                   <p>Calendar</p>
                 </div>
                 <div className={styles.action}>
                   <div style={{backgroundColor: '#5482FB'}}>
-
+                    <BsLink45Deg className={styles.action_icon} />
                   </div>
 
                   <p>Copy Link</p>
