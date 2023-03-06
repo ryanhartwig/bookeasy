@@ -60,7 +60,7 @@ export default function Page() {
           )})}
 
         </div>
-        <p>This Week</p>
+        <SectionLabel label='This Week' />
       </div>
     </div>
   )
