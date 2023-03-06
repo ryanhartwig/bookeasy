@@ -33,11 +33,16 @@
   align-items: center;
 }
 .appointment {
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  
+  padding: 11px;
   
   height: 150px;
   width: 260px;
-  border-left: 8px solid transparent;
+  border-left: 4px solid transparent;
 }
 .app_header {
   display: flex;
@@ -45,4 +50,14 @@
 }
 p.alt {
   font-size: 14px;
+  color: #787878;
+  margin-top: 2px;
+}
+
+.client {
+  margin-left: 5px;
+  padding-left: 10px;
+  border-left: 2px solid var(--dividers);
+
+  
 }

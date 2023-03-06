@@ -29,7 +29,12 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
               <p>{service.duration}m</p>
             </div>
 
-            <p className={styles.alt}>{formatTime(app.start_date, true)}</p>
+            <p className={styles.alt}>{formatTime(app.start_date)}</p>
+
+            <div className={styles.client}>
+              <p className={styles.alt} style={{fontWeight: 100}}>with</p>
+              <p>Steven Price</p>
+            </div>
           </div>
         </Card>
       )})}
