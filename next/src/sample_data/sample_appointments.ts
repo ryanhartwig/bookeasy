@@ -1,7 +1,6 @@
 import type { Appointment } from "../types/Appointment";
 
 const sampleStart = new Date();
-sampleStart.setDate(sampleStart.getDate() + 5);
 sampleStart.setHours(8, 0, 0, 0);
 
 const sampleEnd = new Date(sampleStart);

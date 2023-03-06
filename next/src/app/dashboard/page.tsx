@@ -3,10 +3,9 @@ import styles from './dashboard.module.scss';
 import { SecondaryHeader } from "../../components/SecondaryHeader"
 import { sample_appointments } from '@/sample_data/sample_appointments';
 import { getCurrentWeek } from '@/helpers/getCurrentWeek';
-import { Card } from '@/components/UI/Card';
-import { sample_services } from '@/sample_data/sample_services';
 import { Service } from '@/types/Service';
 import { SectionLabel } from '@/components/UI/SectionLabel';
+import { Appointments } from './appointments';
 
 export default function Page() {
 
@@ -34,32 +33,7 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <SectionLabel label='Today' />
-        <div className={styles.apppointments}>
-          {sample_appointments.map(app => {
-            const service = sample_services.find(s => app.service_id === s.id);
-            if (!service) return <></>
-
-            const start = new Date(app.start_date);
-
-            return (
-            <Card key={app.id}>
-              <div className={styles.appointment} style={{borderLeftColor: '#BA1682'}}>
-                <div className={styles.app_header}>
-                  <p>{service.name}</p>
-                  <p>{service.duration}m</p>
-                </div>
-
-                <p className={styles.alt}>
-                  {start.toDateString().split(' ').slice(0, -1).join(' ') 
-                    + ' • '
-                    + `${start.toLocaleTimeString()}`
-                  }
-                </p>
-              </div>
-            </Card>
-          )})}
-
-        </div>
+        <Appointments appointments={sample_appointments} />
         <SectionLabel label='This Week' />
       </div>
     </div>
