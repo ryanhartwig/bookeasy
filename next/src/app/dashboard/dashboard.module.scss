@@ -24,11 +24,17 @@
 
 .content {
   padding: 20px;
-  
-  p {
-    font-size: 20px;
-    font-weight: 100;
-  }
+}
+.section_label {
+  display: flex;
+  align-items: center;
+}
+.section_label p {
+  font-size: 20px;
+  font-weight: 100;
+}
+.section_label hr {
+  margin: 0 10px;
 }
 
 /* Appointment Cards */
@@ -39,7 +45,7 @@
 .appointment {
   padding: 5px;
   
-  height: 180px;
+  height: 150px;
   width: 260px;
   border-left: 8px solid transparent;
 }

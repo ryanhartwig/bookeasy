@@ -32,7 +32,10 @@ export default function Page() {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <p>Today</p>
+        <div className={styles.section_label}>
+          <p>Today</p>
+          <hr />
+        </div>
         <div className={styles.apppointments}>
           {sample_appointments.map(app => {
             const service = sample_services.find(s => app.service_id === s.id);
