@@ -5,6 +5,7 @@ import styles from './dashboard.module.scss';
 import { Card } from '@/components/UI/Card';
 import { Appointment } from '@/types/Appointment';
 import { sample_services } from '@/sample_data/sample_services';
+import { formatTime } from '@/helpers/formatTime';
 
 interface AppointmentsProps {
   appointments: Appointment[],
@@ -20,10 +21,6 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
         const service = sample_services.find(s => app.service_id === s.id);
         if (!service) return <></>
 
-        const start = new Date(app.start_date);
-        let [hours, period] = start.toLocaleTimeString().split(' ');
-        hours = hours.split(':').slice(0, 2).join(':');
-
         return (
         <Card key={app.id}>
           <div className={styles.appointment} style={{borderLeftColor: '#BA1682'}}>
@@ -32,9 +29,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
               <p>{service.duration}m</p>
             </div>
 
-            <p className={styles.alt}>
-              {`${hours} ${period}`}
-            </p>
+            <p className={styles.alt}>{formatTime(app.start_date, true)}</p>
           </div>
         </Card>
       )})}
