@@ -6,6 +6,7 @@ import { getCurrentWeek } from '@/helpers/getCurrentWeek';
 import { Card } from '@/components/UI/Card';
 import { sample_services } from '@/sample_data/sample_services';
 import { Service } from '@/types/Service';
+import { SectionLabel } from '@/components/UI/SectionLabel';
 
 export default function Page() {
 
@@ -32,10 +33,7 @@ export default function Page() {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <div className={styles.section_label}>
-          <p>Today</p>
-          <hr />
-        </div>
+        <SectionLabel label='Today' />
         <div className={styles.apppointments}>
           {sample_appointments.map(app => {
             const service = sample_services.find(s => app.service_id === s.id);
