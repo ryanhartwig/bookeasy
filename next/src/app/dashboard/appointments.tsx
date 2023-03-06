@@ -22,6 +22,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
       {appointments.map(app => {
         const service = sample_services.find(s => app.service_id === s.id);
         if (!service) return <></>
+        const canEnterSession = Date.now() < app.start_date + (1000 * 60 * service.duration) && Date.now() > app.start_date - (1000 * 60 * 60);
 
         return (
         <Card key={app.id}>
@@ -42,7 +43,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
             <div className={styles.actions}>
               {/* Left Actions */}
               <div>
-                <div className={styles.action}>
+                <div className={styles.action} style={{opacity: canEnterSession ? 1 : 0.5, pointerEvents: canEnterSession ? 'auto' : 'none'}}>
                   <div style={{backgroundColor: '#B54078', width: 44}}>
                     <BsCameraVideo className={styles.action_icon} />
                   </div>
