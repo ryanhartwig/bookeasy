@@ -33,7 +33,7 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <SectionLabel label='Today' />
-        <Appointments appointments={sample_appointments} />
+        <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
         <SectionLabel label='This Week' />
       </div>
     </div>

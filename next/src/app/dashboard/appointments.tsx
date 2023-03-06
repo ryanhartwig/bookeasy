@@ -12,6 +12,7 @@ interface AppointmentsProps {
 
 export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
 
+  
 
   return (
     <div className={styles.apppointments}>
@@ -20,6 +21,8 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
         if (!service) return <></>
 
         const start = new Date(app.start_date);
+        let [hours, period] = start.toLocaleTimeString().split(' ');
+        hours = hours.split(':').slice(0, 2).join(':');
 
         return (
         <Card key={app.id}>
@@ -30,10 +33,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
             </div>
 
             <p className={styles.alt}>
-              {start.toDateString().split(' ').slice(0, -1).join(' ') 
-                + ' • '
-                + `${start.toLocaleTimeString()}`
-              }
+              {`${hours} ${period}`}
             </p>
           </div>
         </Card>
