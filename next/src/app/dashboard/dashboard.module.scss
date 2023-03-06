@@ -37,8 +37,7 @@
   flex-direction: column;
   justify-content: space-between;
 
-  
-  padding: 11px;
+  padding: 8px;
   
   height: 150px;
   width: 260px;
@@ -53,11 +52,48 @@ p.alt {
   color: #787878;
   margin-top: 2px;
 }
-
 .client {
   margin-left: 5px;
   padding-left: 10px;
   border-left: 2px solid var(--dividers);
-
-  
 }
+.actions {
+  display: flex;
+  justify-content: space-between;
+
+  // Actions (wrapper for left and wrapper for right)
+  > div {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.action {
+  transition: background-color 200ms;
+  cursor: pointer;
+
+  margin: 0 5px;
+  padding: 3px;
+  padding-bottom: 0;
+  border-radius: 10px;
+
+  p {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  &:hover {
+    background: rgb(241, 241, 241);
+  }
+
+  // Icon
+  > div {
+    margin: 0 auto;
+    
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+  }
+}
+
+/* */
