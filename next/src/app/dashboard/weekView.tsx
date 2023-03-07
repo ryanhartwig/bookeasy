@@ -1,11 +1,23 @@
 import styles from './dashboard.module.scss';
 
-export const WeekView = () => {
+interface WeekViewProps {
+  start: Date,
+}
 
+export const WeekView: React.FC<WeekViewProps> = ({start}) => {
+  const days = new Array(7).fill(true);
 
   return (
     <div className={styles.weekview}>
-      <p>test</p>
+      <div className={styles.weekdays}>
+        {days.map((_, i) => {
+
+          
+          return <div key={i}>
+                
+          </div>
+        })}
+      </div>
     </div>
   )
 }

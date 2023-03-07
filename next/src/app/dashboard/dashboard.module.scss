@@ -114,4 +114,11 @@ p.alt {
 .weekview {
   height: 100%;
   width: 100%;
+  padding: 20px;
+}
+.weekdays {
+  width: 100%;
+  height: 35px;
+  display: flex;
+  justify-content: space-around;
 }

@@ -10,7 +10,7 @@ import { WeekView } from './weekView';
 
 export default function Page() {
 
-  const [start, end] = getCurrentWeek();
+  const [start, end, startDate] = getCurrentWeek();
   
   return (
     <div className={styles.dashboard}>
@@ -35,7 +35,7 @@ export default function Page() {
         <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
         <SectionLabel label='This Week' />
         <Card style={{width: '100%', height: '100%'}}>
-          <WeekView />
+          <WeekView start={startDate} />
         </Card>
       </div>
     </div>
