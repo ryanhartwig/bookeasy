@@ -7,6 +7,7 @@ import { SectionLabel } from '@/components/UI/SectionLabel';
 import { Appointments } from './appointments';
 import { Card } from '@/components/UI/Card';
 import { WeekView } from './weekView';
+import { Hourly } from './hourly';
 
 export default function Page() {
 
@@ -34,8 +35,9 @@ export default function Page() {
         <SectionLabel label='Today' />
         <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
         <SectionLabel label='This Week' />
-        <Card style={{width: '100%', height: '100%'}}>
+        <Card className={styles.weekview_card}>
           <WeekView start={startDate} />
+          <Hourly />
         </Card>
       </div>
     </div>
