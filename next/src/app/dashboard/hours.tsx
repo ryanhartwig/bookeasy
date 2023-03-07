@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './dashboard.module.scss';
 
 /* 
@@ -17,7 +19,7 @@ export const Hours = () => {
 
         return (
           <div key={i} className={styles.block}>
-
+            
           </div>
         )
       })}
