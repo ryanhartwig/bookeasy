@@ -16,10 +16,9 @@ export const Hours = () => {
   return (
     <div className={styles.hours}>
       {blocks.map((_, i) => {
-
+        const borderBottomColor = i % 4 === 3 ? '#A3A3A3' : '';
         return (
-          <div key={i} className={styles.block}>
-            
+          <div key={i} className={styles.block} style={{borderBottomColor}}>
           </div>
         )
       })}

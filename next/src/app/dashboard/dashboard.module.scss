@@ -180,6 +180,12 @@ p.alt {
 .block {
   height: 15px;
   border-bottom: 1px solid #E7E7E7;
+  overflow-y: visible;
+
+  p {
+    font-size: 10px;
+    font-weight: 400;
+  }
 
   &:last-child {
     border-bottom: none;
