@@ -23,6 +23,7 @@ export const Hours = () => {
         let hourIndex = 0;
         let hour = 0;
         let period = '';
+
         if (isHour) {
           hourIndex = i / 4;
           hour = hourIndex % 12 === 0 ? 12 : hourIndex % 12;
@@ -30,11 +31,9 @@ export const Hours = () => {
         }
 
 
-        
-        
-
         return (
           <div key={i} className={styles.block} style={{borderBottomColor}}>
+            <div className={styles.cover} />
             {isHour && <p>{hour} {period}</p>}
           </div>
         )
