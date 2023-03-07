@@ -9,6 +9,8 @@
   display: flex;
   align-content: center;
 
+  white-space: nowrap;
+
   div {
     display: flex;
     justify-content: center;
@@ -142,4 +144,7 @@ p.alt {
 .hourly {
   height: 100%;
   width: 100%;
+
+  border-top: 1px solid var(--dividers);
+  margin-top: 7px;
 }
