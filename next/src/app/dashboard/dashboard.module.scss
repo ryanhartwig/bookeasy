@@ -114,11 +114,11 @@ p.alt {
 .weekview_card {
   width: 100%;
   height: 100%;
-}
-.weekview {
-  height: 100%;
-  width: 100%;
-  padding: 15px;
+
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
 }
 .weekdays {
   width: 100%;
@@ -127,10 +127,19 @@ p.alt {
   justify-content: space-around;
   text-align: center;
 
+  flex: 0 0 35px;
+
   p:last-child {
     font-weight: 300;
     font-size: 0.7em;
     margin-top: 2px;
     color: rgb(160, 157, 157);
   }
+}
+
+
+/* Hourly breakdown */
+.hourly {
+  height: 100%;
+  width: 100%;
 }

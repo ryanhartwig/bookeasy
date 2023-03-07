@@ -1,9 +1,10 @@
+import styles from './dashboard.module.scss';
+
 export const Hourly = () => {
 
-
   return (
-    <div>
-      
+    <div className={styles.hourly}>
+
     </div>
   )
 }
