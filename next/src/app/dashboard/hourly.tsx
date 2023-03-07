@@ -7,9 +7,7 @@ import { Hours } from './hours';
 export const Hourly = () => {
 
   const days = Array(7).fill(true);
-
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
-
   const [width, setWidth] = useState<string>('');
 
   useEffect(() => {

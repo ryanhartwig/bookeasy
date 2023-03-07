@@ -172,6 +172,8 @@ p.alt {
   border: 1px solid var(--dividers);
   border-right: none;
 
+  overflow: hidden;
+
   &:last-child {
     border-right: 1px solid var(--dividers);
   }
