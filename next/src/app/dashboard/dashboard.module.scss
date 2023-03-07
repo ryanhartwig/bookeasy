@@ -185,6 +185,8 @@ p.alt {
   p {
     font-size: 10px;
     font-weight: 400;
+    color: var(--font-color-alt);
+    padding: 2px;
   }
 
   &:last-child {
