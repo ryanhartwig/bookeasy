@@ -14,7 +14,7 @@ interface AppointmentsProps {
 }
 
 export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
-
+  
   
 
   return (

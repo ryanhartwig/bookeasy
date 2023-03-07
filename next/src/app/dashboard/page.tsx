@@ -3,18 +3,17 @@ import styles from './dashboard.module.scss';
 import { SecondaryHeader } from "../../components/SecondaryHeader"
 import { sample_appointments } from '@/sample_data/sample_appointments';
 import { getCurrentWeek } from '@/helpers/getCurrentWeek';
-import { Service } from '@/types/Service';
 import { SectionLabel } from '@/components/UI/SectionLabel';
 import { Appointments } from './appointments';
+import { Card } from '@/components/UI/Card';
+import { WeekView } from './weekView';
 
 export default function Page() {
 
   const [start, end] = getCurrentWeek();
-  const servicesMap = new Map<string, Service>();
-  const servicesIds = new Set<string>();
   
   return (
-    <div className="Dashboard">
+    <div className={styles.dashboard}>
       <SecondaryHeader>
         <div className={styles.header}>
           <div>
@@ -35,6 +34,9 @@ export default function Page() {
         <SectionLabel label='Today' />
         <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
         <SectionLabel label='This Week' />
+        <Card style={{width: '100%', height: '100%'}}>
+          <WeekView />
+        </Card>
       </div>
     </div>
   )
