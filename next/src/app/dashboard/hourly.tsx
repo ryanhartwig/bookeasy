@@ -19,7 +19,7 @@ export const Hourly = () => {
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
         {days.map((_, i) => {
 
-          return <Hours key={i} />
+          return <Hours key={i} day={i} />
         })}
       </div>
     </div>
