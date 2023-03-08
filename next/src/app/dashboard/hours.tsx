@@ -3,6 +3,7 @@
 import styles from './dashboard.module.scss';
 
 import { sample_base_availability } from '@/sample_data/sample_base_availability';
+import { Appointment } from '@/types/Appointment';
 
 /* 
 
@@ -14,9 +15,10 @@ Formula to convert hours / mins into index:
 
 interface HoursProps {
   day: number,
+  appointments: Appointment[],
 }
 
-export const Hours: React.FC<HoursProps> = ({day}) => {
+export const Hours: React.FC<HoursProps> = ({day, appointments}) => {
   const blocks = new Array(96).fill(true);
   const availability = new Map<number, string[][]>();
 
@@ -28,8 +30,6 @@ export const Hours: React.FC<HoursProps> = ({day}) => {
     availability.set(day, current);
   })
 
-  console.log(availability);
-  
   return (
     <div className={styles.hours}>
       {blocks.map((_, i) => {

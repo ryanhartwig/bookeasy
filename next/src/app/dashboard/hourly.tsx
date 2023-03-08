@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './dashboard.module.scss';
 import { Hours } from './hours';
 
+import { sample_appointments } from '@/sample_data/sample_appointments';
+
 export const Hourly = () => {
 
   const days = Array(7).fill(true);
@@ -19,7 +21,7 @@ export const Hourly = () => {
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
         {days.map((_, i) => {
 
-          return <Hours key={i} day={i} />
+          return <Hours key={i} day={i} appointments={[]} />
         })}
       </div>
     </div>
