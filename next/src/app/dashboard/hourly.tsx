@@ -1,11 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './dashboard.module.scss';
 import { Hours } from './hours';
-
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
-import { useDebouncedCallback } from 'use-debounce';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
 
 export const Hourly = () => {
