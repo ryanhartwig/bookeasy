@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './dashboard.module.scss';
 import { Hours } from './hours';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
+import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
+
+
 
 export const Hourly = () => {
 
@@ -11,6 +14,7 @@ export const Hourly = () => {
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
 
   const [width, setWidth] = useState<string>('');
+  const [start, end] = getCurrentWeek();
   
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
@@ -23,6 +27,8 @@ export const Hourly = () => {
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
         {days.map((_, i) => {
+          
+          
           return <Hours key={i} day={i} appointments={[]} />
         })}
       </div>

@@ -11,8 +11,7 @@ import { Hourly } from './hourly';
 
 export default function Page() {
 
-  const [start, end, startDate] = getCurrentWeek();
-  
+  const [start, end] = getCurrentWeek();
   
   return (
     <div className={styles.dashboard}>
@@ -20,7 +19,9 @@ export default function Page() {
         <div className={styles.header}>
           <div>
             <p style={{fontWeight: 100}}>Week of</p>
-            <p className={styles.headerLarge}>{start} - {end}</p>
+            <p className={styles.headerLarge}>
+              {`${start.toDateString().split(' ').slice(1, 3).join(' ')}`} - {`${end.toDateString().split(' ').slice(1, 3).join(' ')}`}
+            </p>
           </div>
           <div>
             <p className={styles.headerLarge}>{sample_appointments.length}</p>
@@ -37,7 +38,7 @@ export default function Page() {
         <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
         <SectionLabel label='This Week' />
         <Card className={styles.weekview_card}>
-          <WeekDays start={startDate} />
+          <WeekDays start={start} />
           <Hourly />
         </Card>
       </div>
