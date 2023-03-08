@@ -5,6 +5,7 @@ import styles from './dashboard.module.scss';
 import { Card } from '@/components/UI/Card';
 import { Appointment } from '@/types/Appointment';
 import { sample_services } from '@/utility/sample_data/sample_services';
+import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
@@ -37,7 +38,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
 
             <div className={styles.client}>
               <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-              <p>Steven Price</p>
+              <p>{sample_clients.find(c => c.id === app.client_id)!.name}</p>
             </div>
 
             <div className={styles.actions}>
