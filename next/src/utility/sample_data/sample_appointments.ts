@@ -1,4 +1,4 @@
-import type { Appointment } from "../types/Appointment";
+import type { Appointment } from "../../types/Appointment";
 
 const sampleStart = new Date();
 sampleStart.setHours(8, 0, 0, 0);

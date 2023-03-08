@@ -2,7 +2,7 @@
 
 import styles from './dashboard.module.scss';
 
-import { sample_base_availability } from '@/sample_data/sample_base_availability';
+import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { Appointment } from '@/types/Appointment';
 
 /* 

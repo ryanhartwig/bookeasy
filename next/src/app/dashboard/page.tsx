@@ -1,8 +1,8 @@
 import styles from './dashboard.module.scss';
 
 import { SecondaryHeader } from "../../components/SecondaryHeader"
-import { sample_appointments } from '@/sample_data/sample_appointments';
-import { getCurrentWeek } from '@/helpers/getCurrentWeek';
+import { sample_appointments } from '@/utility/sample_data/sample_appointments';
+import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
 import { SectionLabel } from '@/components/UI/SectionLabel';
 import { Appointments } from './appointments';
 import { Card } from '@/components/UI/Card';

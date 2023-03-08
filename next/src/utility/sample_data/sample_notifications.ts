@@ -1,4 +1,4 @@
-import type { Notification } from "../types/Notification"
+import type { Notification } from "../../types/Notification"
 
 export const sample_notifications: Notification[] = [{
   user_id: 'christinabronson',

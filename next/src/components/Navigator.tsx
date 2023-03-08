@@ -5,7 +5,7 @@ import * as bookit from '../../public/assets/logo_temp.svg';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import navlinks from '@/data/navlinks';
+import navlinks from '@/utility/data/navlinks';
 
 export const Navigator = () => {
   const path = usePathname();
