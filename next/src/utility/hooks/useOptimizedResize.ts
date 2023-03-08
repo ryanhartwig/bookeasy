@@ -14,8 +14,6 @@ export const useOptimizedResize = (wrapperRef: MutableRefObject<any>, targetWidt
   const pauseResize = useCallback(() => {
     setWrapperWidth(`${wrapperRef.current.offsetWidth}px`);
     window.removeEventListener('resize', pauseResize);
-
-    console.log('d');
   }, [wrapperRef]);
 
   const widen = useDebouncedCallback(() => {
