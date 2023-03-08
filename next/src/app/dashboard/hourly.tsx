@@ -34,6 +34,7 @@ export const Hourly = () => {
   useEffect(() => {
     sample_services.forEach(s => services.set(s.id, s));
     sample_clients.forEach(c => clients.set(c.id, c));
+
   }, [clients, services]);
   
   return (

@@ -19,14 +19,14 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
   
 
   return (
-    <div className={styles.apppointments}>
+    <div className={styles.appointments}>
       {appointments.map(app => {
         const service = sample_services.find(s => app.service_id === s.id);
         if (!service) return <></>
         const canEnterSession = Date.now() < app.start_date + (1000 * 60 * service.duration) && Date.now() > app.start_date - (1000 * 60 * 60);
 
         return (
-        <Card key={app.id}>
+        <Card key={app.id} className={styles.appointment_wrapper}>
           <div className={styles.appointment} style={{borderLeftColor: '#BA1682'}}>
             <div>
               <div className={styles.app_header}>
