@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import styles from './dashboard.module.scss';
+import styles from './weekly_overview.module.scss';
 import { Hours } from './hours';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
 import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';

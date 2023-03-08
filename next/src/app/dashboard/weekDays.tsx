@@ -1,4 +1,4 @@
-import styles from './dashboard.module.scss';
+import styles from './weekly_overview.module.scss';
 
 interface WeekDaysProps {
   start: Date,

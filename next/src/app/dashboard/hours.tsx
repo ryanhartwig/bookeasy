@@ -1,23 +1,13 @@
 'use client';
 
-import styles from './dashboard.module.scss';
+import styles from './weekly_overview.module.scss';
 
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { Appointment } from '@/types/Appointment';
 import { useEffect, useMemo } from 'react';
-import { sample_services } from '@/utility/sample_data/sample_services';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
 import { formatTime } from '@/utility/functions/formatTime';
-
-/* 
-
-Formula to convert hours / mins into index:
-
-  (Date.getHours() * 4) + (Date.getMinutes() / 15)
-
-*/
 
 interface HoursProps {
   day: number,
@@ -33,10 +23,8 @@ interface AppointmentData extends Appointment {
 
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
   const blocks = new Array(96).fill(true);
-
   const availability = useMemo(() => new Map<number, string[][]>(), []);
   const appointmentIndices = useMemo(() => new Map<number, AppointmentData>(), []);
-  
 
   useEffect(() => {
     appointments.forEach(app => {
@@ -61,8 +49,6 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
     });
   }, [appointmentIndices, appointments, availability, clients, services]);
 
-  
-
   return (
     <div className={styles.hours}>
       {blocks.map((_, i) => {
@@ -83,8 +69,6 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
         const period = hour < 12 ? 'am' : 'pm';
 
         let covered = true;
-
-
         const dayAvailability = availability.get(day);
 
         if (dayAvailability) {
@@ -96,8 +80,6 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
               && (endHr === hour ? endMin > segment : endHr > hour);
           })
         }
-
-       
 
         return (
           <div key={i} className={styles.block} style={{borderBottomColor}}>
