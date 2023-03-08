@@ -15,7 +15,7 @@ Formula to convert hours / mins into index:
 
 interface HoursProps {
   day: number,
-  appointments: Appointment[],
+  appointments?: Appointment[],
 }
 
 export const Hours: React.FC<HoursProps> = ({day, appointments}) => {
