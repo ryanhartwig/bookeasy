@@ -4,11 +4,11 @@ import styles from './dashboard.module.scss';
 
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { Appointment } from '@/types/Appointment';
-import { Service } from '@/types/Service';
-import { Client } from '@/types/Client';
 import { useEffect, useMemo } from 'react';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
+import { Service } from '@/types/Service';
+import { Client } from '@/types/Client';
 
 /* 
 
@@ -21,20 +21,18 @@ Formula to convert hours / mins into index:
 interface HoursProps {
   day: number,
   appointments: Appointment[],
+  services: Map<string, Service>,
+  clients: Map<string, Client>,
 }
 
-export const Hours: React.FC<HoursProps> = ({day, appointments}) => {
+export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
   const blocks = new Array(96).fill(true);
 
   const availability = useMemo(() => new Map<number, string[][]>(), []);
   const appointmentIndices = useMemo(() => new Map<number, Appointment>(), []);
-  const services = useMemo(() => new Map<string, Service>(), []);
-  const clients = useMemo(() => new Map<string, Client>(), []);
+  
 
   useEffect(() => {
-    sample_services.forEach(s => services.set(s.id, s));
-    sample_clients.forEach(c => clients.set(c.id, c));
-    
     appointments.forEach(app => {
       const date = new Date(app.start_date);
       const calculatedIndex = (date.getHours() * 4) + (date.getMinutes() / 15);
@@ -48,7 +46,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments}) => {
       current.push([start, end]);
       availability.set(day, current);
     });
-  }, [appointmentIndices, appointments, availability, clients, services]);
+  }, [appointmentIndices, appointments, availability]);
 
   
 
