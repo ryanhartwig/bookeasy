@@ -14,7 +14,7 @@ export const Hourly = () => {
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
 
   const [width, setWidth] = useState<string>('');
-  const [start, end] = getCurrentWeek();
+  const [start] = getCurrentWeek();
   
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
