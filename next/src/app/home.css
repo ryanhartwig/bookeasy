@@ -9,6 +9,9 @@
   min-width: 100%;
   max-width: 100%;
 
+  height: 100%;
+  width: 100%;
+
   overflow: hidden;
   
   background-color: #EDF0F2;
@@ -64,6 +67,9 @@
 /* Right side content */
 .Content {
   width: 100%;
+  height: 100%;
+
+  overflow: hidden;
 }
 
 /* Title and avatar w/notifications */

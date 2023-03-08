@@ -1,4 +1,4 @@
-import type { UserPrefs } from "../types/UserPrefs";
+import type { UserPrefs } from "../../types/UserPrefs";
 
 export const sample_user_prefs: UserPrefs = {
   user_id: 'christinabronson',

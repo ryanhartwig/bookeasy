@@ -1,3 +1,11 @@
+interface AvailabilitySlice {
+  user_id: string,
+  business_id: string,
+  day: number,
+  start: string,
+  end: string,
+}
+
 interface Recurring {
   start_period: number,
   end_period: number,
@@ -17,13 +25,7 @@ export interface BaseAvailability {
   id: string,
   user_id: string,
   business_id: string,
-  monday: string,
-  tuesday: string,
-  wednesday: string,
-  thursday: string,
-  friday: string,
-  saturday: string,
-  sunday: string,
+  slices: AvailabilitySlice[],
   recurring: Recurring[],
   time_off: TimeOff[],
 }

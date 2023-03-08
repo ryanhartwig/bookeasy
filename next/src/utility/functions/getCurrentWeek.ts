@@ -1,4 +1,4 @@
-export const getCurrentWeek = (): [string, string] => {
+export const getCurrentWeek = (): [Date, Date] => {
   const weekStart = new Date();
   const day = weekStart.getDay();
 
@@ -10,10 +10,5 @@ export const getCurrentWeek = (): [string, string] => {
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 6);
 
-  const period: [string, string] = [
-    `${weekStart.toDateString().split(' ').slice(1, 3).join(' ')}`,
-    `${weekEnd.toDateString().split(' ').slice(1, 3).join(' ')}`
-  ];
-
-  return period;
+  return [weekStart, weekEnd];
 }

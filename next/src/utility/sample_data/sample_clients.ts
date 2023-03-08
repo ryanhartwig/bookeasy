@@ -1,4 +1,4 @@
-import type { Client } from "../types/Client";
+import type { Client } from "../../types/Client";
 
 export const sample_clients: Client[] = [{
   id: 'stevenprice',

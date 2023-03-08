@@ -2,9 +2,12 @@
 
 html {
   --font-on-dark: #F2F2F2;
-  --font-on-light: #242424
+  --font-on-light: #242424;
   --ds: 0px 2px 5px rgba(0, 0, 0, 0.25);
   --dividers: #DDDDDD;
+  --header-height: 54px;
+  --secondary-header-height: 58px;
+  --font-color-alt: #676767;
 }
 
 * {
@@ -35,4 +38,29 @@ h2 {
 
 hr {
   border-color: #5e5e5e;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid;
+
+  border-color: var(--dividers);
+
+  width: 100%;
+}
+
+/* Prevent text highlighting / selection */
+.noselect {
+  -webkit-touch-callout: none !important; /* iOS Safari */
+    -webkit-user-select: none !important; /* Safari */
+     -khtml-user-select: none !important; /* Konqueror HTML */
+       -moz-user-select: none !important; /* Old versions of Firefox */
+        -ms-user-select: none !important; /* Internet Explorer/Edge */
+            user-select: none !important; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+/* Make scrollbar invisible */
+.hidescrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
