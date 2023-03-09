@@ -6,4 +6,5 @@ export interface Service {
   provider: string,
   cost: number,
   is_video: boolean,
+  color: string,
 };
