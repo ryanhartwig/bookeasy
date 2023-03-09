@@ -1,14 +1,7 @@
 'use client';
 
 import './Calendar.css';
-
 import { Days } from './Days';
-
-/* React Icons */
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { ReactIconButton } from '../UI/ReactIconButton';
-import { useCallback, useState } from 'react';
-import { getDayRange as minMaxDate } from '@/utility/functions/getDayRange';
 import { View } from '@/app/calendar/page';
 
 interface CalendarProps {
@@ -17,7 +10,6 @@ interface CalendarProps {
   startDate: Date,
   viewing: View,
 }
-
 
 export const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 export const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

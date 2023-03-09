@@ -26,6 +26,7 @@
 .Calendar-reset p {
   font-size: 14px;
   margin-right: 25px;
+  font-weight: 300;
   opacity: 0.5;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -76,13 +77,13 @@
   height: fit-content;
   width: 100%;
 
-  margin-top: 3px;
+  margin: 3px 0;
 }
 
 .Calendar-days > p {
   width: 100%;
   font-weight: 100;
-  font-size: clamp(10px, 16px, 1.5vh);
+  font-size: 14px;
 }
 
 .Calendar-fields-wrapper {

@@ -2,13 +2,13 @@
 
 import styles from './calendar.module.scss';
 
-
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Calendar, months } from '@/components/calendar/Calendar';
 import { useState, useCallback } from 'react';
 import { getDayRange } from '@/utility/functions/getDayRange';
 import { ReactIconButton } from '@/components/UI/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { Daily } from './daily';
 
 export interface View {        
   month: number,
@@ -90,6 +90,7 @@ export default function Page() {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
+        <Daily />
         <Calendar startDate={startDate} viewing={viewing} />
       </div>
     </div>
