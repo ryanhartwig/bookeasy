@@ -22,7 +22,7 @@ export const sample_base_availability: BaseAvailability = {
       user_id: 'christinabronson',
       day: 1,
       start: '13:00',
-      end: '17:00',
+      end: '19:00',
     }, {
       business_id: 'christinabronson',
       user_id: 'christinabronson',

@@ -88,7 +88,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
             {covered && <div className={styles.cover} />}
             {isHour && <p>{hour12} {period}</p>}
             {appointment && 
-              <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color}}>
+              <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color || 'blue'}}>
                 <div>
                   <p style={{fontSize: 12}}>{appointment.client_name}</p>
                   <p>{formatTime(appointment.start_date)}</p>

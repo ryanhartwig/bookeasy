@@ -25,7 +25,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
 
         return (
         <Card key={app.id} className={styles.appointment_wrapper}>
-          <div className={styles.appointment} style={{borderLeftColor: service.color}}>
+          <div className={styles.appointment} style={{borderLeftColor: service.color || 'blue'}}>
             <div>
               <div className={styles.app_header}>
                 <p>{service.name}</p>
