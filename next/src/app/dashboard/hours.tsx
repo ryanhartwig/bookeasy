@@ -4,7 +4,7 @@ import styles from './weekly_overview.module.scss';
 
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { Appointment } from '@/types/Appointment';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
 import { formatTime } from '@/utility/functions/formatTime';
@@ -23,33 +23,46 @@ interface AppointmentData extends Appointment {
 }
 
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
-  const availability = useMemo(() => new Map<number, string[][]>(), []);
-  const appointmentIndices = useMemo(() => new Map<number, AppointmentData>(), []);
-
-  useEffect(() => {
-    appointments.forEach(app => {
-      const date = new Date(app.start_date);
-      const calculatedIndex = (date.getHours() * 4) + (date.getMinutes() / 15);
-      const client = clients.get(app.client_id);
-      const service = services.get(app.service_id);
-
-      appointmentIndices.set(calculatedIndex, {
-        ...app,
-        client_name: client?.name || '',
-        service_name: service?.name || '',
-        color: service?.color || '',
-      });
-    });
-
-    sample_base_availability.slices.forEach(slice => {
-      const {start, end, day} = slice;
-      const current = availability.get(day) || [];
+  const [availability, setAvailability] = useState<Map<number, string[][]>>(new Map());
+  const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
   
-      current.push([start, end]);
-      availability.set(day, current);
-    });
-  }, [appointmentIndices, appointments, availability, clients, services]);
+  useEffect(() => {
+    setAppointmentIndices(p => {
+      const prev = new Map(p);
 
+      appointments.forEach(app => {
+        const date = new Date(app.start_date);
+        const calculatedIndex = (date.getHours() * 4) + (date.getMinutes() / 15);
+        const client = clients.get(app.client_id);
+        const service = services.get(app.service_id);
+  
+        prev.set(calculatedIndex, {
+          ...app,
+          client_name: client?.name || '',
+          service_name: service?.name || '',
+          color: service?.color || '',
+        });
+      });
+
+      return prev;
+    })
+  }, [appointments, clients, services]);
+  
+  useEffect(() => {
+    setAvailability(p => {
+      const prev = new Map(p);
+
+      sample_base_availability.slices.forEach(slice => {
+        const {start, end, day} = slice;
+        const current = prev.get(day) || [];
+    
+        current.push([start, end]);
+        prev.set(day, current);
+      });
+
+      return prev;
+    });
+  }, []);
   
   const blocks = useMemo(() => {
     const b = new Array(96).fill(true)
