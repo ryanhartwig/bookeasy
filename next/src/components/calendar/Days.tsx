@@ -28,32 +28,32 @@ export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
 
       weekDate.setDate(day + 1);
       
-      return new Date(weekDate);
+      // return new Date(weekDate);
+      const d = new Date(weekDate);
+      const style: CSSProperties = {}
+
+      if (i < 7) {
+        style.borderTop = 'none';
+      }
+      if (i % 7 === 0) {
+        style.borderLeft = 'none';
+      }
+      
+      return <Day 
+        key={`${i}-${d.getDate}`} 
+        selected={selected} 
+        onSelect={onSelect} 
+        date={d} 
+        viewing={viewing} 
+        style={style}
+      />
     })
-  }, [date]);
+  }, [date, onSelect, selected, viewing]);
 
 
   return (
     <div className='Days'>
-      {days.map((d, i) => {
-        const style: CSSProperties = {}
-
-        if (i < 7) {
-          style.borderTop = 'none';
-        }
-        if (i % 7 === 0) {
-          style.borderLeft = 'none';
-        }
-        
-        return <Day 
-          key={`${i}-${d.getDate}`} 
-          selected={selected} 
-          onSelect={onSelect} 
-          date={d} 
-          viewing={viewing} 
-          style={style}
-        />
-      })}
+      {days}
     </div>
   )
 }

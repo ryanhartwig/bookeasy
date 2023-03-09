@@ -16,9 +16,11 @@
   position: relative;
   
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-direction: column;
+
+  padding: 6px;
   
   background: #ffffff;
   
