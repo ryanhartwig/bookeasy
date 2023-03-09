@@ -8,7 +8,8 @@
   max-width: calc(100% / 7);
   max-height: calc(100% / 6);
 
-  padding: 0.2vh;
+  border-left: 1px solid var(--dividers);
+  border-top: 1px solid var(--dividers);
 }
 
 .Day-content {
@@ -19,8 +20,7 @@
   align-items: center;
   flex-direction: column;
   
-  background: #302D2D;
-  border-radius: 8px;
+  background: #ffffff;
   
   width: 100%;
   height: 100%;
@@ -34,7 +34,6 @@
   font-size: clamp(10px, 16px, 1.5vh);
   font-weight: 200;
 }
-
 
 /* Conditional Styling */
 .Day-content.out-of-view {

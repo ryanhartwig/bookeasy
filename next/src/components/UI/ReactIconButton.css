@@ -1,0 +1,44 @@
+.ReactIconButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  cursor: pointer;
+  background-color: transparent;
+
+  max-height: 40px;
+  min-height: 40px;
+  height: 40px;
+  max-width: 40px;
+  min-width: 40px;
+
+  transition: background-color 0.2s;
+}
+.ReactIconButton:hover {
+  background: rgba(255,255,255,0.08);
+}
+.ReactIconButton.active {
+  background-color: #1d2e6a
+}
+
+.rib-text {
+  font-size: 11px;
+}
+
+/* Force bounds on icon size to fit text evenly */
+.ReactIconButton > *:first-child {
+  min-height: 65%;
+  max-height: 65%;
+}
+
+.ReactIconButton > *:last-child {
+  min-height: 35%;
+  max-height: 35%;
+}
+
+/* No text (single element) */
+.ReactIconButton > *:first-child:last-child {
+  min-height: 100%;
+  max-height: 100%;
+}

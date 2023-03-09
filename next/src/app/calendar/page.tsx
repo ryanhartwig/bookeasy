@@ -2,6 +2,7 @@ import styles from './calendar.module.scss';
 
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
+import { Calendar } from '@/components/calendar/Calendar';
 
 export default function Page() {
   
@@ -11,7 +12,7 @@ export default function Page() {
 
       </SecondaryHeader>
       <div className={styles.content}>
-
+        <Calendar />
       </div>
     </div>
   )

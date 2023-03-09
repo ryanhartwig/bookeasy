@@ -1,23 +1,27 @@
+'use client';
+
 import './Calendar.css';
 
 import { Days } from './Days';
 
 /* React Icons */
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { ReactIconButton } from '../ui/ReactIconButton';
+import { ReactIconButton } from '../UI/ReactIconButton';
 import { useCallback, useState } from 'react';
-import { days, months } from '../../utility/data/days_months';
-import { minMaxDate } from '../../utility/helpers/minMaxDate';
+import { getDayRange as minMaxDate } from '@/utility/functions/getDayRange';
 
 interface CalendarProps {
   showOptions?: boolean,
   selected?: [number, number],
   onSelect?: ([min, max]: [number, number]) => any,
 }
-interface View {
+interface View {        
   month: number,
   year: number,
 }
+
+export const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export const Calendar = ({showOptions, onSelect, selected}: CalendarProps) => {
 
@@ -67,7 +71,6 @@ export const Calendar = ({showOptions, onSelect, selected}: CalendarProps) => {
     onSelect && onSelect([min, max]);
   }, [max, min, onSelect]);
 
-  const blockInc = viewing.month === today.getMonth() && viewing.year === today.getFullYear();
 
   return (
     <div className='Calendar'>
@@ -75,21 +78,19 @@ export const Calendar = ({showOptions, onSelect, selected}: CalendarProps) => {
       <div className='Calendar-period noselect'>
         <div className='Calendar-period-month'>
           {/* Month with < / > inc options when showOptions is true */}
-          {showOptions && 
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
-              <AiOutlineLeft size={15}/>
-            </ReactIconButton> }
 
+          <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
+            <AiOutlineLeft size={15}/>
+          </ReactIconButton> 
           <h2>{months[viewing.month]}</h2>
 
-          {!blockInc && showOptions &&  
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
-              <AiOutlineRight size={15}/>
-            </ReactIconButton>}
+          <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
+            <AiOutlineRight size={15}/>
+          </ReactIconButton>
         </div>
         <div className='Calendar-reset'>
           <h2>{viewing.year}</h2>
-          {showOptions && <p onClick={reset}>Today</p>}
+          <p onClick={reset}>Today</p>
         </div>
       </div>
 

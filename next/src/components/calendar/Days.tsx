@@ -1,4 +1,6 @@
-import { useMemo } from 'react';
+'use client';
+
+import { CSSProperties, useMemo } from 'react';
 import { Day } from './Day';
 import './Days.css';
 
@@ -18,7 +20,7 @@ export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
     const weekDate = new Date(date);
     const array = new Array(42).fill(0);
 
-    return array.map((n, i) => {
+    return array.map((_, i) => {
       const day = weekDate.getDate();
       if (i && day === 0) {
         weekDate.setMonth(weekDate.getMonth() + 1);
@@ -33,7 +35,25 @@ export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
 
   return (
     <div className='Days'>
-      {days.map((d, i) => <Day key={`${i}-${d.getDate}`} selected={selected} onSelect={onSelect} date={d} viewing={viewing} />)}
+      {days.map((d, i) => {
+        const style: CSSProperties = {}
+
+        if (i < 7) {
+          style.borderTop = 'none';
+        }
+        if (i % 7 === 0) {
+          style.borderLeft = 'none';
+        }
+        
+        return <Day 
+          key={`${i}-${d.getDate}`} 
+          selected={selected} 
+          onSelect={onSelect} 
+          date={d} 
+          viewing={viewing} 
+          style={style}
+        />
+      })}
     </div>
   )
 }
