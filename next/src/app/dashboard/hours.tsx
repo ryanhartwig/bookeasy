@@ -19,6 +19,7 @@ interface HoursProps {
 interface AppointmentData extends Appointment {
   client_name: string,
   service_name: string,
+  color: string,
 }
 
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
@@ -30,13 +31,14 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
     appointments.forEach(app => {
       const date = new Date(app.start_date);
       const calculatedIndex = (date.getHours() * 4) + (date.getMinutes() / 15);
-      const client_name = clients.get(app.client_id)?.name || '';
-      const service_name = services.get(app.service_id)?.name || '';
+      const client = clients.get(app.client_id);
+      const service = services.get(app.service_id);
 
       appointmentIndices.set(calculatedIndex, {
         ...app,
-        client_name,
-        service_name,
+        client_name: client?.name || '',
+        service_name: service?.name || '',
+        color: service?.color || '',
       });
     });
 
@@ -86,7 +88,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
             {covered && <div className={styles.cover} />}
             {isHour && <p>{hour12} {period}</p>}
             {appointment && 
-              <div className={styles.weekly_app} style={{height}}>
+              <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color}}>
                 <div>
                   <p style={{fontSize: 12}}>{appointment.client_name}</p>
                   <p>{formatTime(appointment.start_date)}</p>
