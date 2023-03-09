@@ -52,13 +52,10 @@
 }
 .Day-content.today {
   color: rgb(79, 184, 255);
-  background: rgba(64, 130, 174, 0.263);
+  background: #DFF0FF;
 }
 .Day-content.today p {
   font-weight: 700;
-}
-.Day-content.session {
-  background: rgba(37, 107, 91, 0.294);
 }
 
 /* Next or previous month reset when day number is the same */
