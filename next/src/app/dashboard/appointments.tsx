@@ -16,8 +16,6 @@ interface AppointmentsProps {
 
 export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
   
-  
-
   return (
     <div className={styles.appointments}>
       {appointments.map(app => {
