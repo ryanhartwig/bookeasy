@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const Redirect = () => {
   const router = useRouter();
 
-  useEffect(() => {router.replace('/dashboard')}, []);
+  useEffect(() => router.replace('/dashboard'), [router]);
 
   return <></>
 }

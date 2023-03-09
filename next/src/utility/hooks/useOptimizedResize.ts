@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, MutableRefObject } from "react";
+import { useState, useCallback, useEffect, MutableRefObject } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 /** Optimizes element resizing by using debounce to await resize finish before applying width to an element 

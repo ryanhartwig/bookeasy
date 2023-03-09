@@ -16,7 +16,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({start}) => {
         const [day, month, date] = thisDay.toDateString().split(' ');
         const color = thisDay.getDate() === new Date().getDate()
           ? '#216FDB'
-          : '';
+          : 'inherit';
         
         return <div key={i}>
           <p style={{color}}>{day}</p>

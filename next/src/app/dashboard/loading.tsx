@@ -1,5 +1,4 @@
 import { SecondaryHeader } from "@/components/SecondaryHeader"
-import { Card } from "@/components/UI/Card"
 import { SectionLabel } from "@/components/UI/SectionLabel"
 
 export default function Loading() {

@@ -23,7 +23,6 @@ interface AppointmentData extends Appointment {
 }
 
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
-  const blocks = new Array(96).fill(true);
   const availability = useMemo(() => new Map<number, string[][]>(), []);
   const appointmentIndices = useMemo(() => new Map<number, AppointmentData>(), []);
 
@@ -51,54 +50,60 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
     });
   }, [appointmentIndices, appointments, availability, clients, services]);
 
+  
+  const blocks = useMemo(() => {
+    const b = new Array(96).fill(true)
+    return b.map((_, i) => {
+      const borderBottomColor = i % 4 === 3 ? '#A3A3A3' : 'inherit';
+
+      const appointment = appointmentIndices.get(i);
+      let height: string = '';
+
+      if (appointment) {
+        height = `${(appointment.end_date - appointment.start_date) / 1000 / 60 - 3}px`;
+      }
+
+      const hour = i / 4; // 0 - 23
+      const segment = (i % 4) * 15; // 0 15 30 45
+
+      const isHour = i % 4 === 0;
+      const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+      const period = hour < 12 ? 'am' : 'pm';
+
+      let covered = true;
+      const dayAvailability = availability.get(day);
+
+      if (dayAvailability) {
+        covered = !dayAvailability.some(([start, end]) => {
+          let [startHr, startMin] = start.split(':').map(s => Number(s));
+          let [endHr, endMin] = end.split(':').map(s => Number(s));
+
+          return (startHr === hour ? startMin <= segment : startHr < hour)
+            && (endHr === hour ? endMin > segment : endHr > hour);
+        })
+      }
+
+      return (
+        <div key={i} className={styles.block} style={{borderBottomColor}}>
+          {covered && <div className={styles.cover} />}
+          {isHour && <p>{hour12} {period}</p>}
+          {appointment && 
+            <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color || 'blue'}}>
+              <div>
+                <p style={{fontSize: 12}}>{appointment.client_name}</p>
+                <p>{formatTime(appointment.start_date)}</p>
+              </div>
+              <p>{appointment.service_name}</p>
+            </div>
+          }
+        </div>
+      )
+    })
+  }, [appointmentIndices, availability, day]);
+  
   return (
     <div className={styles.hours}>
-      {blocks.map((_, i) => {
-        const borderBottomColor = i % 4 === 3 ? '#A3A3A3' : '';
-
-        const appointment = appointmentIndices.get(i);
-        let height: string = '';
-
-        if (appointment) {
-          height = `${(appointment.end_date - appointment.start_date) / 1000 / 60 - 3}px`;
-        }
-
-        const hour = i / 4; // 0 - 23
-        const segment = (i % 4) * 15; // 0 15 30 45
-
-        const isHour = i % 4 === 0;
-        const hour12 = hour % 12 === 0 ? 12 : hour % 12;
-        const period = hour < 12 ? 'am' : 'pm';
-
-        let covered = true;
-        const dayAvailability = availability.get(day);
-
-        if (dayAvailability) {
-          covered = !dayAvailability.some(([start, end]) => {
-            let [startHr, startMin] = start.split(':').map(s => Number(s));
-            let [endHr, endMin] = end.split(':').map(s => Number(s));
-
-            return (startHr === hour ? startMin <= segment : startHr < hour)
-              && (endHr === hour ? endMin > segment : endHr > hour);
-          })
-        }
-
-        return (
-          <div key={i} className={styles.block} style={{borderBottomColor}}>
-            {covered && <div className={styles.cover} />}
-            {isHour && <p>{hour12} {period}</p>}
-            {appointment && 
-              <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color || 'blue'}}>
-                <div>
-                  <p style={{fontSize: 12}}>{appointment.client_name}</p>
-                  <p>{formatTime(appointment.start_date)}</p>
-                </div>
-                <p>{appointment.service_name}</p>
-              </div>
-            }
-          </div>
-        )
-      })}
+      {blocks}
     </div>
   )
 }

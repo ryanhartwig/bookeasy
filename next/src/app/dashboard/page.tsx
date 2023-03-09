@@ -14,7 +14,7 @@ export default function Page() {
   const [start, end] = getCurrentWeek();
   
   return (
-    <div className={styles.dashboard}>
+    <div id="dashboard" className={styles.dashboard}>
       <SecondaryHeader>
         <div className={styles.header}>
           <div>
@@ -35,7 +35,7 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <SectionLabel label='Today' />
-        <Appointments appointments={sample_appointments} /> {/* Will be fetched and passed */}
+        <Appointments appointments={sample_appointments} />
         <SectionLabel label='This Week' />
         <Card className={styles.weekview_card}>
           <WeekDays start={start} />

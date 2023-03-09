@@ -6,10 +6,8 @@
 export const formatTime = (date: number | Date, lowercase: boolean = false) => {
   const d = new Date(date);
 
-  let [hours, period] = d.toLocaleTimeString().split(' ');
+  let [hours, period] = d.toLocaleTimeString().split(/\s/);
 
-  if (!period) period = hours.slice(-2);
-  
   hours = hours.split(':').slice(0, 2).join(':');
 
   if (lowercase) {
