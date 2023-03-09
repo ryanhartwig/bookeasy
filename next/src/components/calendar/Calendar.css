@@ -7,8 +7,10 @@
   width: 100%;
   height: 100%;
 
-  max-width: 650px;
-  max-height: 650px;
+  max-width: 1200px;
+  max-height: 1200px;
+
+  text-align: center;
 
   padding: 10px;
 }
@@ -44,7 +46,9 @@
   flex-shrink: 0;
 
   width: 100%;
-  height: 30px;
+  height: 100%;
+
+  text-align: center;
 
   padding-right: 25px;
   padding-left: 15px;
