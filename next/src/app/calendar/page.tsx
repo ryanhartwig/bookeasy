@@ -112,10 +112,16 @@ export default function Page() {
   }, [startDate]);
   
   // This will be fetched & revalidated on updates, and will only include appointments for the current month
-  const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments.filter(app => app.start_date >= start && app.start_date <= end));
+  const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments
+    .filter(app => app.start_date >= start && app.start_date <= end)
+    .sort((a, b) => a.start_date - b.start_date)
+  );
 
   useEffect(() => {
-    setAppointments(sample_appointments.filter(app => app.start_date >= start && app.start_date <= end))
+    setAppointments(sample_appointments
+      .filter(app => app.start_date >= start && app.start_date <= end)
+      .sort((a, b) => a.start_date - b.start_date)
+    );
   }, [end, start, startDate]);
 
   const services = useMemo(() => new Map<string, Service>(), []);
