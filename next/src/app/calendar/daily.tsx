@@ -14,6 +14,8 @@ interface DailyProps {
 }
 
 export const Daily: React.FC<DailyProps> = ({day}) => {
+
+  
   const services = useMemo( () => new Map<string, Service>(), []);
   const clients = useMemo(() => new Map<string, Client>(), []);
 
@@ -32,6 +34,7 @@ export const Daily: React.FC<DailyProps> = ({day}) => {
   
   return (
     <div className={styles.daily}>
+      <p className={styles.day}>{new Date(day).toDateString()}</p>
       <div className={styles.day_wrapper} >
         <Card ref={wrapperRef} className={styles.day_card} style={{width}}>
           <Hours services={services} clients={clients} appointments={[]} />

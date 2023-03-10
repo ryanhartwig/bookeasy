@@ -1,7 +1,15 @@
 @use 'src/app/globalutil';
 
+.day {
+  text-align: center;
+  color: var(--font-color-alt);
+  font-size: 14px;
+  font-weight: 300;
+  padding-bottom: 5px;
+}
+
 .daily {
-  padding: 63px 10px 14px 30px;
+  padding: 33px 10px 14px 30px;
   height: 100%;
 
   width: 350px;
