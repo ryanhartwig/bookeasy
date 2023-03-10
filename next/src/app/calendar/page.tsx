@@ -11,6 +11,10 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
 import { Appointment } from '@/types/Appointment';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
+import { sample_clients } from '@/utility/sample_data/sample_clients';
+import { sample_services } from '@/utility/sample_data/sample_services';
 
 export interface View {        
   month: number,
@@ -18,7 +22,6 @@ export interface View {
 }
 
 export default function Page() {
-
   const today = new Date();
   const initDate = new Date();
   initDate.setDate(1);
@@ -26,8 +29,6 @@ export default function Page() {
 
   const [selected, setSelected] = useState<[number, number]>(getDayRange());
 
-  
-  
   // On selecting day
   const onSelect = useCallback(([min, max]: [number, number]) => {
     setSelected([min, max]);
@@ -116,6 +117,14 @@ export default function Page() {
   useEffect(() => {
     setAppointments(sample_appointments.filter(app => app.start_date >= start && app.start_date <= end))
   }, [end, start, startDate]);
+
+  const services = useMemo(() => new Map<string, Service>(), []);
+  const clients = useMemo(() => new Map<string, Client>(), []);
+  
+  useEffect(() => {
+    sample_services.forEach(s => services.set(s.id, s));
+    sample_clients.forEach(c => clients.set(c.id, c));
+  }, [clients, services]);
   
   return (
     <div className={styles.calendar}>
@@ -140,7 +149,7 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <Daily day={selected[0]} />
-        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} />
+        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clients} services={services} />
       </div>
     </div>
   )

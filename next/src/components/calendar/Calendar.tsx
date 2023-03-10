@@ -4,10 +4,9 @@ import './Calendar.css';
 import { Days } from './Days';
 import { View } from '@/app/calendar/page';
 
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
-import { useEffect, useMemo, useState } from 'react';
 import { Appointment } from '@/types/Appointment';
-import { getDayRange } from '@/utility/functions/getDayRange';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
 
 interface CalendarProps {
   selected?: [number, number],
@@ -15,12 +14,14 @@ interface CalendarProps {
   startDate: Date,
   viewing: View,
   appointments: Appointment[],
+  services: Map<string, Service>,
+  clients: Map<string, Client>,
 }
 
 export const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 export const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export const Calendar: React.FC<CalendarProps> = ({startDate, onSelect, selected, viewing, appointments}) => {
+export const Calendar: React.FC<CalendarProps> = ({startDate, onSelect, selected, viewing, appointments, clients, services}) => {
 
   return (
     <div className='Calendar'>
@@ -31,7 +32,7 @@ export const Calendar: React.FC<CalendarProps> = ({startDate, onSelect, selected
       
       {/* Calendar Days */}
       <div className='Calendar-fields-wrapper noselect'>
-        <Days appointments={appointments} date={startDate} viewing={viewing} onSelect={onSelect} selected={selected} />
+        <Days clients={clients} services={services} appointments={appointments} date={startDate} viewing={viewing} onSelect={onSelect} selected={selected} />
       </div>
     </div>
   )

@@ -1,6 +1,8 @@
 'use client';
 
 import { Appointment } from '@/types/Appointment';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
 import { getDayRange } from '@/utility/functions/getDayRange';
 import { CSSProperties, useMemo } from 'react';
 import { Day } from './Day';
@@ -15,9 +17,11 @@ interface DaysProps {
   onSelect?: ([min, max]: [number, number]) => any,
   selected?: [number, number],
   appointments: Appointment[],
+  services: Map<string, Service>,
+  clients: Map<string, Client>,
 }
 
-export const Days: React.FC<DaysProps> = ({date, viewing, selected, onSelect, appointments}) => {
+export const Days: React.FC<DaysProps> = ({date, viewing, selected, onSelect, appointments, clients, services}) => {
 
   const days = useMemo(() => {
     const weekDate = new Date(date);
@@ -52,9 +56,11 @@ export const Days: React.FC<DaysProps> = ({date, viewing, selected, onSelect, ap
         date={d} 
         viewing={viewing} 
         style={style}
+        clients={clients}
+        services={services}
       />
     })
-  }, [appointments, date, onSelect, selected, viewing]);
+  }, [appointments, clients, date, onSelect, selected, services, viewing]);
 
 
   return (

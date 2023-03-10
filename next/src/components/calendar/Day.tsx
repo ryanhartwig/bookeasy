@@ -7,6 +7,8 @@ import clsx from 'clsx';
 import { getDayRange as minMaxDate } from '@/utility/functions/getDayRange';
 import { CSSProperties } from 'react';
 import { Appointment } from '@/types/Appointment';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
 
 interface DayProps {
   date: Date,
@@ -18,9 +20,11 @@ interface DayProps {
   selected?: [number, number],
   style?: CSSProperties,
   appointments: Appointment[],
+  services: Map<string, Service>,
+  clients: Map<string, Client>,
 }
 
-export const Day: React.FC<DayProps> = ({date, style, viewing, onSelect, selected, appointments}) => {
+export const Day: React.FC<DayProps> = ({date, style, viewing, onSelect, selected, appointments, clients, services}) => {
 
   const today = new Date();
   const ss = [0, 6].includes(date.getDay());
@@ -40,10 +44,18 @@ export const Day: React.FC<DayProps> = ({date, style, viewing, onSelect, selecte
         {'selected': selected?.includes(rangeMin)}
       )}>
         <p>{date.getDate()}</p>
-        <div className='Day-appointment'>
-          {appointments.map(app => (
-            <p key={app.id}>{app.service_name}</p>
-          ))}
+        <div className='Day-appointments'>
+          {appointments.map(app => {
+            const service = services.get(app.service_id);
+            const client = clients.get(app.client_id);
+
+            return (
+              <div key={app.id} className='Day-appointment' style={{background: service?.color || 'initial'}}>
+                <p>{app.service_name}</p>
+              </div>
+            )
+          }
+          )}
         </div>
       </div>
     </div>
