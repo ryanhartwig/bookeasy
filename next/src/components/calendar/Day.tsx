@@ -33,7 +33,7 @@ export const Day = ({date, style, viewing, onSelect, selected}: DayProps) => {
       <div className={clsx(
         'Day-content', 
         {'out-of-view': viewing.month !== date.getMonth()},
-        {'today': viewing.month === today.getMonth() && date.getDate() === today.getDate()},
+        {'today': viewing.year === today.getFullYear() && viewing.month === today.getMonth() && date.getDate() === today.getDate()},
         {ss},
         {'selected': selected?.includes(rangeMin)}
       )}>

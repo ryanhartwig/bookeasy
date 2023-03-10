@@ -4,7 +4,7 @@ import styles from './calendar.module.scss';
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Calendar, months } from '@/components/calendar/Calendar';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getDayRange } from '@/utility/functions/getDayRange';
 import { ReactIconButton } from '@/components/UI/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -38,6 +38,20 @@ export default function Page() {
     year: today.getFullYear(),
   });
 
+  useEffect(() => {
+    const selectedDate = new Date(selected[0]);
+    if (viewing.month === selectedDate.getMonth()) return;
+
+    setViewing({
+      month: selectedDate.getMonth(),
+      year: selectedDate.getFullYear(),
+    });
+    selectedDate.setDate(1);
+    selectedDate.setDate(selectedDate.getDay() * -1);
+
+    setStartDate(selectedDate);
+  }, [selected, viewing.month]);
+
   // Increment / decrement month
   const onMonthSwitch = useCallback((n: number) => {
     const newDate = new Date(startDate);
@@ -50,9 +64,20 @@ export default function Page() {
     })
 
     newDate.setDate(1);
+    const selectedDate = new Date(newDate);
     newDate.setDate(newDate.getDay() * -1);
 
     setStartDate(newDate);
+
+    if (n === 2) {
+      setSelected(getDayRange(selectedDate));
+    }
+    if (n === 0) {
+      selectedDate.setMonth(selectedDate.getMonth() + 1);
+      selectedDate.setDate(1);
+      selectedDate.setDate(selectedDate.getDate() - 1);
+      setSelected(getDayRange(selectedDate));
+    }
   }, [startDate]);
 
   const [min, max] = getDayRange(new Date());
