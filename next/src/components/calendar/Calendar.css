@@ -84,6 +84,8 @@
   width: 100%;
   font-weight: 100;
   font-size: 14px;
+
+  color: var(--font-color-alt)
 }
 
 .Calendar-fields-wrapper {

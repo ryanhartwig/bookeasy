@@ -53,8 +53,8 @@
   z-index: 1;
 }
 .Day-content.today {
-  color: rgb(79, 184, 255);
-  background: #DFF0FF;
+  // color: rgb(79, 184, 255);
+  color: var(--font-utility);
 }
 .Day-content.today p {
   font-weight: 700;
@@ -73,5 +73,5 @@
 }
 
 .Day-content.selected {
-  border: 1px solid rgba(128, 128, 128, 0.6);
+  background: #DFF0FF;
 }

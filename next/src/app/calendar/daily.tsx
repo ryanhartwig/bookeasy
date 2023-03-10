@@ -5,9 +5,10 @@ export const Daily = () => {
 
   return (
     <div className={styles.daily}>
-      <Card>
+      <Card className={styles.day_wrapper} >
         <p>test</p>
       </Card>
     </div>
+    
   )
 }
