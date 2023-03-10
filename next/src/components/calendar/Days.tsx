@@ -1,5 +1,7 @@
 'use client';
 
+import { Appointment } from '@/types/Appointment';
+import { getDayRange } from '@/utility/functions/getDayRange';
 import { CSSProperties, useMemo } from 'react';
 import { Day } from './Day';
 import './Days.css';
@@ -11,10 +13,11 @@ interface DaysProps {
     year: number,
   }
   onSelect?: ([min, max]: [number, number]) => any,
-  selected?: [number, number]
+  selected?: [number, number],
+  appointments: Appointment[],
 }
 
-export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
+export const Days: React.FC<DaysProps> = ({date, viewing, selected, onSelect, appointments}) => {
 
   const days = useMemo(() => {
     const weekDate = new Date(date);
@@ -22,14 +25,16 @@ export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
 
     return array.map((_, i) => {
       const day = weekDate.getDate();
+      
+      // This may be redundant? day should never === 0
       if (i && day === 0) {
         weekDate.setMonth(weekDate.getMonth() + 1);
       }
 
       weekDate.setDate(day + 1);
       
-      // return new Date(weekDate);
       const d = new Date(weekDate);
+      const [start, end] = getDayRange(d);
       const style: CSSProperties = {}
 
       if (i < 7) {
@@ -43,12 +48,13 @@ export const Days = ({date, viewing, selected, onSelect}: DaysProps) => {
         key={`${i}-${d.getDate}`} 
         selected={selected} 
         onSelect={onSelect} 
+        appointments={appointments.filter(app => app.start_date >= start && app.start_date <= end)}
         date={d} 
         viewing={viewing} 
         style={style}
       />
     })
-  }, [date, onSelect, selected, viewing]);
+  }, [appointments, date, onSelect, selected, viewing]);
 
 
   return (

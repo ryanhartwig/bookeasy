@@ -6,6 +6,7 @@ import clsx from 'clsx';
 
 import { getDayRange as minMaxDate } from '@/utility/functions/getDayRange';
 import { CSSProperties } from 'react';
+import { Appointment } from '@/types/Appointment';
 
 interface DayProps {
   date: Date,
@@ -16,9 +17,10 @@ interface DayProps {
   onSelect?: ([min, max]: [number, number]) => any,
   selected?: [number, number],
   style?: CSSProperties,
+  appointments: Appointment[],
 }
 
-export const Day = ({date, style, viewing, onSelect, selected}: DayProps) => {
+export const Day: React.FC<DayProps> = ({date, style, viewing, onSelect, selected, appointments}) => {
 
   const today = new Date();
   const ss = [0, 6].includes(date.getDay());
@@ -38,6 +40,11 @@ export const Day = ({date, style, viewing, onSelect, selected}: DayProps) => {
         {'selected': selected?.includes(rangeMin)}
       )}>
         <p>{date.getDate()}</p>
+        <div className='Day-appointment'>
+          {appointments.map(app => (
+            <p key={app.id}>{app.service_name}</p>
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -52,11 +52,9 @@
   position: absolute;
   z-index: 1;
 }
-.Day-content.today {
+.Day-content.today > p {
   // color: rgb(79, 184, 255);
   color: var(--font-utility);
-}
-.Day-content.today p {
   font-weight: 700;
 }
 
@@ -74,4 +72,11 @@
 
 .Day-content.selected {
   background: #DFF0FF;
+}
+
+.Day-appointment {
+  p {
+    font-weight: 1300;
+    font-size: 12px;
+  }
 }

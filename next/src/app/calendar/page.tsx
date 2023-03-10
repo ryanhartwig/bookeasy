@@ -4,11 +4,13 @@ import styles from './calendar.module.scss';
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Calendar, months } from '@/components/calendar/Calendar';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { getDayRange } from '@/utility/functions/getDayRange';
 import { ReactIconButton } from '@/components/UI/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
+import { Appointment } from '@/types/Appointment';
+import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 
 export interface View {        
   month: number,
@@ -23,6 +25,8 @@ export default function Page() {
   initDate.setDate(initDate.getDay() * -1);
 
   const [selected, setSelected] = useState<[number, number]>(getDayRange());
+
+  
   
   // On selecting day
   const onSelect = useCallback(([min, max]: [number, number]) => {
@@ -94,6 +98,24 @@ export default function Page() {
     setStartDate(init);
     onSelect && onSelect([min, max]);
   }, [max, min, onSelect]);
+
+  const [start, end] = useMemo<[number, number]>(() => {
+    const startEnd = new Date(startDate);
+    startEnd.setDate(startEnd.getDate() + 1);
+    const [start] = getDayRange(startEnd);
+
+    startEnd.setDate(startEnd.getDate() + 41);
+    const [_, end] = getDayRange(startEnd);
+
+    return [start, end];
+  }, [startDate]);
+  
+  // This will be fetched & revalidated on updates, and will only include appointments for the current month
+  const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments.filter(app => app.start_date >= start && app.start_date <= end));
+
+  useEffect(() => {
+    setAppointments(sample_appointments.filter(app => app.start_date >= start && app.start_date <= end))
+  }, [end, start, startDate]);
   
   return (
     <div className={styles.calendar}>
@@ -118,7 +140,7 @@ export default function Page() {
       </SecondaryHeader>
       <div className={styles.content}>
         <Daily day={selected[0]} />
-        <Calendar selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} />
+        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} />
       </div>
     </div>
   )
