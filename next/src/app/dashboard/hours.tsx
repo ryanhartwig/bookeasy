@@ -26,10 +26,10 @@ interface AppointmentData extends Appointment {
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
   const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
-  
+
   useEffect(() => {
     setAppointmentIndices(p => {
-      const prev = new Map(p);
+      const prev = new Map();
 
       appointments.forEach(app => {
         const date = new Date(app.start_date);

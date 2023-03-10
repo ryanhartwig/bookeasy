@@ -117,6 +117,8 @@ export default function Page() {
     .sort((a, b) => a.start_date - b.start_date)
   );
 
+  const dayApps = useMemo(() => appointments.filter(app => app.start_date >= selected[0] && app.start_date <= selected[1]), [appointments, selected]);
+
   useEffect(() => {
     setAppointments(sample_appointments
       .filter(app => app.start_date >= start && app.start_date <= end)
@@ -154,7 +156,7 @@ export default function Page() {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <Daily day={selected[0]} />
+        <Daily day={selected[0]} appointments={dayApps} services={services} clients={clients} />
         <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clients} services={services} />
       </div>
     </div>
