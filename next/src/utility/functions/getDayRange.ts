@@ -3,7 +3,7 @@
  * @param d Date or number (Date.getTime()) to parse
  * @returns The Date.getTime() (milliseconds) representing the very start and end of the day, of the provided date
  */
-export const getDayRange = (d: Date | number): [number, number] => {
+export const getDayRange = (d: Date | number = new Date()): [number, number] => {
   const date = new Date(d);
 
   // Set to very start of provided day

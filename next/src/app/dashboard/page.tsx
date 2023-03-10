@@ -6,8 +6,8 @@ import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
 import { SectionLabel } from '@/components/UI/SectionLabel';
 import { Appointments } from './appointments';
 import { Card } from '@/components/UI/Card';
+import { WeekDayNames } from './weekDayNames';
 import { WeekDays } from './weekDays';
-import { Hourly } from './hourly';
 
 export default function Page() {
 
@@ -38,8 +38,8 @@ export default function Page() {
         <Appointments appointments={sample_appointments} />
         <SectionLabel label='This Week' />
         <Card className={styles.weekview_card}>
-          <WeekDays start={start} />
-          <Hourly />
+          <WeekDayNames start={start} />
+          <WeekDays />
         </Card>
       </div>
     </div>

@@ -1,0 +1,13 @@
+.Days {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  height: 100%;  
+  width: 100%;
+
+  flex-wrap: wrap;
+  
+  padding: 4px;
+  padding-top: 0;
+}

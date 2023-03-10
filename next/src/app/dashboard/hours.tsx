@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import styles from './weekly_overview.module.scss';
@@ -10,7 +11,7 @@ import { Client } from '@/types/Client';
 import { formatTime } from '@/utility/functions/formatTime';
 
 interface HoursProps {
-  day: number,
+  day?: number,
   appointments: Appointment[],
   services: Map<string, Service>,
   clients: Map<string, Client>,
@@ -23,12 +24,12 @@ interface AppointmentData extends Appointment {
 }
 
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
-  const [availability, setAvailability] = useState<Map<number, string[][]>>(new Map());
+  const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
-  
+
   useEffect(() => {
     setAppointmentIndices(p => {
-      const prev = new Map(p);
+      const prev = new Map();
 
       appointments.forEach(app => {
         const date = new Date(app.start_date);
@@ -49,6 +50,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
   }, [appointments, clients, services]);
   
   useEffect(() => {
+    if (day === undefined) return;
     setAvailability(p => {
       const prev = new Map(p);
 
@@ -83,11 +85,10 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
       const hour12 = hour % 12 === 0 ? 12 : hour % 12;
       const period = hour < 12 ? 'am' : 'pm';
 
-      let covered = true;
-      const dayAvailability = availability.get(day);
+      let covered = availability === undefined ? false : true;
 
-      if (dayAvailability) {
-        covered = !dayAvailability.some(([start, end]) => {
+      if (day && availability?.has(day)) {
+        covered = !availability.get(day)!.some(([start, end]) => {
           let [startHr, startMin] = start.split(':').map(s => Number(s));
           let [endHr, endMin] = end.split(':').map(s => Number(s));
 

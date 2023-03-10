@@ -1,0 +1,100 @@
+.Day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: calc(100% / 7);
+  height: calc(100% / 6);
+  max-width: calc(100% / 7);
+  max-height: calc(100% / 6);
+
+  border-left: 1px solid var(--dividers);
+  border-top: 1px solid var(--dividers);
+}
+
+.Day-content {
+  position: relative;
+  
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+
+  padding: 6px;
+  
+  background: #ffffff;
+  
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+
+  overflow:hidden;
+}
+
+.Day p {
+  font-size: clamp(10px, 16px, 1.5vh);
+  font-weight: 200;
+}
+
+/* Conditional Styling */
+.Day-content.out-of-view {
+  opacity: 0.4;
+}
+
+.Day-content-flash {
+  position: absolute;
+  z-index: 0;
+
+  color: rgba(255, 255, 255, 0.2);
+}
+.Day-content.session p {
+  position: absolute;
+  z-index: 1;
+}
+.Day-content.today > p {
+  // color: rgb(79, 184, 255);
+  color: var(--font-utility);
+  font-weight: 700;
+}
+
+/* Next or previous month reset when day number is the same */
+.Day-content.today.out-of-view {
+  color: white;
+  background: #302D2D;
+}
+.Day-content.today.out-of-view.ss {
+  background: rgba(14, 52, 77, 0.637);
+}
+.Day-content.today.out-of-view p {
+  font-weight: 200;
+}
+
+.Day-content.selected {
+  background: #DFF0FF;
+}
+
+.Day-appointments {
+  width: 100%;
+  max-height: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+}
+.Day-appointment {
+  width: 100%;
+  height: 23px;
+  border-radius: 3px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 2px 0;
+
+  p {
+    font-weight: 300;
+    font-size: 11px;
+    color: var(--font-on-dark);
+  }
+}

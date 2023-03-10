@@ -13,7 +13,7 @@ export const Navigator = () => {
   return (
     <div className='Navigator'>
       <div className='Navigator_logo'>
-        <Image className='Navigator_logo_icon' src={bookit} alt="Book it logo" />
+        <Image className='Navigator_logo_icon' priority src={bookit} alt="Book it logo" />
         <span>book it.</span>
       </div>
       <div className='Navigator_links'>
