@@ -1,14 +1,63 @@
+@use 'src/app/globalutil';
+
 .daily {
-  padding: 33px 10px 14px 30px;
+  padding: 63px 10px 14px 30px;
   height: 100%;
 
   width: 350px;
-  overflow: hidden;
 }
 
 .day_wrapper {
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
+  height: 90%;
+  overflow: hidden;
+  @include globalutil.shadow;
+}
+
+.day_card {
+  box-shadow: none;
   overflow-y: auto;
+
+  padding-left: 40px;
+  padding-top: 12px;
+
+  max-height: 100%;
+
+  // 15 minute block style overrides
+  > div {
+    border-left: none;
+    overflow: visible;
+
+    border-top: none;
+    
+    > div {
+      margin-left: 7px;
+
+      &:nth-child(4n) {
+        margin-left: 0;
+      }
+      
+      &:first-child {
+        border-top: 1px solid #a3a3a3;
+        border-bottom: none;
+        margin-left: 0;
+      }
+
+      &:nth-child(2) {
+        border-top: 1px solid #E7E7E7
+      }
+
+      &:first-child > p {
+        left: -39px;
+      }
+
+      > p {
+        font-size: 10px;
+        position: relative;
+        left: -41px;
+        top: -8px;
+        
+        color: rgb(156, 154, 154);
+      }
+      }
+  }
 }

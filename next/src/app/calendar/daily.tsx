@@ -23,14 +23,16 @@ export const Daily = () => {
 
   useEffect(() => {
     if (!wrapperRef.current ) return;
-    setWidth(`calc(100% + ${wrapperRef.current.offsetWidth - wrapperRef.current.clientWidth}px + 10px)`);
+    setWidth(`calc(100% + ${wrapperRef.current.offsetWidth - wrapperRef.current.clientWidth}px - 0px)`);
   }, []);
   
   return (
     <div className={styles.daily}>
-      <Card className={styles.day_wrapper} ref={wrapperRef} style={{width, boxShadow: 'none'}} >
-        <Hours services={services} clients={clients} appointments={[]} />
-      </Card>
+      <div className={styles.day_wrapper} >
+        <Card ref={wrapperRef} className={styles.day_card} style={{width}}>
+          <Hours services={services} clients={clients} appointments={[]} />
+        </Card>  
+      </div>
     </div>
     
   )
