@@ -72,8 +72,6 @@ export default function Page() {
         {/* Year/Month Select */}
         <div className='Calendar-period noselect'>
           <div className='Calendar-period-month'>
-            {/* Month with < / > inc options when showOptions is true */}
-
             <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
               <AiOutlineLeft size={15}/>
             </ReactIconButton> 
