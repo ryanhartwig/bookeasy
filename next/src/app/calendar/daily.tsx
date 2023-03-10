@@ -9,7 +9,11 @@ import { useMemo, useEffect, useState, useRef } from 'react';
 import { Hours } from '../dashboard/hours';
 import styles from './daily.module.scss';
 
-export const Daily = () => {
+interface DailyProps {
+  day: number,
+}
+
+export const Daily: React.FC<DailyProps> = ({day}) => {
   const services = useMemo( () => new Map<string, Service>(), []);
   const clients = useMemo(() => new Map<string, Client>(), []);
 

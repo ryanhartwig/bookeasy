@@ -22,8 +22,12 @@ export default function Page() {
   initDate.setDate(1);
   initDate.setDate(initDate.getDay() * -1);
 
+  const [selected, setSelected] = useState<[number, number]>(getDayRange());
+  
   // On selecting day
-  const onSelect = useCallback(([min, max]: [number, number]) => {}, []);
+  const onSelect = useCallback(([min, max]: [number, number]) => {
+    setSelected([min, max]);
+  }, []);
 
   // First date to show on the top left most cell of the calendar
   const [startDate, setStartDate] = useState<Date>(initDate);
@@ -88,8 +92,8 @@ export default function Page() {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <Daily />
-        <Calendar startDate={startDate} viewing={viewing} />
+        <Daily day={selected[0]} />
+        <Calendar selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} />
       </div>
     </div>
   )
