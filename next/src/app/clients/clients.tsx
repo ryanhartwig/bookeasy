@@ -1,16 +1,15 @@
 'use client';
 
 import { SectionLabel } from '@/components/UI/SectionLabel';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import styles from './clients.module.scss';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
+import Image from 'next/image';
 
 export const Clients = () => {
 
   const [query, setQuery] = useState<string>('');
-
-  
 
   return (
     <div className={styles.clients}>
@@ -22,7 +21,7 @@ export const Clients = () => {
             <SectionLabel label={b.name} />
             {clients.map(c => (
               <div key={c.id} className={styles.client}>
-                
+                {c.avatar && <Image alt="client avatar" src={c.avatar} style={{width: 30, height: 30}} />}
                 <p>{c.name}</p>
               </div>
             ))}
