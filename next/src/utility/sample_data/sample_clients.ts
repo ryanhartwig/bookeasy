@@ -17,7 +17,7 @@ export const sample_clients: Client[] = [{
   business_id: 'johnsonteam',
   details: {
     notes: 'Cannot do full appointments, modified rate to accomodate for this',
-  }
+  },
 }, {
   id: 'samuelcooper',
   name: 'Samuel Cooper',
