@@ -21,7 +21,7 @@ export const Clients = () => {
           // organize by team
           .filter(c => c.business_id === b.id)
           // space separated lazy search
-          .filter(c => !query.length || query.split(' ').every(slice => c.name.includes(slice)))
+          .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
         ;
         
         return (
@@ -49,6 +49,12 @@ export const Clients = () => {
 
   return (
     <div className={styles.clients}>
+      <input 
+        value={query} 
+        onChange={(e) => setQuery(e.target.value)} 
+        className={styles.input}
+        placeholder='Search by client...'
+      />
       {results}
     </div>
   )

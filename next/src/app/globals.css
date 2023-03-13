@@ -66,3 +66,14 @@ hr {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+input {
+  outline: none;
+  border: none;
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+::placeholder {
+  font-weight: 300;
+  opacity: 0.7;
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
