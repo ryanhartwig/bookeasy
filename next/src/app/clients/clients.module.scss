@@ -15,10 +15,6 @@
   flex-direction: column;
 }
 
-.details {
-  flex: 3 3 100%;
-}
-
 .client_team {
   display: flex;
   flex-direction: column;
@@ -56,5 +52,25 @@
   margin: 5px;
   font-size: 14px;
   font-weight: 300;
-  
+}
+
+/* Client details cards */
+.details {
+  display: flex;
+
+  flex: 3 3 100%;
+  padding: 10px;
+
+  > div:first-child {
+    flex: 0 0 313px;
+    display: flex;
+    flex-direction: column;
+  }
+  > div:last-child {
+    flex: 1 1 100%;
+  }
+}
+.card {
+  margin: 10px;
+  max-width: 700px;
 }
