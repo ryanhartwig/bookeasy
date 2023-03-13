@@ -8,6 +8,6 @@ export interface Client {
   id: string,
   name: string,
   email: string,
-  teams: string[],
-  details: Details[],
+  teams: string,
+  details?: Details,
 };
