@@ -8,7 +8,7 @@ import { sample_clients } from '@/utility/sample_data/sample_clients';
 
 export const Clients = () => {
 
-  const teams = useMemo<Set<string>>(() => new Set(), []);
+  const teams = useMemo<Set<string>>(() => new Set(sample_clients.map(c => c.team)), []);
   const [query, setQuery] = useState<string>('');
 
 

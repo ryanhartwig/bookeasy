@@ -6,8 +6,8 @@ interface Details {
 }
 export interface Client {
   id: string,
+  business_id: string,
   name: string,
   email: string,
-  teams: string,
   details?: Details,
 };
