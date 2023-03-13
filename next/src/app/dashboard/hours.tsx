@@ -87,14 +87,14 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
 
       let covered = availability === undefined ? false : true;
 
-      if (day && availability?.has(day)) {
+      if (day !== undefined && availability?.has(day)) {
         covered = !availability.get(day)!.some(([start, end]) => {
           let [startHr, startMin] = start.split(':').map(s => Number(s));
           let [endHr, endMin] = end.split(':').map(s => Number(s));
 
           return (startHr === hour ? startMin <= segment : startHr < hour)
             && (endHr === hour ? endMin > segment : endHr > hour);
-        })
+        });
       }
 
       return (

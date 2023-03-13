@@ -4,10 +4,7 @@ import { Card } from '@/components/UI/Card';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { getDayRange } from '@/utility/functions/getDayRange';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
-import { sample_services } from '@/utility/sample_data/sample_services';
-import { useMemo, useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Hours } from '../dashboard/hours';
 import styles from './daily.module.scss';
 
@@ -22,7 +19,6 @@ export const Daily: React.FC<DailyProps> = ({day, services, clients, appointment
 
   const [width, setWidth] = useState<string>('100%');
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
-
 
   useEffect(() => {
     if (!wrapperRef.current ) return;
