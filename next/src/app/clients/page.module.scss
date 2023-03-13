@@ -1,0 +1,16 @@
+.wrapper {
+  width: 100%;
+  height: calc(100% - var(--header-height));
+  overflow: hidden;
+  display: flex;
+}
+
+.clients {
+  background-color: var(--secondary-background);
+  flex: 1 1 300px;
+  min-width: 250px;
+}
+
+.details {
+  flex: 3 3 100%;
+}
