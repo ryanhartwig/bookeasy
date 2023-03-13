@@ -10,4 +10,5 @@ export interface Client {
   name: string,
   email: string,
   details?: Details,
+  avatar?: any,
 };

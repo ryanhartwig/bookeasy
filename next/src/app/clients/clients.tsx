@@ -19,10 +19,10 @@ export const Clients = () => {
         
         return (
           <div key={b.id} className={styles.client_team}>
-            <SectionLabel label={b.name} style={{marginLeft: 8}} />
+            <SectionLabel label={b.name} />
             {clients.map(c => (
               <div key={c.id} className={styles.client}>
-
+                
                 <p>{c.name}</p>
               </div>
             ))}
