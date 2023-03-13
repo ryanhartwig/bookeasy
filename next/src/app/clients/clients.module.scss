@@ -16,18 +16,32 @@
   flex: 3 3 100%;
 }
 
+.client_team {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .client {
   border-radius: 10px;
-  margin: 10px;
+  margin: 3px 10px;
   padding: 5px;
 
+  cursor: pointer;
+  
   display: flex;
   align-items: center;
   
-  width: 100%;
+  flex: 1 1 100%;
+
+  transition: background-color 0.2s;
 
   p {
     font-size: 14px;
+    font-weight: 300;
     margin-left: 15px;
   }
+}
+.selected {
+  background: #E8E8E8;
 }
