@@ -1,5 +1,6 @@
 import { Card } from '@/components/UI/Card';
 import { Client } from '@/types/Client';
+import Image from 'next/image';
 import styles from './clients.module.scss';
 
 interface DetailsProps {
@@ -14,7 +15,8 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       <>
         <div>
           <Card className={styles.card} style={{height: 444}}>
-            
+            {selected.avatar && <Image src={selected.avatar} alt="Client avatar" style={{width: 100, height: 100}} />}
+            <p>{selected.name}</p>
           </Card>
           <Card className={styles.card} style={{height: 272}}>
             
