@@ -1,4 +1,7 @@
-.services {
+@use 'src/app/globalutil';
+
+
+.services_page {
   height: calc(100% - var(--header-height));
 
   padding: 10px;
@@ -11,4 +14,18 @@
   p {
     font-size: 12px;
   }
+}
+
+.services_wrapper {
+  padding: 10px;
+}
+
+.service {
+  height: 85px;
+  width: 100%;
+
+  background: white;
+  margin: 10px;
+
+  @include globalutil.shadow;
 }
