@@ -1,7 +1,7 @@
 import type { Client } from "../../types/Client";
 
-import avatarMale from '../../../public/assets/avatar_male.png';
-import avatarFemale from '../../../public/assets/avatar_female.png';
+import avatarMale from '../../../public/assets/avatar_male.svg';
+import avatarFemale from '../../../public/assets/avatar_female.svg';
 
 export const sample_clients: Client[] = [{
   id: 'stevenprice',
