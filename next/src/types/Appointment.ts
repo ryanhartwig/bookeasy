@@ -11,4 +11,5 @@ export interface Appointment {
   service_provider: string,
   service_cost: number,
   is_video: boolean,
+  is_paid: boolean,
 };

@@ -9,6 +9,7 @@ html {
   --secondary-header-height: 58px;
   --font-color-alt: #676767;
   --font-utility: #216FDB;
+  --secondary-background: #FAF6F1;
 }
 
 * {
@@ -64,4 +65,15 @@ hr {
 .hidescrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+input {
+  outline: none;
+  border: none;
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+::placeholder {
+  font-weight: 300;
+  opacity: 0.7;
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }

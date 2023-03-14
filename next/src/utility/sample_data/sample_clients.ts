@@ -1,35 +1,47 @@
 import type { Client } from "../../types/Client";
 
+import avatarMale from '../../../public/assets/avatar_male.svg';
+import avatarFemale from '../../../public/assets/avatar_female.svg';
+
 export const sample_clients: Client[] = [{
   id: 'stevenprice',
   name: 'Steven Price',
   email: 'steven.price@gmail.com',
-  teams: ['christinabronson'],
-  details: []
+  business_id: 'christinabronson',
+  phone: '905-923-2359',
+  address: '2402 Plains Rd. East, Hamilton',
+  avatar: avatarMale,
 }, {
   id: 'alexanderstewart',
   name: 'Alexander Stewart',
   email: 'alexander.stewart@gmail.com',
-  teams: ['christinabronson'],
-  details: []
+  business_id: 'christinabronson',
+  phone: '905-923-1242',
+  address: '2412 Plains Rd. West, Hamilton',
+  avatar: avatarMale,
 }, {
   id: 'emiliegray',
   name: 'Emilie Gray',
   email: 'emilie.gray@gmail.com',
-  teams: ['johnsonteam'],
-  details: [{
-    notes: 'Cannot do full appointments, modified rate to accomodate for this',
-  }]
+  business_id: 'johnsonteam',
+  phone: '905-353-5315',
+  address: '1212 Plains Rd. East, Hamilton',
+  notes: 'Cannot do full appointments, modified rate to accomodate for this',
+  avatar: avatarFemale,
 }, {
   id: 'samuelcooper',
   name: 'Samuel Cooper',
   email: 'samuel.cooper@gmail.com',
-  teams: ['johnsonteam'],
-  details: []
+  business_id: 'johnsonteam',
+  phone: '905-565-3531',
+  address: '1355 Plains Rd. East, Hamilton',
+  avatar: avatarMale,
 }, {
   id: 'ethanblackwood',
   name: 'Ethan Blackwood',
   email: 'ethan.blackwood@gmail.com',
-  teams: ['johnsonteam'],
-  details: []
+  business_id: 'johnsonteam',
+  phone: '905-264-4644',
+  address: '1245 Plains Rd. West, Hamilton',
+  avatar: avatarMale,
 }];

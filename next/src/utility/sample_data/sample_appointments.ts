@@ -19,6 +19,7 @@ export const sample_appointments: Appointment[] = [{
     service_name: 'Initial Consult',
     service_provider: 'Christina Bronson',
     is_video: true,
+    is_paid: true,
   }, {
     id: 'app2',
     user_id: 'christinabronson',
@@ -32,5 +33,6 @@ export const sample_appointments: Appointment[] = [{
     service_name: 'Full Consult',
     service_provider: 'Johnson Team',
     is_video: true,
+    is_paid: !!Math.round(Math.random()),
   }
 ];
