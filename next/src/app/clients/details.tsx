@@ -6,7 +6,7 @@ import { Client } from '@/types/Client';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './clients.module.scss';
 
 interface DetailsProps {
@@ -36,6 +36,8 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       .reduce((a, b) => a + b, 0)
       .toFixed(2)
   }, [booked, previous]);
+
+  const [tab, setTab] = useState<number>(0);
 
   return (
     <div className={styles.details}>
@@ -92,8 +94,21 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
         </Card>
       </div>
       <div>
-        <Card className={styles.card} style={{height: 736}}>
-          
+        <Card className={clsx(styles.card, styles.apps)} style={{height: 736}}>
+          <div className={styles.nav}>
+            <div onClick={() => setTab(0)}>
+              <p>Booked</p>
+            </div>
+            <div onClick={() => setTab(1)}>
+              <p>Previous</p>
+            </div>
+
+            {/* Tab Underline */}
+            <div className={styles.selected} style={{left: tab * 120}} />
+          </div>
+          <div className={styles.results}>
+
+          </div>
         </Card>
       </div>
     </div>
