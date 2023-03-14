@@ -22,7 +22,22 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             <p className={styles.client_name}>{selected.name}</p>
             <hr />
             <div className={styles.client_contact}>
-
+              <div>
+                <p className={styles.label}>phone</p>
+                <p>{selected.phone}</p>
+              </div>
+              <div>
+                <p className={styles.label}>email</p>
+                <p>{selected.email}</p>
+              </div>
+              <div>
+                <p className={styles.label}>address</p>
+                <p>{selected.address}</p>
+              </div>
+            </div>
+            <p className={styles.label} style={{width: '95%', marginTop: 5}}>notes</p>
+            <div className={styles.notes}>
+              <p>{selected.details?.notes}</p>
             </div>
           </Card>
           <Card className={styles.card} style={{height: 272}}>

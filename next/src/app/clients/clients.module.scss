@@ -54,6 +54,13 @@
   font-weight: 300;
 }
 
+.label {
+  font-weight: 100;
+  color: var(--font-color-alt);
+  font-size: 12px;
+  text-align: left;
+}
+
 /* Client details cards */
 .details {
   display: flex;
@@ -90,8 +97,45 @@
   margin-top: 15px;
 }
 .client_contact {
-  
+  padding: 5px;
+  width: 85%;
+
   div {
     display: flex;
+    align-items: center;
+    margin: 7px 0;    
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    // Label (eg phone)
+    > p:first-child {
+      flex: 0 0 70px;
+    }
+
+    // Value
+    > p:last-child {
+      width: 100%;
+      font-weight: 300;
+      font-size: 14px;
+      color: rgb(80, 80, 80);
+    }
+  }
+}
+
+
+
+.notes {
+  width: 100%;
+  height: 100%;
+  background: #FAF6F1;
+
+  margin-top: 5px;
+
+  padding: 8px;
+  p {
+    font-weight: 100;
+    font-size: 13px;
   }
 }
