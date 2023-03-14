@@ -1,0 +1,14 @@
+.services {
+  height: calc(100% - var(--header-height));
+
+  padding: 10px;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-around;
+
+  p {
+    font-size: 12px;
+  }
+}
