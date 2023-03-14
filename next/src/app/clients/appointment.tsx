@@ -11,8 +11,7 @@ interface AppointmentCardProps {
 
 export const AppointmentCard: React.FC<AppointmentCardProps> = ({app}) => {
 
-  const service = useMemo<Service>(() => sample_services.find(s => s.id === app.service_id)!, []);
-
+  const service = useMemo<Service>(() => sample_services.find(s => s.id === app.service_id)!, [app.service_id]);
   const date = useMemo<string>(() => new Date(app.start_date).toDateString(), [app.start_date]);
 
   return (
