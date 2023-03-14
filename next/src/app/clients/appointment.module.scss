@@ -1,0 +1,43 @@
+.app {
+  height: 96px;
+  width: 100%;
+  background-color: var(--secondary-background);
+  border-left: 2px solid #20C2D8;
+
+  padding: 7px;
+
+  font-weight: 300;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  p:nth-child(2) {
+    color: var(--font-color-alt);
+    margin: 3px;
+    font-size: 0.9em;
+    font-weight: 300;
+  }
+
+  > div:last-child {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      line-height: 1;
+    }
+    p:last-child {
+      cursor: pointer;
+      opacity: 0.8;
+
+      transition: opacity 200ms;
+      
+      &:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    }
+  }
+}
