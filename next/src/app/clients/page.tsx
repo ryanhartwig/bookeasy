@@ -13,7 +13,8 @@ export default function Page() {
   return (
     <div className={styles.wrapper}>
       <Clients selected={selected} setSelected={setSelected} />
-      <Details selected={selected} />
+      {selected ? <Details selected={selected} />
+        : <p style={{width: '100%', padding: 20, fontWeight: 300, fontSize: 14, color: 'grey'}}>Select a client to see details</p>}
     </div>
   )
 }
