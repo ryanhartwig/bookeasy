@@ -72,5 +72,26 @@
 }
 .card {
   margin: 10px;
+  padding: 10px;
   max-width: 700px;
+}
+.client_details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  hr {
+    margin: 10px;
+    width: 85%
+  }
+}
+.client_name {
+  font-size: 18px;
+  margin-top: 15px;
+}
+.client_contact {
+  
+  div {
+    display: flex;
+  }
 }

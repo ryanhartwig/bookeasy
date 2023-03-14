@@ -1,5 +1,6 @@
 import { Card } from '@/components/UI/Card';
 import { Client } from '@/types/Client';
+import clsx from 'clsx';
 import Image from 'next/image';
 import styles from './clients.module.scss';
 
@@ -14,9 +15,15 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       {selected ? 
       <>
         <div>
-          <Card className={styles.card} style={{height: 444}}>
-            {selected.avatar && <Image src={selected.avatar} alt="Client avatar" style={{width: 100, height: 100}} />}
-            <p>{selected.name}</p>
+          <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
+            {selected.avatar && 
+              <Image src={selected.avatar} alt="Client avatar" style={{width: 115, height: 115}} />
+            }
+            <p className={styles.client_name}>{selected.name}</p>
+            <hr />
+            <div className={styles.client_contact}>
+
+            </div>
           </Card>
           <Card className={styles.card} style={{height: 272}}>
             
