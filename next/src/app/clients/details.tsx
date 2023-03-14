@@ -37,7 +37,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
             <p className={styles.label} style={{width: '95%', marginTop: 5}}>notes</p>
             <div className={styles.notes}>
-              <p>{selected.details?.notes}</p>
+              <p>{selected.notes}</p>
             </div>
           </Card>
           <Card className={styles.card} style={{height: 272}}>

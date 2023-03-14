@@ -26,9 +26,7 @@ export const sample_clients: Client[] = [{
   business_id: 'johnsonteam',
   phone: '905-353-5315',
   address: '1212 Plains Rd. East, Hamilton',
-  details: {
-    notes: 'Cannot do full appointments, modified rate to accomodate for this',
-  },
+  notes: 'Cannot do full appointments, modified rate to accomodate for this',
   avatar: avatarFemale,
 }, {
   id: 'samuelcooper',
