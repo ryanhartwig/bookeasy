@@ -104,7 +104,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
 
             {/* Tab Underline */}
-            <div className={styles.selected} style={{left: tab * 120}} />
+            <div className={styles.tab_indicator} style={{left: tab * 120}} />
           </div>
           <div className={styles.results}>
 
