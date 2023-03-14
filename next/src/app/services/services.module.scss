@@ -17,15 +17,17 @@
 }
 
 .services_wrapper {
-  padding: 10px;
+  padding: 5px;
 }
 
 .service {
   height: 85px;
-  width: 100%;
+  width: calc(100% - 20px);
 
   background: white;
   margin: 10px;
+
+  border-left: 8px solid #20C2D8;
 
   @include globalutil.shadow;
 }

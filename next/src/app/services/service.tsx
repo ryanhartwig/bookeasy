@@ -11,7 +11,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service}) => {
 
 
   return (
-    <div className={styles.service}>
+    <div className={styles.service} style={{borderLeftColor: service.color}}>
 
     </div>
   )
