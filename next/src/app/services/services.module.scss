@@ -30,4 +30,19 @@
   border-left: 8px solid #20C2D8;
 
   @include globalutil.shadow;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  text-align: center;
+
+  > p {
+    width: 120px;
+    font-size: 14px;
+  }
+  > p:first-child {
+    text-align: left;
+    padding-left: 10px;
+  }
 }
