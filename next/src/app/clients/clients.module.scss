@@ -58,7 +58,6 @@
   font-weight: 100;
   color: var(--font-color-alt);
   font-size: 12px;
-  text-align: left;
 }
 
 /* Client details cards */
@@ -163,5 +162,23 @@
   &:hover {
     background-color: #216fdb19;
     opacity: 1;
+  }
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  justify-content: space-around;
+}
+
+.metric {
+  width: 100%;
+
+  > p:first-child {
+    font-size: 24px;
+    font-weight: 100;
   }
 }

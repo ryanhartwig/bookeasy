@@ -15,6 +15,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       {selected ? 
       <>
         <div>
+          {/* Client photo, name, contact info, notes */}
           <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
             {selected.avatar && 
               <Image src={selected.avatar} alt="Client avatar" style={{width: 115, height: 115}} />
@@ -41,8 +42,28 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
             <p className={styles.edit}>Edit</p>
           </Card>
-          <Card className={styles.card} style={{height: 272}}>
-            
+
+          {/* Client metrics (total appointments, calculated revenue, etc) */}
+          <Card className={clsx(styles.card, styles.metrics)} style={{height: 272}}>
+            <div className={styles.metric}>
+                <p>n</p>
+                <p className={styles.label}>Past Appointments</p>
+              </div>
+              <hr />
+              <div className={styles.metric}>
+                <p>n</p>
+                <p className={styles.label}>Cancelled Appointments</p>
+              </div>
+              <hr />
+              <div className={styles.metric}>
+                <p>n</p>
+                <p className={styles.label}>Total Calculated Revenue</p>
+              </div>
+              <hr />
+              <div className={styles.metric}>
+                <p>n</p>
+                <p className={styles.label}>Unpaid</p>
+              </div>  
           </Card>
         </div>
         <div>
