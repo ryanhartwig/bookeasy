@@ -87,6 +87,8 @@
   flex-direction: column;
   align-items: center;
 
+  position: relative;
+
   hr {
     margin: 10px;
     width: 85%
@@ -137,5 +139,29 @@
   p {
     font-weight: 100;
     font-size: 13px;
+  }
+}
+
+.edit {
+  position: absolute;
+  top: 7px;
+  right: 18px;
+
+  padding: 4px 12px;
+
+  cursor: pointer;
+  
+  color: var(--font-utility);
+  font-size: 14px;
+  margin-top: 5px;
+  font-weight: 400;
+
+  opacity: 0.8;
+
+  transition: background-color 200ms, opacity 200ms;
+
+  &:hover {
+    background-color: #216fdb19;
+    opacity: 1;
   }
 }

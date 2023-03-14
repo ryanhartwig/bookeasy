@@ -39,6 +39,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             <div className={styles.notes}>
               <p>{selected.notes}</p>
             </div>
+            <p className={styles.edit}>Edit</p>
           </Card>
           <Card className={styles.card} style={{height: 272}}>
             
