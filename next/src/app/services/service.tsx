@@ -7,6 +7,8 @@ import { User } from '@/types/User';
 import { sample_members, sample_user } from '@/utility/sample_data/sample_user';
 import Image from 'next/image';
 
+import { BsFillCameraVideoFill } from 'react-icons/bs';
+
 interface ServiceCardProps {
   service: Service
 }
@@ -20,6 +22,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service}) => {
 
   return (
     <div className={styles.service} style={{borderLeftColor: service.color}}>
+      {service.is_video && 
+      <div className={styles.video}>
+        <BsFillCameraVideoFill size={16} />
+      </div>}
       <p>{service.name}</p>
       <p>{service.duration} min</p>
       <p>{service.provider}</p>

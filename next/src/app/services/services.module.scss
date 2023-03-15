@@ -30,6 +30,8 @@
 }
 
 .service {
+  position: relative;
+  
   height: 85px;
   width: calc(100% - 20px);
 
@@ -50,10 +52,23 @@
     width: 120px;
     font-size: 14px;
   }
-  > p:first-child {
+  > p:first-of-type {
     text-align: left;
-    padding-left: 10px;
+    position: relative;
+    left: 20px;
   }
+}
+
+.video {
+  position: absolute;
+  left: 17px;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: rgb(165, 165, 165);
 }
 
 .assignees {
