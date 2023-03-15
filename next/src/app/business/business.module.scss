@@ -78,6 +78,11 @@
   align-items: center;
 }
 
+.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .year_select {
   margin: 10px;
   display: flex;
