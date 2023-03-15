@@ -5,6 +5,7 @@ import { sample_user } from '@/utility/sample_data/sample_user';
 import clsx from 'clsx';
 import Image from 'next/image';
 import styles from './business.module.scss';
+import { Metrics } from './metrics';
 
 export default function Page() {
   return (
@@ -27,7 +28,7 @@ export default function Page() {
           </div>
         </Card>
         <Card className={clsx(styles.card, styles.metrics)}>
-          
+          <Metrics user={sample_user} />
         </Card>
       </div>
 
