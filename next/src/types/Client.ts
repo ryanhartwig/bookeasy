@@ -7,4 +7,5 @@ export interface Client {
   avatar?: any,
   address?: string,
   phone?: string,
+  created: number,
 };

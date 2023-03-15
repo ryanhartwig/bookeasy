@@ -11,6 +11,7 @@ export const sample_clients: Client[] = [{
   phone: '905-923-2359',
   address: '2402 Plains Rd. East, Hamilton',
   avatar: avatarMale,
+  created: Date.now(),
 }, {
   id: 'alexanderstewart',
   name: 'Alexander Stewart',
@@ -19,6 +20,7 @@ export const sample_clients: Client[] = [{
   phone: '905-923-1242',
   address: '2412 Plains Rd. West, Hamilton',
   avatar: avatarMale,
+  created: Date.now(),
 }, {
   id: 'emiliegray',
   name: 'Emilie Gray',
@@ -28,6 +30,7 @@ export const sample_clients: Client[] = [{
   address: '1212 Plains Rd. East, Hamilton',
   notes: 'Cannot do full appointments, modified rate to accomodate for this',
   avatar: avatarFemale,
+  created: Date.now(),
 }, {
   id: 'samuelcooper',
   name: 'Samuel Cooper',
@@ -36,6 +39,7 @@ export const sample_clients: Client[] = [{
   phone: '905-565-3531',
   address: '1355 Plains Rd. East, Hamilton',
   avatar: avatarMale,
+  created: Date.now(),
 }, {
   id: 'ethanblackwood',
   name: 'Ethan Blackwood',
@@ -44,4 +48,5 @@ export const sample_clients: Client[] = [{
   phone: '905-264-4644',
   address: '1245 Plains Rd. West, Hamilton',
   avatar: avatarMale,
+  created: Date.now(),
 }];
