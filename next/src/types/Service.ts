@@ -7,4 +7,5 @@ export interface Service {
   cost: number,
   is_video: boolean,
   color: string,
+  user_ids: string[],
 };

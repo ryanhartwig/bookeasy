@@ -5,4 +5,5 @@ export interface User {
   email: string,
   phone?: number,
   business_ids: string[],
+  avatar?: string,
 };
