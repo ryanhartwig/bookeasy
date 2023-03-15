@@ -28,5 +28,45 @@
 }
 
 .overview {
-  max-height: 270px !important;
+  max-height: 250px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 10px;
+  padding-bottom: 5px;
+  font-weight: 300;
+
+  
+}
+
+.name {
+  margin: 12px;
+  font-size: 20px;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    p {
+      color: var(--font-color-alt);
+      font-size: 12px;
+    }
+    p:first-child {
+      font-size: 20px;
+      color: var(--font-on-light);
+    }
+  }
 }
