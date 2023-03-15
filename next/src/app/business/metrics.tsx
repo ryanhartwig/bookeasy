@@ -64,31 +64,34 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
         </ReactIconButton>
       </div>
 
-      <hr />
-      <p className={styles.metric}>
-        ${appsInRange.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
-      </p>
-      <p className={styles.metric_label}>
-        Total Estimated Revenue
-      </p>
-      <p className={styles.metric}>
-        ${appsInRange.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
-      </p>
-      <p className={styles.metric_label}>
-        Total Unpaid
-      </p>
-      <p className={styles.metric}>
-        {appsInRange.length}
-      </p>
-      <p className={styles.metric_label}>
-        Appointments
-      </p>
-      <p className={styles.metric}>
-        {clientsInRange.length}
-      </p>
-      <p className={styles.metric_label}>
-        Accrued Clients
-      </p>
+      <div className={styles.metric_data}>
+        <div style={{textAlign: 'center'}}>
+          <p className={styles.metric}>
+            ${appsInRange.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+          </p>
+          <p className={styles.metric_label}>
+            Total Estimated Revenue
+          </p>
+          <p className={styles.metric}>
+            ${appsInRange.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+          </p>
+          <p className={styles.metric_label}>
+            Total Unpaid
+          </p>
+          <p className={styles.metric}>
+            {appsInRange.length}
+          </p>
+          <p className={styles.metric_label}>
+            Appointments
+          </p>
+          <p className={styles.metric}>
+            {clientsInRange.length}
+          </p>
+          <p className={styles.metric_label}>
+            Accrued Clients
+          </p>
+        </div>
+      </div>      
     </>
   )
 }

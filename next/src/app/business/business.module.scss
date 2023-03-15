@@ -89,7 +89,32 @@
   justify-content: center;
   align-items: center;
 
+  padding-bottom: 8px;
+  
   > * {
     margin: 0 12px;
   }
+
+  border-bottom: 1px solid var(--dividers);
+  width: 100%;
+}
+
+.metric_data {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.metric {
+  font-size: 24px;
+  font-weight: 100;
+  margin: 10px;
+}
+.metric_label {
+  font-size: 12px;
+  color: var(--font-color-alt);
+  font-weight: 100;
+  margin-bottom: 25px;
 }
