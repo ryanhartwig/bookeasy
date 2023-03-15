@@ -9,6 +9,7 @@ export const sample_services: Service[] = [{
   provider: 'Christina Bronson',
   is_video: true,
   color: '#BA1682',
+  user_ids: ['christinabronson'],
 }, {
   id: 'fullconsult',
   business_id: 'johnsonteam',
@@ -18,6 +19,7 @@ export const sample_services: Service[] = [{
   provider: 'Johnson Team',
   is_video: true,
   color: '#1626BA',
+  user_ids: ['christinabronson', 'johngreenwood'],
 }, {
   id: 'reviewmeeting',
   business_id: 'johnsonteam',
@@ -27,4 +29,5 @@ export const sample_services: Service[] = [{
   provider: 'Johnson Team',
   is_video: true,
   color: '#BAAA16',
+  user_ids: ['christinabronson'],
 }];
