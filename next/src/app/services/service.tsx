@@ -25,7 +25,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service}) => {
       <p>{service.provider}</p>
       <div className={styles.assignees}>
         {assignees.map(user => 
-          <Image key={user.id} src={user.avatar || ''} alt="User avatar" height={30} width={30} />
+          <div key={user.id}>
+            <Image src={user.avatar || ''} alt="User avatar" height={30} width={30} />
+            <p>{user.name}</p>
+          </div>
         )}
       </div>
       <p>${service.cost.toFixed(2)}</p>
