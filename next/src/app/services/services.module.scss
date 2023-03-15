@@ -11,13 +11,24 @@
   display: flex;
   justify-content: space-around;
 
+  margin: 5px auto 0 auto;
+  width: 98%;
+
   p {
     font-size: 12px;
+    width: 70px;
+    text-align: center;
+
+    &:nth-child(2) {
+      position: relative;
+      left: 8px;
+    }
   }
 }
 
 .services_wrapper {
   padding: 5px;
+  padding-top: 0;
 }
 
 .service {
