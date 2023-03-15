@@ -6,4 +6,5 @@ export interface User {
   phone?: number,
   business_ids: string[],
   avatar?: string,
+  created: number,
 };

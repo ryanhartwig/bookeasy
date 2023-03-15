@@ -10,6 +10,7 @@ export const sample_user: User = {
   email: 'christina.bronson@gmail.com',
   business_ids: ['johnsonteam'],
   avatar: avatarFemale,
+  created: Date.now(),
 };
 
 export const sample_members: User[] = [{
@@ -18,19 +19,22 @@ export const sample_members: User[] = [{
   name: 'John Greenwood',
   email: 'johng@gmail.com',
   business_ids: ['johnsonteam'],
-  avatar: avatarMale
+  avatar: avatarMale,
+  created: Date.now(),
 }, {
   id: 'phillipwest',
   own_business_id: '',
   name: 'Phillip West',
   email: 'philwest@gmail.com',
   business_ids: ['johnsonteam'],
-  avatar: avatarMale
+  avatar: avatarMale,
+  created: Date.now(),
 }, {
   id: 'Marly Johnson',
   own_business_id: '',
   name: 'Marly Johnson',
   email: 'mjohnson@gmail.com',
   business_ids: ['johnsonteam'],
-  avatar: avatarMale
+  avatar: avatarMale,
+  created: Date.now(),
 }]
