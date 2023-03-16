@@ -39,3 +39,34 @@
     background-color: #216fdb19;
   }
 }
+
+.toggle {
+  height: 18px;
+  width: 30px;
+
+  position: relative;
+
+  background-color: rgb(196, 195, 195);
+  border-radius: 10000px;
+
+  transition: background-color 300ms;
+}
+.toggle.on {
+  background-color: var(--font-utility);
+}
+
+.toggle_circle {
+  height: 12px;
+  width: 12px;
+  background: white;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 3px;
+  left: 3px;
+
+  transition: left 300ms, right 300ms;
+}
+.toggle_circle.on {
+  left: 15px;
+}

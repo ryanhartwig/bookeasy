@@ -20,7 +20,7 @@ export const Settings: React.FC = () => {
       <Tabs tab={tab} setTab={setTab} tabs={tabs} />
       <div className={styles.settings_wrapper}>
         {tabComponents.map((Comp, i) => 
-          i === tab ? <Comp key={Comp.name}/> : <></>
+          i === tab ? <Comp key={Comp.name}/> : <div key={i}></div>
         )}
       </div>
     </>
