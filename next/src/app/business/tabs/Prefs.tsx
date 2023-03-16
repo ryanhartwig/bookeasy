@@ -13,10 +13,9 @@ export const Prefs = () => {
       <p>General Business Prefs</p>
       <hr />
 
-      <Setting label='Test' toggleState={toggle} onAction={() => {
-        console.log('clicked')
-        setToggle(p => !p);
-      }} />
+      <Setting label='Test'>
+        <p>Data</p>
+      </Setting>
     </div>
   )
 } 

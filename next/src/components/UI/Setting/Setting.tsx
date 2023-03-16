@@ -22,11 +22,13 @@ export const Setting: React.FC<SettingProps> = ({label, children, toggleState, o
       <div className={styles.value}>
         {children}
       </div>
-      <div className={styles.action} onClick={onAction}>
-        {toggleState === undefined && <p>Edit</p>}
-        <div className={clsx(styles.toggle, {[styles.on]: toggleState})}>
-          <div className={clsx(styles.toggle_circle, {[styles.on]: toggleState})} />
-        </div>
+      <div className={clsx(styles.action, 'noselect')} onClick={onAction}>
+        {toggleState === undefined 
+          ? <p>Edit</p>
+          : <div className={clsx(styles.toggle, {[styles.on]: toggleState})}>
+              <div className={clsx(styles.toggle_circle, {[styles.on]: toggleState})} />
+            </div>
+        }
       </div>
     </div>
   )
