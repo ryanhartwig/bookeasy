@@ -3,6 +3,16 @@
   padding: 5px;
   display: flex;
 
+  // Left panel wrapper
+  > div:first-child {
+    flex-direction: column;
+
+    flex: 1 1 320px;
+    max-width: 320px;
+    min-width: 320px;
+  }
+  
+  // Right panel wrapper
   > div {
     display: flex;
 
@@ -11,14 +21,6 @@
     max-height: 786px;
 
     width: 100%;
-  }
-
-  > div:first-child {
-    flex-direction: column;
-
-    flex: 1 1 320px;
-    max-width: 320px;
-    min-width: 320px;
   }
 }
 
@@ -37,8 +39,6 @@
   padding: 10px;
   padding-bottom: 5px;
   font-weight: 300;
-
-  
 }
 
 .name {

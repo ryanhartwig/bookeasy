@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import styles from './business.module.scss';
 import { Metrics } from './metrics';
+import { Settings } from './settings';
 
 export default function Page() {
   return (
@@ -35,7 +36,7 @@ export default function Page() {
       {/* Right panel */}
       <div>
         <Card className={clsx(styles.card, styles.prefs)}>
-
+          <Settings />
         </Card>
       </div>
     </div>
