@@ -17,8 +17,8 @@
 }
 
 .value {
-  position: relative;
-  left: 25%;
+  position: absolute;
+  left: 35%;
   font-weight: 300;
   color: grey;
 }
@@ -52,6 +52,7 @@
   width: 30px;
 
   position: relative;
+  right: 6px;
 
   background-color: rgb(196, 195, 195);
   border-radius: 10000px;
