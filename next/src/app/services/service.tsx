@@ -11,9 +11,10 @@ import { BsFillCameraVideoFill } from 'react-icons/bs';
 
 interface ServiceCardProps {
   service: Service
+  edit?: boolean,
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({service}) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({service, edit}) => {
 
   const assignees = useMemo<User[]>(() => 
     sample_members.filter(member => service.user_ids.includes(member.id))
@@ -38,6 +39,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service}) => {
         )}
       </div>
       <p>${service.cost.toFixed(2)}</p>
+      {edit && <p className={styles.edit}>Edit</p>}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { sample_businesses } from "@/utility/sample_data/sample_businesses";
 import { sample_business_prefs } from "@/utility/sample_data/sample_business_prefs";
 import { sample_clients } from "@/utility/sample_data/sample_clients";
+import { sample_services } from "@/utility/sample_data/sample_services";
 import { sample_user } from "@/utility/sample_data/sample_user";
 import { useState } from "react";
 import styles from './business.module.scss';
@@ -21,7 +22,7 @@ export const Settings: React.FC = () => {
     <Prefs key={Prefs.name} business={sample_businesses.find(b => b.id === sample_user.own_business_id)!} />, 
     <ClientList clients={sample_clients.filter(c => c.business_id === sample_user.own_business_id)} key={ClientList.name} />, 
     <BookingSitePrefs key={BookingSitePrefs.name} business_prefs={sample_business_prefs.find(pref => pref.business_id === sample_user.own_business_id)!} />, 
-    <Services key={Services.name} />, 
+    <Services key={Services.name} services={sample_services.filter(s => s.business_id === sample_user.own_business_id)} />, 
     <Availability key={Availability.name} />
   ];
   
