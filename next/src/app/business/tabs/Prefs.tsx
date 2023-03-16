@@ -15,8 +15,9 @@ export const Prefs: React.FC<PrefsProps> = ({business}) => {
 
   return (
     <div className={styles.Prefs}>
-      <p>General Business Prefs</p>
-      <hr />
+      <div className={styles.header}>
+        <p>General Business Prefs</p>
+      </div>
 
       <div className={styles.settings}>
         <Setting label='Business Photo'>
