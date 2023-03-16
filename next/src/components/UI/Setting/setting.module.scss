@@ -6,5 +6,36 @@
   align-items: center;
   position: relative;
 
-  border-bottom: 1px solid var(--dividers);
+  border-bottom: 1px solid #dddddd76;
+
+  padding: 12px;
+  font-size: 12px;
+}
+
+.label {
+  font-weight: 500;
+}
+
+.action {
+  position: absolute;
+  right: 12px;
+  color: var(--font-utility);
+  cursor: pointer;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > p {
+    opacity: 0.8;
+    transition: opacity 200ms, background-color 200ms;
+    padding: 5px 12px;
+    border-radius: 3px;
+  }
+
+  &:hover > p {
+    opacity: 1;
+    background-color: #216fdb19;
+  }
 }

@@ -1,3 +1,10 @@
 .Prefs {
   width: 100%;
+
+  > p:first-child {
+    margin: 12px;
+    padding-left: 10px;
+    font-size: 14px;
+    color: var(--font-color-alt);
+  }
 }
