@@ -3,7 +3,7 @@
 import { Client } from '@/types/Client';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import Image from 'next/image';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import styles from './tabs.module.scss';
 
 interface ClientListProps {
@@ -30,7 +30,7 @@ export const ClientList: React.FC<ClientListProps> = ({clients}) => {
       {clients.map(c => (
         <div className={styles.client} key={c.id}>
           <div>
-            <Image src={c. avatar} alt="Client avatar" height={28} />
+            <Image src={c.avatar} alt="Client avatar" height={28} />
           </div>
           <div>
             <p>{c.name}</p>
