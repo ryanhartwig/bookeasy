@@ -13,8 +13,6 @@ interface PrefsProps {
 
 export const Prefs: React.FC<PrefsProps> = ({business}) => {
 
-  const [toggle, setToggle] = useState<boolean>(false);
-  
   return (
     <div className={styles.Prefs}>
       <p>General Business Prefs</p>

@@ -3,7 +3,7 @@
 import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { sample_businesses } from "@/utility/sample_data/sample_businesses";
 import { sample_user } from "@/utility/sample_data/sample_user";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import styles from './business.module.scss';
 import { Availability } from "./tabs/Availability";
 import { BookingSitePrefs } from "./tabs/BookingSitePrefs";
@@ -28,7 +28,14 @@ export const Settings: React.FC = () => {
       <Tabs tab={tab} setTab={setTab} tabs={tabs} />
       <div className={styles.settings_wrapper}>
         {tabComponents.map((component, i) => 
-          i === tab ? <div key={i}>{component}</div> : <div key={i}></div>
+          i === tab 
+            ? <div 
+                key={i} 
+                className={styles.component_wrapper}
+              >
+                {component}
+              </div> 
+            : <div key={i}></div>
         )}
       </div>
     </>
