@@ -12,6 +12,7 @@ export const sample_clients: Client[] = [{
   address: '2402 Plains Rd. East, Hamilton',
   avatar: avatarMale,
   created: Date.now(),
+  active: true,
 }, {
   id: 'alexanderstewart',
   name: 'Alexander Stewart',
@@ -21,6 +22,7 @@ export const sample_clients: Client[] = [{
   address: '2412 Plains Rd. West, Hamilton',
   avatar: avatarMale,
   created: Date.now(),
+  active: true,
 }, {
   id: 'emiliegray',
   name: 'Emilie Gray',
@@ -31,6 +33,7 @@ export const sample_clients: Client[] = [{
   notes: 'Cannot do full appointments, modified rate to accomodate for this',
   avatar: avatarFemale,
   created: Date.now(),
+  active: true,
 }, {
   id: 'samuelcooper',
   name: 'Samuel Cooper',
@@ -40,6 +43,7 @@ export const sample_clients: Client[] = [{
   address: '1355 Plains Rd. East, Hamilton',
   avatar: avatarMale,
   created: Date.now(),
+  active: true,
 }, {
   id: 'ethanblackwood',
   name: 'Ethan Blackwood',
@@ -49,4 +53,5 @@ export const sample_clients: Client[] = [{
   address: '1245 Plains Rd. West, Hamilton',
   avatar: avatarMale,
   created: Date.now(),
+  active: true,
 }];

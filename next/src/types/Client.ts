@@ -8,4 +8,5 @@ export interface Client {
   address?: string,
   phone?: string,
   created: number,
+  active: boolean,
 };
