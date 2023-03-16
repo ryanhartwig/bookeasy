@@ -19,11 +19,11 @@ export default function Page() {
           <div className={styles.details}>
             <div>
               <p>{sample_clients.filter(c => c.business_id === sample_user.id).length}</p>
-              <p>clients</p>  
+              <p>client(s)</p>  
             </div>
             <div>
               <p>{sample_services.filter(s => s.business_id === sample_user.id).length}</p>
-              <p>services</p>  
+              <p>service(s)</p>  
             </div>
           </div>
         </Card>

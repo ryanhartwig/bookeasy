@@ -82,13 +82,13 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
             {appsInRange.length}
           </p>
           <p className={styles.metric_label}>
-            Appointments
+            Appointment(s)
           </p>
           <p className={styles.metric}>
             {clientsInRange.length}
           </p>
           <p className={styles.metric_label}>
-            Accrued Clients
+            Accrued Client(s)
           </p>
         </div>
       </div>      
