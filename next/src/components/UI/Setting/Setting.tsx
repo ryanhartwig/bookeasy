@@ -1,12 +1,13 @@
 'use client';
 
 import clsx from 'clsx';
+import React from 'react';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import styles from './setting.module.scss';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
-  children?: JSX.Element | never[],
+  children?: React.ReactNode,
   /**
    * If provided, will use switch instead of 'Edit' button
    */
@@ -14,7 +15,7 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   onAction?: (...args: any) => any,
 }
 
-export const Setting: React.FC<SettingProps> = ({label, children, toggleState, onAction, ...props}) => {
+export const Setting = ({label, children, toggleState, onAction, ...props}: SettingProps) => {
 
   return (
     <div {...props} className={clsx(styles.Setting, props.className || '')}>
@@ -32,4 +33,4 @@ export const Setting: React.FC<SettingProps> = ({label, children, toggleState, o
       </div>
     </div>
   )
-} 
+}
