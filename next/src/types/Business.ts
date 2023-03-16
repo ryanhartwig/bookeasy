@@ -3,4 +3,5 @@ export interface Business {
   name: string,
   email: string | null,
   phone: number | null,
+  photo: any,
 };

@@ -14,11 +14,12 @@
 
 .label {
   font-weight: 500;
+  position: absolute;
 }
 
 .value {
-  position: absolute;
-  left: 35%;
+  position: relative;
+  left: 37%;
   font-weight: 300;
   color: grey;
 }
