@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactIconButton } from "@/components/UI/ReactIconButton";
+
+import { ReactIconButton } from "@/components/UI/IconButton/ReactIconButton";
 import { Appointment } from "@/types/Appointment";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";

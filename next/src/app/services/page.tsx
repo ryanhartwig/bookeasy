@@ -1,5 +1,4 @@
-import { Card } from '@/components/UI/Card';
-import { SectionLabel } from '@/components/UI/SectionLabel';
+import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_user } from '@/utility/sample_data/sample_user';

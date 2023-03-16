@@ -1,6 +1,7 @@
 'use client';
 
-import { Card } from '@/components/UI/Card';
+
+import { Card } from '@/components/UI/Card/Card';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';

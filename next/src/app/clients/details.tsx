@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from '@/components/UI/Card';
+import { Card } from '@/components/UI/Card/Card';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
@@ -73,7 +73,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
 
         {/* Client metrics (total appointments, calculated revenue, etc) */}
         <Card className={clsx(styles.card, styles.metrics)} style={{height: 272}}>
-          <div className={styles.metric}>
+            <div className={styles.metric}>
               <p>{previous.length}</p>
               <p className={styles.label}>Past Appointments</p>
             </div>

@@ -1,4 +1,4 @@
-import { Card } from '@/components/UI/Card';
+import { Card } from '@/components/UI/Card/Card';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_user } from '@/utility/sample_data/sample_user';

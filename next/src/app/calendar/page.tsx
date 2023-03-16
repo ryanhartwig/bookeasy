@@ -6,7 +6,6 @@ import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Calendar, months } from '@/components/calendar/Calendar';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { getDayRange } from '@/utility/functions/getDayRange';
-import { ReactIconButton } from '@/components/UI/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
 import { Appointment } from '@/types/Appointment';
@@ -15,6 +14,7 @@ import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
+import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 
 export interface View {        
   month: number,
