@@ -12,13 +12,12 @@
     min-width: 320px;
   }
   
-  // Right panel wrapper
   > div {
     display: flex;
 
     flex: 2 2 100%;
     max-width: 1000px;
-    max-height: 786px;
+    max-height: 700px;
 
     width: 100%;
   }
@@ -104,7 +103,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 30px;
+  padding-top: 10px;
 }
 
 .metric {
