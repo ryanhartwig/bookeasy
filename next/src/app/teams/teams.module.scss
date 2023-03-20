@@ -138,3 +138,41 @@
   margin: 10px;
   height: 100%;
 }
+
+
+// Card content (sections)
+.overview {
+  text-align: center;
+
+  padding-top: 20px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 5px 0 15px 0;
+  }
+  hr {
+    width: 80%;
+    margin: 19px auto;
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+
+    > div {
+      > p {
+        font-size: 18px;
+        font-weight: 300;
+      }
+      > p:last-child {
+        font-size: 12px;
+        margin-top: 4px;
+        color: var(--font-alt);
+        font-weight: 100;
+      }
+    }
+  }
+}

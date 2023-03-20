@@ -5,6 +5,11 @@ import { Business } from '@/types/Business';
 import { useState } from 'react';
 import { Teams } from './teams';
 import styles from './teams.module.scss';
+import Image from 'next/image';
+
+import teamDefault from '../../../public/assets/team_default.png';
+import clsx from 'clsx';
+
 
 export default function Page() {
   
@@ -21,13 +26,33 @@ export default function Page() {
         {selected ? (
         <>
           <div className={styles.left}>
+            <Card className={clsx(styles.card, styles.overview)}>
+              <Image src={teamDefault} width={139} alt='Add team icon' />
+              <h2>{selected.name}</h2>
+              <hr />
+              <div>
+                <div>
+                  <p>n</p>
+                  <p>member(s)</p>
+                </div>
+                <div>
+                  <p>n</p>
+                  <p>client(s)</p>
+                </div>
+                <div>
+                  <p>n</p>
+                  <p>service(s)</p>
+                </div>
+              </div>
+            </Card>
+            <Card className={styles.card}>
+
+            </Card>
+          </div>
+          <div className={styles.right}>
             <Card className={styles.card}>
               
             </Card>
-            <Card className={styles.card} />
-          </div>
-          <div className={styles.right}>
-            <Card className={styles.card} />
           </div>
         </> 
         ) : <p className={styles.select}>Select a team to see details</p>}
