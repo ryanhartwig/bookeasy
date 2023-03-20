@@ -8,20 +8,21 @@ import styles from './teams.module.scss';
 
 import clsx from 'clsx';
 import { User } from '@/types/User';
-import { sample_members } from '@/utility/sample_data/sample_user';
+import { sample_members, sample_user } from '@/utility/sample_data/sample_user';
 import { Client } from '@/types/Client';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { Service } from '@/types/Service';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { Overview } from './overview';
+import Image from 'next/image';
 
 
 export default function Page() {
-  
+
   const [selected, setSelected] = useState<Business>();
 
   const members = useMemo<User[]>(() => selected 
-    ? sample_members.filter(m => m.business_ids.includes(selected.id)) 
+    ? [...sample_members, sample_user].filter(m => m.business_ids.includes(selected.id)) 
     : []
   , [selected]);
   const clients = useMemo<Client[]>(() => selected 
@@ -47,8 +48,17 @@ export default function Page() {
               <Card className={clsx(styles.card, styles.overview)}>
                 <Overview selected={selected} members={members} clients={clients} services={services} />
               </Card>
-              <Card className={styles.card}>
-
+              <Card className={clsx(styles.card, styles.members_overview)}>
+                <h2>Team Members</h2>
+                <hr />
+                <div className={styles.members}>
+                  {members.map(m => (
+                    <div key={m.id}>
+                      <Image src={m.avatar ?? ''} alt={'Member avatar'} />
+                      <p>{m.name}</p>
+                    </div>
+                  ))}
+                </div>
               </Card>
             </div>
             <div className={styles.right}>

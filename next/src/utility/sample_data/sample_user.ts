@@ -8,7 +8,7 @@ export const sample_user: User = {
   own_business_id: 'christinabronson',
   name: 'Christina Bronson',
   email: 'christina.bronson@gmail.com',
-  business_ids: ['johnsonteam'],
+  business_ids: [['johnsonteam', false]],
   avatar: avatarFemale,
   created: Date.now(),
 };
@@ -18,7 +18,7 @@ export const sample_members: User[] = [{
   own_business_id: '',
   name: 'John Greenwood',
   email: 'johng@gmail.com',
-  business_ids: ['johnsonteam'],
+  business_ids: [['johnsonteam', false]],
   avatar: avatarMale,
   created: Date.now(),
 }, {
@@ -26,7 +26,7 @@ export const sample_members: User[] = [{
   own_business_id: '',
   name: 'Phillip West',
   email: 'philwest@gmail.com',
-  business_ids: ['johnsonteam'],
+  business_ids: [['johnsonteam', false]],
   avatar: avatarMale,
   created: Date.now(),
 }, {
@@ -34,7 +34,7 @@ export const sample_members: User[] = [{
   own_business_id: '',
   name: 'Marly Johnson',
   email: 'mjohnson@gmail.com',
-  business_ids: ['johnsonteam'],
+  business_ids: [['johnsonteam', true]],
   avatar: avatarMale,
   created: Date.now(),
 }]
