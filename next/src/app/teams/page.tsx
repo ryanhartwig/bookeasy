@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/UI/Card/Card';
 import { Business } from '@/types/Business';
-import { useMemo, useState } from 'react';
+import { SetStateAction, useMemo, useState } from 'react';
 import { Teams } from './teams';
 import styles from './teams.module.scss';
 
@@ -14,8 +14,10 @@ import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { Service } from '@/types/Service';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { Overview } from './overview';
-import Image from 'next/image';
 import { Members } from './members';
+import { Tabs } from '@/components/UI/Tabs/Tabs';
+import { Services } from '@/components/business_settings/Services';
+
 
 
 export default function Page() {
@@ -34,6 +36,8 @@ export default function Page() {
     ? sample_services.filter(s => s.business_id === selected.id)
     : []
   , [selected]);
+
+  const [tab, setTab] = useState<number>(0);
   
   return (
     <div className={styles.Teams}>
@@ -55,6 +59,10 @@ export default function Page() {
             </div>
             <div className={styles.right}>
               <Card className={styles.card}>
+                <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
+                <div className={styles.settings_wrapper}>
+                  {tab === 0 && <Services services={services} />}
+                </div>
               </Card>
             </div>
           </> 
