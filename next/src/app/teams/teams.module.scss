@@ -21,3 +21,20 @@
 .user_teams {
   width: 100%;
 }
+
+.create_team {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  height: 138px;
+  width: 162px;
+
+  border: 1px dashed #AAAAAA;
+
+  p { 
+    font-size: 12px; 
+    margin-bottom: 7px;
+  }
+}
