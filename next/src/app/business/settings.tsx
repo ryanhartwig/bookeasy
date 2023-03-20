@@ -9,11 +9,11 @@ import { sample_services } from "@/utility/sample_data/sample_services";
 import { sample_user } from "@/utility/sample_data/sample_user";
 import { useState } from "react";
 import styles from './business.module.scss';
-import { Availability } from "./tabs/Availability";
-import { BookingSitePrefs } from "./tabs/BookingSitePrefs";
-import { ClientList } from "./tabs/ClientList";
-import { Prefs } from "./tabs/Prefs";
-import { Services } from "./tabs/Services";
+import { Availability } from "../../components/business_settings/Availability";
+import { BookingSitePrefs } from "@/components/business_settings/BookingSitePrefs";
+import { ClientList } from "@/components/business_settings/ClientList";
+import { Prefs } from "@/components/business_settings/Prefs";
+import { Services } from "@/components/business_settings/Services";
 
 export const Settings: React.FC = () => {
 
