@@ -10,10 +10,11 @@ import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
+import { Business } from '@/types/Business';
 
 interface TeamsProps {
-  selected: string,
-  setSelected: React.Dispatch<React.SetStateAction<string>>,
+  selected?: Business,
+  setSelected: React.Dispatch<React.SetStateAction<Business | undefined>>,
 }
 
 export const Teams: React.FC<TeamsProps> = ({selected, setSelected}) => {
@@ -25,8 +26,8 @@ export const Teams: React.FC<TeamsProps> = ({selected, setSelected}) => {
       {/* Teams user belongs to */}
       {teams.map(t => (
         <Card key={t.id} 
-          className={clsx(styles.team, {[styles.selected]: selected === t.id})}
-          onClick={() => setSelected(t.id)}
+          className={clsx(styles.team, {[styles.selected]: selected && selected.id === t.id})}
+          onClick={() => setSelected(t)}
         >
           <p>{t.name}</p>
           <Image src={teamDefault} alt='Add team icon' />
