@@ -181,6 +181,10 @@
   text-align: center;
   
   padding: 13px 30px;
+
+  hr {
+    margin-bottom: 9px;
+  }
   
   h2 {
     font-weight: 300;
@@ -199,5 +203,25 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 90%;
+
+    margin: 4px 0;
+
+    p {
+      font-size: 12px;
+
+      &:first-of-type {
+        width:fit-content;
+        text-align: left;
+        width: 100%;
+        padding-left: 12px;
+      }
+
+      &:last-child {
+        font-weight: 300;
+        color: rgb(147, 147, 147);
+      }
+    }
+    
   }
 }

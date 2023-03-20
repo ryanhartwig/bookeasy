@@ -22,7 +22,7 @@ export default function Page() {
   const [selected, setSelected] = useState<Business>();
 
   const members = useMemo<User[]>(() => selected 
-    ? [...sample_members, sample_user].filter(m => m.business_ids.includes(selected.id)) 
+    ? [...sample_members, sample_user].filter(m => m.business_ids.find(([id]) => id.includes(selected.id))) 
     : []
   , [selected]);
   const clients = useMemo<Client[]>(() => selected 
@@ -54,8 +54,9 @@ export default function Page() {
                 <div className={styles.members}>
                   {members.map(m => (
                     <div key={m.id}>
-                      <Image src={m.avatar ?? ''} alt={'Member avatar'} />
+                      <Image src={m.avatar ?? ''} alt={'Member avatar'} width={30}/>
                       <p>{m.name}</p>
+                      <p>{m.business_ids.find(([id, elevated]) => id === selected.id)![1] ? 'Admin' : 'Member'}</p>
                     </div>
                   ))}
                 </div>
