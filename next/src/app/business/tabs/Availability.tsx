@@ -1,17 +1,21 @@
 'use client';
 
 import { Setting } from '@/components/UI/Setting/Setting';
+import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { formatMilitaryTime } from '@/utility/functions/formatMilitaryTime';
-import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import styles from './tabs.module.scss';
 
-export const Availability = () => {
+interface AvailabilityProps {
+  availabilitySlices: AvailabilitySlice[],
+}
+
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) => {
 
   const availability = useMemo(() => {
     const map = new Map<number, {start: string, end: string}[]>();
 
-    sample_base_availability.slices.forEach(slice => {
+    availabilitySlices.forEach(slice => {
       map.set(slice.day, 
         (map.get(slice.day) ?? [])
           .concat([{ start: slice.start, end: slice.end }])
@@ -22,7 +26,7 @@ export const Availability = () => {
     });
 
     return map;
-  }, []);
+  }, [availabilitySlices]);
 
   const slices = useMemo(() => {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

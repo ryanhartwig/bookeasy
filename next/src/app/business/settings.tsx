@@ -1,6 +1,7 @@
 'use client';
 
 import { Tabs } from "@/components/UI/Tabs/Tabs";
+import { sample_base_availability } from "@/utility/sample_data/sample_base_availability";
 import { sample_businesses } from "@/utility/sample_data/sample_businesses";
 import { sample_business_prefs } from "@/utility/sample_data/sample_business_prefs";
 import { sample_clients } from "@/utility/sample_data/sample_clients";
@@ -23,7 +24,7 @@ export const Settings: React.FC = () => {
     <ClientList clients={sample_clients.filter(c => c.business_id === sample_user.own_business_id)} key={ClientList.name} />, 
     <BookingSitePrefs key={BookingSitePrefs.name} business_prefs={sample_business_prefs.find(pref => pref.business_id === sample_user.own_business_id)!} />, 
     <Services key={Services.name} services={sample_services.filter(s => s.business_id === sample_user.own_business_id)} />, 
-    <Availability key={Availability.name} />
+    <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />
   ];
   
   return (
