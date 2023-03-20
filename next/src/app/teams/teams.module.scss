@@ -1,0 +1,23 @@
+.Teams {
+  height: calc(100% - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
+.teams_section {
+  height: 205px;
+  width: 100%;
+  background-color: var(--secondary-background);
+  border-bottom: 1px solid var(--dividers);
+  padding: 15px 30px;
+  overflow-x: auto;
+
+  p {
+    font-size: 14px;
+    font-weight: 300;
+  }
+}
+
+.user_teams {
+  width: 100%;
+}
