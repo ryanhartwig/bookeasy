@@ -3,14 +3,13 @@
 import Image from 'next/image';
 import styles from './teams.module.scss';
 
-import addTeam from '../../../public/assets/team_add.svg'
+import addTeam from '../../../public/assets/team_add.svg';
+import teamDefault from '../../../public/assets/team_default.svg';
 import { useMemo, useState } from 'react';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
-
-
 
 export const Teams = () => {
   
@@ -25,7 +24,8 @@ export const Teams = () => {
           className={clsx(styles.team, {[styles.selected]: selected === t.id})}
           onClick={() => setSelected(t.id)}
         >
-
+          <p>{t.name}</p>
+          <Image src={teamDefault} alt='Add team icon' />
         </Card>
       ))}
 

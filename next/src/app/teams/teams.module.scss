@@ -34,7 +34,12 @@
   width: 168px;
   height: 132px;
 
-  opacity: 0.6;
+  opacity: 0.5;
+
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  flex-direction: column;
 
   transition: opacity 200ms;
   cursor: pointer;
