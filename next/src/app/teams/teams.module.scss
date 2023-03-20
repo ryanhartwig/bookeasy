@@ -28,6 +28,27 @@
   }
 }
 
+// Regular team
+.team {
+  border-left: 4px solid #F36A6A;
+  width: 168px;
+  height: 132px;
+
+  opacity: 0.6;
+
+  transition: opacity 200ms;
+  cursor: pointer;
+  
+  &:hover {
+    opacity: 1;
+  }
+
+  &.selected {
+    opacity: 1;
+  }
+}
+
+// Create team
 .create_team_icon {
   opacity: 0.5;
   transition: opacity 200ms;
