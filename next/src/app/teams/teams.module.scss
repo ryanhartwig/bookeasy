@@ -20,6 +20,17 @@
 
 .user_teams {
   width: 100%;
+  padding: 15px 10px;
+  display: flex;
+
+  > * {
+    margin-right: 10px;
+  }
+}
+
+.create_team_icon {
+  opacity: 0.5;
+  transition: opacity 200ms;
 }
 
 .create_team {
@@ -28,13 +39,30 @@
   align-items: center;
   flex-direction: column;
   
-  height: 138px;
-  width: 162px;
-
+  height: 132px;
+  width: 168px;
   border: 1px dashed #AAAAAA;
+
+  cursor: pointer;
+  transition: border-color 200ms;
 
   p { 
     font-size: 12px; 
     margin-bottom: 7px;
+    opacity: 0.5;
+
+    transition: opacity 200ms;
+  }
+
+  &:hover {
+    border-color: rgb(0, 0, 0);
+
+    .create_team_icon {
+      opacity: 1;
+    }
+
+    p { 
+      opacity: 1;
+    }
   }
 }

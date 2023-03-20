@@ -16,7 +16,7 @@ export const Teams = () => {
       {/* Create team */}
       <div className={styles.create_team}>
         <p>Create Team</p>
-        <Image src={addTeam} alt='Add team icon' />
+        <Image src={addTeam} alt='Add team icon' className={styles.create_team_icon} />
       </div>
     </div>
   )
