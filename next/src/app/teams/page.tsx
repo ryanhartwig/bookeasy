@@ -15,6 +15,7 @@ import { Service } from '@/types/Service';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { Overview } from './overview';
 import Image from 'next/image';
+import { Members } from './members';
 
 
 export default function Page() {
@@ -49,22 +50,11 @@ export default function Page() {
                 <Overview selected={selected} members={members} clients={clients} services={services} />
               </Card>
               <Card className={clsx(styles.card, styles.members_overview)}>
-                <h2>Team Members</h2>
-                <hr />
-                <div className={styles.members}>
-                  {members.map(m => (
-                    <div key={m.id}>
-                      <Image src={m.avatar ?? ''} alt={'Member avatar'} width={30}/>
-                      <p>{m.name}</p>
-                      <p>{m.business_ids.find(([id, elevated]) => id === selected.id)![1] ? 'Admin' : 'Member'}</p>
-                    </div>
-                  ))}
-                </div>
+                <Members members={members} selected={selected} />
               </Card>
             </div>
             <div className={styles.right}>
               <Card className={styles.card}>
-                
               </Card>
             </div>
           </> 
