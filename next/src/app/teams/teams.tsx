@@ -11,10 +11,14 @@ import { sample_user } from '@/utility/sample_data/sample_user';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
 
-export const Teams = () => {
+interface TeamsProps {
+  selected: string,
+  setSelected: React.Dispatch<React.SetStateAction<string>>,
+}
+
+export const Teams: React.FC<TeamsProps> = ({selected, setSelected}) => {
   
   const teams = useMemo(() => sample_businesses.filter(b => b.id !== sample_user.own_business_id), []);
-  const [selected, setSelected] = useState<string>('');
 
   return (
     <div className={styles.user_teams}>
