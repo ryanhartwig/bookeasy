@@ -43,6 +43,11 @@
 
   transition: opacity 200ms;
   cursor: pointer;
+
+  p {
+    margin: 3px;
+    font-size: 12px;
+  }
   
   &:hover {
     opacity: 1;

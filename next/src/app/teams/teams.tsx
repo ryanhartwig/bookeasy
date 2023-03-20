@@ -26,6 +26,7 @@ export const Teams = () => {
         >
           <p>{t.name}</p>
           <Image src={teamDefault} alt='Add team icon' />
+          <p>{t.elevated ? 'Admin' : 'Member'}</p>
         </Card>
       ))}
 
