@@ -2,13 +2,13 @@
 
 import styles from './dashboard.module.scss';
 
-import { Card } from '@/components/UI/Card';
 import { Appointment } from '@/types/Appointment';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
+import { Card } from '@/components/UI/Card/Card';
 
 interface AppointmentsProps {
   appointments: Appointment[],

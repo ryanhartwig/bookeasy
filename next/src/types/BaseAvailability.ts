@@ -1,4 +1,4 @@
-interface AvailabilitySlice {
+export interface AvailabilitySlice {
   user_id: string,
   business_id: string,
   /**

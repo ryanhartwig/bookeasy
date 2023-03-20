@@ -1,5 +1,5 @@
 import { SecondaryHeader } from "@/components/SecondaryHeader"
-import { SectionLabel } from "@/components/UI/SectionLabel"
+import { SectionLabel } from "@/components/UI/SectionLabel/SectionLabel"
 
 export default function Loading() {
   return (

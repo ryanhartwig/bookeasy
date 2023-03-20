@@ -3,11 +3,12 @@ import styles from './dashboard.module.scss';
 import { SecondaryHeader } from "../../components/SecondaryHeader"
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
-import { SectionLabel } from '@/components/UI/SectionLabel';
 import { Appointments } from './appointments';
-import { Card } from '@/components/UI/Card';
+
 import { WeekDayNames } from './weekDayNames';
 import { WeekDays } from './weekDays';
+import { Card } from '@/components/UI/Card/Card';
+import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 
 export default function Page() {
 

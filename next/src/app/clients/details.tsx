@@ -1,6 +1,7 @@
 'use client';
 
-import { Card } from '@/components/UI/Card';
+import { Card } from '@/components/UI/Card/Card';
+import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
@@ -73,7 +74,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
 
         {/* Client metrics (total appointments, calculated revenue, etc) */}
         <Card className={clsx(styles.card, styles.metrics)} style={{height: 272}}>
-          <div className={styles.metric}>
+            <div className={styles.metric}>
               <p>{previous.length}</p>
               <p className={styles.label}>Past Appointments</p>
             </div>
@@ -96,17 +97,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       </div>
       <div>
         <Card className={clsx(styles.card, styles.apps)} style={{height: 736}}>
-          <div className={styles.nav}>
-            <div onClick={() => setTab(0)} className='noselect'>
-              <p>Booked</p>
-            </div>
-            <div onClick={() => setTab(1)} className='noselect'>
-              <p>Previous</p>
-            </div>
-
-            {/* Tab Underline */}
-            <div className={styles.tab_indicator} style={{left: tab * 120}} />
-          </div>
+          <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
               ? booked.map((app) => <AppointmentCard key={app.id} app={app} />)

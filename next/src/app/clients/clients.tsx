@@ -2,13 +2,13 @@
 
 import styles from './clients.module.scss';
 
-import { SectionLabel } from '@/components/UI/SectionLabel';
 import { useMemo, useState } from 'react';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { Client } from '@/types/Client';
+import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 
 interface ClientsProps {
   selected: Client | undefined,

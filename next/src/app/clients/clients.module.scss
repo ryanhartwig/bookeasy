@@ -56,7 +56,7 @@
 
 .label {
   font-weight: 100;
-  color: var(--font-color-alt);
+  color: var(--font-alt);
   font-size: 12px;
 }
 
@@ -189,46 +189,6 @@
 // Navigator (booked / previous)
 .apps {
   padding: 0;
-}
-.nav {
-  height: 46px;
-  width: 100%;
-  border-bottom: 2px solid var(--dividers);
-  display: flex;
-  align-items: center;
-
-  position: relative;
-
-  > div:not(:last-child) {
-    height: 100%;
-    width: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    transition: background-color 200ms;
-
-    p {
-      font-size: 14px;
-      font-weight: 400;
-    }
-
-    &:hover {
-      background-color: rgb(245, 245, 245);
-    }
-  }
-}
-
-.tab_indicator {
-  width: 120px;
-  height: 2px;
-  background: black;
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-
-  transition: left 300ms cubic-bezier(.1,.43,.5,.95);
 }
 
 .results {

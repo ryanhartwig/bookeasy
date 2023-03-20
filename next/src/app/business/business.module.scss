@@ -1,0 +1,130 @@
+.business {
+  height: calc(100% - var(--header-height));
+  padding: 5px;
+  display: flex;
+
+  // Left panel wrapper
+  > div:first-child {
+    flex-direction: column;
+
+    flex: 1 1 320px;
+    max-width: 320px;
+    min-width: 320px;
+  }
+  
+  > div {
+    display: flex;
+
+    flex: 2 2 100%;
+    max-width: 1000px;
+    max-height: 700px;
+
+    width: 100%;
+  }
+}
+
+.card {
+  flex: 1 1 100%;
+  margin: 10px;
+}
+
+.overview {
+  max-height: 250px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 10px;
+  padding-bottom: 5px;
+  font-weight: 300;
+}
+
+.name {
+  margin: 12px;
+  font-size: 20px;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    p {
+      color: var(--font-alt);
+      font-size: 12px;
+    }
+    p:first-child {
+      font-size: 20px;
+      color: var(--font-on-light);
+    }
+  }
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.year_select {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 8px;
+  
+  > * {
+    margin: 0 12px;
+  }
+
+  border-bottom: 1px solid var(--dividers);
+  width: 100%;
+}
+
+.metric_data {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.metric {
+  font-size: 24px;
+  font-weight: 100;
+  margin: 10px;
+}
+.metric_label {
+  font-size: 12px;
+  color: var(--font-alt);
+  font-weight: 100;
+  margin-bottom: 25px;
+}
+
+// Right panel settings
+.settings_wrapper {
+  width: 100%;
+  height: calc(100% - 46px);
+}
+
+.component_wrapper {
+  width: 100%;
+  height: 100%;
+}

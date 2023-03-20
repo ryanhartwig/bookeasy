@@ -33,6 +33,6 @@ export const sample_appointments: Appointment[] = [{
     service_name: 'Full Consult',
     service_provider: 'Johnson Team',
     is_video: true,
-    is_paid: !!Math.round(Math.random()),
+    is_paid: true,
   }
 ];
