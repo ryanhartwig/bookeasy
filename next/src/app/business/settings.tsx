@@ -14,6 +14,7 @@ import { BookingSitePrefs } from "@/components/business_settings/BookingSitePref
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
+import { Staff } from "@/components/business_settings/Staff";
 
 export const Settings: React.FC = () => {
 
@@ -24,7 +25,7 @@ export const Settings: React.FC = () => {
     <ClientList clients={sample_clients.filter(c => c.business_id === sample_user.own_business_id)} key={ClientList.name} />, 
     <BookingSitePrefs key={BookingSitePrefs.name} business_prefs={sample_business_prefs.find(pref => pref.business_id === sample_user.own_business_id)!} />, 
     <Services key={Services.name} services={sample_services.filter(s => s.business_id === sample_user.own_business_id)} />, 
-    <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />
+    <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />,
   ];
   
   return (
@@ -38,7 +39,6 @@ export const Settings: React.FC = () => {
           </>
         )}
         </div>
-
       </div>
     </>
   )
