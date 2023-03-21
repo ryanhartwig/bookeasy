@@ -17,6 +17,9 @@ import { Overview } from './overview';
 import { Members } from './members';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Services } from '@/components/business_settings/Services';
+import { ClientList } from '@/components/business_settings/ClientList';
+import { BookingSitePrefs } from '@/components/business_settings/BookingSitePrefs';
+import { sample_business_prefs } from '@/utility/sample_data/sample_business_prefs';
 
 
 
@@ -38,6 +41,14 @@ export default function Page() {
   , [selected]);
 
   const [tab, setTab] = useState<number>(0);
+
+  const tabs = useMemo(() => {
+    if (!selected) return []; 
+    return [
+    <Services key='services' services={services} />,
+    <ClientList key='clients' clients={clients} />,
+    <BookingSitePrefs key='bookingsite' business_prefs={sample_business_prefs.find(pref => pref.business_id === selected!.id)!} />,
+  ]}, [clients, selected, services]);
   
   return (
     <div className={styles.Teams}>
@@ -61,7 +72,11 @@ export default function Page() {
               <Card className={styles.card}>
                 <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
                 <div className={styles.settings_wrapper}>
-                  {tab === 0 && <Services services={services} />}
+                  {tabs.map((component, i) => (
+                    <>
+                      {i === tab && component}
+                    </>
+                  ))}
                 </div>
               </Card>
             </div>
