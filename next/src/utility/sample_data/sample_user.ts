@@ -35,6 +35,6 @@ export const sample_members: User[] = [{
   name: 'Marly Johnson',
   email: 'mjohnson@gmail.com',
   business_ids: [['johnsonteam', true]],
-  avatar: avatarMale,
+  avatar: avatarFemale,
   created: Date.now(),
 }]
