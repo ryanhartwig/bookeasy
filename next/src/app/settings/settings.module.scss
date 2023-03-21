@@ -29,4 +29,13 @@
     padding-top: 0;
     color: rgb(86, 86, 86);
   }
+
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+}
+
+.setting_block {
+  width: 85%;
+  margin: 0 auto;
 }
