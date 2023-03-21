@@ -4,7 +4,7 @@ export interface User {
   name: string,
   email: string,
   phone?: number,
-  business_ids: string[],
+  business_ids: [string, boolean][],
   avatar?: string,
   created: number,
 };
