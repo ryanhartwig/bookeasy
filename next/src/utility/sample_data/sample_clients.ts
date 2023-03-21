@@ -13,6 +13,7 @@ export const sample_clients: Client[] = [{
   avatar: avatarMale,
   created: Date.now(),
   active: true,
+  assigned_staff: ['christinabronson'],
 }, {
   id: 'alexanderstewart',
   name: 'Alexander Stewart',
@@ -23,6 +24,7 @@ export const sample_clients: Client[] = [{
   avatar: avatarMale,
   created: Date.now(),
   active: true,
+  assigned_staff: ['christinabronson'],
 }, {
   id: 'emiliegray',
   name: 'Emilie Gray',
@@ -34,6 +36,7 @@ export const sample_clients: Client[] = [{
   avatar: avatarFemale,
   created: Date.now(),
   active: true,
+  assigned_staff: ['christinabronson', 'johngreenwood'],
 }, {
   id: 'samuelcooper',
   name: 'Samuel Cooper',
@@ -44,6 +47,7 @@ export const sample_clients: Client[] = [{
   avatar: avatarMale,
   created: Date.now(),
   active: true,
+  assigned_staff: ['christinabronson'],
 }, {
   id: 'ethanblackwood',
   name: 'Ethan Blackwood',
@@ -54,4 +58,5 @@ export const sample_clients: Client[] = [{
   avatar: avatarMale,
   created: Date.now(),
   active: true,
+  assigned_staff: ['christinabronson', 'johngreenwood'],
 }];

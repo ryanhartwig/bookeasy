@@ -20,18 +20,18 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients}) => {
   return (
     <div className={styles.ClientList}>
       <div className={styles.header}>
-        {['Name', 'Appointments', 'Date Added', 'Active Client'].map(t => <p key={t}>{t}</p>)}
+        {['Name', 'Services', 'Clients', 'Date Added'].map(t => <p key={t}>{t}</p>)}
       </div>
-      {clients.map(c => (
-        <div className={styles.client} key={c.id}>
+      {members.map(m => (
+        <div className={styles.client} key={m.id}>
           <div>
-            <Image src={c.avatar} alt="Client avatar" height={28} />
+            <Image src={m.avatar || ''} alt="Member avatar" height={28} />
           </div>
           <div>
-            <p>{c.name}</p>
+            <p>{m.name}</p>
+            <p>{services.filter(s => s.user_ids.includes(m.id)).length}</p>
             <p></p>
-            <p>{new Date(c.created).toDateString().split(' ').slice(1).join(' ')}</p>
-            <p>{c.active ? 'Yes' : 'No'}</p>
+            <p>{new Date(m.created).toDateString().split(' ').slice(1).join(' ')}</p>
           </div>
         </div>
       ))}
