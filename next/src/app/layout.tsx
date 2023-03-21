@@ -2,7 +2,6 @@ import './globals.css'
 import './home.scss';
 
 import { Navigator } from '@/components/Navigator';
-import { Header } from '@/components/Header';
 
 export default function RootLayout({children}: { children: React.ReactNode}) {
   return (

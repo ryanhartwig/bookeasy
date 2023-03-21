@@ -7,9 +7,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import navlinks from '@/utility/data/navlinks';
 
-import styles from './navigator.module.scss';
 import clsx from 'clsx';
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
+import { HiOutlineCog8Tooth } from 'react-icons/hi2';
 
 export const Navigator = () => {
   const path = usePathname();
@@ -23,13 +22,13 @@ export const Navigator = () => {
       <div className='Navigator_links'>
         {navlinks.map(([name, url, Icon]) => (
           <Link className={clsx('Navigator_link', {'active': path === `/${url}`})} key={name} href={url}>
-            <Icon />
+            <Icon size={22} color='rgba(240,240,240,0.9)' />
             <p>{name}</p>
           </Link>
         ))}
         <hr />
         <Link className={clsx('Navigator_link', {'active': path === '/settings'})} href='settings'>
-          <MdOutlineSpaceDashboard />
+          <HiOutlineCog8Tooth color='rgba(240,240,240,0.9)' />
           <p>Settings</p>
         </Link>
       </div>
