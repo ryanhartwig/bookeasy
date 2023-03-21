@@ -25,21 +25,16 @@ export default function Page() {
           <Setting label='Email'>
             <p>{user.email}</p>
           </Setting>
-          <Setting label='Phone' style={{borderBottom: 'none'}}>
+          <Setting label='Phone'>
             <p>{user.phone ?? 'None'}</p>
           </Setting>
         </div>
 
         <SectionLabel label="Privacy Settings" className={styles.label} />
         <div className={styles.setting_block}>
-          <Setting label='Hide my profile picture on booking sites' toggleState={prefs.private_photo}>
-          </Setting>
-          <Setting label='Name'>
-            <p>{user.name}</p>
-          </Setting>
-          <Setting label='Email'>
-            <p>{user.email}</p>
-          </Setting>
+          <Setting label='Hide my profile picture on booking sites' toggleState={prefs.private_photo} />
+          <Setting label='Hide my email on booking sites' toggleState={prefs.private_email} />
+          <Setting label='Hide my phone number on booking sites' toggleState={prefs.private_phone} />
         </div>
         <SectionLabel label="Notification Settings" className={styles.label} />
       </Card>

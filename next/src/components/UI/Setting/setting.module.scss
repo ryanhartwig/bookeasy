@@ -12,6 +12,10 @@
   font-size: 12px;
 
   min-height: 39px;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 }
 
 .label {
