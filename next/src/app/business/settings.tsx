@@ -31,16 +31,14 @@ export const Settings: React.FC = () => {
     <>
       <Tabs tab={tab} setTab={setTab} tabs={tabs} />
       <div className={styles.settings_wrapper}>
+        <div className={styles.component_wrapper}>
         {tabComponents.map((component, i) => 
-          i === tab 
-            ? <div 
-                key={i} 
-                className={styles.component_wrapper}
-              >
-                {component}
-              </div> 
-            : <div key={i}></div>
+          <>
+            {i === tab && component}
+          </>
         )}
+        </div>
+
       </div>
     </>
   )
