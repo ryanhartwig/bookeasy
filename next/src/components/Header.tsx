@@ -1,8 +1,12 @@
-export const Header = () => {
+interface HeaderProps {
+  text: string,
+}
+
+export const Header: React.FC<HeaderProps> = ({text}) => {
 
   return (
     <div className='Header'>
-      <h2>Dashboard</h2>
+      <h2>{text}</h2>
     </div>
   )
 }

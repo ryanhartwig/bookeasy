@@ -21,6 +21,7 @@ import { ClientList } from '@/components/business_settings/ClientList';
 import { BookingSitePrefs } from '@/components/business_settings/BookingSitePrefs';
 import { sample_business_prefs } from '@/utility/sample_data/sample_business_prefs';
 import { Staff } from '@/components/business_settings/Staff';
+import { Header } from '@/components/Header';
 
 
 
@@ -53,39 +54,42 @@ export default function Page() {
   ]}, [clients, members, selected, services]);
   
   return (
-    <div className={styles.Teams}>
-      <div className={styles.teams_section}>
-        <p>My teams</p>
-        <Teams selected={selected} setSelected={setSelected} />
-      </div>
+    <>
+      <Header text="Teams" />
+      <div className={styles.Teams}>
+        <div className={styles.teams_section}>
+          <p>My teams</p>
+          <Teams selected={selected} setSelected={setSelected} />
+        </div>
 
-      <div className={styles.team_overview}>
-        {selected ? (
-          <>
-            <div className={styles.left}>
-              <Card className={clsx(styles.card, styles.overview)}>
-                <Overview selected={selected} members={members} clients={clients} services={services} />
-              </Card>
-              <Card className={clsx(styles.card, styles.members_overview)}>
-                <Members members={members} selected={selected} />
-              </Card>
-            </div>
-            <div className={styles.right}>
-              <Card className={styles.card}>
-                <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
-                <div className={styles.settings_wrapper}>
-                  {tabs.map((component, i) => (
-                    <>
-                      {i === tab && component}
-                    </>
-                  ))}
-                </div>
-              </Card>
-            </div>
-          </> 
-        ) : <p className={styles.select}>Select a team to see details</p>}
+        <div className={styles.team_overview}>
+          {selected ? (
+            <>
+              <div className={styles.left}>
+                <Card className={clsx(styles.card, styles.overview)}>
+                  <Overview selected={selected} members={members} clients={clients} services={services} />
+                </Card>
+                <Card className={clsx(styles.card, styles.members_overview)}>
+                  <Members members={members} selected={selected} />
+                </Card>
+              </div>
+              <div className={styles.right}>
+                <Card className={styles.card}>
+                  <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
+                  <div className={styles.settings_wrapper}>
+                    {tabs.map((component, i) => (
+                      <>
+                        {i === tab && component}
+                      </>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </> 
+          ) : <p className={styles.select}>Select a team to see details</p>}
+        </div>
+        
       </div>
-      
-    </div>
+    </>
   )
 }

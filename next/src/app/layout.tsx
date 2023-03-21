@@ -11,7 +11,6 @@ export default function RootLayout({children}: { children: React.ReactNode}) {
         <main className='main'>
           <Navigator />
           <div className='Content'>
-            <Header />
             {children}
           </div>
         </main>

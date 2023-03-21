@@ -15,6 +15,7 @@ import { Service } from '@/types/Service';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
+import { Header } from '@/components/Header';
 
 export interface View {        
   month: number,
@@ -135,30 +136,33 @@ export default function Page() {
   }, [clients, services]);
   
   return (
-    <div className={styles.calendar}>
-      <SecondaryHeader>
-        {/* Year/Month Select */}
-        <div className='Calendar-period noselect'>
-          <div className='Calendar-period-month'>
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
-              <AiOutlineLeft size={15}/>
-            </ReactIconButton> 
-            <h2>{months[viewing.month]}</h2>
+    <>
+      <Header text='Calendar' />
+      <div className={styles.calendar}>
+        <SecondaryHeader>
+          {/* Year/Month Select */}
+          <div className='Calendar-period noselect'>
+            <div className='Calendar-period-month'>
+              <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
+                <AiOutlineLeft size={15}/>
+              </ReactIconButton> 
+              <h2>{months[viewing.month]}</h2>
 
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
-              <AiOutlineRight size={15}/>
-            </ReactIconButton>
+              <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
+                <AiOutlineRight size={15}/>
+              </ReactIconButton>
+            </div>
+            <div className='Calendar-reset'>
+              <h2>{viewing.year}</h2>
+              <p onClick={reset}>Today</p>
+            </div>
           </div>
-          <div className='Calendar-reset'>
-            <h2>{viewing.year}</h2>
-            <p onClick={reset}>Today</p>
-          </div>
+        </SecondaryHeader>
+        <div className={styles.content}>
+          <Daily day={selected[0]} appointments={dayApps} services={services} clients={clients} />
+          <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clients} services={services} />
         </div>
-      </SecondaryHeader>
-      <div className={styles.content}>
-        <Daily day={selected[0]} appointments={dayApps} services={services} clients={clients} />
-        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clients} services={services} />
       </div>
-    </div>
+    </>
   )
 }
