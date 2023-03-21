@@ -6,5 +6,5 @@ export interface UserPrefs {
   notification_booking: boolean,
   notification_reminder: boolean,
   notification_overview: boolean,
-  notification_overview_time: number | null,
+  notification_overview_time: string | null,
 };
