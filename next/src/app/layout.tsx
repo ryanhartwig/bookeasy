@@ -1,5 +1,5 @@
 import './globals.css'
-import './home.css';
+import './home.scss';
 
 import { Navigator } from '@/components/Navigator';
 import { Header } from '@/components/Header';

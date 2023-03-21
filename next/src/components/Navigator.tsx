@@ -7,6 +7,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import navlinks from '@/utility/data/navlinks';
 
+import styles from './navigator.module.scss';
+import clsx from 'clsx';
+import { MdOutlineSpaceDashboard } from 'react-icons/md';
+
 export const Navigator = () => {
   const path = usePathname();
 
@@ -17,11 +21,17 @@ export const Navigator = () => {
         <span>book it.</span>
       </div>
       <div className='Navigator_links'>
-        { navlinks.map(([name, url]) => (
-          <Link key={name} href={url}><p className={path === `/${url}` ? 'active' : ''} >{name}</p></Link>
+        {navlinks.map(([name, url, Icon]) => (
+          <Link className={clsx('Navigator_link', {'active': path === `/${url}`})} key={name} href={url}>
+            <Icon />
+            <p>{name}</p>
+          </Link>
         ))}
         <hr />
-        <Link href="settings"><p className={path === '/settings' ? 'active' : ''} >Settings</p></Link>
+        <Link className={clsx('Navigator_link', {'active': path === '/settings'})} href='settings'>
+          <MdOutlineSpaceDashboard />
+          <p>Settings</p>
+        </Link>
       </div>
     </div>
   )
