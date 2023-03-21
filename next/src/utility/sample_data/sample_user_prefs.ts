@@ -8,5 +8,5 @@ export const sample_user_prefs: UserPrefs = {
   notification_booking: true,
   notification_reminder: false,
   notification_overview: false,
-  notification_overview_time: null,
+  notification_overview_time: '9:00',
 };

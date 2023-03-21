@@ -1,6 +1,7 @@
 import { Card } from '@/components/UI/Card/Card';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Setting } from '@/components/UI/Setting/Setting';
+import { formatMilitaryTime } from '@/utility/functions/formatMilitaryTime';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import { sample_user_prefs } from '@/utility/sample_data/sample_user_prefs';
 import Image from 'next/image';
@@ -37,6 +38,14 @@ export default function Page() {
           <Setting label='Hide my phone number on booking sites' toggleState={prefs.private_phone} />
         </div>
         <SectionLabel label="Notification Settings" className={styles.label} />
+        <div className={styles.setting_block}>
+          <Setting label='Receive email notification when an appointment is booked or cancelled' toggleState={prefs.notification_booking} />
+          <Setting label='Receive email reminders for upcoming appointments' toggleState={prefs.notification_reminder} />
+          <Setting label='Receive appointments overview email on work days' toggleState={prefs.notification_overview} />
+          <Setting label='Receive at:' style={{paddingLeft: 50, opacity: prefs.notification_overview ? 1 : 0.5, pointerEvents: prefs.notification_overview ? 'all' : 'none'}}>
+            <p>{prefs.notification_overview_time ? formatMilitaryTime(prefs.notification_overview_time) : 'Unset'}</p>
+          </Setting>
+        </div>
       </Card>
     </div>
   )
