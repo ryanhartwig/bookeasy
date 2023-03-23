@@ -2,4 +2,10 @@ type Post @model {
   title: String!
   slug: String! @unique
   views: Int @default(value: 0)
+  comments: [Comment!]!
+}
+
+type Comment @model {
+  message: String!
+  post: Post!
 }
