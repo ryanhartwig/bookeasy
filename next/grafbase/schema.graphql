@@ -1,0 +1,5 @@
+type Post @model {
+  title: String!
+  slug: String! @unique
+  views: Int @default(value: 0)
+}
