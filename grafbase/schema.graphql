@@ -10,26 +10,25 @@
 #   post: Post!
 # }
 
+type BusinessPrefs @model {
+  min_booking_notice: Number,
+  min_cancel_notice: Number,
+  max_book_ahead: Number,
+}
 
 type Business @model {
-  id: ID! @unique,
   name: String!,
   email: String,
   phone: String,
-  prefs: {
-    min_booking_notice: Number,
-    min_cancel_notice: Number,
-    max_book_ahead: Number,
-  }
+  prefs: BusinessPrefs!,
 }
 
 type User @model {
-  id: ID! @unique,
   name: String!,
   email: String!,
   phone: String,
   businesses: [Business]!,
-  business: Business,
+  business: Business @relation(name: "business"),
 }
 
 type UserPrefs @model {
@@ -50,7 +49,7 @@ type Notification @model {
 }
 
 type Client @model {
-  business: Business!,
+  business: Business! @relation(name: "business"),
   name: String!,
   email: String!,
   notes: String,
@@ -61,7 +60,7 @@ type Client @model {
 }
 
 type Service @model {
-  business: Business!,
+  business: Business! @relation(name: "business"),
   name: String!,
   duration: Number!,
   provider: String!,
@@ -72,10 +71,10 @@ type Service @model {
 }
 
 type Appointment @model {
-  user: User!,
-  business: Business!,
-  client: Client!,
-  service: Service!,
+  user: User! @relation(name: "user"),
+  business: Business! @relation(name: "business"),
+  client: Client! @relation(name: "client"),
+  service: Service! @relation(name: "service"),
   start_date: Number!,
   end_date: Number!,
   service_name: String!,
@@ -87,8 +86,8 @@ type Appointment @model {
 }
 
 type AvailabilitySlice @model {
-  user: User!,
-  business: Business!,
+  user: User! @relation(name: "user"),
+  business: Business! @relation(name: "business"),
   day: Number!,
   start: String!,
   end: String!,
@@ -101,8 +100,8 @@ type TimeOff @model {
 }
 
 type BaseAvailability @model {
-  user: User!,
-  business: Business!,
-  slices: [AvailabilitySlice]!,
-  time_off: [TimeOff]!,
+  user: User! @relation(name: "user"),
+  business: Business! @relation(name: "business"),
+  slices: [AvailabilitySlice]! @relation(name: "slices"),
+  time_off: [TimeOff]! @relation(name: "time_off"),
 }
