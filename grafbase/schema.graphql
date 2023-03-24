@@ -23,13 +23,6 @@ type Business @model {
   }
 }
 
-export interface BusinessPrefs {
-  business_id: string,
-  min_booking_notice: number | null,
-  min_cancel_notice: number | null,
-  max_book_ahead: number | null,
-}
-
 type User @model {
   id: ID! @unique,
   name: String!,
@@ -37,6 +30,16 @@ type User @model {
   phone: String,
   businesses: [Business]!,
   business: Business,
+}
+
+type UserPrefs @model {
+  private_photo: Boolean!,
+  private_email: Boolean!,
+  private_phone: Boolean!,
+  notification_booking: Boolean!,
+  notification_reminder: Boolean!,
+  notification_overview: Boolean!,
+  notification_overview_time: String,
 }
 
 type Notification @model {
