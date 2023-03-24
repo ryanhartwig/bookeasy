@@ -85,3 +85,24 @@ type Appointment @model {
   is_video: Boolean!,
   is_paid: Boolean!,
 }
+
+type AvailabilitySlice @model {
+  user: User!,
+  business: Business!,
+  day: Number!,
+  start: String!,
+  end: String!,
+}
+
+type TimeOff @model {
+  start_period: Number!,
+  end_period: Number!,
+  reason: String!,
+}
+
+type BaseAvailability @model {
+  user: User!,
+  business: Business!,
+  slices: [AvailabilitySlice]!,
+  time_off: [TimeOff]!,
+}
