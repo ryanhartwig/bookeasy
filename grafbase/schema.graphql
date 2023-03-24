@@ -1,11 +1,84 @@
-type Post @model {
-  title: String!
-  slug: String! @unique
-  views: Int @default(value: 0)
-  comments: [Comment!]!
+# type Post @model {
+#   title: String!
+#   slug: String! @unique
+#   views: Int @default(value: 0)
+#   comments: [Comment!]!
+# }
+
+# type Comment @model {
+#   message: String!
+#   post: Post!
+# }
+
+
+type Business @model {
+  id: ID! @unique,
+  name: String!,
+  email: String,
+  phone: String,
+  prefs: {
+    min_booking_notice: Number,
+    min_cancel_notice: Number,
+    max_book_ahead: Number,
+  }
 }
 
-type Comment @model {
-  message: String!
-  post: Post!
+export interface BusinessPrefs {
+  business_id: string,
+  min_booking_notice: number | null,
+  min_cancel_notice: number | null,
+  max_book_ahead: number | null,
+}
+
+type User @model {
+  id: ID! @unique,
+  name: String!,
+  email: String!,
+  phone: String,
+  businesses: [Business]!,
+  business: Business,
+}
+
+type Notification @model {
+  user: User!,
+  text: String!,
+  link: String,
+  seen: Boolean,
+}
+
+type Client @model {
+  business: Business!,
+  name: String!,
+  email: String!,
+  notes: String,
+  address: String,
+  phone: String,
+  active: Boolean,
+  assigned_users: [User]!
+}
+
+type Service @model {
+  business: Business!,
+  name: String!,
+  duration: Number!,
+  provider: String!,
+  cost: Number!,
+  is_video: Boolean!,
+  color: String!,
+  assigned_users: [User]!,
+}
+
+type Appointment @model {
+  user: User!,
+  business: Business!,
+  client: Client!,
+  service: Service!,
+  start_date: Number!,
+  end_date: Number!,
+  service_name: String!,
+  service_duration: Number!,
+  service_provider: String!,
+  service_cost: Number!,
+  is_video: Boolean!,
+  is_paid: Boolean!,
 }

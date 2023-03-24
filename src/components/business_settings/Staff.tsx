@@ -25,7 +25,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients}) => {
         <div>
           <p>{m.name}</p>
           <p>{services.filter(s => s.user_ids.includes(m.id)).length}</p>
-          <p>{clients.filter(c => c.assigned_staff.includes(m.id)).length}</p>
+          <p>{clients.filter(c => c.assigned_users.includes(m.id)).length}</p>
           <p>{new Date(m.created).toDateString().split(' ').slice(1).join(' ')}</p>
           <p className={styles.details}>Details</p>
         </div>

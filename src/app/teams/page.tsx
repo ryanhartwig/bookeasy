@@ -19,9 +19,9 @@ import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Services } from '@/components/business_settings/Services';
 import { ClientList } from '@/components/business_settings/ClientList';
 import { BookingSitePrefs } from '@/components/business_settings/BookingSitePrefs';
-import { sample_business_prefs } from '@/utility/sample_data/sample_business_prefs';
 import { Staff } from '@/components/business_settings/Staff';
 import { Header } from '@/components/Header';
+import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 
 
 
@@ -49,7 +49,7 @@ export default function Page() {
     return [
     <Services key='services' services={services} />,
     <ClientList key='clients' clients={clients} />,
-    <BookingSitePrefs key='bookingsite' business_prefs={sample_business_prefs.find(pref => pref.business_id === selected!.id)!} />,
+    <BookingSitePrefs key='bookingsite' business={sample_businesses.find(b => b.id === selected!.id)!} />,
     <Staff key='staff' clients={clients} members={members} services={services} />,
   ]}, [clients, members, selected, services]);
   

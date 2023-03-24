@@ -9,5 +9,5 @@ export interface Client {
   phone?: string,
   created: number,
   active: boolean,
-  assigned_staff: string[],
+  assigned_users: string[],
 };
