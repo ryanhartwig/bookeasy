@@ -15,8 +15,8 @@ type User @model {
   name: String!,
   email: String!,
   phone: String,
-  businesses: [Business]!,
-  business: Business @relation(name: "user_business"),
+  businesses: [[Business, Boolean]]!,
+  ownBusiness: Business @relation(name: "user_business"),
 }
 
 type UserPrefs @model {
