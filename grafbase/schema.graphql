@@ -1,4 +1,4 @@
-type BusinessPrefs @model {
+type BusinessPrefs {
   minBookingNotice: Int @default(value: 86400000),
   minCancelNotice: Int @default(value: 86400000),
   maxBookAhead: Int @default(value: 2592000000),
@@ -16,15 +16,7 @@ type BusinessRelation {
   elevated: Boolean!,
 }
 
-type User @model {
-  name: String!,
-  email: String!,
-  phone: String,
-  businesses: [BusinessRelation]!,
-  ownBusiness: Business @relation(name: "user_business"),
-}
-
-type UserPrefs @model {
+type UserPrefs {
   privatePhoto: Boolean! @default(value: false),
   privateEmail: Boolean! @default(value: true),
   privatePhone: Boolean! @default(value: true),
@@ -32,6 +24,15 @@ type UserPrefs @model {
   notificationReminder: Boolean! @default(value: true),
   notificationOverview: Boolean! @default(value: false),
   notificationOverviewTime: String,
+}
+
+type User @model {
+  name: String!,
+  email: String!,
+  phone: String,
+  businesses: [BusinessRelation]!,
+  ownBusiness: Business @relation(name: "user_business"),
+  prefs: UserPrefs!,
 }
 
 type Notification @model {
