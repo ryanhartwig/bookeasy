@@ -1,7 +1,7 @@
 type BusinessPrefs @model {
-  minBookingBotice: Int,
-  minCancelNotice: Int,
-  maxBookAhead: Int,
+  minBookingNotice: Int @default(value: 86400000),
+  minCancelNotice: Int @default(value: 86400000),
+  maxBookAhead: Int @default(value: 2592000000),
 }
 
 type Business @model {
@@ -25,12 +25,12 @@ type User @model {
 }
 
 type UserPrefs @model {
-  privatePhoto: Boolean!,
-  privateEmail: Boolean!,
-  privatePhone: Boolean!,
-  notificationBooking: Boolean!,
-  notificationReminder: Boolean!,
-  notificationOverview: Boolean!,
+  privatePhoto: Boolean! @default(value: false),
+  privateEmail: Boolean! @default(value: true),
+  privatePhone: Boolean! @default(value: true),
+  notificationBooking: Boolean! @default(value: true),
+  notificationReminder: Boolean! @default(value: true),
+  notificationOverview: Boolean! @default(value: false),
   notificationOverviewTime: String,
 }
 
@@ -38,7 +38,7 @@ type Notification @model {
   user: User!,
   text: String!,
   link: String,
-  seen: Boolean,
+  seen: Boolean @default(value: false),
 }
 
 type Client @model {
@@ -48,7 +48,7 @@ type Client @model {
   notes: String,
   address: String,
   phone: String,
-  active: Boolean,
+  active: Boolean @default(value: true),
   assignedUsers: [User]!
 }
 
@@ -75,7 +75,7 @@ type Appointment @model {
   serviceProvider: String!,
   serviceCost: Int!,
   isVideo: Boolean!,
-  isPaid: Boolean!,
+  isPaid: Boolean! @default(value: false),
 }
 
 type AvailabilitySlice @model {
