@@ -1,19 +1,7 @@
-# type Post @model {
-#   title: String!
-#   slug: String! @unique
-#   views: Int @default(value: 0)
-#   comments: [Comment!]!
-# }
-
-# type Comment @model {
-#   message: String!
-#   post: Post!
-# }
-
 type BusinessPrefs @model {
-  min_booking_notice: Number,
-  min_cancel_notice: Number,
-  max_book_ahead: Number,
+  minBookingBotice: Int,
+  minCancelNotice: Int,
+  maxBookAhead: Int,
 }
 
 type Business @model {
@@ -28,17 +16,17 @@ type User @model {
   email: String!,
   phone: String,
   businesses: [Business]!,
-  business: Business @relation(name: "business"),
+  business: Business @relation(name: "user_business"),
 }
 
 type UserPrefs @model {
-  private_photo: Boolean!,
-  private_email: Boolean!,
-  private_phone: Boolean!,
-  notification_booking: Boolean!,
-  notification_reminder: Boolean!,
-  notification_overview: Boolean!,
-  notification_overview_time: String,
+  privatePhoto: Boolean!,
+  privateEmail: Boolean!,
+  privatePhone: Boolean!,
+  notificationBooking: Boolean!,
+  notificationReminder: Boolean!,
+  notificationOverview: Boolean!,
+  notificationOverviewTime: String,
 }
 
 type Notification @model {
@@ -49,59 +37,59 @@ type Notification @model {
 }
 
 type Client @model {
-  business: Business! @relation(name: "business"),
+  business: Business! @relation(name: "client_business"),
   name: String!,
   email: String!,
   notes: String,
   address: String,
   phone: String,
   active: Boolean,
-  assigned_users: [User]!
+  assignedUsers: [User]!
 }
 
 type Service @model {
-  business: Business! @relation(name: "business"),
+  business: Business! @relation(name: "service_business"),
   name: String!,
-  duration: Number!,
+  duration: Int!,
   provider: String!,
-  cost: Number!,
-  is_video: Boolean!,
+  cost: Int!,
+  isVideo: Boolean!,
   color: String!,
-  assigned_users: [User]!,
+  assignedUsers: [User]!,
 }
 
 type Appointment @model {
-  user: User! @relation(name: "user"),
-  business: Business! @relation(name: "business"),
-  client: Client! @relation(name: "client"),
-  service: Service! @relation(name: "service"),
-  start_date: Number!,
-  end_date: Number!,
-  service_name: String!,
-  service_duration: Number!,
-  service_provider: String!,
-  service_cost: Number!,
-  is_video: Boolean!,
-  is_paid: Boolean!,
+  user: User! @relation(name: "app_user"),
+  business: Business! @relation(name: "app_business"),
+  client: Client! @relation(name: "app_client"),
+  service: Service! @relation(name: "app_service"),
+  startDate: Int!,
+  endDate: Int!,
+  serviceName: String!,
+  serviceDuration: Int!,
+  serviceProvider: String!,
+  serviceCost: Int!,
+  isVideo: Boolean!,
+  isPaid: Boolean!,
 }
 
 type AvailabilitySlice @model {
-  user: User! @relation(name: "user"),
-  business: Business! @relation(name: "business"),
-  day: Number!,
+  user: User! @relation(name: "avail_user"),
+  business: Business! @relation(name: "avail_business"),
+  day: Int!,
   start: String!,
   end: String!,
 }
 
 type TimeOff @model {
-  start_period: Number!,
-  end_period: Number!,
+  startPeriod: Int!,
+  endPeriod: Int!,
   reason: String!,
 }
 
 type BaseAvailability @model {
-  user: User! @relation(name: "user"),
-  business: Business! @relation(name: "business"),
-  slices: [AvailabilitySlice]! @relation(name: "slices"),
-  time_off: [TimeOff]! @relation(name: "time_off"),
+  user: User! @relation(name: "base_avail_user"),
+  business: Business! @relation(name: "base_avail_business"),
+  slices: [AvailabilitySlice]! @relation(name: "base_avail_slices"),
+  timeOff: [TimeOff]! @relation(name: "base_avail_time_off"),
 }

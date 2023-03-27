@@ -1,5 +1,3 @@
-'use client';
-
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
