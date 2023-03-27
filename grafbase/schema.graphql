@@ -12,11 +12,6 @@ type Business @model {
   users: [User]!,
 }
 
-type BusinessRelation {
-  business: Business!,
-  elevated: Boolean!,
-}
-
 type UserPrefs {
   privatePhoto: Boolean! @default(value: false),
   privateEmail: Boolean! @default(value: true),
@@ -31,8 +26,8 @@ type User @model {
   name: String!,
   email: String!,
   phone: String,
-  businesses: [BusinessRelation]!,
-  ownBusiness: Business @relation(name: "user_business"),
+  businesses: [Business!]! @relation(name: "user_teams"),
+  ownBusiness: Business @relation(name: "user_own_business"),
   prefs: UserPrefs!,
 }
 
