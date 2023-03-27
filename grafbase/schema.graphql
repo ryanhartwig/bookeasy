@@ -24,7 +24,7 @@ type UserPrefs {
 
 type User @model {
   name: String!,
-  email: String!,
+  email: String! @unique,
   phone: String,
   businesses: [Business!]! @relation(name: "user_teams"),
   ownBusiness: Business @relation(name: "user_own_business"),
@@ -41,7 +41,7 @@ type Notification @model {
 type Client @model {
   business: Business! @relation(name: "client_business"),
   name: String!,
-  email: String!,
+  email: String! @unique,
   notes: String,
   address: String,
   phone: String,
