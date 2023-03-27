@@ -11,11 +11,16 @@ type Business @model {
   prefs: BusinessPrefs!,
 }
 
+type BusinessRelation {
+  business: Business!,
+  elevated: Boolean!,
+}
+
 type User @model {
   name: String!,
   email: String!,
   phone: String,
-  businesses: [[Business, Boolean]]!,
+  businesses: [BusinessRelation]!,
   ownBusiness: Business @relation(name: "user_business"),
 }
 
