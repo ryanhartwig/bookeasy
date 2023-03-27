@@ -9,6 +9,7 @@ type Business @model {
   email: String,
   phone: String,
   prefs: BusinessPrefs!,
+  users: [User]!,
 }
 
 type BusinessRelation {
