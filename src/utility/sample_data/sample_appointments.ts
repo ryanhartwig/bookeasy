@@ -6,6 +6,7 @@ sampleStart.setHours(8, 0, 0, 0);
 const sampleEnd = new Date(sampleStart);
 sampleEnd.setHours(sampleStart.getHours() + 1);
 
+
 export const sample_appointments: Appointment[] = [{
     id: 'app1',
     user_id: 'christinabronson',
@@ -23,7 +24,7 @@ export const sample_appointments: Appointment[] = [{
   }, {
     id: 'app2',
     user_id: 'christinabronson',
-    business_id: 'christinabronson',
+    business_id: 'johnsonteam',
     client_id: 'emiliegray',
     service_id: 'fullconsult',
     start_date: sampleStart.getTime() + 1000 * 60 * 60 * 1.5,
