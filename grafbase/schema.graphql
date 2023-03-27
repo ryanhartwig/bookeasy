@@ -75,9 +75,7 @@ type Appointment @model {
   isPaid: Boolean! @default(value: false),
 }
 
-type AvailabilitySlice @model {
-  user: User! @relation(name: "avail_user"),
-  business: Business! @relation(name: "avail_business"),
+type AvailabilitySlice {
   day: Int!,
   start: String!,
   end: String!,
