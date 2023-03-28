@@ -59,15 +59,9 @@
 }
 
 /* Next or previous month reset when day number is the same */
-.Day-content.today.out-of-view {
-  color: white;
-  background: #302D2D;
-}
-.Day-content.today.out-of-view.ss {
-  background: rgba(14, 52, 77, 0.637);
-}
 .Day-content.today.out-of-view p {
   font-weight: 200;
+  color: grey;
 }
 
 .Day-content.selected {
