@@ -10,6 +10,8 @@ type Business @model {
   phone: String,
   prefs: BusinessPrefs!,
   users: [User!]!,
+  clients: [Client!]!,
+  services: [Service!]!,
 }
 
 type UserPrefs {
@@ -122,3 +124,9 @@ type BaseAvailability @model {
 # review meeting: service_01GWJFKVPW1M4JFESKNZV1AJ65
 
 # users, businesses, linked
+
+# appointments:
+# steven & christina init consult: appointment_01GWJGT2D7VCA17AN9PAG9A8QE
+# eimilie and chrsitina full cons: appointment_01GWJH273QQ47HAYAQWZGC6YWW
+
+# avail: baseavailability_01GWJGBHKXXBJPDA5FMGB70CXP
