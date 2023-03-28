@@ -9,7 +9,7 @@ type Business @model {
   email: String,
   phone: String,
   prefs: BusinessPrefs!,
-  users: [User]!,
+  users: [User!]!,
 }
 
 type UserPrefs {
@@ -28,7 +28,12 @@ type User @model {
   phone: String,
   businesses: [Business!]! @relation(name: "user_teams"),
   ownBusiness: Business @relation(name: "user_own_business"),
-  prefs: UserPrefs!,
+  prefs: UserPrefs!,  
+  assignedClients: [Client!]!,
+  notifications: [Notification!]!,
+  services: [Service!]!,
+  appointments: [Appointment!]!,
+  availability: [BaseAvailability!]!,
 }
 
 type Notification @model {
@@ -46,7 +51,7 @@ type Client @model {
   address: String,
   phone: String,
   active: Boolean @default(value: true),
-  assignedUsers: [User]!
+  assignedUsers: [User!]!
 }
 
 type Service @model {
@@ -57,7 +62,7 @@ type Service @model {
   cost: Int!,
   isVideo: Boolean!,
   color: String!,
-  assignedUsers: [User]!,
+  assignedUsers: [User!]!,
 }
 
 type Appointment @model {
@@ -90,15 +95,15 @@ type TimeOff @model {
 type BaseAvailability @model {
   user: User! @relation(name: "base_avail_user"),
   business: Business! @relation(name: "base_avail_business"),
-  slices: [AvailabilitySlice]! @relation(name: "base_avail_slices"),
-  timeOff: [TimeOff]! @relation(name: "base_avail_time_off"),
+  slices: [AvailabilitySlice!]!,
+  timeOff: [TimeOff!]! @relation(name: "base_avail_time_off"),
 }
 
 
+# christina bronson: user_01GWHJK2PJ3C1DGYJY32YSJFQ3
 # john greenwood: user_01GWJ9XXHTZGAJJ28DZ47BEBQP
 # phillip west: user_01GWJ9XXHTZGAJJ28DZ47BEBQQ
 # marly johsnon: user_01GWJ9XXHTZGAJJ28DZ47BEBQR
-# christina bronson: user_01GWHJK2PJ3C1DGYJY32YSJFQ3
 
 # own business id (chrstina bronson)
 # business_01GWHNAX5BM0Q7K2GVS5YVJBKC
@@ -106,10 +111,11 @@ type BaseAvailability @model {
 # johnson team id
 # business_01GWJ9XXHTZGAJJ28DZ47BEBQN
 
-# stevenprice: client_01GWJEJWN2053A8HJSX4HGFJX5
+# steven price: client_01GWJEJWN2053A8HJSX4HGFJX5
 # alexander stewart: client_01GWJEP84FDSE3TKDBK6656S8C
-# emilie gray: client_01GWJEQKW2ZBVS3N2PZRE0PV85
 # samuel cooper: client_01GWJET8ERJ7PJYXZK6QVHFX5W
+# ethan blackwood: client_01GWJERVBTMTQRXX5VG6CWZ3HW
+# emilie gray: client_01GWJEQKW2ZBVS3N2PZRE0PV85
 
 # init consult: service_01GWJFHH8PQKE5QG8REM8KT90N
 # full consult: service_01GWJFK2RHYKTE4YRXWZNVD441
