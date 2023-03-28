@@ -12,6 +12,7 @@ type Business @model {
   users: [User!]!,
   clients: [Client!]!,
   services: [Service!]!,
+  appointments: [Appointment!]!,
 }
 
 type UserPrefs {
@@ -53,7 +54,8 @@ type Client @model {
   address: String,
   phone: String,
   active: Boolean @default(value: true),
-  assignedUsers: [User!]!
+  assignedUsers: [User!]!,
+  appointments: [Appointment!]!,
 }
 
 type Service @model {
@@ -107,7 +109,7 @@ type BaseAvailability @model {
 # phillip west: user_01GWJ9XXHTZGAJJ28DZ47BEBQQ
 # marly johsnon: user_01GWJ9XXHTZGAJJ28DZ47BEBQR
 
-# own business id (chrstina bronson)
+# christina bronson
 # business_01GWHNAX5BM0Q7K2GVS5YVJBKC
 
 # johnson team id
