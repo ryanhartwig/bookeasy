@@ -19,11 +19,6 @@ const query = gql`
 
 export default async function RootLayout({children}: { children: React.ReactNode}) {
 
-  const client = getClient();
-  const { data } = await client.query({
-    query
-  });
-  
   return (
     <html lang="en">
       <body>

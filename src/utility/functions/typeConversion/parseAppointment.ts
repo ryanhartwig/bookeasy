@@ -6,9 +6,18 @@ export const parseToAppointment = (data: any): Appointment => {
   // }
   
   return {
-    ...data,
     businessId: data.business.id,
     clientId: data.client.id,
-    serviceId: data.service.id
+    serviceId: data.service.id,
+    id: data.id,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    serviceName: data.serviceName,
+    serviceDuration: data.serviceDuration,
+    serviceProvider: data.serviceProvider,
+    serviceCost: data.serviceCost,
+    isVideo: data.isVideo,
+    isPaid: data.isPaid,
+    userId: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3",
   } as Appointment;
 }

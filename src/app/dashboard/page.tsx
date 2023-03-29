@@ -1,7 +1,6 @@
 import styles from './dashboard.module.scss';
 
 import { SecondaryHeader } from "../../components/SecondaryHeader"
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
 import { Appointments } from './appointments';
 
@@ -14,6 +13,7 @@ import { Header } from '@/components/Header';
 import { gql } from '@apollo/client';
 import { getClient } from '@/utility/functions/getClient';
 import { Appointment } from '@/types/Appointment';
+import { parseToAppointment } from '@/utility/functions/typeConversion/parseAppointment';
 
 const query = gql`
   query UserAppointmentsQuery($after: String!, $id: ID!) {
@@ -22,13 +22,17 @@ const query = gql`
       edges {
         node {
           id
+          business { id }
+          client { id }
+          service { id }
           startDate
           endDate
-          client {
-            id
-          }
           serviceName
+          serviceDuration
+          serviceProvider
+          serviceCost
           isVideo
+          isPaid
         }
       }
       pageInfo {
@@ -40,48 +44,9 @@ const query = gql`
 }
 `
 
-// {
-//   "data": {
-//     "user": {
-//       "appointments": {
-//         "edges": [
-//           {
-//             "node": {
-//               "client": {
-//                 "name": "Steven Price"
-//               },
-//               "endDate": "1679922000000",
-//               "id": "appointment_01GWJGT2D7VCA17AN9PAG9A8QE",
-//               "isVideo": true,
-//               "serviceName": "Initial Consult",
-//               "startDate": "1679918400000"
-//             }
-//           },
-//           {
-//             "node": {
-//               "client": {
-//                 "name": "Emilie Gray"
-//               },
-//               "endDate": "1679928300000",
-//               "id": "appointment_01GWJH273QQ47HAYAQWZGC6YWW",
-//               "isVideo": true,
-//               "serviceName": "Full Consult",
-//               "startDate": "1679923800000"
-//             }
-//           }
-//         ],
-//         "pageInfo": {
-//           "endCursor": "YXBwb2ludG1lbnRfMDFHV0pIMjczUVE0N0hBWUFRV1pHQzZZV1c",
-//           "hasNextPage": false
-//         }
-//       }
-//     }
-//   }
-// }
-
 export default async function Page() {
 
-  const allAppointments: Partial<Appointment>[] = [];
+  const allAppointments: Appointment[] = [];
 
   const client = getClient();
   let after = '';
@@ -94,7 +59,7 @@ export default async function Page() {
       } });
       const { appointments } = data.user;
 
-      allAppointments.push(appointments.edges.map((edge: any) => ({...edge.node, client: undefined, clientId: edge.node.client.id}) as Partial<Appointment>))
+      allAppointments.push(...appointments.edges.map((edge: any) => parseToAppointment(edge.node)))
       if (appointments.pageInfo.hasNextPage) {
         after = appointments.pageInfo.endCursor;
         await fillAppointments();
@@ -125,7 +90,7 @@ export default async function Page() {
               </p>
             </div>
             <div>
-              <p className={styles.headerLarge}>{sample_appointments.length}</p>
+              <p className={styles.headerLarge}>{allAppointments.length}</p>
               <p style={{fontWeight: 100}}>Appointments</p>
             </div>
             <div>
@@ -136,11 +101,11 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={sample_appointments} />
+          <Appointments appointments={allAppointments} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays appointments={sample_appointments} />
+            <WeekDays appointments={allAppointments} />
           </Card>
         </div>
       </div>
