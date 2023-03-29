@@ -19,13 +19,13 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
 
   const previous = useMemo<Appointment[]>(() => {
     return sample_appointments.filter(app => 
-      app.client_id === selected.id && app.start_date < Date.now()
+      app.clientId === selected.id && app.startDate < Date.now()
     );
   }, [selected.id]);
 
   const booked = useMemo<Appointment[]>(() => {
     return sample_appointments.filter(app => 
-      app.client_id === selected.id && app.start_date >= Date.now()
+      app.clientId === selected.id && app.startDate >= Date.now()
     );
   }, [selected.id]);
 
@@ -33,8 +33,8 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
     console.log(previous.concat(booked));
     
     return previous.concat(booked)
-      .filter(app => !app.is_paid)
-      .map(app => app.service_cost)
+      .filter(app => !app.isPaid)
+      .map(app => app.serviceCost)
       .reduce((a, b) => a + b, 0)
       .toFixed(2)
   }, [booked, previous]);
@@ -85,7 +85,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
             <hr />
             <div className={styles.metric}>
-              <p>${previous.map(p => p.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
+              <p>${previous.map(p => p.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
               <p className={styles.label}>Total Estimated Revenue</p>
             </div>
             <hr />

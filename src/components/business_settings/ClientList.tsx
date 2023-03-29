@@ -16,7 +16,7 @@ export const ClientList: React.FC<ClientListProps> = ({clients}) => {
     const map = new Map<string, number>();
     
     sample_appointments.forEach(app => {
-      map.set(app.client_id, map.get(app.id) ?? 0 + 1);
+      map.set(app.clientId, map.get(app.id) ?? 0 + 1);
     });
 
     return map;

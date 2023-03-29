@@ -49,7 +49,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
           date.setDate(date.getDate() + i);
 
           const [dayStart, dayEnd] = getDayRange(date);
-          const thisDayApps = appointments.filter((app) => dayStart <= app.start_date && dayEnd >= app.start_date);
+          const thisDayApps = appointments.filter((app) => dayStart <= app.startDate && dayEnd >= app.startDate);
           
           return <Hours key={i} day={i} appointments={thisDayApps} services={services} clients={clients} />
         })}
