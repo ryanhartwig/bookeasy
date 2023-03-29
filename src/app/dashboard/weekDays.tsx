@@ -8,13 +8,17 @@ import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
 import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
 import { getDayRange } from '@/utility/functions/getDayRange';
 
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
+import { Appointment } from '@/types/Appointment';
 
-export const WeekDays = () => {
+interface WeekDaysProps {
+  appointments: Appointment[],
+}
+
+export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -45,9 +49,9 @@ export const WeekDays = () => {
           date.setDate(date.getDate() + i);
 
           const [dayStart, dayEnd] = getDayRange(date);
-          const appointments = sample_appointments.filter((app) => dayStart <= app.start_date && dayEnd >= app.start_date);
+          const thisDayApps = appointments.filter((app) => dayStart <= app.start_date && dayEnd >= app.start_date);
           
-          return <Hours key={i} day={i} appointments={appointments} services={services} clients={clients} />
+          return <Hours key={i} day={i} appointments={thisDayApps} services={services} clients={clients} />
         })}
       </div>
     </div>

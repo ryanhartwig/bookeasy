@@ -11,9 +11,11 @@ import { Card } from '@/components/UI/Card/Card';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Header } from '@/components/Header';
 
-export default function Page() {
+export default async function Page() {
 
   const [start, end] = getCurrentWeek();
+
+
   
   return (
     <>
@@ -43,7 +45,7 @@ export default function Page() {
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays />
+            <WeekDays appointments={sample_appointments} />
           </Card>
         </div>
       </div>

@@ -3,6 +3,7 @@ import './home.scss';
 
 import { gql } from '@apollo/client';
 import { getClient } from '@/utility/functions/getClient';
+import { Navigator } from '@/components/Navigator';
 
 const query = gql`
   query { 
@@ -16,28 +17,12 @@ const query = gql`
   }
 `
 
-import { Navigator } from '@/components/Navigator';
-// import { gql, grafbase } from '../../lib/grafbase';
-
-// const GetAllUsersQuery = gql`
-//   query {
-//     userCollection(first:100) {
-//       edges {
-//         node {
-//           name
-//           id
-//         }
-//       }
-//     }
-//   }
-// `
-
 export default async function RootLayout({children}: { children: React.ReactNode}) {
 
-  // const { userCollection } = await grafbase.request(GetAllUsersQuery) as any;
-
   const client = getClient();
-  const { data } = await client.query({ query });
+  const { data } = await client.query({
+    query
+  });
   
   return (
     <html lang="en">
@@ -45,8 +30,7 @@ export default async function RootLayout({children}: { children: React.ReactNode
         <main className='main'>
           <Navigator />
           <div className='Content'>
-            {/* {children} */}
-            <p>{JSON.stringify({data})}</p>
+            {children}
           </div>
         </main>
       </body>

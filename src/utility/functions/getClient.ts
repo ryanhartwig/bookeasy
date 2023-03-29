@@ -6,7 +6,10 @@ export const getClient = () => {
   if (!client || typeof window === "undefined") {
     client = new ApolloClient({
       link: new HttpLink({
-        uri: "http://127.0.0.1:4000/graphql",
+        uri: process.env.GRAFBASE_API_URL,
+        headers: {
+          'x-api-key': process.env.GRAFBASE_API_KEY || ''
+        },
       }),
       cache: new InMemoryCache(),
     });
@@ -14,3 +17,18 @@ export const getClient = () => {
 
   return client;
 };
+
+/* 
+
+To revalidate by interval (seconds):
+
+const { data } = await client.query({
+  query,
+  context: {
+    fetchOptions: {
+      next: { revalidate: 5 }
+    }
+  }
+});
+
+*/
