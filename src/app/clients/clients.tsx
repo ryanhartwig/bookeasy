@@ -22,7 +22,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
       sample_businesses.map(b => {
         const clients = sample_clients
           // organize by team
-          .filter(c => c.business_id === b.id)
+          .filter(c => c.businessId === b.id)
           // space separated lazy search
           .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
         ;

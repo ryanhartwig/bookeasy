@@ -22,7 +22,7 @@ export default function Page() {
             <hr />
             <div className={styles.details}>
               <div>
-                <p>{sample_clients.filter(c => c.business_id === sample_user.id).length}</p>
+                <p>{sample_clients.filter(c => c.businessId === sample_user.id).length}</p>
                 <p>client(s)</p>  
               </div>
               <div>

@@ -1,6 +1,6 @@
 export interface Client {
   id: string,
-  business_id: string,
+  businessId: string,
   name: string,
   email: string,
   notes?: string,
@@ -9,5 +9,5 @@ export interface Client {
   phone?: string,
   created: number,
   active: boolean,
-  assigned_users: string[],
+  assignedUsers: string[],
 };
