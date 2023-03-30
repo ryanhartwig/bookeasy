@@ -15,6 +15,7 @@ import { getAllServices } from '@/utility/functions/fetch/getAllServices';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 
 export default async function Page() {
+  // Cached / deduped after first call in any server component
   const { appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
   const { services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
   const { clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
@@ -49,7 +50,7 @@ export default async function Page() {
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays appointments={appointments} />
+            <WeekDays appointments={appointments} services={services} clients={clients} />
           </Card>
         </div>
       </div>

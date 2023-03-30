@@ -10,15 +10,15 @@ import { getDayRange } from '@/utility/functions/getDayRange';
 
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
-import { sample_services } from '@/utility/sample_data/sample_services';
 import { Appointment } from '@/types/Appointment';
 
 interface WeekDaysProps {
   appointments: Appointment[],
+  services: Service[],
+  clients: Client[],
 }
 
-export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
+export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clients}) => {
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -26,8 +26,8 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
   const [width, setWidth] = useState<string>('auto');
   const [start] = getCurrentWeek();
 
-  const services = useMemo(() => new Map<string, Service>(), []);
-  const clients = useMemo(() => new Map<string, Client>(), []);
+  const servicesMap = useMemo(() => new Map<string, Service>(), []);
+  const clientsMap = useMemo(() => new Map<string, Client>(), []);
   
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
@@ -37,9 +37,9 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
   }, []);
 
   useEffect(() => {
-    sample_services.forEach(s => services.set(s.id, s));
-    sample_clients.forEach(c => clients.set(c.id, c));
-  }, [clients, services]);
+    services.forEach(s => servicesMap.set(s.id, s));
+    clients.forEach(c => clientsMap.set(c.id, c));
+  }, [clients, clientsMap, services, servicesMap]);
   
   return (
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
@@ -51,7 +51,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments}) => {
           const [dayStart, dayEnd] = getDayRange(date);
           const thisDayApps = appointments.filter((app) => dayStart <= app.startDate && dayEnd >= app.startDate);
           
-          return <Hours key={i} day={i} appointments={thisDayApps} services={services} clients={clients} />
+          return <Hours key={i} day={i} appointments={thisDayApps} services={servicesMap} clients={clientsMap} />
         })}
       </div>
     </div>

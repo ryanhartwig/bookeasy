@@ -25,7 +25,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
       {appointments.map(app => {
         const service = services.find(s => app.serviceId === s.id);
         if (!service) return <></>
-        const canEnterSession = Date.now() < Number(app.startDate) + (1000 * 60 * service.duration) && Date.now() > Number(app.startDate) - (1000 * 60 * 60);
+        const canEnterSession = Date.now() < app.startDate + (1000 * 60 * service.duration) && Date.now() > app.startDate - (1000 * 60 * 60);
 
         return (
         <Card key={app.id} className={styles.appointment_wrapper}>
@@ -35,7 +35,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
                 <p>{service.name}</p>
                 <p>{service.duration}m</p>
               </div>
-              <p className={styles.alt}>{formatTime(Number(app.startDate))}</p>
+              <p className={styles.alt}>{formatTime(app.startDate)}</p>
             </div>
 
             <div className={styles.client}>

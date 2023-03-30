@@ -27,6 +27,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
   const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
 
+
   useEffect(() => {
     setAppointmentIndices(p => {
       const prev = new Map();
