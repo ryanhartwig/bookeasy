@@ -87,6 +87,8 @@ export const getAllAppointments = async (userId: string) => {
 
   await fillAppointments();
 
+
+
   return { 
     appointments: allAppointments,
     error

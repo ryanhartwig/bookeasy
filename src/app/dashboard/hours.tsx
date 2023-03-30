@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
 import { formatTime } from '@/utility/functions/formatTime';
+import clsx from 'clsx';
 
 interface HoursProps {
   day?: number,
@@ -26,7 +27,6 @@ interface AppointmentData extends Appointment {
 export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
   const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
-
 
   useEffect(() => {
     setAppointmentIndices(p => {
@@ -98,12 +98,14 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
         });
       }
 
+      const color = appointment?.color || 'blue';
+
       return (
         <div key={i} className={styles.block} style={{borderBottomColor}}>
           {covered && <div className={styles.cover} />}
           {isHour && <p>{hour12} {period}</p>}
           {appointment && 
-            <div className={styles.weekly_app} style={{height, backgroundColor: appointment.color || 'blue'}}>
+            <div className={clsx(styles.weekly_app, 'noselect')} style={{height, borderColor: color}}>
               <div>
                 <p style={{fontSize: 12}}>{appointment.client_name}</p>
                 <p>{formatTime(appointment.startDate)}</p>

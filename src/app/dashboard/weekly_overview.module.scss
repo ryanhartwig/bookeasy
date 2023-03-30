@@ -104,6 +104,32 @@
 
   line-height: 0.9;
 
+  cursor: pointer;
+
+  rotate: 0;
+  scale: 1;
+
+  transition: 
+    rotate 200ms,
+    scale 200ms,
+  ;
+
+  &:hover {
+    scale: 1.03;
+    z-index: 5;
+  }
+  &:active {
+    rotate: 4deg;
+    scale: 0.85;
+    left: 40px;
+  }
+
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+  border-left: 4px solid;
+  background: white;
+
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -113,7 +139,7 @@
   z-index: 1;
 
   p {
-    color: var(--font-on-dark);
+    color: var(--font-on-light);
     font-size: 10px;
   }
 
