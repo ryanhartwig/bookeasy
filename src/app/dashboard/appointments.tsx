@@ -8,8 +8,6 @@ import { formatTime } from '@/utility/functions/formatTime';
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
 import { Card } from '@/components/UI/Card/Card';
 import { Service } from '@/types/Service';
-import { gql, useQuery } from '@apollo/client';
-import { getClient } from '@/utility/functions/getClient';
 import { Client } from '@/types/Client';
 
 interface AppointmentsProps {

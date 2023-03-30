@@ -31,4 +31,8 @@ const { data } = await client.query({
   }
 });
 
+|| 
+
+export const revalidate = 5;
+
 */
