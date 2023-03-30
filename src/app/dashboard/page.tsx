@@ -13,38 +13,11 @@ import { Header } from '@/components/Header';
 import { gql } from '@apollo/client';
 import { getClient } from '@/utility/functions/getClient';
 import { Appointment } from '@/types/Appointment';
-import { parseToAppointment } from '@/utility/functions/typeConversion/parseAppointment';
 import { Service } from '@/types/Service';
-import { parseToService } from '@/utility/functions/typeConversion/parseService';
+import { parseToService } from '@/utility/functions/fetch/parseService';
+import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
 
-const appointmentsQuery = gql`
-  query UserAppointmentsQuery($after: String!, $id: ID!) {
-  user(by: {id: $id}) {
-    appointments(first:100, after: $after) {
-      edges {
-        node {
-          id
-          business { id }
-          client { id }
-          service { id }
-          startDate
-          endDate
-          serviceName
-          serviceDuration
-          serviceProvider
-          serviceCost
-          isVideo
-          isPaid
-        }
-      }
-      pageInfo {
-        hasNextPage 
-        endCursor
-      }
-    }
-  }
-}
-`
+
 
 const servicesQuery = gql`
   query UserServicesQuery($after: String!,  $id: ID!) {
@@ -62,6 +35,10 @@ const servicesQuery = gql`
           color
         }
       }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 }
@@ -69,11 +46,10 @@ const servicesQuery = gql`
 
 export default async function Page() {
 
-  const allAppointments: Appointment[] = [];
+  const { appointments, error } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
   const allServices: Service[] = [];
 
   const client = getClient();
-  let appointmentsAfter = '';
   let servicesAfter = '';
 
   const fillServices = async () => {
@@ -95,29 +71,10 @@ export default async function Page() {
   }
 
 
-  const fillAppointments = async () => {
-    try {
-      const { data } = await client.query({ query: appointmentsQuery, variables: {
-        after: appointmentsAfter,
-        id: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3" // default sample user
-      } });
-      const { appointments } = data.user;
-
-      allAppointments.push(...appointments.edges.map((edge: any) => parseToAppointment(edge.node)))
-      if (appointments.pageInfo.hasNextPage) {
-        appointmentsAfter = appointments.pageInfo.endCursor;
-        await fillAppointments();
-      }
-      
-    } catch(e) {
-      console.log(e);
-    }
-    
-  }
-  await fillAppointments();
+  
   await fillServices();
 
-  console.log(allAppointments);
+  console.log(appointments);
   console.log(allServices);
 
   
@@ -137,7 +94,7 @@ export default async function Page() {
               </p>
             </div>
             <div>
-              <p className={styles.headerLarge}>{allAppointments.length}</p>
+              <p className={styles.headerLarge}>{appointments.length}</p>
               <p style={{fontWeight: 100}}>Appointments</p>
             </div>
             <div>
@@ -148,11 +105,11 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={allAppointments} services={allServices} />
+          <Appointments appointments={appointments} services={allServices} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays appointments={allAppointments} />
+            <WeekDays appointments={appointments} />
           </Card>
         </div>
       </div>
