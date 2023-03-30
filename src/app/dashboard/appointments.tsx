@@ -3,23 +3,23 @@
 import styles from './dashboard.module.scss';
 
 import { Appointment } from '@/types/Appointment';
-import { sample_services } from '@/utility/sample_data/sample_services';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
 import { Card } from '@/components/UI/Card/Card';
 import { Service } from '@/types/Service';
+import { gql, useQuery } from '@apollo/client';
+import { getClient } from '@/utility/functions/getClient';
+import { Client } from '@/types/Client';
 
 interface AppointmentsProps {
   appointments: Appointment[],
   services: Service[],
+  clients: Client[],
 }
 
-export const Appointments: React.FC<AppointmentsProps> = ({appointments, services}) => {
+export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
 
-  console.log(appointments[0].serviceId);
-  
   return (
     <div className={styles.appointments}>
       {appointments.map(app => {
@@ -40,7 +40,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
 
             <div className={styles.client}>
               <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-              {/* <p>{sample_clients.find(c => c.id === app.clientId)!.name}</p> */}
+              <p>{clients.find(c => c.id === app.clientId)!.name}</p>
             </div>
 
             <div className={styles.actions}>

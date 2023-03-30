@@ -61,11 +61,11 @@ export const getAllClients = async (userId: string) => {
         after,
         id: userId
       } });
-      const { clients } = data.user;
+      const { assignedClients } = data.user;
 
-      allClients.push(...clients.edges.map((edge: any) => parseToClient(edge.node, userId)))
-      if (clients.pageInfo.hasNextPage) {
-        after = clients.pageInfo.endCursor;
+      allClients.push(...assignedClients.edges.map((edge: any) => parseToClient(edge.node, userId)))
+      if (assignedClients.pageInfo.hasNextPage) {
+        after = assignedClients.pageInfo.endCursor;
         await fillClients();
       }
       

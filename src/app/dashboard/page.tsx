@@ -12,10 +12,12 @@ import { Header } from '@/components/Header';
 
 import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 
 export default async function Page() {
   const { appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
   const { services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
 
   const [start, end] = getCurrentWeek();
 
@@ -43,7 +45,7 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={appointments} services={services} />
+          <Appointments appointments={appointments} services={services} clients={clients} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
