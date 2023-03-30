@@ -69,7 +69,7 @@ export const getAllAppointments = async (userId: string) => {
     try {
       const { data } = await client.query({ query, variables: {
         after,
-        id: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3" // default sample user
+        id: userId
       } });
       const { appointments } = data.user;
 
@@ -89,6 +89,6 @@ export const getAllAppointments = async (userId: string) => {
 
   return { 
     appointments: allAppointments,
-    error: error
+    error
   }
 }

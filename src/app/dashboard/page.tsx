@@ -14,7 +14,6 @@ import { gql } from '@apollo/client';
 import { getClient } from '@/utility/functions/getClient';
 import { Appointment } from '@/types/Appointment';
 import { Service } from '@/types/Service';
-import { parseToService } from '@/utility/functions/fetch/parseService';
 import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
 
 
