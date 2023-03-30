@@ -22,7 +22,7 @@ export const Settings: React.FC = () => {
     <Prefs key={Prefs.name} business={sample_businesses.find(b => b.id === sample_user.own_business_id)!} />, 
     <ClientList clients={sample_clients.filter(c => c.business_id === sample_user.own_business_id)} key={ClientList.name} />, 
     <BookingSitePrefs key={BookingSitePrefs.name} business={sample_businesses.find(b => b.id === sample_user.own_business_id)!} />, 
-    <Services key={Services.name} services={sample_services.filter(s => s.business_id === sample_user.own_business_id)} />, 
+    <Services key={Services.name} services={sample_services.filter(s => s.businessId === sample_user.own_business_id)} />, 
     <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />,
   ];
   

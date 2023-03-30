@@ -26,7 +26,7 @@ export default function Page() {
                 <p>client(s)</p>  
               </div>
               <div>
-                <p>{sample_services.filter(s => s.business_id === sample_user.id).length}</p>
+                <p>{sample_services.filter(s => s.businessId === sample_user.id).length}</p>
                 <p>service(s)</p>  
               </div>
             </div>

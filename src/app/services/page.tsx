@@ -20,7 +20,7 @@ export default function Page() {
           )}
         </div>
         {sample_businesses.map(b => {
-          const services = sample_services.filter(s => s.business_id === b.id);
+          const services = sample_services.filter(s => s.businessId === b.id);
           
           return (
             <div key={b.id} className={styles.services_wrapper}>

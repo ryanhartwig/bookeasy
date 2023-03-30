@@ -38,7 +38,7 @@ export default function Page() {
     : []
   , [selected]);
   const services = useMemo<Service[]>(() => selected
-    ? sample_services.filter(s => s.business_id === selected.id)
+    ? sample_services.filter(s => s.businessId === selected.id)
     : []
   , [selected]);
 

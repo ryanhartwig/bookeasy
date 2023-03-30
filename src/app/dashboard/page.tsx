@@ -14,8 +14,10 @@ import { gql } from '@apollo/client';
 import { getClient } from '@/utility/functions/getClient';
 import { Appointment } from '@/types/Appointment';
 import { parseToAppointment } from '@/utility/functions/typeConversion/parseAppointment';
+import { Service } from '@/types/Service';
+import { parseToService } from '@/utility/functions/typeConversion/parseService';
 
-const query = gql`
+const appointmentsQuery = gql`
   query UserAppointmentsQuery($after: String!, $id: ID!) {
   user(by: {id: $id}) {
     appointments(first:100, after: $after) {
@@ -44,24 +46,66 @@ const query = gql`
 }
 `
 
+const servicesQuery = gql`
+  query UserServicesQuery($after: String!,  $id: ID!) {
+  user(by: {id: $id}) {
+    services(first:100, after: $after) {
+      edges {
+        node {
+          id 
+          business { id }
+          name
+          duration
+          provider
+          cost
+          isVideo
+          color
+        }
+      }
+    }
+  }
+}
+`
+
 export default async function Page() {
 
   const allAppointments: Appointment[] = [];
+  const allServices: Service[] = [];
 
   const client = getClient();
-  let after = '';
+  let appointmentsAfter = '';
+  let servicesAfter = '';
+
+  const fillServices = async () => {
+    try {
+      const { data } = await client.query({ query: servicesQuery, variables: {
+        after: servicesAfter,
+        id: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3" // default sample user
+      } });
+      const { services } = data.user;
+
+      allServices.push(...services.edges.map((edge: any) => parseToService(edge.node)))
+      if (services.pageInfo.hasNextPage) {
+        servicesAfter = services.pageInfo.endCursor;
+        await fillServices();
+      }
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
 
   const fillAppointments = async () => {
     try {
-      const { data } = await client.query({ query, variables: {
-        after,
+      const { data } = await client.query({ query: appointmentsQuery, variables: {
+        after: appointmentsAfter,
         id: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3" // default sample user
       } });
       const { appointments } = data.user;
 
       allAppointments.push(...appointments.edges.map((edge: any) => parseToAppointment(edge.node)))
       if (appointments.pageInfo.hasNextPage) {
-        after = appointments.pageInfo.endCursor;
+        appointmentsAfter = appointments.pageInfo.endCursor;
         await fillAppointments();
       }
       
@@ -71,8 +115,11 @@ export default async function Page() {
     
   }
   await fillAppointments();
+  await fillServices();
 
   console.log(allAppointments);
+  console.log(allServices);
+
   
   const [start, end] = getCurrentWeek();
 
@@ -101,7 +148,7 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={allAppointments} />
+          <Appointments appointments={allAppointments} services={allServices} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />

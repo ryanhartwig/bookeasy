@@ -17,13 +17,13 @@ interface ServiceCardProps {
 export const ServiceCard: React.FC<ServiceCardProps> = ({service, edit}) => {
 
   const assignees = useMemo<User[]>(() => 
-    sample_members.filter(member => service.user_ids.includes(member.id))
+    sample_members.filter(member => service.userIds.includes(member.id))
       .concat([sample_user])
-  , [service.user_ids]);
+  , [service.userIds]);
 
   return (
     <div className={styles.service} style={{borderLeftColor: service.color}}>
-      {service.is_video && 
+      {service.isVideo && 
       <div className={styles.video}>
         <BsFillCameraVideoFill size={16} />
       </div>}

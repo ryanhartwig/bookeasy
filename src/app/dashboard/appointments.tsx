@@ -9,19 +9,23 @@ import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
 import { Card } from '@/components/UI/Card/Card';
+import { Service } from '@/types/Service';
 
 interface AppointmentsProps {
   appointments: Appointment[],
+  services: Service[],
 }
 
-export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
+export const Appointments: React.FC<AppointmentsProps> = ({appointments, services}) => {
+
+  console.log(appointments[0].serviceId);
   
   return (
     <div className={styles.appointments}>
       {appointments.map(app => {
-        const service = sample_services.find(s => app.serviceId === s.id);
+        const service = services.find(s => app.serviceId === s.id);
         if (!service) return <></>
-        const canEnterSession = Date.now() < app.startDate + (1000 * 60 * service.duration) && Date.now() > app.startDate - (1000 * 60 * 60);
+        const canEnterSession = Date.now() < Number(app.startDate) + (1000 * 60 * service.duration) && Date.now() > Number(app.startDate) - (1000 * 60 * 60);
 
         return (
         <Card key={app.id} className={styles.appointment_wrapper}>
@@ -31,12 +35,12 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
                 <p>{service.name}</p>
                 <p>{service.duration}m</p>
               </div>
-              <p className={styles.alt}>{formatTime(app.startDate)}</p>
+              <p className={styles.alt}>{formatTime(Number(app.startDate))}</p>
             </div>
 
             <div className={styles.client}>
               <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-              <p>{sample_clients.find(c => c.id === app.clientId)!.name}</p>
+              {/* <p>{sample_clients.find(c => c.id === app.clientId)!.name}</p> */}
             </div>
 
             <div className={styles.actions}>
