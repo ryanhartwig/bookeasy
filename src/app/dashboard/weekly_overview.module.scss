@@ -95,8 +95,10 @@
 
 .weekly_app {
   position: absolute;
-  left: 30px;
+  left: 32px;
   top: 1px;
+
+  opacity: 0.9;
 
   padding: 2px;
 
@@ -106,7 +108,7 @@
   justify-content: space-between;
   flex-direction: column;
 
-  width: calc(100% - 30px);
+  width: calc(100% - 34px);
 
   z-index: 1;
 
