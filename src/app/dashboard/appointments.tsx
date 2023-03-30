@@ -73,7 +73,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
             </div>
           </div>
         </Card>
-      )}) : <p className={styles.no_apps}>No appointments to show.</p>}
+      )}) : <p className={styles.no_apps}>No appointments to show</p>}
 
     </div>
   )
