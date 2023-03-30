@@ -20,7 +20,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
 
   return (
     <div className={styles.appointments}>
-      {appointments.map(app => {
+      {appointments.length ? appointments.map(app => {
         const service = services.find(s => app.serviceId === s.id);
         if (!service) return <></>
         const canEnterSession = Date.now() < app.startDate + (1000 * 60 * service.duration) && Date.now() > app.startDate - (1000 * 60 * 60);
@@ -73,7 +73,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
             </div>
           </div>
         </Card>
-      )})}
+      )}) : <p className={styles.no_apps}>No appointments to show.</p>}
 
     </div>
   )
