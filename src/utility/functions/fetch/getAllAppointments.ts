@@ -3,7 +3,7 @@ import { Appointment } from "@/types/Appointment";
 import { gql } from "@apollo/client";
 import { getClient } from "../getClient";
 
-const query = gql`
+export const query = gql`
   query UserAppointmentsQuery($after: String!, $id: ID!) {
   user(by: {id: $id}) {
     appointments(first:100, after: $after) {

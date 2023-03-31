@@ -6,7 +6,7 @@ export const getClient = () => {
   if (!client || typeof window === "undefined") {
     client = new ApolloClient({
       link: new HttpLink({
-        uri: process.env.GRAFBASE_API_URL,
+        uri: 'http://127.0.0.1:4000/graphql', // process.env.GRAFBASE_API_URL,
         headers: {
           'x-api-key': process.env.GRAFBASE_API_KEY || ''
         },

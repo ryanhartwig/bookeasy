@@ -3,7 +3,7 @@ import { getClient } from "../getClient";
 
 import { gql } from '@apollo/client';
 
-const query = gql`
+export const query = gql`
   query UserServicesQuery($after: String!,  $id: ID!) {
   user(by: {id: $id}) {
     services(first:100, after: $after) {

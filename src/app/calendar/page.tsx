@@ -4,20 +4,20 @@ import styles from './calendar.module.scss';
 
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Calendar, months } from '@/components/calendar/Calendar';
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import { getDayRange } from '@/utility/functions/getDayRange';
+import { useState, useEffect, useMemo } from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
 import { Appointment } from '@/types/Appointment';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
-import { sample_services } from '@/utility/sample_data/sample_services';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { Header } from '@/components/Header';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
 import { getMonthRange } from '@/utility/functions/getMonthRange';
+import { useQuery } from '@apollo/client';
+import { query } from '@/utility/functions/fetch/getAllAppointments';
+import { getClient } from '@/utility/functions/getClient';
 
 export interface View {        
   month: number,
@@ -25,9 +25,25 @@ export interface View {
 }
 
 export default function Page() {
+  
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
-
+  
   const [start, end] = useMemo(() => getMonthRange(new Date(startDate).setMonth(viewing.month)), [startDate, viewing.month]);
+
+  
+  const client = getClient();
+  const {data, loading } = useQuery(query, {
+    client,
+    variables: {
+      after: "",
+      id: "user_01GWHJK2PJ3C1DGYJY32YSJFQ3"
+    }
+  });
+
+  useEffect(() => {
+    if (!data || loading) return; 
+    console.log(data);
+  }, [data, loading]);
 
   // This will be fetched & revalidated on updates, and will only include appointments for the current month
   const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments
@@ -44,13 +60,24 @@ export default function Page() {
     );
   }, [end, start, startDate]);
 
-  const services = useMemo(() => new Map<string, Service>(), []);
-  const clients = useMemo(() => new Map<string, Client>(), []);
+  const [servicesMap, setServicesMap] = useState(() => new Map<string, Service>());
+  const [clientsMap, setClientsMap] = useState(() => new Map<string, Client>());
+
+  // use apollo fetch hook =)
   
-  useEffect(() => {
-    sample_services.forEach(s => services.set(s.id, s));
-    sample_clients.forEach(c => clients.set(c.id, c));
-  }, [clients, services]);
+  
+  // useEffect(() => {
+  //   console.log(clients);
+
+  //   const sMap = new Map<string, Service>();
+  //   const cMap = new Map<string, Client>();
+
+  //   services.forEach(s => sMap.set(s.id, s));
+  //   clients.forEach(c => cMap.set(c.id, c));
+
+  //   setServicesMap(sMap);
+  //   setClientsMap(cMap);
+  // }, [data]);
   
   return (
     <>
@@ -76,8 +103,8 @@ export default function Page() {
           </div>
         </SecondaryHeader>
         <div className={styles.content}>
-          <Daily day={selected[0]} appointments={dayApps} services={services} clients={clients} />
-          <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clients} services={services} />
+          <Daily day={selected[0]} appointments={dayApps} services={servicesMap} clients={clientsMap} />
+          <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clientsMap} services={servicesMap} />
         </div>
       </div>
     </>
