@@ -14,6 +14,7 @@ import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { inRange } from '@/utility/functions/inRange';
+import { getDayRange } from '@/utility/functions/getDayRange';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
@@ -22,8 +23,6 @@ export default async function Page() {
   const { clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
 
   const [start, end] = getCurrentWeek();
-  const [startTime, endTime] = [start.getTime(), end.getTime()];
-
   return (
     <>
       <Header text='Dashboard' />
@@ -48,11 +47,11 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={appointments.filter(app => inRange([startTime, endTime], app.startDate))} services={services} clients={clients} />
+          <Appointments appointments={appointments.filter(app => inRange(getDayRange(), app.startDate))} services={services} clients={clients} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays appointments={appointments} services={services} clients={clients} />
+            <WeekDays appointments={appointments.filter(app => inRange([start.getTime(), end.getTime()], app.startDate))} services={services} clients={clients} />
           </Card>
         </div>
       </div>
