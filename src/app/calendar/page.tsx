@@ -16,6 +16,7 @@ import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { Header } from '@/components/Header';
+import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
 
 export interface View {        
   month: number,
@@ -23,84 +24,9 @@ export interface View {
 }
 
 export default function Page() {
-  const today = new Date();
-  const initDate = new Date();
-  initDate.setDate(1);
-  initDate.setDate(initDate.getDay() * -1);
 
-  const [selected, setSelected] = useState<[number, number]>(getDayRange());
-
-  // On selecting day
-  const onSelect = useCallback(([min, max]: [number, number]) => {
-    setSelected([min, max]);
-  }, []);
-
-  // First date to show on the top left most cell of the calendar
-  const [startDate, setStartDate] = useState<Date>(initDate);
-
-  // Month currently selected / viewing
-  const [viewing, setViewing] = useState<View>({
-    month: today.getMonth(),
-    year: today.getFullYear(),
-  });
-
-  useEffect(() => {
-    const selectedDate = new Date(selected[0]);
-    if (viewing.month === selectedDate.getMonth()) return;
-
-    setViewing({
-      month: selectedDate.getMonth(),
-      year: selectedDate.getFullYear(),
-    });
-    selectedDate.setDate(1);
-    selectedDate.setDate(selectedDate.getDay() * -1);
-
-    setStartDate(selectedDate);
-  }, [selected, viewing.month]);
-
-  // Increment / decrement month
-  const onMonthSwitch = useCallback((n: number) => {
-    const newDate = new Date(startDate);
-
-    newDate.setMonth(newDate.getMonth() + n);
-    
-    setViewing({
-      month: newDate.getMonth(),
-      year: newDate.getFullYear(),
-    })
-
-    newDate.setDate(1);
-    const selectedDate = new Date(newDate);
-    newDate.setDate(newDate.getDay() * -1);
-
-    setStartDate(newDate);
-
-    if (n === 2) {
-      setSelected(getDayRange(selectedDate));
-    }
-    if (n === 0) {
-      selectedDate.setMonth(selectedDate.getMonth() + 1);
-      selectedDate.setDate(1);
-      selectedDate.setDate(selectedDate.getDate() - 1);
-      setSelected(getDayRange(selectedDate));
-    }
-  }, [startDate]);
-
-  const [min, max] = getDayRange(new Date());
-  const reset = useCallback(() => {
-    const td = new Date();
-    const init = new Date();
-    init.setDate(1);
-    init.setDate(init.getDay() * -1);
-    
-    setViewing({
-      month: td.getMonth(),
-      year: td.getFullYear(),
-    });
-    setStartDate(init);
-    onSelect && onSelect([min, max]);
-  }, [max, min, onSelect]);
-
+  const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
+  
   const [start, end] = useMemo<[number, number]>(() => {
     const startEnd = new Date(startDate);
     startEnd.setDate(startEnd.getDate() + 1);
@@ -111,7 +37,7 @@ export default function Page() {
 
     return [start, end];
   }, [startDate]);
-  
+
   // This will be fetched & revalidated on updates, and will only include appointments for the current month
   const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments
     .filter(app => app.startDate >= start && app.startDate <= end)
@@ -154,7 +80,7 @@ export default function Page() {
             </div>
             <div className='Calendar-reset'>
               <h2>{viewing.year}</h2>
-              <p onClick={reset}>Today</p>
+              <p onClick={onReset}>Today</p>
             </div>
           </div>
         </SecondaryHeader>
