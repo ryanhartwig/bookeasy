@@ -17,6 +17,7 @@ import { sample_services } from '@/utility/sample_data/sample_services';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { Header } from '@/components/Header';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
+import { getMonthRange } from '@/utility/functions/getMonthRange';
 
 export interface View {        
   month: number,
@@ -24,19 +25,9 @@ export interface View {
 }
 
 export default function Page() {
-
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
-  
-  const [start, end] = useMemo<[number, number]>(() => {
-    const startEnd = new Date(startDate);
-    startEnd.setDate(startEnd.getDate() + 1);
-    const [start] = getDayRange(startEnd);
 
-    startEnd.setDate(startEnd.getDate() + 41);
-    const [_, end] = getDayRange(startEnd);
-
-    return [start, end];
-  }, [startDate]);
+  const [start, end] = useMemo(() => getMonthRange(new Date(startDate).setMonth(viewing.month)), [startDate, viewing.month]);
 
   // This will be fetched & revalidated on updates, and will only include appointments for the current month
   const [appointments, setAppointments] = useState<Appointment[]>(sample_appointments
