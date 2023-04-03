@@ -26,7 +26,7 @@ export default async function Page() {
           
           return (
             <div key={b.id} className={styles.services_wrapper}>
-              <SectionLabel label={b.id === sample_user.own_business_id ? 'My Services' : b.name} />
+              <SectionLabel label={b.id === sample_user.ownBusinessId ? 'My Services' : b.name} />
               {filteredServices.map(s => 
               <div key={s.id}>
                 {/* @ts-expect-error Server Component */}

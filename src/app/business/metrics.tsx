@@ -39,8 +39,8 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
     .filter(app => new Date(app.startDate).getFullYear() === selectedDate.getFullYear())
   , [selectedDate]);
   const clientsInRange = useMemo<Client[]>(() => sample_clients
-    .filter(c => new Date(c.created).getFullYear() === selectedDate.getFullYear() && c.businessId === user.own_business_id)
-  , [selectedDate, user.own_business_id]);
+    .filter(c => new Date(c.created).getFullYear() === selectedDate.getFullYear() && c.businessId === user.ownBusinessId)
+  , [selectedDate, user.ownBusinessId]);
 
   return (
     <>

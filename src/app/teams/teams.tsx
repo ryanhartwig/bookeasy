@@ -17,7 +17,7 @@ interface TeamsProps {
 
 export const Teams: React.FC<TeamsProps> = ({selected, setSelected}) => {
   
-  const teams = useMemo(() => sample_businesses.filter(b => b.id !== sample_user.own_business_id), []);
+  const teams = useMemo(() => sample_businesses.filter(b => b.id !== sample_user.ownBusinessId), []);
 
   return (
     <div className={styles.user_teams}>

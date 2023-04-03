@@ -30,7 +30,7 @@ export default function Page() {
   const [selected, setSelected] = useState<Business>();
 
   const members = useMemo<User[]>(() => selected 
-    ? [...sample_members, sample_user].filter(m => m.business_ids.find(([id]) => id.includes(selected.id))) 
+    ? [...sample_members, sample_user].filter(m => m.businessIds.find(([id]) => id.includes(selected.id))) 
     : []
   , [selected]);
   const clients = useMemo<Client[]>(() => selected 
