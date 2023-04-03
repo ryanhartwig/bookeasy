@@ -29,6 +29,7 @@ type User @model {
   name: String!,
   email: String! @unique,
   phone: String,
+  avatar: String,
   businesses: [Business!]! @relation(name: "user_teams"),
   ownBusiness: Business @relation(name: "user_own_business"),
   prefs: UserPrefs!,  

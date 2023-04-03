@@ -3,16 +3,16 @@ import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments
 import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { userId } from '@/utility/sample_data/sample_userId';
 import { ClientsView } from './clientsView';
 
 export default async function Page() {
 
-  const { data: clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: businesses } = await getAllBusinesses('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: clients } = await getAllClients(userId);
+  const { data: businesses } = await getAllBusinesses(userId);
+  const { data: appointments } = await getAllAppointments(userId);
+  const { data: services } = await getAllServices(userId);
 
-  console.log(clients);
   return (
     <>
       <Header text='Clients' />
