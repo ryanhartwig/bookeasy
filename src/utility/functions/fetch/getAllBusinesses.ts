@@ -32,7 +32,16 @@ export const query = gql`
  */
 export const parseToBusiness = (data: any, userId: string): Business => {
   return {
-    
+    id: data.id,
+    name: data.name,
+    email: data.email,
+    phone: data.phone ?? null,
+    photo: data.photo ?? null,
+    prefs: {
+      min_booking_notice: data.min_booking_notice ?? null,
+      min_cancel_notice: data.min_cancel_notice ?? null,
+      max_book_ahead: data.max_book_ahead ?? null,
+    }
   } as Business;
 }
 

@@ -1,7 +1,6 @@
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import Image from 'next/image';
 import clsx from 'clsx';
@@ -11,16 +10,17 @@ import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
+  clients: Client[],
 }
 
-export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
+export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients}) => {
 
   const [query, setQuery] = useState<string>('');
 
   const results = useMemo(() => {    
     return (
       sample_businesses.map(b => {
-        const clients = sample_clients
+        const filteredClients = clients
           // organize by team
           .filter(c => c.businessId === b.id)
           // space separated lazy search
@@ -30,11 +30,11 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
         return (
           <div key={b.id} className={styles.client_team}>
             <SectionLabel label={b.name} />
-            {clients.map(c => (
+            {filteredClients.map(c => (
               <div 
                 key={c.id} 
                 className={clsx(styles.client, {[styles.selected]: selected?.id === c.id})}
-                onClick={(e) => {
+                onClick={() => {
                   setSelected(c);
                 }}
               >
@@ -47,7 +47,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
       })
     )
     
-  }, [query, selected?.id, setSelected]);
+  }, [clients, query, selected?.id, setSelected]);
 
 
   return (
