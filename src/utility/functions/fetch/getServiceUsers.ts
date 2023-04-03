@@ -33,7 +33,7 @@ interface ServiceUser {
  */
 export const getServiceUsers = async (serviceId: string) => {
   let error: any = undefined;
-  const assignedUsers: ServiceUser[] = [];
+  const serviceUsers: ServiceUser[] = [];
   const client = getClient();
   
   const fillUsers = async () => {
@@ -43,7 +43,7 @@ export const getServiceUsers = async (serviceId: string) => {
       } });
       const { assignedUsers } = data.service;
 
-      assignedUsers.push(...assignedUsers.edges.map((edge: any) => ({id: edge.id, name: edge.name, avatar: edge.avatar} as ServiceUser)))
+      serviceUsers.push(...assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser)))
     } catch(e) {
       error = e;
     }
@@ -52,7 +52,7 @@ export const getServiceUsers = async (serviceId: string) => {
   await fillUsers();
 
   return {
-    data: assignedUsers,
+    data: serviceUsers,
     error,
   }
 }

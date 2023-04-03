@@ -2,8 +2,6 @@ import { Header } from '@/components/Header';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
-import { sample_businesses } from '@/utility/sample_data/sample_businesses';
-import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import { userId } from '@/utility/sample_data/sample_userId';
 import ServiceCard from './service';
@@ -30,10 +28,10 @@ export default async function Page() {
             <div key={b.id} className={styles.services_wrapper}>
               <SectionLabel label={b.id === sample_user.own_business_id ? 'My Services' : b.name} />
               {filteredServices.map(s => 
-              <>
+              <div key={s.id}>
                 {/* @ts-expect-error Server Component */}
-                <ServiceCard key={s.id} service={s} />
-              </>
+                <ServiceCard service={s} />
+              </div>
               )}
             </div>
           )

@@ -1,18 +1,16 @@
 import styles from './services.module.scss';
 import { Service } from "@/types/Service"
-import { sample_members, sample_user } from '@/utility/sample_data/sample_user';
 import Image from 'next/image';
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
+import { getServiceUsers } from '@/utility/functions/fetch/getServiceUsers';
+import { IoPersonCircleSharp } from 'react-icons/io5';
 
 export default async function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
 
-  const assignees = sample_members
-    .filter(member => service.userIds.includes(member.id))
-    .concat([sample_user])
-  ;
-
-  return (
+  const { data: assignees, error } = await getServiceUsers(service.id);
+   
+  return error ? <p>{JSON.stringify(error.message)}</p> : (
     <div className={styles.service} style={{borderLeftColor: service.color}}>
       {service.isVideo && 
       <div className={styles.video}>
@@ -24,7 +22,8 @@ export default async function ServiceCard({service, edit}: { service: Service, e
       <div className={styles.assignees}>
         {assignees.map(user => 
           <div key={user.id}>
-            <Image src={user.avatar || ''} alt="User avatar" height={30} width={30} />
+            {user.avatar ? <Image src={user.avatar} alt="User avatar" height={30} width={30} />
+            : <IoPersonCircleSharp fontSize={30} color={'rgb(210, 210, 210)'} />}
             <p>{user.name}</p>
           </div>
         )}
