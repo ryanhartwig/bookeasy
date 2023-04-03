@@ -12,21 +12,13 @@ export interface View {
 
 export default async function Page() {
   const { data: appointments} = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const services = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const clients = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-
-  // const appointments = useMemo<Appointment[]>(() => {
-  //   if (!data || loading) return []; 
-  //   return data.user.appointments.edges
-  //     .map((app: any) => parseToAppointment(app.node, 'user_01GWHJK2PJ3C1DGYJY32YSJFQ3'))
-  //     .filter((app: Appointment) => app.startDate >= start && app.startDate <= end)
-  //     .sort((a: Appointment, b: Appointment) => a.startDate - b.startDate);
-  // }, [data, end, loading, start]);
+  const { data: services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
 
   return (
     <>
       <Header text='Calendar' />
-      <CalendarView appointments={appointments} />
+      <CalendarView appointments={appointments} services={services} clients={clients} />
     </>
   )
 }

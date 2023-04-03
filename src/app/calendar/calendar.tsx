@@ -9,23 +9,39 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
 import { getMonthRange } from '@/utility/functions/getMonthRange';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 
 interface CalendarProps {
-  appointments: Appointment[]
+  appointments: Appointment[],
+  services: Service[],
+  clients: Client[],
 }
 
-export const CalendarView: React.FC<CalendarProps> = ({appointments}) => {
-
+export const CalendarView: React.FC<CalendarProps> = ({appointments, services, clients}) => {
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
   const [start, end] = useMemo(() => getMonthRange(new Date(startDate).setMonth(viewing.month)), [startDate, viewing.month]);
 
   const [servicesMap, setServicesMap] = useState(() => new Map<string, Service>());
   const [clientsMap, setClientsMap] = useState(() => new Map<string, Client>());
 
-  const dayApps = useMemo(() => appointments.filter(app => app.startDate >= selected[0] && app.startDate <= selected[1]), [appointments, selected]);
+  useEffect(() => {
+    const sMap = new Map<string, Service>();
+    const cMap = new Map<string, Client>();
+
+    services.forEach(s => sMap.set(s.id, s));
+    clients.forEach(c => cMap.set(c.id, c));
+
+    setServicesMap(sMap);
+    setClientsMap(cMap);
+  }, [clients, services]);
+
+  const selectedMonthAppointments = useMemo<Appointment[]>(() => appointments
+    .filter(app => app.startDate >= start && app.startDate <= end)
+    .sort((a, b) => a.startDate - b.startDate)
+  , [appointments, end, start]);
+  const selectedDayAppointments = useMemo(() => appointments.filter(app => app.startDate >= selected[0] && app.startDate <= selected[1]), [appointments, selected]);
 
   return (
     <div className={styles.calendar}>
@@ -49,8 +65,8 @@ export const CalendarView: React.FC<CalendarProps> = ({appointments}) => {
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <Daily day={selected[0]} appointments={dayApps} services={servicesMap} clients={clientsMap} />
-        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clientsMap} services={servicesMap} />
+        <Daily day={selected[0]} appointments={selectedDayAppointments} services={servicesMap} clients={clientsMap} />
+        <Calendar appointments={selectedMonthAppointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clientsMap} services={servicesMap} />
       </div>
     </div>
   )
