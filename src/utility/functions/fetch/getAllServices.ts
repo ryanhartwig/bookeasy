@@ -79,7 +79,7 @@ export const getAllServices = async (userId: string) => {
   await fillServices();
 
   return {
-    services: allServices,
+    data: allServices,
     error,
   }
 }

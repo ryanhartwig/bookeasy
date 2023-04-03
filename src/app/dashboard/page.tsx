@@ -18,9 +18,9 @@ import { getDayRange } from '@/utility/functions/getDayRange';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
-  const { appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
 
   const [start, end] = getCurrentWeek();
   return (

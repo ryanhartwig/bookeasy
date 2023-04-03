@@ -37,7 +37,7 @@ export const query = gql`
  * @param data JSON data
  * @param userId Id of current user
  */
-const parseToAppointment = (data: any, userId: string): Appointment => {
+export const parseToAppointment = (data: any, userId: string): Appointment => {
   return {
     businessId: data.business.id,
     clientId: data.client.id,
@@ -90,7 +90,7 @@ export const getAllAppointments = async (userId: string) => {
 
 
   return { 
-    appointments: allAppointments,
+    data: allAppointments,
     error
   }
 }

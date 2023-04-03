@@ -78,7 +78,7 @@ export const getAllClients = async (userId: string) => {
   await fillClients();
 
   return { 
-    clients: allClients,
+    data: allClients,
     error
   }
 }
