@@ -50,7 +50,7 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
         {/* Client photo, name, contact info, notes */}
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
           {selected.avatar ? 
-            <Image src={selected.avatar} alt="Client avatar" style={{width: 115, height: 115}} />
+            <Image src={selected.avatar} alt="Client avatar" width={115} height={115} />
           : <IoPersonCircleSharp fontSize={250} style={{height: 420}} color={'rgb(225, 225, 225)'} />}
           <p className={styles.client_name}>{selected.name}</p>
           <hr />
