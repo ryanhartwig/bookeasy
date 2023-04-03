@@ -1,21 +1,7 @@
 import './globals.css'
 import './home.scss';
 
-import { gql } from '@apollo/client';
-import { getClient } from '@/utility/functions/getClient';
 import { Navigator } from '@/components/Navigator';
-
-const query = gql`
-  query { 
-    userCollection(first:100) {
-      edges {
-        node {
-          name
-        }
-      }
-    }
-  }
-`
 
 export default async function RootLayout({children}: { children: React.ReactNode}) {
 
