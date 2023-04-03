@@ -3,6 +3,10 @@ import type { Client } from "../../types/Client";
 import avatarMale from '../../../public/assets/avatar_male.svg';
 import avatarFemale from '../../../public/assets/avatar_female.svg';
 
+// Local urls
+// /_next/static/media/avatar_male.5f6f6b8b.svg
+// /_next/static/media/avatar_female.609eddd1.svg
+
 export const sample_clients: Client[] = [{
   id: 'stevenprice',
   name: 'Steven Price',

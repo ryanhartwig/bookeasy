@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Business } from '@/types/Business';
-import { IoPersonCircleSharp } from 'react-icons/io5';
+import { BsPersonCircle } from 'react-icons/bs';
 
 interface ClientsProps {
   selected: Client | undefined,
@@ -40,7 +40,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
                 }}
               >
                 {c.avatar ? <Image alt="client avatar" src={c.avatar} width={30} height={30} style={{width: 30, height: 30}} />
-                : <IoPersonCircleSharp fontSize={30} color={'rgb(210, 210, 210)'} />}
+                : <BsPersonCircle fontSize={30} color={'rgb(210, 210, 210)'} />}
                 <p>{c.name}</p>
               </div>
             ))}

@@ -8,7 +8,7 @@ import { Service } from '@/types/Service';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { IoPersonCircleSharp } from 'react-icons/io5';
+import { BsPersonCircle } from 'react-icons/bs';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
 
@@ -51,7 +51,7 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
           {selected.avatar ? 
             <Image src={selected.avatar} alt="Client avatar" width={115} height={115} />
-          : <IoPersonCircleSharp fontSize={250} style={{height: 420}} color={'rgb(225, 225, 225)'} />}
+          : <BsPersonCircle fontSize={200} style={{height: 400}} color={'rgb(225, 225, 225)'} />}
           <p className={styles.client_name}>{selected.name}</p>
           <hr />
           <div className={styles.client_contact}>

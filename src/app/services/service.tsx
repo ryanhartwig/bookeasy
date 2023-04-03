@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { getServiceUsers } from '@/utility/functions/fetch/getServiceUsers';
-import { IoPersonCircleSharp } from 'react-icons/io5';
+import { BsPersonCircle } from 'react-icons/bs';
 
 export default async function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
 
@@ -22,8 +22,8 @@ export default async function ServiceCard({service, edit}: { service: Service, e
       <div className={styles.assignees}>
         {assignees.map(user => 
           <div key={user.id}>
-            {user.avatar ? <Image src={user.avatar} alt="User avatar" height={30} width={30} />
-            : <IoPersonCircleSharp fontSize={30} color={'rgb(210, 210, 210)'} />}
+            {user.avatar ? <Image src={user.avatar} alt="User avatar" height={26} width={26} />
+            : <BsPersonCircle fontSize={26} color={'rgb(210, 210, 210)'} />}
             <p>{user.name}</p>
           </div>
         )}
