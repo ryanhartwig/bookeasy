@@ -5,10 +5,11 @@ import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
+import { sample_clients } from '@/utility/sample_data/sample_clients';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { IoPersonCircleSharp } from 'react-icons/io5';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
 
@@ -20,6 +21,7 @@ interface DetailsProps {
 
 export const Details: React.FC<DetailsProps> = ({selected, appointments, services}) => {
 
+  // let selected = sample_clients[0];
   const previous = useMemo<Appointment[]>(() => {
     return appointments.filter(app => 
       app.clientId === selected.id && app.startDate < Date.now()
@@ -33,8 +35,6 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
   }, [appointments, selected.id]);
 
   const unpaid = useMemo<string>(() => {
-    console.log(previous.concat(booked));
-    
     return previous.concat(booked)
       .filter(app => !app.isPaid)
       .map(app => app.serviceCost)
@@ -49,9 +49,9 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
       <div>
         {/* Client photo, name, contact info, notes */}
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
-          {selected.avatar && 
+          {selected.avatar ? 
             <Image src={selected.avatar} alt="Client avatar" style={{width: 115, height: 115}} />
-          }
+          : <IoPersonCircleSharp fontSize={250} style={{height: 420}} color={'rgb(225, 225, 225)'} />}
           <p className={styles.client_name}>{selected.name}</p>
           <hr />
           <div className={styles.client_contact}>
