@@ -4,6 +4,7 @@ import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -13,21 +14,23 @@ import styles from './clients.module.scss';
 
 interface DetailsProps {
   selected: Client,
+  appointments: Appointment[],
+  services: Service[],
 }
 
-export const Details: React.FC<DetailsProps> = ({selected}) => {
+export const Details: React.FC<DetailsProps> = ({selected, appointments, services}) => {
 
   const previous = useMemo<Appointment[]>(() => {
-    return sample_appointments.filter(app => 
+    return appointments.filter(app => 
       app.clientId === selected.id && app.startDate < Date.now()
     );
-  }, [selected.id]);
+  }, [appointments, selected.id]);
 
   const booked = useMemo<Appointment[]>(() => {
-    return sample_appointments.filter(app => 
+    return appointments.filter(app => 
       app.clientId === selected.id && app.startDate >= Date.now()
     );
-  }, [selected.id]);
+  }, [appointments, selected.id]);
 
   const unpaid = useMemo<string>(() => {
     console.log(previous.concat(booked));
@@ -100,8 +103,8 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
-              ? booked.map((app) => <AppointmentCard key={app.id} app={app} />)
-              : previous.map((app) => <AppointmentCard key={app.id} app={app} />)}
+              ? booked.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)
+              : previous.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)}
           </div>
         </Card>
       </div>

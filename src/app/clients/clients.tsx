@@ -1,25 +1,26 @@
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
-import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
+import { Business } from '@/types/Business';
 
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
   clients: Client[],
+  businesses: Business[],
 }
 
-export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients}) => {
+export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients, businesses}) => {
 
   const [query, setQuery] = useState<string>('');
 
   const results = useMemo(() => {    
     return (
-      sample_businesses.map(b => {
+      businesses.map(b => {
         const filteredClients = clients
           // organize by team
           .filter(c => c.businessId === b.id)
@@ -47,7 +48,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients}
       })
     )
     
-  }, [clients, query, selected?.id, setSelected]);
+  }, [businesses, clients, query, selected?.id, setSelected]);
 
 
   return (

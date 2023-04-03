@@ -32,7 +32,7 @@ export const query = gql`
 const parseToClient = (data: any, userId: string): Client => {
   return {
     id: data.id,
-    businessId: data.businessId,
+    businessId: data.business.id,
     name: data.name,
     email: data.email,
     notes: data.notes ?? undefined,
