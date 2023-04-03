@@ -1,14 +1,16 @@
 import { Header } from '@/components/Header';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
+import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
 import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_user } from '@/utility/sample_data/sample_user';
-import { ServiceCard } from './service';
+import { userId } from '@/utility/sample_data/sample_userId';
+import ServiceCard from './service';
 import styles from './services.module.scss';
 
-export default function Page() {
-
-
+export default async function Page() {
+  
+  const { data: businesses } = await getAllBusinesses(userId);
   
   return (
     <>
@@ -26,7 +28,10 @@ export default function Page() {
             <div key={b.id} className={styles.services_wrapper}>
               <SectionLabel label={b.id === sample_user.own_business_id ? 'My Services' : b.name} />
               {services.map(s => 
+              <>
+                {/* @ts-expect-error Server Component */}
                 <ServiceCard key={s.id} service={s} />
+              </>
               )}
             </div>
           )

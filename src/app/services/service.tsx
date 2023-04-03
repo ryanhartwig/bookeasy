@@ -1,5 +1,3 @@
-'use client';
-
 import styles from './services.module.scss';
 import { Service } from "@/types/Service"
 import { useMemo } from 'react';
@@ -9,12 +7,7 @@ import Image from 'next/image';
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 
-interface ServiceCardProps {
-  service: Service
-  edit?: boolean,
-}
-
-export const ServiceCard: React.FC<ServiceCardProps> = ({service, edit}) => {
+export default async function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
 
   const assignees = useMemo<User[]>(() => 
     sample_members.filter(member => service.userIds.includes(member.id))

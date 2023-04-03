@@ -15,12 +15,13 @@ import { getAllServices } from '@/utility/functions/fetch/getAllServices';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { inRange } from '@/utility/functions/inRange';
 import { getDayRange } from '@/utility/functions/getDayRange';
+import { userId } from '@/utility/sample_data/sample_userId';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
-  const { data: appointments } = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: appointments } = await getAllAppointments(userId);
+  const { data: services } = await getAllServices(userId);
+  const { data: clients } = await getAllClients(userId);
 
   const [start, end] = getCurrentWeek();
   return (

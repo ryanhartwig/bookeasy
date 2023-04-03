@@ -6,12 +6,7 @@ import clsx from 'clsx';
 import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Business } from '@/types/Business';
-
 import { IoPersonCircleSharp } from 'react-icons/io5';
-
-import avatarMale from '../../../public/assets/avatar_male.svg';
-import avatarFemale from '../../../public/assets/avatar_female.svg';
-
 
 interface ClientsProps {
   selected: Client | undefined,
@@ -21,7 +16,6 @@ interface ClientsProps {
 }
 
 export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients, businesses}) => {
-  console.log(avatarMale);
   const [query, setQuery] = useState<string>('');
 
   const results = useMemo(() => {    
@@ -33,8 +27,6 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
           // space separated lazy search
           .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
         ;
-
-        console.log(filteredClients);
 
         return (
           <div key={b.id} className={styles.client_team}>

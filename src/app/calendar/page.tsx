@@ -3,6 +3,7 @@ import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
 import { getClient } from '@/utility/functions/getClient';
+import { userId } from '@/utility/sample_data/sample_userId';
 import { CalendarView } from './calendar';
 
 export interface View {        
@@ -11,9 +12,9 @@ export interface View {
 }
 
 export default async function Page() {
-  const { data: appointments} = await getAllAppointments('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: services } = await getAllServices('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
-  const { data: clients } = await getAllClients('user_01GWHJK2PJ3C1DGYJY32YSJFQ3');
+  const { data: appointments} = await getAllAppointments(userId);
+  const { data: services } = await getAllServices(userId);
+  const { data: clients } = await getAllClients(userId);
 
   return (
     <>

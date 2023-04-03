@@ -71,7 +71,6 @@ export const getAllServices = async (userId: string) => {
         await fillServices();
       }
     } catch(e) {
-      console.log(e);
       error = e;
     }
   }
