@@ -56,6 +56,7 @@ type Client @model {
   active: Boolean @default(value: true),
   assignedUsers: [User!]!,
   appointments: [Appointment!]!,
+  avatar: String,
 }
 
 type Service @model {

@@ -17,6 +17,7 @@ export const query = gql`
             address
             phone
             active
+            avatar
           }
         }
       }
@@ -36,7 +37,7 @@ const parseToClient = (data: any, userId: string): Client => {
     name: data.name,
     email: data.email,
     notes: data.notes ?? undefined,
-    avatar: data.avatar ?? undefined,
+    avatar: data.avatar,
     address: data.address ?? undefined,
     phone: data.phone ?? undefined,
     created: data.created,

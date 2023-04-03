@@ -5,13 +5,13 @@ import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { IoPersonCircleSharp } from 'react-icons/io5';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
+
 
 interface DetailsProps {
   selected: Client,

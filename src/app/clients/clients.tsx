@@ -9,6 +9,10 @@ import { Business } from '@/types/Business';
 
 import { IoPersonCircleSharp } from 'react-icons/io5';
 
+import avatarMale from '../../../public/assets/avatar_male.svg';
+import avatarFemale from '../../../public/assets/avatar_female.svg';
+
+
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
@@ -17,7 +21,7 @@ interface ClientsProps {
 }
 
 export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients, businesses}) => {
-
+  console.log(avatarMale);
   const [query, setQuery] = useState<string>('');
 
   const results = useMemo(() => {    
@@ -30,6 +34,8 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
           .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
         ;
 
+        console.log(filteredClients);
+
         return (
           <div key={b.id} className={styles.client_team}>
             <SectionLabel label={b.name} />
@@ -41,7 +47,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
                   setSelected(c);
                 }}
               >
-                {c.avatar ? <Image alt="client avatar" src={c.avatar} style={{width: 30, height: 30}} />
+                {c.avatar ? <Image alt="client avatar" src={c.avatar} width={30} height={30} style={{width: 30, height: 30}} />
                 : <IoPersonCircleSharp fontSize={30} color={'rgb(210, 210, 210)'} />}
                 <p>{c.name}</p>
               </div>
