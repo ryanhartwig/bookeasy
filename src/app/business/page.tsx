@@ -2,7 +2,7 @@ import { Header } from '@/components/Header';
 import { Card } from '@/components/UI/Card/Card';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
-import { getUser } from '@/utility/functions/fetch/getUserDetails';
+import { getUser, parseToUser } from '@/utility/functions/fetch/getUserDetails';
 import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { sample_services } from '@/utility/sample_data/sample_services';
 import { sample_user } from '@/utility/sample_data/sample_user';
@@ -19,8 +19,6 @@ export default async function Page() {
   const { data: services } = await getAllServices(userId);
   const { data: user } = await getUser(userId);
 
-  // console.log(user);
-  
   return (
     <>
       <Header text='My Business' />

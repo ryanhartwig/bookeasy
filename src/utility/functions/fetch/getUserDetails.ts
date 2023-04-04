@@ -11,6 +11,9 @@ export const query = gql`
       phone
       avatar
       createdAt
+      ownBusiness {
+        id
+      }
       prefs {
         privatePhoto
         privateEmail
@@ -25,15 +28,15 @@ export const query = gql`
   }
 `
 
-const parseToUser = (d: any): User => ({
-  businessIds: [],
-  created: d.createdAt,
-  email: d.email,
+export const parseToUser = (d: any): User => ({
   id: d.id,
-  name: d.name,
-  avatar: d.avatar,
-  phone: d.phone,
   ownBusinessId: d.ownBusiness.id,
+  name: d.name,
+  email: d.email,
+  phone: d.phone ?? null,
+  businessIds: [],
+  avatar: d.avatar ?? '',
+  created: d.createdAt,
 });
 
 /** Fetches user details for provided userId
@@ -51,12 +54,7 @@ export const getUser = async (userId: string) => {
       id: userId
     } });
 
-    console.log(data.user);
-    
-    user = parseToUser(data.user)
-
-    // console.log(user);
-
+    user = parseToUser(data.user); 
   } catch(e) {
     error = e;
   }
