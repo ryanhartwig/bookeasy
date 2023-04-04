@@ -3,7 +3,7 @@ import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
 
 interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  avatarUrl?: string,
+  src?: string,
   /**
    * Width and height of the avatar or default
    */
@@ -15,14 +15,14 @@ interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
 }
 
 /**
- * Displays avatar if the person has one, or uses default
+ * Displays avatar if provided, or uses default icon
  */
-export const Avatar: React.FC<AvatarProps> = ({avatarUrl, size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
+export const Avatar: React.FC<AvatarProps> = ({src, size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
 
   return (
-    <div>
-      {avatarUrl
-        ? <Image alt="Person avatar" src={avatarUrl} width={size} height={size} style={{width: size, height: size}} />
+    <div {...props} style={{...props.style, width: size, height: size}}>
+      {src
+        ? <Image alt="Person avatar" src={src} width={size} height={size} style={{width: size, height: size}} />
         : <BsPersonCircle fontSize={size} color={defaultColor} />
       }
     </div>

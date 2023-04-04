@@ -7,6 +7,7 @@ import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Business } from '@/types/Business';
 import { BsPersonCircle } from 'react-icons/bs';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface ClientsProps {
   selected: Client | undefined,
@@ -39,8 +40,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
                   setSelected(c);
                 }}
               >
-                {c.avatar ? <Image alt="client avatar" src={c.avatar} width={30} height={30} style={{width: 30, height: 30}} />
-                : <BsPersonCircle fontSize={30} color={'rgb(210, 210, 210)'} />}
+                <Avatar src={c.avatar} />
                 <p>{c.name}</p>
               </div>
             ))}
