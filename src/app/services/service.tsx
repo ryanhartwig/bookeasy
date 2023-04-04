@@ -1,10 +1,9 @@
 import styles from './services.module.scss';
 import { Service } from "@/types/Service"
-import Image from 'next/image';
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { getServiceUsers } from '@/utility/functions/fetch/getServiceUsers';
-import { BsPersonCircle } from 'react-icons/bs';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 export default async function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
 
@@ -22,8 +21,7 @@ export default async function ServiceCard({service, edit}: { service: Service, e
       <div className={styles.assignees}>
         {assignees.map(user => 
           <div key={user.id}>
-            {user.avatar ? <Image src={user.avatar} alt="User avatar" height={26} width={26} />
-            : <BsPersonCircle fontSize={26} color={'rgb(210, 210, 210)'} />}
+            <Avatar src={user.avatar} size={26} />
             <p>{user.name}</p>
           </div>
         )}

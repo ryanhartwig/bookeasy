@@ -1,17 +1,15 @@
 'use client';
 
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { BsPersonCircle } from 'react-icons/bs';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
-
 
 interface DetailsProps {
   selected: Client,
@@ -20,8 +18,6 @@ interface DetailsProps {
 }
 
 export const Details: React.FC<DetailsProps> = ({selected, appointments, services}) => {
-
-  // let selected = sample_clients[0];
   const previous = useMemo<Appointment[]>(() => {
     return appointments.filter(app => 
       app.clientId === selected.id && app.startDate < Date.now()
@@ -49,9 +45,7 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
       <div>
         {/* Client photo, name, contact info, notes */}
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
-          {selected.avatar ? 
-            <Image src={selected.avatar} alt="Client avatar" width={115} height={115} />
-          : <BsPersonCircle fontSize={200} style={{height: 400}} color={'rgb(225, 225, 225)'} />}
+          <Avatar src={selected.avatar} size={115} />
           <p className={styles.client_name}>{selected.name}</p>
           <hr />
           <div className={styles.client_contact}>

@@ -1,12 +1,10 @@
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
 import clsx from 'clsx';
 import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Business } from '@/types/Business';
-import { BsPersonCircle } from 'react-icons/bs';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface ClientsProps {
@@ -50,7 +48,6 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients,
     )
     
   }, [businesses, clients, query, selected?.id, setSelected]);
-
 
   return (
     <div className={styles.clients}>
