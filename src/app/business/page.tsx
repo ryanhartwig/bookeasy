@@ -20,8 +20,6 @@ export default async function Page() {
   const { data: user } = await getUser(userId);
   const { data: availability } = await getUserAvailability(userId);
 
-  console.log(availability[0].slices);
-
   if (!user) return <></>
 
   return (
@@ -37,11 +35,11 @@ export default async function Page() {
             <hr />
             <div className={styles.details}>
               <div>
-                <p>{clients.filter(c => c.businessId === user.id).length}</p>
+                <p>{clients.filter(c => c.businessId === user.ownBusinessId).length}</p>
                 <p>client(s)</p>  
               </div>
               <div>
-                <p>{services.filter(s => s.businessId === user.id).length}</p>
+                <p>{services.filter(s => s.businessId === user.ownBusinessId).length}</p>
                 <p>service(s)</p>  
               </div>
             </div>
