@@ -1,13 +1,43 @@
+'use client';
+
 import styles from './services.module.scss';
 import { Service } from "@/types/Service"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
-import { getServiceUsers } from '@/utility/functions/fetch/getServiceUsers';
+import { ServiceUser } from '@/utility/functions/fetch/getServiceUsers';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
+import { useEffect, useState } from 'react';
 
-export default async function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
+import { getClient } from '@/utility/functions/getClient';
+import { gql, useQuery } from '@apollo/client';
 
-  const { data: assignees, error } = await getServiceUsers(service.id);
+export const query = gql`
+  query GetServiceUsers($id: ID!) {
+    service(by: {id: $id}){
+      assignedUsers(first: 100){
+        edges {
+          node {
+            id
+            name
+            avatar
+          }
+        }
+      }
+    }
+  }
+`
+
+export default function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
+  const client = getClient();
+  const { data, loading, error } = useQuery(query, { client, variables: { id: service.id } });
+  const [assignees, setAssignees] = useState<ServiceUser[]>([]);
+
+  useEffect(() => {
+    if (!data || loading) return;
+
+    const { assignedUsers } = data.service;
+    setAssignees(assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser)))
+  }, [data, loading]);
    
   return error ? <p>{JSON.stringify(error.message)}</p> : (
     <div className={styles.service} style={{borderLeftColor: service.color}}>

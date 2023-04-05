@@ -21,7 +21,7 @@ export const query = gql`
 /**
  * User return fields from grafbase
  */
-interface ServiceUser {
+export interface ServiceUser {
   id: string,
   name: string,
   avatar: string,

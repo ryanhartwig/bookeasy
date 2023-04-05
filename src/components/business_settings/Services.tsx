@@ -12,7 +12,6 @@ export const Services: React.FC<ServicesProps> = ({services}) => {
     <div className={styles.Services}>
       {services.map(s => (
         <div key={s.id}>
-          {/* @ts-expect-error Server Component */}
           <ServiceCard key={s.id} service={s} edit />
         </div>
       ))}

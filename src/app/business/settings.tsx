@@ -14,6 +14,7 @@ import { Client } from "@/types/Client";
 import { User } from "@/types/User";
 import { Service } from "@/types/Service";
 import { BaseAvailability } from "@/types/BaseAvailability";
+import { ServicesWrapper } from "./servicesWrapper";
 
 interface SettingsProps {
   businesses: Business[],
@@ -31,9 +32,20 @@ export const Settings: React.FC<SettingsProps> = ({businesses, clients, user, se
     <Prefs key={Prefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
     <ClientList clients={clients.filter(c => c.businessId === user.ownBusinessId)} key={ClientList.name} />, 
     <BookingSitePrefs key={BookingSitePrefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
-    <Services key={Services.name} services={services.filter(s => s.businessId === user.ownBusinessId)} />, 
+    <ServicesWrapper key={Services.name}>
+              <Services services={services} />, 
+            </ServicesWrapper>,
     <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />,
   ];
+
+  /*
+  <C>
+    <Services /> (server comp)
+  </C>
+
+  C = ({children}) => <>{children}</>
+
+  */
   
   return (
     <>
