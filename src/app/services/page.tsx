@@ -7,6 +7,8 @@ import { userId } from '@/utility/sample_data/sample_userId';
 import ServiceCard from './service';
 import styles from './services.module.scss';
 
+export const revalidate = 5;
+
 export default async function Page() {
   
   const { data: businesses } = await getAllBusinesses(userId);
@@ -29,7 +31,6 @@ export default async function Page() {
               <SectionLabel label={b.id === sample_user.ownBusinessId ? 'My Services' : b.name} />
               {filteredServices.map(s => 
               <div key={s.id}>
-                {/* @ts-expect-error Server Component */}
                 <ServiceCard service={s} />
               </div>
               )}

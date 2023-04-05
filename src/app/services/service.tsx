@@ -6,7 +6,7 @@ import { Service } from "@/types/Service"
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { ServiceUser } from '@/utility/functions/fetch/getServiceUsers';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
-import { useEffect, useState } from 'react';
+import { cache, useEffect, useState } from 'react';
 
 import { getClient } from '@/utility/functions/getClient';
 import { gql, useQuery } from '@apollo/client';
@@ -26,17 +26,56 @@ export const query = gql`
     }
   }
 `
+export const revalidate = 4;
+
+// const getUserDetails = cache(async (serviceId: string) => {
+//   const client = getClient();
+//   const { data } = await client.query({query, variables: {id: serviceId},
+//   context: {
+//     fetchOptions: {
+//       next: {
+//         revalidate: 5
+//       }
+//     }
+//   }});
+//   return data.service.assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser));
+// });
 
 export default function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
-  const client = getClient();
-  const { data, loading, error } = useQuery(query, { client, variables: { id: service.id } });
   const [assignees, setAssignees] = useState<ServiceUser[]>([]);
+  // const [error, setError] = useState<any>();
+
+  const client = getClient();
+  const { data, loading, error } = useQuery(query, { 
+    client, 
+    variables: { 
+      id: service.id 
+    }, 
+    context: {
+      fetchOptions: {
+        next: {
+          revalidate: 5
+        }
+      }
+    }
+  });
 
   useEffect(() => {
     if (!data || loading) return;
 
     const { assignedUsers } = data.service;
     setAssignees(assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser)))
+    
+    
+    // ;(async() => {
+    //   try {
+    //     const users = await getUserDetails(service.id);
+    //     setAssignees(users);
+    //   } catch(e) {
+    //     setError(e);
+    //   }
+    // })()
+
   }, [data, loading]);
    
   return error ? <p>{JSON.stringify(error.message)}</p> : (
