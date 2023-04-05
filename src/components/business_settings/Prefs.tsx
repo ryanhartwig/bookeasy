@@ -2,10 +2,6 @@
 
 import { Setting } from '@/components/UI/Setting/Setting';
 import { Business } from '@/types/Business';
-import { sample_businesses } from '@/utility/sample_data/sample_businesses';
-import { sample_user } from '@/utility/sample_data/sample_user';
-import Image from 'next/image';
-import { useMemo, useState } from 'react';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
 

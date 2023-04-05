@@ -4,6 +4,7 @@ import { Card } from '@/components/UI/Card/Card';
 import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getUserAvailability } from '@/utility/functions/fetch/getUserAvailability';
 import { getUser } from '@/utility/functions/fetch/getUserDetails';
 import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
@@ -17,6 +18,9 @@ export default async function Page() {
   const { data: services } = await getAllServices(userId);
   const { data: businesses} = await getAllBusinesses(userId);
   const { data: user } = await getUser(userId);
+  const { data: availability } = await getUserAvailability(userId);
+
+  console.log(availability[0].slices);
 
   if (!user) return <></>
 
@@ -50,7 +54,7 @@ export default async function Page() {
         {/* Right panel */}
         <div>
           <Card className={clsx(styles.card, styles.prefs)}>
-            <Settings businesses={businesses} clients={clients} services={services} user={user} />
+            <Settings businesses={businesses} clients={clients} services={services} user={user} availability={availability.find(a => a.businessId === user.ownBusinessId)!} />
           </Card>
         </div>
       </div>

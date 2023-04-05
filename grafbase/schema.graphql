@@ -92,7 +92,7 @@ type AvailabilitySlice {
   end: String!,
 }
 
-type TimeOff @model {
+type TimeOff {
   startPeriod: Int!,
   endPeriod: Int!,
   reason: String!,
@@ -102,7 +102,7 @@ type BaseAvailability @model {
   user: User! @relation(name: "base_avail_user"),
   business: Business! @relation(name: "base_avail_business"),
   slices: [AvailabilitySlice!]!,
-  timeOff: [TimeOff!]! @relation(name: "base_avail_time_off"),
+  timeOff: [TimeOff!]!,
 }
 
 

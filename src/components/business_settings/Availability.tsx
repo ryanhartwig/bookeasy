@@ -11,7 +11,6 @@ interface AvailabilityProps {
 }
 
 export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) => {
-
   const availability = useMemo(() => {
     const map = new Map<number, {start: string, end: string}[]>();
 
