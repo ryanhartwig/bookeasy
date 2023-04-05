@@ -2,10 +2,6 @@
 
 import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { sample_base_availability } from "@/utility/sample_data/sample_base_availability";
-import { sample_businesses } from "@/utility/sample_data/sample_businesses";
-import { sample_clients } from "@/utility/sample_data/sample_clients";
-import { sample_services } from "@/utility/sample_data/sample_services";
-import { sample_user } from "@/utility/sample_data/sample_user";
 import { useState } from "react";
 import styles from './business.module.scss';
 import { Availability } from "../../components/business_settings/Availability";
@@ -13,16 +9,29 @@ import { BookingSitePrefs } from "@/components/business_settings/BookingSitePref
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
+import { Business } from "@/types/Business";
+import { Client } from "@/types/Client";
+import { User } from "@/types/User";
+import { Service } from "@/types/Service";
+import { BaseAvailability } from "@/types/BaseAvailability";
 
-export const Settings: React.FC = () => {
+interface SettingsProps {
+  businesses: Business[],
+  clients: Client[],
+  user: User,
+  services: Service[],
+  // availability: BaseAvailability,
+}
+
+export const Settings: React.FC<SettingsProps> = ({businesses, clients, user, services}) => {
 
   const [tab, setTab] = useState<number>(0);
   const tabs = ['Preferences', 'Client List', 'Booking Site', 'Services', 'Availability'];
   const tabComponents = [
-    <Prefs key={Prefs.name} business={sample_businesses.find(b => b.id === sample_user.ownBusinessId)!} />, 
-    <ClientList clients={sample_clients.filter(c => c.businessId === sample_user.ownBusinessId)} key={ClientList.name} />, 
-    <BookingSitePrefs key={BookingSitePrefs.name} business={sample_businesses.find(b => b.id === sample_user.ownBusinessId)!} />, 
-    <Services key={Services.name} services={sample_services.filter(s => s.businessId === sample_user.ownBusinessId)} />, 
+    <Prefs key={Prefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
+    <ClientList clients={clients.filter(c => c.businessId === user.ownBusinessId)} key={ClientList.name} />, 
+    <BookingSitePrefs key={BookingSitePrefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
+    <Services key={Services.name} services={services.filter(s => s.businessId === user.ownBusinessId)} />, 
     <Availability key={Availability.name} availabilitySlices={sample_base_availability.slices} />,
   ];
   

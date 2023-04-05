@@ -6,6 +6,7 @@ import { sample_businesses } from '@/utility/sample_data/sample_businesses';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
 
 interface PrefsProps {
@@ -22,10 +23,10 @@ export const Prefs: React.FC<PrefsProps> = ({business}) => {
 
       <div className={styles.settings}>
         <Setting label='Business Photo'>
-          <Image src={business.photo} alt='Business logo or avatar' height={50} />
+          <Avatar src={business.photo} size={50} alt='Business logo' />
         </Setting>
         <Setting label='Business Name'>
-          <p>{business.name ?? 'None'}</p>
+          <p>{business.name}</p>
         </Setting>
         <Setting label='Business Email'>
           <p>{business.email ?? 'None'}</p>

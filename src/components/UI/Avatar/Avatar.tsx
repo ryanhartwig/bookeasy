@@ -12,17 +12,18 @@ interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
    * Fill color of the default avatar
    */
   defaultColor?: string,
+  alt?: string,
 }
 
 /**
  * Displays avatar if provided, or uses default icon
  */
-export const Avatar: React.FC<AvatarProps> = ({src, size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
+export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
 
   return (
     <div {...props} style={{...props.style, width: size, height: size}}>
       {src
-        ? <Image alt="Person avatar" src={src} width={size} height={size} style={{width: size, height: size}} />
+        ? <Image alt={alt} src={src} width={size} height={size} style={{width: size, height: size}} />
         : <BsPersonCircle fontSize={size} color={defaultColor} />
       }
     </div>
