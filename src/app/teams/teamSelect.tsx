@@ -3,22 +3,23 @@ import styles from './teams.module.scss';
 
 import addTeam from '../../../public/assets/team_add.svg';
 import teamDefault from '../../../public/assets/team_default.svg';
-import { useMemo } from 'react';
-import { sample_businesses } from '@/utility/sample_data/sample_businesses';
-import { sample_user } from '@/utility/sample_data/sample_user';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
 import { Business } from '@/types/Business';
+import { useMemo } from 'react';
+import { User } from '@/types/User';
 
 interface TeamsProps {
   selected?: Business,
   setSelected: React.Dispatch<React.SetStateAction<Business | undefined>>,
+  teams: Business[],
+  currentUser: User,
 }
 
-export const Teams: React.FC<TeamsProps> = ({selected, setSelected}) => {
-  
-  const teams = useMemo(() => sample_businesses.filter(b => b.id !== sample_user.ownBusinessId), []);
+export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams: allTeams, currentUser}) => {
 
+  const teams = useMemo(() => allTeams.filter(t => t.id !== currentUser.ownBusinessId), [allTeams, currentUser.ownBusinessId]);
+  
   return (
     <div className={styles.user_teams}>
       {/* Teams user belongs to */}

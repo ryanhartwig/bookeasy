@@ -3,19 +3,19 @@ import { gql } from "@apollo/client";
 import { getClient } from "../getClient";
 
 export const query = gql`
-  query ClientsQuery($after:String!, $id: ID!) {
-    user(by: {id: $id}) {
-      assignedClients(first: 100, after:$after) {
+  query BusinessMembers($after:String!, $id: ID!) {
+    business(by: {id: $id}) {
+      users(first: 100, after:$after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         edges {
           node {
             id
-            business { id }
             name
             email
-            notes
-            address
             phone
-            active
             avatar
           }
         }
