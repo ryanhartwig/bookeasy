@@ -33,10 +33,10 @@ export const query = gql`
  * 
  * @param data JSON data
  */
-const parseToClient = (data: any): Client => {
+const parseToClient = (data: any, businessId: string): Client => {
   return {
     id: data.id,
-    businessId: data.business.id,
+    businessId: businessId,
     name: data.name,
     email: data.email,
     notes: data.notes,
@@ -67,7 +67,7 @@ export const getBusinessClients = async (businessId: string) => {
       } });
       const { clients } = data.business;
 
-      allClients.push(...clients.edges.map((edge: any) => parseToClient(edge.node)))
+      allClients.push(...clients.edges.map((edge: any) => parseToClient(edge.node, businessId)))
       if (clients.pageInfo.hasNextPage) {
         after = clients.pageInfo.endCursor;
         await fillClients();
