@@ -2,6 +2,8 @@
   height: calc(100% - var(--header-height));
 
   padding: 15px;
+
+
 }
 
 .card {
@@ -18,7 +20,7 @@
 .label {
   position: relative;  
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start !important;
   
   hr {
     margin: 0;

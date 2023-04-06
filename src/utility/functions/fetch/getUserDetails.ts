@@ -37,6 +37,15 @@ export const parseToUser = (d: any): User => ({
   businessIds: [],
   avatar: d.avatar ?? '',
   created: d.createdAt,
+  prefs: {
+    privatePhoto: d.prefs.privatePhoto,
+    privateEmail: d.prefs.privateEmail,
+    privatePhone: d.prefs.privatePhone,
+    notificationBooking: d.prefs.notificationBooking,
+    notificationReminder: d.prefs.notificationReminder,
+    notificationOverview: d.prefs.notificationOverview,
+    notificationOverviewTime: d.prefs.notificationOverviewTime,
+  }
 });
 
 /** Fetches user details for provided userId

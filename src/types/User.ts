@@ -7,4 +7,13 @@ export interface User {
   created: string,
   phone?: number,
   avatar?: string,
+  prefs: {
+    privatePhoto: boolean,
+    privateEmail: boolean,
+    privatePhone: boolean,
+    notificationBooking: boolean,
+    notificationReminder: boolean,
+    notificationOverview: boolean,
+    notificationOverviewTime: string | null,
+  };
 };
