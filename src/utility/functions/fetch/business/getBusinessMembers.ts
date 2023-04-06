@@ -1,6 +1,6 @@
 import { User } from "@/types/User";
 import { gql } from "@apollo/client";
-import { getClient } from "../getClient";
+import { getClient } from "../../getClient";
 
 export const query = gql`
   query BusinessMembers($after:String!, $id: ID!) {
