@@ -11,6 +11,7 @@ import { getBusinessMembers } from '@/utility/functions/fetch/business/getBusine
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { TeamDetails } from './teamDetails';
+import { getBusinessUserMeta, UserMeta } from '@/utility/functions/fetch/business/getBusinessUserMeta';
 
 interface TeamsViewProps {
   teams: Business[],
@@ -24,20 +25,28 @@ export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [members, setMembers] = useState<User[]>([]);
+  const [meta, setMeta] = useState<UserMeta[]>([]);
 
   useEffect(() => {
     if (!selected) return;
     ;(async () => {
-      const clients = getBusinessClients(selected.id);
-      const services = getBusinessServices(selected.id);
-      const members = getBusinessMembers(selected.id);
+      const clientsPromise = getBusinessClients(selected.id);
+      const servicesPromise = getBusinessServices(selected.id);
+      const membersPromise = getBusinessMembers(selected.id);
+      const metaPromise = getBusinessUserMeta(selected.id);
       
       try {
-        const results = await Promise.all([clients, services, members]);
-        const [c, s, m] = results;
-        setClients(c.data);
-        setServices(s.data);
-        setMembers(m.data);
+        const results = await Promise.all([
+          clientsPromise, 
+          servicesPromise,
+          membersPromise, 
+          metaPromise
+        ]);
+        const [clients, services, members, meta] = results;
+        setClients(clients.data);
+        setServices(services.data);
+        setMembers(members.data);
+        setMeta(meta.data)
 
       } catch(e) {
         console.log(e);
@@ -56,7 +65,7 @@ export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
           <TeamSelect currentUser={currentUser} teams={teams} selected={selected} setSelected={setSelected} />
         </div>
         
-        {selected && <TeamDetails business={selected} clients={clients} services={services} users={members} />}
+        {selected && <TeamDetails business={selected} clients={clients} services={services} users={members} meta={meta}/>}
         
       </div>
     </>

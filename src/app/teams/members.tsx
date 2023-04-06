@@ -3,15 +3,15 @@
 import { Avatar } from "@/components/UI/Avatar/Avatar";
 import { Business } from "@/types/Business";
 import { User } from "@/types/User";
+import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
 import styles from './teams.module.scss';
 
 interface MembersProps {
   members: User[],
-  selected: Business,
+  meta: UserMeta[],
 }
 
-export const Members: React.FC<MembersProps> = ({members, selected}) => {
-
+export const Members: React.FC<MembersProps> = ({members, meta}) => {
 
   return (
     <>
@@ -22,7 +22,7 @@ export const Members: React.FC<MembersProps> = ({members, selected}) => {
           <div key={m.id}>
             <Avatar src={m.avatar} size={30} />
             <p>{m.name}</p>
-            <p>Member</p>
+            <p>{meta.find(meta => meta.userId === m.id)!.elevated ? 'Admin' : 'Member'}</p>
           </div>
         ))}
       </div>

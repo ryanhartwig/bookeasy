@@ -8,6 +8,7 @@ import { Business } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
+import { UserMeta } from '@/utility/functions/fetch/business/getBusinessUserMeta';
 import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { Members } from './members';
@@ -19,9 +20,10 @@ interface TeamDetailsProps {
   clients: Client[],
   business: Business,
   users: User[],
+  meta: UserMeta[],
 }
 
-export const TeamDetails: React.FC<TeamDetailsProps> = ({services, clients, business, users}) => {
+export const TeamDetails: React.FC<TeamDetailsProps> = ({services, clients, business, users, meta}) => {
   const [tab, setTab] = useState<number>(0);
   
   const tabs = useMemo(() => {
@@ -29,8 +31,8 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({services, clients, busi
     <Services key='services' services={services} />,
     <ClientList key='clients' clients={clients} />,
     <BookingSitePrefs key='bookingsite' business={business} />,
-    <Staff key='staff' clients={clients} members={users} services={services} />,
-  ]}, [business, clients, services, users]);
+    <Staff key='staff' clients={clients} members={users} services={services} meta={meta} />,
+  ]}, [business, clients, meta, services, users]);
 
   return (
     <div className={styles.team_overview}>
@@ -39,7 +41,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({services, clients, busi
           <Overview selected={business} members={users} clients={clients} services={services} />
         </Card>
         <Card className={clsx(styles.card, styles.members_overview)}>
-          <Members members={users} selected={business} />
+          <Members members={users} meta={meta} />
         </Card>
       </div>
       <div className={styles.right}>
