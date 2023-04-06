@@ -4,6 +4,12 @@ type BusinessPrefs {
   maxBookAhead: Int @default(value: 2592000000),
 }
 
+type UserMeta @model {
+  user: User!,
+  elevated: Boolean!,
+  dateAdded: String!,
+}
+
 type Business @model {
   name: String!,
   email: String,
@@ -13,6 +19,7 @@ type Business @model {
   clients: [Client!]!,
   services: [Service!]!,
   appointments: [Appointment!]!,
+  userMeta: [UserMeta!]!,
 }
 
 type UserPrefs {

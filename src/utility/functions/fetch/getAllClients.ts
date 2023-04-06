@@ -40,7 +40,7 @@ const parseToClient = (data: any, userId: string): Client => {
     avatar: data.avatar,
     address: data.address ?? undefined,
     phone: data.phone ?? undefined,
-    created: data.created,
+    created: data.createdAt,
     active: data.active,
     assignedUserIds: [],
   } as Client;

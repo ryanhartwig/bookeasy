@@ -1,8 +1,8 @@
 'use client';
 
+import { Avatar } from "@/components/UI/Avatar/Avatar";
 import { Business } from "@/types/Business";
 import { User } from "@/types/User";
-import Image from 'next/image';
 import styles from './teams.module.scss';
 
 interface MembersProps {
@@ -20,9 +20,9 @@ export const Members: React.FC<MembersProps> = ({members, selected}) => {
       <div className={styles.members}>
         {members.map(m => (
           <div key={m.id}>
-            <Image src={m.avatar ?? ''} alt={'Member avatar'} width={30}/>
+            <Avatar src={m.avatar} size={30} />
             <p>{m.name}</p>
-            <p>{m.businessIds.find(([id, elevated]) => id === selected.id)![1] ? 'Admin' : 'Member'}</p>
+            <p>Member</p>
           </div>
         ))}
       </div>

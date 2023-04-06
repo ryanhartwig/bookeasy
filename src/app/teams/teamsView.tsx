@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { User } from '@/types/User';
-import { useQuery } from '@apollo/client';
-import { getClient } from '@/utility/functions/getClient';
 import { getBusinessClients } from '@/utility/functions/fetch/business/getBusinessClients';
 import { getBusinessServices } from '@/utility/functions/fetch/business/getBusinessServices';
 import { getBusinessMembers } from '@/utility/functions/fetch/business/getBusinessMembers';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
+import { TeamDetails } from './teamDetails';
 
 interface TeamsViewProps {
   teams: Business[],
@@ -19,8 +20,10 @@ interface TeamsViewProps {
 export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
 
   const [selected, setSelected] = useState<Business>();
-  const client = getClient();
 
+  const [clients, setClients] = useState<Client[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [members, setMembers] = useState<User[]>([]);
 
   useEffect(() => {
     if (!selected) return;
@@ -31,9 +34,11 @@ export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
       
       try {
         const results = await Promise.all([clients, services, members]);
-        
+        const [c, s, m] = results;
+        setClients(c.data);
+        setServices(s.data);
+        setMembers(m.data);
 
-        console.log(results);
       } catch(e) {
         console.log(e);
       }
@@ -51,6 +56,7 @@ export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
           <TeamSelect currentUser={currentUser} teams={teams} selected={selected} setSelected={setSelected} />
         </div>
         
+        {selected && <TeamDetails business={selected} clients={clients} services={services} users={members} />}
         
       </div>
     </>

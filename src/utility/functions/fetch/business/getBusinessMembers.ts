@@ -35,6 +35,7 @@ const parseToUser = (data: any): User => {
     name: data.name,
     avatar: data.avatar,
     phone: data.phone,
+    created: data.createdAt,
   } as User;
 }
 

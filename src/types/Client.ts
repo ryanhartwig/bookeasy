@@ -7,7 +7,7 @@ export interface Client {
   avatar?: any,
   address?: string,
   phone?: string,
-  created?: number,
+  created: number,
   active?: boolean,
   assignedUserIds: string[],
 };

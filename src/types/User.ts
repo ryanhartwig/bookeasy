@@ -4,7 +4,7 @@ export interface User {
   email: string,
   ownBusinessId?: string | null,
   businessIds?: [string, boolean][],
-  created?: number,
+  created: string,
   phone?: number,
   avatar?: string,
 };

@@ -7,6 +7,7 @@ import { User } from "@/types/User";
 import styles from './tabs.module.scss';
 import Image from 'next/image';
 import { useMemo } from "react";
+import { Avatar } from "../UI/Avatar/Avatar";
 
 interface StaffProps {
   members: User[],
@@ -20,7 +21,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients}) => {
     members.map(m => (
       <div className={styles.client} key={m.id}>
         <div>
-          <Image src={m.avatar || ''} alt="Member avatar" height={28} />
+          <Avatar src={m.avatar} size={28} />
         </div>
         <div>
           <p>{m.name}</p>
