@@ -1,44 +1,44 @@
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
-import { sample_businesses } from '@/utility/sample_data/sample_businesses';
-import Image from 'next/image';
 import clsx from 'clsx';
 import { Client } from '@/types/Client';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
+import { Business } from '@/types/Business';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
+  clients: Client[],
+  businesses: Business[],
 }
 
-export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
-
+export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients, businesses}) => {
   const [query, setQuery] = useState<string>('');
 
   const results = useMemo(() => {    
     return (
-      sample_businesses.map(b => {
-        const clients = sample_clients
+      businesses.map(b => {
+        const filteredClients = clients
           // organize by team
-          .filter(c => c.business_id === b.id)
+          .filter(c => c.businessId === b.id)
           // space separated lazy search
           .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
         ;
-        
+
         return (
           <div key={b.id} className={styles.client_team}>
             <SectionLabel label={b.name} />
-            {clients.map(c => (
+            {filteredClients.map(c => (
               <div 
                 key={c.id} 
                 className={clsx(styles.client, {[styles.selected]: selected?.id === c.id})}
-                onClick={(e) => {
+                onClick={() => {
                   setSelected(c);
                 }}
               >
-                {c.avatar && <Image alt="client avatar" src={c.avatar} style={{width: 30, height: 30}} />}
+                <Avatar src={c.avatar} />
                 <p>{c.name}</p>
               </div>
             ))}
@@ -47,8 +47,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected}) => {
       })
     )
     
-  }, [query, selected?.id, setSelected]);
-
+  }, [businesses, clients, query, selected?.id, setSelected]);
 
   return (
     <div className={styles.clients}>

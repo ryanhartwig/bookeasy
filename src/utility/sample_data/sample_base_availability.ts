@@ -1,9 +1,9 @@
 import type { BaseAvailability } from "../../types/BaseAvailability";
 
 export const sample_base_availability: BaseAvailability = {
-  business_id: 'christinabronson',
+  businessId: 'christinabronson',
   id: 'avail1',
-  user_id: 'christinabronson',
+  userId: 'christinabronson',
   slices: [
     {
       business_id: 'christinabronson',
@@ -68,6 +68,6 @@ export const sample_base_availability: BaseAvailability = {
     },
   ],
   recurring: [],
-  time_off: [],
+  timeOff: [],
 }
 

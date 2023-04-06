@@ -5,36 +5,36 @@ import avatarFemale from '../../../public/assets/avatar_female.svg';
 
 export const sample_user: User = {
   id: 'christinabronson',
-  own_business_id: 'christinabronson',
+  ownBusinessId: 'christinabronson',
   name: 'Christina Bronson',
   email: 'christina.bronson@gmail.com',
-  business_ids: [['johnsonteam', false]],
+  businessIds: [['johnsonteam', false]],
   avatar: avatarFemale,
   created: Date.now(),
 };
 
 export const sample_members: User[] = [{
   id: 'johngreenwood',
-  own_business_id: '',
+  ownBusinessId: '',
   name: 'John Greenwood',
   email: 'johng@gmail.com',
-  business_ids: [['johnsonteam', false]],
+  businessIds: [['johnsonteam', false]],
   avatar: avatarMale,
   created: Date.now(),
 }, {
   id: 'phillipwest',
-  own_business_id: '',
+  ownBusinessId: '',
   name: 'Phillip West',
   email: 'philwest@gmail.com',
-  business_ids: [['johnsonteam', false]],
+  businessIds: [['johnsonteam', false]],
   avatar: avatarMale,
   created: Date.now(),
 }, {
   id: 'Marly Johnson',
-  own_business_id: '',
+  ownBusinessId: '',
   name: 'Marly Johnson',
   email: 'mjohnson@gmail.com',
-  business_ids: [['johnsonteam', true]],
+  businessIds: [['johnsonteam', true]],
   avatar: avatarFemale,
   created: Date.now(),
 }]

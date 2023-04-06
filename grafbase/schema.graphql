@@ -4,6 +4,12 @@ type BusinessPrefs {
   maxBookAhead: Int @default(value: 2592000000),
 }
 
+type UserMeta @model {
+  user: User!,
+  elevated: Boolean!,
+  dateAdded: String!,
+}
+
 type Business @model {
   name: String!,
   email: String,
@@ -13,6 +19,7 @@ type Business @model {
   clients: [Client!]!,
   services: [Service!]!,
   appointments: [Appointment!]!,
+  userMeta: [UserMeta!]!,
 }
 
 type UserPrefs {
@@ -29,6 +36,7 @@ type User @model {
   name: String!,
   email: String! @unique,
   phone: String,
+  avatar: String,
   businesses: [Business!]! @relation(name: "user_teams"),
   ownBusiness: Business @relation(name: "user_own_business"),
   prefs: UserPrefs!,  
@@ -56,6 +64,7 @@ type Client @model {
   active: Boolean @default(value: true),
   assignedUsers: [User!]!,
   appointments: [Appointment!]!,
+  avatar: String,
 }
 
 type Service @model {
@@ -90,7 +99,7 @@ type AvailabilitySlice {
   end: String!,
 }
 
-type TimeOff @model {
+type TimeOff {
   startPeriod: Int!,
   endPeriod: Int!,
   reason: String!,
@@ -100,7 +109,7 @@ type BaseAvailability @model {
   user: User! @relation(name: "base_avail_user"),
   business: Business! @relation(name: "base_avail_business"),
   slices: [AvailabilitySlice!]!,
-  timeOff: [TimeOff!]! @relation(name: "base_avail_time_off"),
+  timeOff: [TimeOff!]!,
 }
 
 

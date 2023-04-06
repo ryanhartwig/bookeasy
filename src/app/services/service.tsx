@@ -2,28 +2,60 @@
 
 import styles from './services.module.scss';
 import { Service } from "@/types/Service"
-import { useMemo } from 'react';
-import { User } from '@/types/User';
-import { sample_members, sample_user } from '@/utility/sample_data/sample_user';
-import Image from 'next/image';
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
+import { ServiceUser } from '@/utility/functions/fetch/getServiceUsers';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
+import { useEffect, useState } from 'react';
 
-interface ServiceCardProps {
-  service: Service
-  edit?: boolean,
-}
+import { getClient } from '@/utility/functions/getClient';
+import { gql, useQuery } from '@apollo/client';
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({service, edit}) => {
+export const query = gql`
+  query GetServiceUsers($id: ID!) {
+    service(by: {id: $id}){
+      assignedUsers(first: 100){
+        edges {
+          node {
+            id
+            name
+            avatar
+          }
+        }
+      }
+    }
+  }
+`
 
-  const assignees = useMemo<User[]>(() => 
-    sample_members.filter(member => service.user_ids.includes(member.id))
-      .concat([sample_user])
-  , [service.user_ids]);
+export default function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
+  const [assignees, setAssignees] = useState<ServiceUser[]>([]);
 
-  return (
+  const client = getClient();
+  const { data, loading, error } = useQuery(query, { 
+    client, 
+    variables: { 
+      id: service.id 
+    }, 
+    context: {
+      fetchOptions: {
+        next: {
+          revalidate: 5
+        }
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (!data || loading) return;
+    if (data.service === null) return setAssignees([]);
+    
+    const { assignedUsers } = data.service;
+    setAssignees(assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser)))
+  }, [data, error, loading]);
+   
+  return error ? <p>{JSON.stringify(error.message)}</p> : (
     <div className={styles.service} style={{borderLeftColor: service.color}}>
-      {service.is_video && 
+      {service.isVideo && 
       <div className={styles.video}>
         <BsFillCameraVideoFill size={16} />
       </div>}
@@ -33,7 +65,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service, edit}) => {
       <div className={styles.assignees}>
         {assignees.map(user => 
           <div key={user.id}>
-            <Image src={user.avatar || ''} alt="User avatar" height={30} width={30} />
+            <Avatar src={user.avatar} size={26} />
             <p>{user.name}</p>
           </div>
         )}

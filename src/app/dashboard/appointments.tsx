@@ -3,25 +3,27 @@
 import styles from './dashboard.module.scss';
 
 import { Appointment } from '@/types/Appointment';
-import { sample_services } from '@/utility/sample_data/sample_services';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
 import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
 import { Card } from '@/components/UI/Card/Card';
+import { Service } from '@/types/Service';
+import { Client } from '@/types/Client';
 
 interface AppointmentsProps {
   appointments: Appointment[],
+  services: Service[],
+  clients: Client[],
 }
 
-export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
-  
+export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
+
   return (
     <div className={styles.appointments}>
-      {appointments.map(app => {
-        const service = sample_services.find(s => app.service_id === s.id);
+      {appointments.length ? appointments.map(app => {
+        const service = services.find(s => app.serviceId === s.id);
         if (!service) return <></>
-        const canEnterSession = Date.now() < app.start_date + (1000 * 60 * service.duration) && Date.now() > app.start_date - (1000 * 60 * 60);
+        const canEnterSession = Date.now() < app.startDate + (1000 * 60 * service.duration) && Date.now() > app.startDate - (1000 * 60 * 60);
 
         return (
         <Card key={app.id} className={styles.appointment_wrapper}>
@@ -31,12 +33,12 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
                 <p>{service.name}</p>
                 <p>{service.duration}m</p>
               </div>
-              <p className={styles.alt}>{formatTime(app.start_date)}</p>
+              <p className={styles.alt}>{formatTime(app.startDate)}</p>
             </div>
 
             <div className={styles.client}>
               <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-              <p>{sample_clients.find(c => c.id === app.client_id)!.name}</p>
+              <p>{clients.find(c => c.id === app.clientId)!.name}</p>
             </div>
 
             <div className={styles.actions}>
@@ -71,7 +73,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
             </div>
           </div>
         </Card>
-      )})}
+      )}) : <p className={styles.no_apps}>No appointments to show</p>}
 
     </div>
   )

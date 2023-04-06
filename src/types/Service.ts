@@ -1,11 +1,11 @@
 export interface Service {
   id: string,
-  business_id: string,
+  businessId: string,
   name: string,
   duration: number,
   provider: string,
   cost: number,
-  is_video: boolean,
+  isVideo: boolean,
   color: string,
-  user_ids: string[],
+  userIds: string[],
 };

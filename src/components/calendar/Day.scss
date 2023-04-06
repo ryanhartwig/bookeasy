@@ -66,6 +66,12 @@
 
 .Day-content.selected {
   background: #DFF0FF;
+
+  > .Day-appointments > .Day-appointment {
+    p {
+      background: #DFF0FF !important;
+    }
+  }
 }
 
 .Day-appointments {
@@ -77,18 +83,25 @@
 }
 .Day-appointment {
   width: 100%;
-  height: 23px;
-  border-radius: 3px;
+  height: 18px;
 
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   margin: 2px 0;
 
+  border-bottom: 2px solid;
+
   p {
     font-weight: 300;
-    font-size: 11px;
-    color: var(--font-on-dark);
+    font-size: 10px;
+    background: white;
+    position: relative;
+    top: 8px;
+    left: 2px;
+    padding: 0px 3px 0 3px;
+    
+    color: var(--font-on-light);
   }
 }

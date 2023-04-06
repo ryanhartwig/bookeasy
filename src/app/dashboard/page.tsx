@@ -1,7 +1,6 @@
 import styles from './dashboard.module.scss';
 
 import { SecondaryHeader } from "../../components/SecondaryHeader"
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
 import { Appointments } from './appointments';
 
@@ -11,10 +10,20 @@ import { Card } from '@/components/UI/Card/Card';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Header } from '@/components/Header';
 
-export default function Page() {
+import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
+import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getAllClients } from '@/utility/functions/fetch/getAllClients';
+import { inRange } from '@/utility/functions/inRange';
+import { getDayRange } from '@/utility/functions/getDayRange';
+import { userId } from '@/utility/sample_data/sample_userId';
+
+export default async function Page() {
+  // Cached / deduped after first call in any server component
+  const { data: appointments } = await getAllAppointments(userId);
+  const { data: services } = await getAllServices(userId);
+  const { data: clients } = await getAllClients(userId);
 
   const [start, end] = getCurrentWeek();
-  
   return (
     <>
       <Header text='Dashboard' />
@@ -28,7 +37,7 @@ export default function Page() {
               </p>
             </div>
             <div>
-              <p className={styles.headerLarge}>{sample_appointments.length}</p>
+              <p className={styles.headerLarge}>{appointments.length}</p>
               <p style={{fontWeight: 100}}>Appointments</p>
             </div>
             <div>
@@ -39,11 +48,11 @@ export default function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={sample_appointments} />
+          <Appointments appointments={appointments.filter(app => inRange(getDayRange(), app.startDate))} services={services} clients={clients} />
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays />
+            <WeekDays appointments={appointments.filter(app => inRange([start.getTime(), end.getTime()], app.startDate))} services={services} clients={clients} />
           </Card>
         </div>
       </div>

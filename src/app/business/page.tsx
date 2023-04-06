@@ -1,45 +1,58 @@
 import { Header } from '@/components/Header';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
-import { sample_clients } from '@/utility/sample_data/sample_clients';
-import { sample_services } from '@/utility/sample_data/sample_services';
-import { sample_user } from '@/utility/sample_data/sample_user';
+import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
+import { getAllClients } from '@/utility/functions/fetch/getAllClients';
+import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getUserAvailability } from '@/utility/functions/fetch/getUserAvailability';
+import { getUser } from '@/utility/functions/fetch/getUserDetails';
+import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
-import Image from 'next/image';
 import styles from './business.module.scss';
 import { Metrics } from './metrics';
 import { Settings } from './settings';
 
-export default function Page() {
+export default async function Page() {
+  
+  const { data: clients } = await getAllClients(userId);
+  const { data: services } = await getAllServices(userId);
+  const { data: businesses} = await getAllBusinesses(userId);
+  const { data: user } = await getUser(userId);
+  const { data: availability } = await getUserAvailability(userId);
+
+  if (!user) return <></>
+
   return (
     <>
       <Header text='My Business' />
       <div className={styles.business}>
         {/* Left panels */}
-        <div>
+        <div>    
           <Card className={clsx(styles.card, styles.overview)}>
-            <Image src={sample_user.avatar || ""} alt="User avatar" height={100} style={{margin: 15}} />
-            <p className={styles.name}>{sample_user.name}</p>
+            
+            <Avatar src={user.avatar} size={100} style={{margin: 15}} />
+            <p className={styles.name}>{user.name}</p>
             <hr />
             <div className={styles.details}>
               <div>
-                <p>{sample_clients.filter(c => c.business_id === sample_user.id).length}</p>
+                <p>{clients.filter(c => c.businessId === user.ownBusinessId).length}</p>
                 <p>client(s)</p>  
               </div>
               <div>
-                <p>{sample_services.filter(s => s.business_id === sample_user.id).length}</p>
+                <p>{services.filter(s => s.businessId === user.ownBusinessId).length}</p>
                 <p>service(s)</p>  
               </div>
             </div>
           </Card>
           <Card className={clsx(styles.card, styles.metrics)}>
-            <Metrics user={sample_user} />
+            {user && <Metrics user={user} />}
           </Card>
         </div>
 
         {/* Right panel */}
         <div>
           <Card className={clsx(styles.card, styles.prefs)}>
-            <Settings />
+            <Settings businesses={businesses} clients={clients} services={services} user={user} availability={availability.find(a => a.businessId === user.ownBusinessId)!} />
           </Card>
         </div>
       </div>

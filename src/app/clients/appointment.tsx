@@ -3,16 +3,16 @@ import styles from './appointment.module.scss';
 import { Appointment } from "@/types/Appointment"
 import { useMemo } from 'react';
 import { Service } from '@/types/Service';
-import { sample_services } from '@/utility/sample_data/sample_services';
 
 interface AppointmentCardProps {
   app: Appointment;
+  services: Service[],
 }
 
-export const AppointmentCard: React.FC<AppointmentCardProps> = ({app}) => {
+export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, services}) => {
 
-  const service = useMemo<Service>(() => sample_services.find(s => s.id === app.service_id)!, [app.service_id]);
-  const date = useMemo<string>(() => new Date(app.start_date).toDateString(), [app.start_date]);
+  const service = useMemo<Service>(() => services.find(s => s.id === app.serviceId)!, [app.serviceId, services]);
+  const date = useMemo<string>(() => new Date(app.startDate).toDateString(), [app.startDate]);
 
   return (
     <div className={styles.app} style={{borderLeftColor: service.color}}>

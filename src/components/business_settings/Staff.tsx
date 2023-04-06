@@ -5,34 +5,37 @@ import { Service } from "@/types/Service";
 import { User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import Image from 'next/image';
 import { useMemo } from "react";
+import { Avatar } from "../UI/Avatar/Avatar";
+import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
 
 interface StaffProps {
   members: User[],
   services: Service[],
   clients: Client[],
+  meta: UserMeta[],
 }
 
-export const Staff: React.FC<StaffProps> = ({members, services, clients}) => {
+export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) => {
   
   const staff = useMemo(() => 
     members.map(m => (
       <div className={styles.client} key={m.id}>
         <div>
-          <Image src={m.avatar || ''} alt="Member avatar" height={28} />
+          <Avatar src={m.avatar} size={28} />
         </div>
         <div>
           <p>{m.name}</p>
-          <p>{services.filter(s => s.user_ids.includes(m.id)).length}</p>
-          <p>{clients.filter(c => c.assigned_users.includes(m.id)).length}</p>
-          <p>{new Date(m.created).toDateString().split(' ').slice(1).join(' ')}</p>
+          <p>{services.filter(s => s.userIds.includes(m.id)).length}</p>
+          <p>{clients.filter(c => c.assignedUserIds.includes(m.id)).length}</p>
+          <p>{new Date(meta.find(meta => meta.userId === m.id)!.dateAdded)
+            .toLocaleDateString()}</p>
           <p className={styles.details}>Details</p>
         </div>
       </div> 
       )
     )
-  , [clients, members, services]);
+  , [clients, members, meta, services]);
 
   return (
     <div className={styles.ClientList}>

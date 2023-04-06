@@ -1,6 +1,6 @@
 export interface Client {
   id: string,
-  business_id: string,
+  businessId: string,
   name: string,
   email: string,
   notes?: string,
@@ -8,6 +8,6 @@ export interface Client {
   address?: string,
   phone?: string,
   created: number,
-  active: boolean,
-  assigned_users: string[],
+  active?: boolean,
+  assignedUserIds: string[],
 };

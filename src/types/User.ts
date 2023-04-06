@@ -1,10 +1,19 @@
 export interface User {
   id: string,
-  own_business_id: string | null,
   name: string,
   email: string,
+  ownBusinessId?: string | null,
+  businessIds?: [string, boolean][],
+  created: string,
   phone?: number,
-  business_ids: [string, boolean][],
   avatar?: string,
-  created: number,
+  prefs: {
+    privatePhoto: boolean,
+    privateEmail: boolean,
+    privatePhone: boolean,
+    notificationBooking: boolean,
+    notificationReminder: boolean,
+    notificationOverview: boolean,
+    notificationOverviewTime: string | null,
+  };
 };

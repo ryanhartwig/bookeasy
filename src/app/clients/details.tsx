@@ -1,40 +1,39 @@
 'use client';
 
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
+import { Service } from '@/types/Service';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
 
 interface DetailsProps {
   selected: Client,
+  appointments: Appointment[],
+  services: Service[],
 }
 
-export const Details: React.FC<DetailsProps> = ({selected}) => {
-
+export const Details: React.FC<DetailsProps> = ({selected, appointments, services}) => {
   const previous = useMemo<Appointment[]>(() => {
-    return sample_appointments.filter(app => 
-      app.client_id === selected.id && app.start_date < Date.now()
+    return appointments.filter(app => 
+      app.clientId === selected.id && app.startDate < Date.now()
     );
-  }, [selected.id]);
+  }, [appointments, selected.id]);
 
   const booked = useMemo<Appointment[]>(() => {
-    return sample_appointments.filter(app => 
-      app.client_id === selected.id && app.start_date >= Date.now()
+    return appointments.filter(app => 
+      app.clientId === selected.id && app.startDate >= Date.now()
     );
-  }, [selected.id]);
+  }, [appointments, selected.id]);
 
   const unpaid = useMemo<string>(() => {
-    console.log(previous.concat(booked));
-    
     return previous.concat(booked)
-      .filter(app => !app.is_paid)
-      .map(app => app.service_cost)
+      .filter(app => !app.isPaid)
+      .map(app => app.serviceCost)
       .reduce((a, b) => a + b, 0)
       .toFixed(2)
   }, [booked, previous]);
@@ -46,9 +45,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       <div>
         {/* Client photo, name, contact info, notes */}
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
-          {selected.avatar && 
-            <Image src={selected.avatar} alt="Client avatar" style={{width: 115, height: 115}} />
-          }
+          <Avatar src={selected.avatar} size={115} />
           <p className={styles.client_name}>{selected.name}</p>
           <hr />
           <div className={styles.client_contact}>
@@ -85,7 +82,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
             <hr />
             <div className={styles.metric}>
-              <p>${previous.map(p => p.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
+              <p>${previous.map(p => p.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
               <p className={styles.label}>Total Estimated Revenue</p>
             </div>
             <hr />
@@ -100,8 +97,8 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
-              ? booked.map((app) => <AppointmentCard key={app.id} app={app} />)
-              : previous.map((app) => <AppointmentCard key={app.id} app={app} />)}
+              ? booked.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)
+              : previous.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)}
           </div>
         </Card>
       </div>

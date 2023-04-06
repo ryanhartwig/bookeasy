@@ -36,11 +36,11 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
   }, [user.created]);
 
   const appsInRange = useMemo<Appointment[]>(() => sample_appointments
-    .filter(app => new Date(app.start_date).getFullYear() === selectedDate.getFullYear())
+    .filter(app => new Date(app.startDate).getFullYear() === selectedDate.getFullYear())
   , [selectedDate]);
   const clientsInRange = useMemo<Client[]>(() => sample_clients
-    .filter(c => new Date(c.created).getFullYear() === selectedDate.getFullYear() && c.business_id === user.own_business_id)
-  , [selectedDate, user.own_business_id]);
+    .filter(c => new Date(c.created).getFullYear() === selectedDate.getFullYear() && c.businessId === user.ownBusinessId)
+  , [selectedDate, user.ownBusinessId]);
 
   return (
     <>
@@ -68,13 +68,13 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
       <div className={styles.metric_data}>
         <div style={{textAlign: 'center'}}>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appsInRange.filter(app => app.isPaid).map(app => app.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
             Total Estimated Revenue
           </p>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appsInRange.filter(app => !app.isPaid).map(app => app.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
             Total Unpaid
