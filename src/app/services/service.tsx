@@ -47,10 +47,11 @@ export default function ServiceCard({service, edit}: { service: Service, edit?: 
 
   useEffect(() => {
     if (!data || loading) return;
-
+    if (data.service === null) return setAssignees([]);
+    
     const { assignedUsers } = data.service;
     setAssignees(assignedUsers.edges.map((edge: any) => ({id: edge.node.id, name: edge.node.name, avatar: edge.node.avatar} as ServiceUser)))
-  }, [data, loading]);
+  }, [data, error, loading]);
    
   return error ? <p>{JSON.stringify(error.message)}</p> : (
     <div className={styles.service} style={{borderLeftColor: service.color}}>
