@@ -10,7 +10,6 @@ export default async function page() {
   const { data: teams} = await getAllBusinesses(userId);
   const { data: currentUser } = await getUser(userId);
 
-
   return (
     <>
       <Header text="Teams" />
