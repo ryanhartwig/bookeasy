@@ -1,5 +1,3 @@
-'use client';
-
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
 import { User } from "@/types/User";
