@@ -8,8 +8,8 @@ import { Appointment } from '@/types/Appointment';
 import { useEffect, useMemo, useState } from 'react';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
-import { formatTime } from '@/utility/functions/formatTime';
 import clsx from 'clsx';
+import { formatTime } from '@/utility/functions/formatting/formatTime';
 
 interface HoursProps {
   day?: number,

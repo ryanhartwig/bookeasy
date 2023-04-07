@@ -7,11 +7,11 @@ import { SecondaryHeader } from '@/components/SecondaryHeader';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
-import { getMonthRange } from '@/utility/functions/getMonthRange';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
 import { useEffect, useMemo, useState } from 'react';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
+import { getMonthRange } from '@/utility/functions/dateRanges/getMonthRange';
 
 interface CalendarProps {
   appointments: Appointment[],

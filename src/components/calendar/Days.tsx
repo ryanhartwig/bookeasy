@@ -3,7 +3,7 @@
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { getDayRange } from '@/utility/functions/getDayRange';
+import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 import { CSSProperties, useMemo } from 'react';
 import { Day } from './Day';
 import './Days.css';

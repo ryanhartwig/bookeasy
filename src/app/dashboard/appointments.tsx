@@ -3,12 +3,12 @@
 import styles from './dashboard.module.scss';
 
 import { Appointment } from '@/types/Appointment';
-import { formatTime } from '@/utility/functions/formatTime';
 
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from 'react-icons/bs';
 import { Card } from '@/components/UI/Card/Card';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
+import { formatTime } from '@/utility/functions/formatting/formatTime';
 
 interface AppointmentsProps {
   appointments: Appointment[],

@@ -1,7 +1,7 @@
 import styles from './dashboard.module.scss';
 
 import { SecondaryHeader } from "../../components/SecondaryHeader"
-import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
+import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { Appointments } from './appointments';
 
 import { WeekDayNames } from './weekDayNames';
@@ -13,9 +13,9 @@ import { Header } from '@/components/Header';
 import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
 import { getAllServices } from '@/utility/functions/fetch/getAllServices';
 import { getAllClients } from '@/utility/functions/fetch/getAllClients';
-import { inRange } from '@/utility/functions/inRange';
-import { getDayRange } from '@/utility/functions/getDayRange';
 import { userId } from '@/utility/sample_data/sample_userId';
+import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component

@@ -1,6 +1,6 @@
 import { View } from "@/app/calendar/page";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getDayRange } from "../functions/getDayRange";
+import { getDayRange } from "../functions/dateRanges/getDayRange";
 
 export const useCalendarNavigation = () => {
   

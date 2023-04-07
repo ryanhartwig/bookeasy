@@ -5,12 +5,12 @@ import styles from './weekly_overview.module.scss';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Hours } from './hours';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
-import { getCurrentWeek } from '@/utility/functions/getCurrentWeek';
-import { getDayRange } from '@/utility/functions/getDayRange';
+import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { Appointment } from '@/types/Appointment';
+import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 
 interface WeekDaysProps {
   appointments: Appointment[],

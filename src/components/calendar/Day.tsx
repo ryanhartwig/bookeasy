@@ -4,7 +4,7 @@ import './Day.scss';
 
 import clsx from 'clsx';
 
-import { getDayRange as minMaxDate } from '@/utility/functions/getDayRange';
+import { getDayRange as minMaxDate } from '@/utility/functions/dateRanges/getDayRange';
 import { CSSProperties } from 'react';
 import { Appointment } from '@/types/Appointment';
 import { Client } from '@/types/Client';

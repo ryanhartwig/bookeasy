@@ -2,7 +2,7 @@
 
 import { Setting } from '@/components/UI/Setting/Setting';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
-import { formatMilitaryTime } from '@/utility/functions/formatMilitaryTime';
+import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
 import { useMemo } from 'react';
 import styles from './tabs.module.scss';
 
