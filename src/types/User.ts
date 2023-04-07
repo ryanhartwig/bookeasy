@@ -7,7 +7,7 @@ export interface User {
   created: string,
   phone?: number,
   avatar?: string,
-  prefs: {
+  prefs?: {
     privatePhoto: boolean,
     privateEmail: boolean,
     privatePhone: boolean,
