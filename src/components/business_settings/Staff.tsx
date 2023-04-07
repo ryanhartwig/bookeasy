@@ -44,9 +44,9 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
         {['Name', 'Services', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
-      <Modal open={!!selected} onClose={() => setSelected(undefined)}>
+      <Modal open={!!selected} onClose={() => setSelected(undefined)} style={{width: 500}}>
         <Modal.Header>Staff Details</Modal.Header>
-        <p>hello world</p>
+        
       </Modal>
     </div>
   )

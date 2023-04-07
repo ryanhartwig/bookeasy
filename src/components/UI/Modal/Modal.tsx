@@ -2,8 +2,8 @@
 import { useClickout } from '@/utility/hooks/useClickout';
 import React from 'react';
 import { useRef } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
-import './Modal.css';
+import { TfiClose } from 'react-icons/tfi';
+import './Modal.scss';
 
 /* React Icons */
 
@@ -11,12 +11,11 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   children: React.ReactNode,
   onClose: (...args: any) => void,
   open: boolean,
-  closeText?: string,
   zIndex?: number,
   refs?: React.MutableRefObject<any>[],
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, closeText, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, open, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -32,17 +31,16 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, closeTex
         <div className={'Modal-box '} ref={contentRef} >
           {!!header?.length && 
           <div className='Modal-header'>
-            <h2>{header}</h2>
-            <hr></hr>
+            <div className='Modal-heading'>
+              <h2>{header}</h2>
+              <div onClick={() => onClick(undefined)} className='Modal-close'>
+                <TfiClose fontSize={13} />
+              </div>
+            </div>
           </div>}
           <div {...divProps} className={'Modal-content ' + divProps.className ?? ''}>
             {content}
           </div>
-          {closeText && 
-          <div onClick={() => onClick(undefined)} className='Modal-close'>
-            <AiOutlineClose size={12} />
-            <p>{closeText}</p>
-          </div>}
         </div>
       </div>}
     </>
