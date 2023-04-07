@@ -3,9 +3,10 @@ import { Service } from "@/types/Service";
 import { User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
+import { Modal } from "../UI/Modal/Modal";
 
 interface StaffProps {
   members: User[],
@@ -15,7 +16,9 @@ interface StaffProps {
 }
 
 export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) => {
-  
+
+  const [selected, setSelected] = useState<User>();
+
   const staff = useMemo(() => 
     members.map(m => (
       <div className={styles.client} key={m.id}>
@@ -28,7 +31,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
           <p>{clients.filter(c => c.assignedUserIds.includes(m.id)).length}</p>
           <p>{new Date(meta.find(meta => meta.userId === m.id)!.dateAdded)
             .toLocaleDateString()}</p>
-          <p className={styles.details}>Details</p>
+          <p className={styles.details} onClick={() => setSelected(m)}>Details</p>
         </div>
       </div> 
       )
@@ -41,6 +44,10 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
         {['Name', 'Services', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
+      <Modal open={!!selected} onClose={() => setSelected(undefined)}>
+        <Modal.Header>Staff Details</Modal.Header>
+        <p>hello world</p>
+      </Modal>
     </div>
   )
 }
