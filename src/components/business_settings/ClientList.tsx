@@ -2,7 +2,6 @@
 
 import { Client } from '@/types/Client';
 import { sample_appointments } from '@/utility/sample_data/sample_appointments';
-import Image from 'next/image';
 import { useMemo } from 'react';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';

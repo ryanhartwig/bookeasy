@@ -1,7 +1,6 @@
 'use client';
 
 import { Avatar } from "@/components/UI/Avatar/Avatar";
-import { Business } from "@/types/Business";
 import { User } from "@/types/User";
 import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
 import styles from './teams.module.scss';
