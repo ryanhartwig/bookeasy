@@ -12,6 +12,10 @@ import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 import { Tabs } from "../UI/Tabs/Tabs";
 import { Services } from "./Services";
 import { ClientList } from "./ClientList";
+import { Availability } from "./Availability";
+import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability";
+import { getUserAvailability } from "@/utility/functions/fetch/getUserAvailability";
+import { Business } from "@/types/Business";
 
 
 interface StaffProps {
@@ -19,16 +23,38 @@ interface StaffProps {
   services: Service[],
   clients: Client[],
   meta: UserMeta[],
+  business: Business,
 }
 
-export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) => {
+export const Staff: React.FC<StaffProps> = ({members, services, clients, meta, business}) => {
 
   const [selected, setSelected] = useState<User>();
   const [tab, setTab] = useState<number>(0);
+  const [availabilityMap, setAvailabilityMap] = useState<Map<string, AvailabilitySlice[]>>(new Map());
 
   useEffect(() => {
     if (!selected) setTab(0);
   }, [selected]);
+
+  useEffect(() => {
+    if (!selected) return;
+    if (availabilityMap.has(selected.id)) return;
+
+    ;(async () => {
+      const result = await getUserAvailability(selected.id);
+      setAvailabilityMap(p => {
+        const map = new Map(p);
+
+        const slices: AvailabilitySlice[] = [];
+        
+        const resultSlices = result.data.find(base => base.businessId === business.id)?.slices;
+        if (resultSlices) slices.push(...resultSlices);
+        
+        map.set(selected.id, slices);
+        return map;
+      })
+    })()
+  }, [availabilityMap, business.id, selected]);
 
   const staff = useMemo(() => 
     members.map(m => (
@@ -54,8 +80,9 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
       services={services.filter(s => s.userIds.includes(selected?.id ?? ""))} 
       key='services'
     />,
-    <ClientList clients={clients.filter(c => c.assignedUserIds.includes(selected?.id ?? ""))} key="clients" />
-  ], [clients, selected?.id, services]);
+    <ClientList clients={clients.filter(c => c.assignedUserIds.includes(selected?.id ?? ""))} key="clients" />,
+    <Availability availabilitySlices={availabilityMap.get(selected?.id || "") || []} key="availability" />,
+  ], [availabilityMap, clients, selected?.id, services]);
 
   return (
     <div className={styles.ClientList}>
