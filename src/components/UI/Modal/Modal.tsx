@@ -1,6 +1,6 @@
 
 import { useClickout } from '@/utility/hooks/useClickout';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useRef } from 'react';
 import { TfiClose } from 'react-icons/tfi';
 import './Modal.scss';
@@ -13,9 +13,10 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   open: boolean,
   zIndex?: number,
   refs?: React.MutableRefObject<any>[],
+  escapeCloses?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -23,6 +24,16 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, ...divPr
   const contentRef = useRef<HTMLDivElement>(undefined!);
 
   const onClick = useClickout(onClose, open, contentRef, ...refs);
+
+  const onKeyDown = useCallback((e: any) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
+  
+  useEffect(() => {
+    if (!escapeCloses) return;
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [escapeCloses, onKeyDown]);
   
   return (
     <>

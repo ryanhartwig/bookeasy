@@ -90,7 +90,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta, b
         {['Name', 'Services', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
-      <Modal open={!!selected} onClose={() => setSelected(undefined)} className={styles.modal} >
+      <Modal open={!!selected} escapeCloses onClose={() => setSelected(undefined)} className={styles.modal} >
         <Modal.Header>Staff Details</Modal.Header>
         {selected &&
           <div className={styles.staff_content}>
