@@ -11,6 +11,7 @@ import { Modal } from "../UI/Modal/Modal";
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 import { Tabs } from "../UI/Tabs/Tabs";
 import { Services } from "./Services";
+import { ClientList } from "./ClientList";
 
 
 interface StaffProps {
@@ -52,8 +53,9 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
     <Services 
       services={services.filter(s => s.userIds.includes(selected?.id ?? ""))} 
       key='services'
-    />
-  ], [selected, services]);
+    />,
+    <ClientList clients={clients.filter(c => c.assignedUserIds.includes(selected?.id ?? ""))} key="clients" />
+  ], [clients, selected?.id, services]);
 
   return (
     <div className={styles.ClientList}>
