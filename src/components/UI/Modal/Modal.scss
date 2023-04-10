@@ -24,13 +24,14 @@
   height: fit-content;
   width: fit-content;
 
+  overflow: hidden;
+
   background: white;
 
   max-height: 95%;
   max-width: 95%;
 
   border-radius: 10px;
-  padding-bottom: 4px;
 }
 
 
@@ -43,7 +44,6 @@
   }
 
   border-bottom: 1px solid var(--dividers);
-  margin-bottom: 8px;
 }
 
 .Modal-heading {

@@ -107,6 +107,8 @@
   height: 100%;
   width: 100%;
 
+  overflow-y: auto;
+
   display: flex;
   flex-direction: column;
 
@@ -134,9 +136,20 @@
 }
 
 .modal {
+  overflow:hidden;
+  
   width: calc(65vw - 206px);
+  height: calc(65vh - 54px);
   min-width: 600px;
   max-width: 1200px;
+}
+
+.staff_content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  height: 100%;
 }
 
 .staff_details {

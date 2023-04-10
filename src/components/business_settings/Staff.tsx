@@ -10,6 +10,7 @@ import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 import { Tabs } from "../UI/Tabs/Tabs";
+import { Services } from "./Services";
 
 
 interface StaffProps {
@@ -47,6 +48,13 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
     )
   , [clients, members, meta, services]);
 
+  const tabs = useMemo(() => [
+    <Services 
+      services={services.filter(s => s.userIds.includes(selected?.id ?? ""))} 
+      key='services'
+    />
+  ], [selected, services]);
+
   return (
     <div className={styles.ClientList}>
       <div className={styles.header}>
@@ -56,7 +64,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
       <Modal open={!!selected} onClose={() => setSelected(undefined)} className={styles.modal} >
         <Modal.Header>Staff Details</Modal.Header>
         {selected &&
-          <>
+          <div className={styles.staff_content}>
             <div className={styles.staff_details}>
               <Avatar src={selected.avatar} size={86} />
               <div>
@@ -73,8 +81,9 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
                 </ul>
               </div>
             </div>
-            <Tabs tab={tab} setTab={setTab} tabs={['Services', 'Clients', 'Availability', 'Time Off']} />
-          </>
+            <Tabs style={{flexGrow: 0, flexShrink: 0}} tab={tab} setTab={setTab} tabs={['Services', 'Clients', 'Availability', 'Time Off']} />
+            {tabs[tab]}
+          </div>
         }
       </Modal>
     </div>
