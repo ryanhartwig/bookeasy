@@ -132,3 +132,32 @@
     text-decoration: underline;
   }
 }
+
+.modal {
+  width: calc(65vw - 206px);
+  min-width: 600px;
+  max-width: 1200px;
+}
+
+.staff_details {
+  display: flex;
+  align-items: center;
+
+  margin: 10px 20px;
+
+  > * { margin-right: 20px}
+
+  ul {
+    list-style-type: none;
+    padding: 3px 8px;
+  }
+  li {
+    font-size: 12px;
+    color: var(--font-alt);
+
+    display: flex;
+    align-items: center;
+
+    > * { margin: 3px 10px 3px 0}
+  }
+}

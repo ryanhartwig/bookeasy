@@ -3,11 +3,13 @@ import { Service } from "@/types/Service";
 import { User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import details from './staff.module.scss';
 import { useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
 import { Modal } from "../UI/Modal/Modal";
+
+import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
+
 
 interface StaffProps {
   members: User[],
@@ -45,9 +47,26 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
         {['Name', 'Services', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
-      <Modal open={!!selected} onClose={() => setSelected(undefined)} className={details.modal} >
+      <Modal open={!!selected} onClose={() => setSelected(undefined)} className={styles.modal} >
         <Modal.Header>Staff Details</Modal.Header>
-        
+        {selected &&
+        <div className={styles.staff_details}>
+          <Avatar src={selected.avatar} size={86} />
+          <div>
+            <p>{selected.name}</p>
+            <ul>
+              <li>
+                <HiOutlinePhone />
+                {selected.phone ?? 'None'}
+              </li>
+              <li>
+                <HiOutlineMail />
+                {selected.email}
+              </li>
+            </ul>
+          </div>
+        </div>
+        }
       </Modal>
     </div>
   )
