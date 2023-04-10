@@ -110,7 +110,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta, b
                 </ul>
               </div>
             </div>
-            <Tabs style={{flexGrow: 0, flexShrink: 0}} tab={tab} setTab={setTab} tabs={['Services', 'Clients', 'Availability', 'Time Off']} />
+            <Tabs style={{flexGrow: 0, flexShrink: 0}} tab={tab} setTab={setTab} tabs={['Services', 'Clients', 'Availability']} />
             {tabs[tab]}
           </div>
         }
