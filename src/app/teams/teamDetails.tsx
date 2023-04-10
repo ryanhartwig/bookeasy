@@ -48,11 +48,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({services, clients, busi
         <Card className={styles.card}>
           <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
           <div className={styles.settings_wrapper}>
-            {tabs.map((component, i) => (
-              <>
-                {i === tab && component}
-              </>
-            ))}
+            {tabs[tab]}
           </div>
         </Card>
       </div>

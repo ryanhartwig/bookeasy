@@ -3,12 +3,13 @@ import { Service } from "@/types/Service";
 import { User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
+import { Tabs } from "../UI/Tabs/Tabs";
 
 
 interface StaffProps {
@@ -21,6 +22,11 @@ interface StaffProps {
 export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) => {
 
   const [selected, setSelected] = useState<User>();
+  const [tab, setTab] = useState<number>(0);
+
+  useEffect(() => {
+    if (!selected) setTab(0);
+  }, [selected]);
 
   const staff = useMemo(() => 
     members.map(m => (
@@ -50,22 +56,25 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, meta}) 
       <Modal open={!!selected} onClose={() => setSelected(undefined)} className={styles.modal} >
         <Modal.Header>Staff Details</Modal.Header>
         {selected &&
-        <div className={styles.staff_details}>
-          <Avatar src={selected.avatar} size={86} />
-          <div>
-            <p>{selected.name}</p>
-            <ul>
-              <li>
-                <HiOutlinePhone />
-                {selected.phone ?? 'None'}
-              </li>
-              <li>
-                <HiOutlineMail />
-                {selected.email}
-              </li>
-            </ul>
-          </div>
-        </div>
+          <>
+            <div className={styles.staff_details}>
+              <Avatar src={selected.avatar} size={86} />
+              <div>
+                <p>{selected.name}</p>
+                <ul>
+                  <li>
+                    <HiOutlinePhone />
+                    {selected.phone ?? 'None'}
+                  </li>
+                  <li>
+                    <HiOutlineMail />
+                    {selected.email}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <Tabs tab={tab} setTab={setTab} tabs={['Services', 'Clients', 'Availability', 'Time Off']} />
+          </>
         }
       </Modal>
     </div>
