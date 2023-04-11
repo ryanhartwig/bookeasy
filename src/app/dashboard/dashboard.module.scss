@@ -1,3 +1,6 @@
+@use 'src/app/globalutil';
+
+
 .dashboard {
   height: calc(100% - var(--header-height));
   position: relative;
@@ -9,6 +12,8 @@
 
   display: flex;
   align-content: center;
+
+  position: relative;
 
   white-space: nowrap;
 
@@ -34,6 +39,47 @@
   height: calc(100% - var(--secondary-header-height));
   display: flex;
   flex-direction: column;
+}
+
+.addApointment {
+  height: 100%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  right: 0;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  
+  > div {
+    @include globalutil.shadow;
+
+    cursor: pointer;
+    
+    height: 33px;
+    width: 155px;
+  
+    background: #243666;
+    border-radius: 10000px;
+  
+    color: var(--font-on-dark);
+    border-right: none !important;
+
+    opacity: 0.85;
+
+    transition: opacity 200ms;
+
+    &:hover {
+      opacity: 1;
+    }
+  
+    p {
+      font-size: 13px;
+      font-weight: 300;
+    }
+  }
 }
 
 

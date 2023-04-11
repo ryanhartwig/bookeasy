@@ -31,11 +31,17 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         <p className={styles.headerLarge}>$0.00</p>
         <p style={{fontWeight: 100}}>Projected</p>
       </div>
-      
 
+      <div className={styles.addApointment}>
+        <div>
+          <p>+ Add Appointment</p>
+        </div>
+      </div>
+      
       <Modal open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} >
 
       </Modal>
+
     </div>
   )
 }
