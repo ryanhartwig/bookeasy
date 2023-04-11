@@ -1,5 +1,6 @@
 .dashboard {
   height: calc(100% - var(--header-height));
+  position: relative;
 }
 
 .header {

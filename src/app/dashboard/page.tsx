@@ -16,6 +16,7 @@ import { getAllClients } from '@/utility/functions/fetch/getAllClients';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { Stats } from './stats';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
@@ -29,22 +30,7 @@ export default async function Page() {
       <Header text='Dashboard' />
       <div id="dashboard" className={styles.dashboard}>
         <SecondaryHeader>
-          <div className={styles.header}>
-            <div>
-              <p style={{fontWeight: 100}}>Week of</p>
-              <p className={styles.headerLarge}>
-                {`${start.toDateString().split(' ').slice(1, 3).join(' ')}`} - {`${end.toDateString().split(' ').slice(1, 3).join(' ')}`}
-              </p>
-            </div>
-            <div>
-              <p className={styles.headerLarge}>{appointments.length}</p>
-              <p style={{fontWeight: 100}}>Appointments</p>
-            </div>
-            <div>
-              <p className={styles.headerLarge}>$0.00</p>
-              <p style={{fontWeight: 100}}>Projected</p>
-            </div>
-          </div>
+          <Stats appointments={appointments} />
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
