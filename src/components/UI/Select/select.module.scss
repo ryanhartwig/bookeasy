@@ -1,8 +1,21 @@
 .input {
+  cursor: pointer;
+
+  position: relative;
+  
   border: 1px solid grey;
   border-radius: 5px;
 
   width: 100%;
   height: 36px;
+}
 
+.down {
+  position: absolute;
+  right: 10px;
+  
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
