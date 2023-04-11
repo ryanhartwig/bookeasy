@@ -7,7 +7,7 @@ interface SelectProps {
 export const Select: React.FC<SelectProps> = ({list}) => {
   return (
     <div className={styles.input}>
-      {...list}
+      
     </div>
   )
 }

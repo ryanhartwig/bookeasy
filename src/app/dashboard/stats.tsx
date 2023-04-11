@@ -41,8 +41,11 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
       
       <Modal open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} className={styles.appointmentForm}>
         <Modal.Header>Create an Appointment</Modal.Header>
-        <p>Select a provider</p>
-        <Select list={[<p key="1">test</p>, <p key="2">tester</p>]} />
+        <div style={{width: '80%', margin: '0 auto', textAlign: 'center'}}>
+          <p>Select a provider</p>
+          <Select list={[<p key="1">test</p>, <p key="2">tester</p>]} />
+        </div>
+        
       </Modal>
 
     </div>
