@@ -17,23 +17,23 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
 
   return (
     <div className={styles.header}>
-      <div>
+      <div className={styles.stat}>
         <p style={{fontWeight: 100}}>Week of</p>
         <p className={styles.headerLarge}>
           {`${start.toDateString().split(' ').slice(1, 3).join(' ')}`} - {`${end.toDateString().split(' ').slice(1, 3).join(' ')}`}
         </p>
       </div>
-      <div>
+      <div className={styles.stat}>
         <p className={styles.headerLarge}>{appointments.length}</p>
         <p style={{fontWeight: 100}}>Appointments</p>
       </div>
-      <div>
+      <div className={styles.stat}>
         <p className={styles.headerLarge}>$0.00</p>
         <p style={{fontWeight: 100}}>Projected</p>
       </div>
 
       <div className={styles.addApointment}>
-        <div>
+        <div onClick={() => setAddAppFormOpen(true)}>
           <p>+ Add Appointment</p>
         </div>
       </div>
