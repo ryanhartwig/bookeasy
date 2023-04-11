@@ -86,6 +86,19 @@
   }
 }
 
+.appointmentForm {
+  width: 381px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  p {
+    font-size: 14px;
+    margin-top: 15px;;
+  }
+}
+
 
 /* Appointment Cards */
 .appointments {

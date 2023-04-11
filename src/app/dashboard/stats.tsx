@@ -1,6 +1,7 @@
 'use client';
 
 import { Modal } from '@/components/UI/Modal/Modal';
+import { Select } from '@/components/UI/Select/Select';
 import { Appointment } from '@/types/Appointment';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { useState } from 'react';
@@ -38,8 +39,10 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         </div>
       </div>
       
-      <Modal open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} >
-
+      <Modal open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} className={styles.appointmentForm}>
+        <Modal.Header>Create an Appointment</Modal.Header>
+        <p>Select a provider</p>
+        <Select list={[<p key="1">test</p>, <p key="2">tester</p>]} />
       </Modal>
 
     </div>
