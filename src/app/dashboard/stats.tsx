@@ -9,7 +9,6 @@ import { Service } from '@/types/Service';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { useState } from 'react';
-import { AppointmentCard } from '../clients/appointment';
 import { AppointmentActionCard } from './appointmentActionCard';
 import styles from './dashboard.module.scss';
 
