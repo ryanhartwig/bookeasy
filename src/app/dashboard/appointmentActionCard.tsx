@@ -12,14 +12,15 @@ interface AppointmentActionCardProps {
   app: Appointment,
   service: Service,
   client: Client,
-  canEnterSession: boolean,
+  canEnterSession?: boolean,
+  mini?: boolean,
 }
 
-export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, service, client, canEnterSession}) => {
+export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, service, client, canEnterSession = false, mini = false}) => {
 
   return (
-    <Card key={app.id} className={styles.appointment_wrapper}>
-      <div className={styles.appointment} style={{borderLeftColor: service.color || 'blue'}}>
+    <Card key={app.id} className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
+      <div className={styles.appointment} style={{borderLeftColor: service.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
         <div>
           <div className={styles.app_header}>
             <p>{service.name}</p>
@@ -33,6 +34,7 @@ export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app
           <p>{client.name}</p>
         </div>
 
+        {!mini && 
         <div className={styles.actions}>
           {/* Left Actions */}
           <div>
@@ -62,7 +64,7 @@ export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app
               <p>Copy Link</p>
             </div>
           </div>
-        </div>
+        </div> }
       </div>
     </Card>
   )

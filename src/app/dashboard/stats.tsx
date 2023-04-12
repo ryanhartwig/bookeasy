@@ -3,11 +3,14 @@
 import { Modal } from '@/components/UI/Modal/Modal';
 import { Select } from '@/components/UI/Select/Select';
 import { Appointment } from '@/types/Appointment';
+import { Business } from '@/types/Business';
+import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { useState } from 'react';
 import { AppointmentCard } from '../clients/appointment';
+import { AppointmentActionCard } from './appointmentActionCard';
 import styles from './dashboard.module.scss';
 
 interface Stats {
@@ -18,6 +21,10 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
 
   const [start, end] = getCurrentWeek();
   const [addAppFormOpen, setAddAppFormOpen] = useState<boolean>(false);
+
+  const [selectedService, setSelectedService] = useState<Service>();
+  const [selectedClient, setSelectedClient] = useState<Client>();
+  const [selectedBusiness, setSelectedBusiness] = useState<Business>();
 
   const [appointment, setAppointment] = useState<Appointment>({
     businessId: "",
@@ -33,7 +40,8 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
     serviceProvider: "...",
     startDate: 0,
     userId: userId,
-  })
+  });
+
 
   return (
     <div className={styles.header}>
@@ -73,7 +81,12 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         </div>
         <hr />
         <p>...</p>        
-        <AppointmentCard app={appointment} service={{color: 'blue'} as Service} />
+        <AppointmentActionCard 
+          app={appointment} 
+          service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
+          client={selectedClient ?? {name: '...'} as Client}
+          mini
+        />
       </Modal>
 
     </div>
