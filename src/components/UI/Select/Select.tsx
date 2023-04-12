@@ -4,12 +4,13 @@ import { BsChevronDown } from 'react-icons/bs';
 
 interface SelectProps {
   list: JSX.Element[],
-  placeholder: string,
+  placeholder?: string,
 }
 
-export const Select: React.FC<SelectProps> = ({list}) => {
+export const Select: React.FC<SelectProps> = ({list, placeholder = ""}) => {
   return (
     <div className={styles.input}>
+      <p>{placeholder}</p>
       <div className={styles.down}>
         <BsChevronDown />
       </div>
