@@ -66,7 +66,7 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         </div>
       </div>
       
-      <Modal open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} className={styles.appointmentForm}>
+      <Modal actionButtonText='Confirm' open={addAppFormOpen} onClose={() => setAddAppFormOpen(false)} className={styles.appointmentForm}>
         <Modal.Header>Create an Appointment</Modal.Header>
         <div className={styles.appointmentOptions}>
           <p>Select a provider</p>
@@ -87,6 +87,7 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
           client={selectedClient ?? {name: '...'} as Client}
           mini
         />
+        <p>warning: this appointment falls out of booking hours</p>
       </Modal>
 
     </div>

@@ -1,5 +1,6 @@
 
 import { useClickout } from '@/utility/hooks/useClickout';
+import clsx from 'clsx';
 import React, { useCallback, useEffect } from 'react';
 import { useRef } from 'react';
 import { TfiClose } from 'react-icons/tfi';
@@ -14,9 +15,11 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   zIndex?: number,
   refs?: React.MutableRefObject<any>[],
   escapeCloses?: boolean,
+  actionButtonText?: string,
+  onAction?: (...args: any) => any,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -41,17 +44,24 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCl
       <div className='Modal noselect' style={{zIndex}} ref={modalRef}>
         <div className={'Modal-box '} ref={contentRef} >
           {!!header?.length && 
-          <div className='Modal-header'>
-            <div className='Modal-heading'>
-              <h2>{header}</h2>
-              <div onClick={() => onClick(undefined)} className='Modal-close'>
-                <TfiClose fontSize={13} />
+            <div className='Modal-header'>
+              <div className='Modal-heading'>
+                <h2>{header}</h2>
+                <div onClick={() => onClick(undefined)} className='Modal-close'>
+                  <TfiClose fontSize={13} />
+                </div>
               </div>
             </div>
-          </div>}
-          <div {...divProps} className={'Modal-content ' + divProps.className ?? ''}>
+          }
+          <div {...divProps} className={clsx('Modal-content', divProps.className ?? '')} >
             {content}
           </div>
+          {actionButtonText && 
+            <div className='Modal-actions' onClick={onAction}>
+              <hr/>
+              <p>{actionButtonText}</p>
+            </div>
+          }
         </div>
       </div>}
     </>
