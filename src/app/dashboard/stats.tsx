@@ -3,8 +3,11 @@
 import { Modal } from '@/components/UI/Modal/Modal';
 import { Select } from '@/components/UI/Select/Select';
 import { Appointment } from '@/types/Appointment';
+import { Service } from '@/types/Service';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
+import { userId } from '@/utility/sample_data/sample_userId';
 import { useState } from 'react';
+import { AppointmentCard } from '../clients/appointment';
 import styles from './dashboard.module.scss';
 
 interface Stats {
@@ -15,6 +18,22 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
 
   const [start, end] = getCurrentWeek();
   const [addAppFormOpen, setAddAppFormOpen] = useState<boolean>(false);
+
+  const [appointment, setAppointment] = useState<Appointment>({
+    businessId: "",
+    clientId: "",
+    endDate: 0,
+    id: "",
+    isPaid: false,
+    isVideo: false,
+    serviceCost: 0,
+    serviceDuration: 0,
+    serviceId: "",
+    serviceName: "...",
+    serviceProvider: "...",
+    startDate: 0,
+    userId: userId,
+  })
 
   return (
     <div className={styles.header}>
@@ -43,9 +62,18 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         <Modal.Header>Create an Appointment</Modal.Header>
         <div className={styles.appointmentOptions}>
           <p>Select a provider</p>
-          <Select list={[<p key="1">test</p>, <p key="2">tester</p>]} placeholder="..." />
+          <Select list={[]} placeholder="..." />
+          <p>Select a client</p>
+          <Select list={[]} placeholder="..." />
+          <p>Select a service</p>
+          <Select list={[]} placeholder="..." />
+          <p>Select date and time</p>
+          <Select list={[]} placeholder="..." />
+          
         </div>
-        
+        <hr />
+        <p>...</p>        
+        <AppointmentCard app={appointment} service={{color: 'blue'} as Service} />
       </Modal>
 
     </div>

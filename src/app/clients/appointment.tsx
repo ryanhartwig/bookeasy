@@ -6,12 +6,11 @@ import { Service } from '@/types/Service';
 
 interface AppointmentCardProps {
   app: Appointment;
-  services: Service[],
+  service: Service,
 }
 
-export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, services}) => {
+export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, service}) => {
 
-  const service = useMemo<Service>(() => services.find(s => s.id === app.serviceId)!, [app.serviceId, services]);
   const date = useMemo<string>(() => new Date(app.startDate).toDateString(), [app.startDate]);
 
   return (
