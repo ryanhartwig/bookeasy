@@ -80,14 +80,14 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
           
         </div>
         <hr />
-        <p>...</p>        
+        <p className={styles.appointmentDate}>...</p>        
         <AppointmentActionCard 
           app={appointment} 
           service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
           client={selectedClient ?? {name: '...'} as Client}
           mini
         />
-        <p>warning: this appointment falls out of booking hours</p>
+        <p className={styles.warning}>warning: this appointment falls out of booking hours</p>
       </Modal>
 
     </div>
