@@ -14,6 +14,7 @@ import { BsFillCameraVideoFill } from 'react-icons/bs';
 
 
 import styles from './appointmentForm.module.scss';
+import { useWaterfall } from "@/utility/hooks/useWaterfall"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -28,6 +29,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
+
+  useWaterfall([[selectedBusiness, setSelectedBusiness], [selectedClient, setSelectedClient], [selectedService, setSelectedService]]);
 
   const [appointment, setAppointment] = useState<Appointment>({
     businessId: selectedBusiness?.id ?? '',
