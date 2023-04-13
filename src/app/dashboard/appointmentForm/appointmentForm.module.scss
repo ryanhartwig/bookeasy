@@ -37,8 +37,12 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 12px 5px;
+  padding: 6px 0px;
 
+  > * {
+    margin-left: 10px;
+  }
+  
   transition: background-color 200ms;
   
   &:hover {

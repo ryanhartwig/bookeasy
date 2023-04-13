@@ -1,3 +1,4 @@
+import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { Appointment } from "@/types/Appointment"
@@ -54,6 +55,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         .filter(c => c.businessId === selectedBusiness?.id) 
         .map(c => (
           <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
+            <Avatar src={c.avatar} size={28} />
             <p>{c.name}</p>
           </div>
         ))
@@ -67,7 +69,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select a provider</p>
         <Select list={businessesList} selected={businessElement} placeholder="..." />
         <p>Select a client</p>
-        <Select list={[]} placeholder="..." />
+        <Select list={clientsList} placeholder="..." />
         <p>Select a service</p>
         <Select list={[]} placeholder="..." />
         <p>Select date and time</p>
