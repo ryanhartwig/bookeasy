@@ -32,7 +32,7 @@ export default async function Page() {
       <Header text='Dashboard' />
       <div id="dashboard" className={styles.dashboard}>
         <SecondaryHeader>
-          <Stats appointments={appointments} businesses={businesses} />
+          <Stats services={services} clients={clients} appointments={appointments} businesses={businesses} />
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />

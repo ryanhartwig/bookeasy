@@ -14,9 +14,11 @@ interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   businesses: Business[],
+  clients: Client[],
+  services: Service[],
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses, clients, services}) => {
   
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
@@ -39,13 +41,24 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   });
 
   const businessesList = useMemo(() => businesses.map(b => (
-    <div key={b.id} className={styles.option} onClick={() => setSelectedBusiness(b)}>
+    <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
       <p>{b.name}</p>
     </div>
   )), [businesses]);
   const businessElement = useMemo(() => selectedBusiness ? (
     <p>{selectedBusiness.name}</p>
   ) : undefined, [selectedBusiness]);
+
+  const clientsList = useMemo(() => selectedBusiness 
+    ? clients
+        .filter(c => c.businessId === selectedBusiness?.id) 
+        .map(c => (
+          <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
+            <p>{c.name}</p>
+          </div>
+        ))
+    : []
+  , [clients, selectedBusiness]);
 
   return (
     <Modal actionButtonText='Confirm' open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>

@@ -2,6 +2,8 @@
 
 import { Appointment } from '@/types/Appointment';
 import { Business } from '@/types/Business';
+import { Client } from '@/types/Client';
+import { Service } from '@/types/Service';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { useState } from 'react';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
@@ -10,9 +12,11 @@ import styles from './dashboard.module.scss';
 interface Stats {
   appointments: Appointment[],
   businesses: Business[],
+  clients: Client[],
+  services: Service[],
 }
 
-export const Stats: React.FC<Stats> = ({appointments, businesses}) => {
+export const Stats: React.FC<Stats> = ({appointments, businesses, clients, services}) => {
 
   const [start, end] = getCurrentWeek();
   const [formOpen, setFormOpen] = useState<boolean>(false);
@@ -40,7 +44,7 @@ export const Stats: React.FC<Stats> = ({appointments, businesses}) => {
         </div>
       </div>
       
-      <AppointmentForm businesses={businesses} open={formOpen} setOpen={setFormOpen} />
+      <AppointmentForm services={services} clients={clients} businesses={businesses} open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }
