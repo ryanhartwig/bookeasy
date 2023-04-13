@@ -49,3 +49,12 @@
     background: rgb(227, 227, 227);
   }
 }
+
+.selectedOption {
+  display: flex;
+  align-items: center;
+
+  > * {
+    margin-right: 8px;
+  }
+}

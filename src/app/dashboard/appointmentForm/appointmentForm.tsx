@@ -47,7 +47,9 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     </div>
   )), [businesses]);
   const businessElement = useMemo(() => selectedBusiness ? (
-    <p>{selectedBusiness.name}</p>
+    <div className={styles.selectedOption}>
+      <p>{selectedBusiness.name}</p>
+    </div>
   ) : undefined, [selectedBusiness]);
 
   const clientsList = useMemo(() => selectedBusiness 
@@ -61,6 +63,12 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         ))
     : []
   , [clients, selectedBusiness]);
+  const clientElement = useMemo(() => selectedClient ? (
+    <div className={styles.selectedOption}>
+      <Avatar src={selectedClient.avatar} size={28} />
+      <p>{selectedClient.name}</p>
+    </div>
+  ) : undefined, [selectedClient]);
 
   return (
     <Modal actionButtonText='Confirm' open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
@@ -69,7 +77,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select a provider</p>
         <Select list={businessesList} selected={businessElement} placeholder="..." />
         <p>Select a client</p>
-        <Select list={clientsList} placeholder="..." />
+        <Select list={clientsList} selected={clientElement} placeholder="..." />
         <p>Select a service</p>
         <Select list={[]} placeholder="..." />
         <p>Select date and time</p>
