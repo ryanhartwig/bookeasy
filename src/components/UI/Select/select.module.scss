@@ -27,14 +27,14 @@
 }
 
 .options {
-  position: absolute;
   cursor: auto;
+  background: #f8f8f8;
+  
+  position: absolute;
   top: 38px;
   left: 0;
 
   overflow-y: auto;
-
-  background: white;
 
   z-index: 20;
   
@@ -44,3 +44,4 @@
   border: 1px solid grey;
   border-radius: 5px;
 }
+

@@ -6,8 +6,12 @@ import { Business } from "@/types/Business"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
+import clsx from "clsx"
 import { useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
+
+import { BsFillCameraVideoFill } from 'react-icons/bs';
+
 
 import styles from './appointmentForm.module.scss';
 
@@ -54,7 +58,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const clientsList = useMemo(() => selectedBusiness 
     ? clients
-        .filter(c => c.businessId === selectedBusiness?.id) 
+        .filter(c => c.businessId === selectedBusiness.id) 
         .map(c => (
           <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
             <Avatar src={c.avatar} size={28} />
@@ -70,6 +74,18 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     </div>
   ) : undefined, [selectedClient]);
 
+  const servicesList = useMemo(() => selectedBusiness
+    ? services
+      .filter(s => s.businessId === selectedBusiness.id)
+      .map(s => (
+        <div key={s.id} style={{borderLeftColor: s.color}} className={clsx(styles.option, styles.service)} onClick={() => setSelectedService(s)}>
+          {s.isVideo && <BsFillCameraVideoFill size={16} color={'grey'} />}
+          <p>{s.name}</p>
+        </div>
+      ))
+    : []
+  , [selectedBusiness, services]);
+
   return (
     <Modal actionButtonText='Confirm' open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
       <Modal.Header>Create an Appointment</Modal.Header>
@@ -79,7 +95,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select a client</p>
         <Select list={clientsList} selected={clientElement} placeholder="..." />
         <p>Select a service</p>
-        <Select list={[]} placeholder="..." />
+        <Select list={servicesList} placeholder="..." />
         <p>Select date and time</p>
         <Select list={[]} placeholder="..." />
         
