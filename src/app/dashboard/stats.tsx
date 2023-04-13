@@ -14,9 +14,10 @@ import styles from './dashboard.module.scss';
 
 interface Stats {
   appointments: Appointment[],
+  businesses: Business[],
 }
 
-export const Stats: React.FC<Stats> = ({appointments}) => {
+export const Stats: React.FC<Stats> = ({appointments, businesses}) => {
 
   const [start, end] = getCurrentWeek();
   const [addAppFormOpen, setAddAppFormOpen] = useState<boolean>(false);
@@ -69,7 +70,12 @@ export const Stats: React.FC<Stats> = ({appointments}) => {
         <Modal.Header>Create an Appointment</Modal.Header>
         <div className={styles.appointmentOptions}>
           <p>Select a provider</p>
-          <Select list={[]} placeholder="..." />
+          <Select list={businesses.map(b => (
+            <div key={b.id} className={styles.option}>
+              <p>{b.name}</p>
+            </div>
+          ))} placeholder="..." />
+          
           <p>Select a client</p>
           <Select list={[]} placeholder="..." />
           <p>Select a service</p>

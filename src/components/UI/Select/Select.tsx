@@ -32,7 +32,11 @@ export const Select: React.FC<SelectProps> = ({list, placeholder = ""}) => {
       
       {optionsShowing && 
         <div className={styles.options} ref={optionsRef}>
-        
+          {list.map(option => (
+            <div key={option.key} className={styles.option}>
+              {option}
+            </div>
+          ))}
         </div>
       }
     </div>

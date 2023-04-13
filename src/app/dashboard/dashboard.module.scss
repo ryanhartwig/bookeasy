@@ -220,3 +220,16 @@ p.alt {
   font-weight: 300;
   font-size: 14px;
 }
+
+.option {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 12px 5px;
+
+  transition: background-color 200ms;
+  
+  &:hover {
+    background: rgb(227, 227, 227);
+  }
+}

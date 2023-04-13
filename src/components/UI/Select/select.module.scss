@@ -27,8 +27,11 @@
 
 .options {
   position: absolute;
+  cursor: auto;
   top: 38px;
   left: 0;
+
+  overflow-y: auto;
 
   background: white;
 
@@ -39,5 +42,4 @@
   min-height: 400px;
   border: 1px solid grey;
   border-radius: 5px;
-  
 }
