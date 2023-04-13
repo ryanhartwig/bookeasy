@@ -5,7 +5,7 @@ import { Business } from "@/types/Business"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import styles from './appointmentForm.module.scss';
@@ -38,17 +38,21 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     userId: userId,
   });
 
+  const businessesList = useMemo(() => businesses.map(b => (
+    <div key={b.id} className={styles.option} onClick={() => setSelectedBusiness(b)}>
+      <p>{b.name}</p>
+    </div>
+  )), [businesses]);
+  const businessElement = useMemo(() => selectedBusiness ? (
+    <p>{selectedBusiness.name}</p>
+  ) : undefined, [selectedBusiness]);
+
   return (
     <Modal actionButtonText='Confirm' open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
-        <Select list={businesses.map(b => (
-          <div key={b.id} className={styles.option}>
-            <p>{b.name}</p>
-          </div>
-        ))} placeholder="..." />
-        
+        <Select list={businessesList} selected={businessElement} placeholder="..." />
         <p>Select a client</p>
         <Select list={[]} placeholder="..." />
         <p>Select a service</p>
