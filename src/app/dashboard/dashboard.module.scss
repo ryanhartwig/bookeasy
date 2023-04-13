@@ -41,7 +41,7 @@
   flex-direction: column;
 }
 
-/* Appointment add / edit form */
+/* Add app button */
 .addApointment {
   height: 100%;
   width: fit-content;
@@ -85,41 +85,6 @@
       font-weight: 300;
     }
   }
-}
-
-.appointmentForm {
-  width: 381px;
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.appointmentOptions {
-  width: 80%;
-  margin: 0 auto;
-  text-align: center;
-
-  > * {
-    margin: 12px 0;
-    &:first-child { margin-top: 16px }
-  }
-
-  > p {
-    font-size: 14px;
-  }
-}
-
-.appointmentDate {
-  color: var(--font-alt);
-  margin: 12px 0;
-  font-size: 12px;
-}
-
-.warning {
-  color: #CE4840;
-  margin: 12px 0;
-  font-size: 11px;
 }
 
 /* Appointment Cards */
@@ -219,17 +184,4 @@ p.alt {
   color: rgb(108, 107, 107);
   font-weight: 300;
   font-size: 14px;
-}
-
-.option {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 12px 5px;
-
-  transition: background-color 200ms;
-  
-  &:hover {
-    background: rgb(227, 227, 227);
-  }
 }
