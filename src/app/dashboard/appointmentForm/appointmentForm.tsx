@@ -29,6 +29,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
+  const [date, setDate] = useState<string>();
+  const [hours, setHours] = useState<number>();
+  const [min, setMin] = useState<number>();
+  const [period, setPeriod] = useState<'am' | 'pm'>('am')
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -99,6 +103,24 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     : undefined
   , [selectedService]);
 
+  const hoursList = new Array(12).fill(0).map((_, i) => (
+    <div key={i} className={styles.option} onClick={() => setHours(i + 1)}>
+      <p>{i + 1}</p>
+    </div>
+  ));
+
+  const minList = new Array(4).fill(0).map((_, i) => (
+    <div key={i} className={styles.option} onClick={() => setMin(i * 15)}>
+      <p>{i * 15}</p>
+    </div>
+  ));
+
+  const periodList = new Array(2).fill(0).map((_, i) => (
+    <div key={i} className={styles.option} onClick={() => setPeriod(!i ? 'am' : 'pm')}>
+      <p>{!i ? 'am' : 'pm'}</p>
+    </div>
+  ));
+
   return (
     <Modal actionButtonText='Confirm' open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
       <Modal.Header>Create an Appointment</Modal.Header>
@@ -110,11 +132,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select a service</p>
         <Select list={servicesList} selected={serviceElement} placeholder="..." />
         <p>Select date and time</p>
-        <input type='date' className={styles.dateInput} />
+        <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>
-          <Select list={[]} placeholder="hr" />
-          <Select list={[]} placeholder="min" />
-          <Select list={[]} />
+          <Select list={hoursList} selected={hours ? <p>{hours}</p> : undefined} placeholder="hr" />
+          <Select list={minList} selected={min ? <p>{min}</p> : undefined} placeholder="min" />
+          <Select list={periodList} selected={<p>{period}</p>} />
         </div>
       </div>
       <hr />
