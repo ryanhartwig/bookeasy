@@ -7,7 +7,7 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
@@ -32,7 +32,24 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [date, setDate] = useState<string>();
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
-  const [period, setPeriod] = useState<'am' | 'pm'>('am')
+  const [period, setPeriod] = useState<'am' | 'pm'>('am');
+
+  const startEndDates = useMemo(() => {
+    if (!date || !hours || !min || !period || !selectedService) return [0, 0];
+
+    const dateObj = new Date();
+    const [year, month, day] = date.split('-').map(d => Number(d));
+    dateObj.setFullYear(year);
+    dateObj.setMonth(month - 1); // 0 indexed
+    dateObj.setDate(day);
+    dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
+
+    const start = dateObj.getTime();
+    dateObj.setTime(dateObj.getTime() + 1000 * 60 * selectedService.duration);
+    const end = dateObj.getTime();
+
+    return [start,end];
+  }, [date, hours, min, period, selectedService]);
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -141,14 +158,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         </div>
       </div>
       <hr />
-      <p className={styles.appointmentDate}>...</p>        
+      <p className={styles.appointmentDate}>{startEndDates ? new Date(startEndDates[0]).toString() : '...'}</p>        
       <AppointmentActionCard 
         app={appointment} 
         service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
         client={selectedClient ?? {name: '...'} as Client}
         mini
       />
-      <p className={styles.warning}>warning: this appointment falls out of booking hours</p>
+      <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>
     </Modal>
   )
 }
