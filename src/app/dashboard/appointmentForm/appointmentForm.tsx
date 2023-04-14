@@ -18,6 +18,7 @@ import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
 import { getUserAvailability } from "@/utility/functions/fetch/getUserAvailability"
+import { inRange } from "@/utility/functions/dateRanges/inRange"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -28,7 +29,7 @@ interface AppointmentFormProps {
   availability: BaseAvailability[],
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses, clients, services}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses, clients, services, availability}) => {
   
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
@@ -38,13 +39,13 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
 
-  const [availabilitySlices, setAvailabilitySlices] = useState<AvailabilitySlice[]>();
-  const [availabilityMap, setAvailabilityMap] = useState<Map<string, BaseAvailability>>(new Map());
+  const availabilityMap = useMemo(() => {
+    const map = new Map<string, BaseAvailability>();
+    availability.forEach(avail => map.set(avail.businessId, avail));
+    return map;
+  }, [availability]);
 
-
-  
-
-  const startEndDates = useMemo(() => {
+  const startEndDates: [number, number] = useMemo(() => {
     if (!date || !hours || min === undefined || !period || !selectedService) return [0, 0];
 
     const dateObj = new Date();
@@ -52,7 +53,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     dateObj.setFullYear(year);
     dateObj.setMonth(month - 1); // 0 indexed
     dateObj.setDate(day);
-    console.log(min);
     dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
 
     const start = dateObj.getTime();
@@ -62,7 +62,24 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     return [start,end];
   }, [date, hours, min, period, selectedService]);
 
+  const isWithinBookingHours = useMemo(() => {
+    if (!selectedBusiness || !startEndDates) return true;
+    const day = new Date(startEndDates[0]).getDay();
 
+    const current = availabilityMap.get(selectedBusiness.id)?.slices.filter(s => {
+      let dayind = s.day;
+      let converted = dayind === 6 ? 0 : dayind + 1;
+      return day === converted;
+    }) ?? [];
+
+    // Convert start and end times to military HR:MN time for comparison check
+    const [start, end] = startEndDates.map(d => new Date(d).toTimeString().split(' ')[0].split(':').slice(0, 2).join(':'));
+
+    return current.some((slice) => {
+      const range: [string, string] = [slice.start, slice.end];
+      return inRange(range, start) && inRange(range, end);
+    });
+  }, [availabilityMap, selectedBusiness, startEndDates]);
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -178,7 +195,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         client={selectedClient ?? {name: '...'} as Client}
         mini
       />
-      <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>
+      {!isWithinBookingHours && <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>}
     </Modal>
   )
 }
