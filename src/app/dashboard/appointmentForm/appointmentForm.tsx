@@ -36,13 +36,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
 
   const startEndDates = useMemo(() => {
-    if (!date || !hours || !min || !period || !selectedService) return [0, 0];
+    if (!date || !hours || min === undefined || !period || !selectedService) return [0, 0];
 
     const dateObj = new Date();
     const [year, month, day] = date.split('-').map(d => Number(d));
     dateObj.setFullYear(year);
     dateObj.setMonth(month - 1); // 0 indexed
     dateObj.setDate(day);
+    console.log(min);
     dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
 
     const start = dateObj.getTime();
