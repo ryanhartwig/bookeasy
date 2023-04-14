@@ -3,24 +3,20 @@ import { useEffect, useRef } from "react";
 /**
  * Resets state of subsequent state when a state value changes, based on the order of inputs
  */
-export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<any>>][], resetValue: any = undefined) => {
+export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<any>>][][], resetValue: any = undefined) => {
 
-  const states = state.map(([state]) => state);
-  const setters = state.map(([_, setter]) => setter);
-  const refs = useRef<any[]>(states);
+  const refs = useRef<[any, React.Dispatch<React.SetStateAction<any>>][][]>(state);
 
   useEffect(() => {
-    
-    for (let i = 0; i < states.length; i++) {
-      if (refs.current[i] !== states[i]) {
-        setters.slice(i + 1).forEach(setter => setter(resetValue));
+    for (let i = 0; i < state.length; i++) {
+      if (refs.current[i].some(([val], subind) => val !== state[i][subind][0])) {
+        state.slice(i + 1).forEach(group => group.forEach(([_, setter]) => setter(undefined)));
 
-        for (let j = 0; j < states.length; j++) {
-          refs.current[j] = j <= i ? states[j] : undefined;
+        for (let j = 0; j < state.length; j++) {
+          refs.current[j] = j <= i ? state[j] : state[j].map(([_, dispatch]) => [undefined, dispatch]);
         }
-
         break;
       }
     }
-  }, [resetValue, setters, state, states]);
+  }, [state]);
 }

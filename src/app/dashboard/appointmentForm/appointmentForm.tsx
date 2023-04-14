@@ -30,7 +30,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
 
-  useWaterfall([[selectedBusiness, setSelectedBusiness], [selectedClient, setSelectedClient], [selectedService, setSelectedService]]);
+  useWaterfall([
+    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
+  ]);
 
   const [appointment, setAppointment] = useState<Appointment>({
     businessId: selectedBusiness?.id ?? '',
