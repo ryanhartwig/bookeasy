@@ -13,15 +13,12 @@ export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<an
     
     for (let i = 0; i < states.length; i++) {
       if (refs.current[i] !== states[i]) {
-        console.log('found diff');
         setters.slice(i + 1).forEach(setter => setter(resetValue));
 
         for (let j = 0; j < states.length; j++) {
           refs.current[j] = j <= i ? states[j] : undefined;
         }
 
-        console.log(states);
-        console.log(refs.current);
         break;
       }
     }

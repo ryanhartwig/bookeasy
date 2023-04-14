@@ -11,9 +11,13 @@
   margin: 0 auto;
   text-align: center;
 
+  display: flex;
+  flex-direction: column;
+
   > * {
-    margin: 12px 0;
+    margin: 6px 0;
     &:first-child { margin-top: 16px }
+    &:last-child { margin-bottom: 16px }
   }
 
   > p {
@@ -64,4 +68,15 @@
   > * {
     margin-right: 8px;
   }
+}
+
+.dateInput {
+  border: 1px solid grey;
+  border-radius: 5px;
+
+  padding: 0 12px;
+  
+
+  width: 100%;
+  height: 36px;
 }

@@ -7,7 +7,7 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
@@ -34,7 +34,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const [appointment, setAppointment] = useState<Appointment>({
     businessId: selectedBusiness?.id ?? '',
-    clientId: "",
+    clientId: selectedClient?.id ?? "",
     endDate: 0,
     id: "",
     isPaid: false,
@@ -107,7 +107,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select a service</p>
         <Select list={servicesList} selected={serviceElement} placeholder="..." />
         <p>Select date and time</p>
-        <Select list={[]} placeholder="..." />
+        <input type='date' className={styles.dateInput} />
         
       </div>
       <hr />
