@@ -1,8 +1,10 @@
 import { formatTime } from "./formatTime";
 
-export const formatFullDateString = (d: Date) => {
-  const [day, month, date, year] = d.toString().split(' ').map(el => Number(el));
-  const time = formatTime(d);
+export const formatFullDateString = (d: Date | number) => {
+  const dateObject = new Date(d);
+  
+  const [day, month, date, year] = dateObject.toString().split(' ');
+  const time = formatTime(dateObject);
 
   return `${day}, ${month} ${date}, ${year} at ${time}`;
 }

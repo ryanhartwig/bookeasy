@@ -15,6 +15,7 @@ import { BsFillCameraVideoFill } from 'react-icons/bs';
 
 import styles from './appointmentForm.module.scss';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
+import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -158,7 +159,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         </div>
       </div>
       <hr />
-      <p className={styles.appointmentDate}>{startEndDates ? new Date(startEndDates[0]).toString() : '...'}</p>        
+      <p className={styles.appointmentDate}>{startEndDates ? formatFullDateString(startEndDates[0]) : '...'}</p>        
       <AppointmentActionCard 
         app={appointment} 
         service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
