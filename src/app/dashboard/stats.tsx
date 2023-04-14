@@ -1,6 +1,7 @@
 'use client';
 
 import { Appointment } from '@/types/Appointment';
+import { BaseAvailability } from '@/types/BaseAvailability';
 import { Business } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
@@ -14,9 +15,10 @@ interface Stats {
   businesses: Business[],
   clients: Client[],
   services: Service[],
+  availability: BaseAvailability[],
 }
 
-export const Stats: React.FC<Stats> = ({appointments, businesses, clients, services}) => {
+export const Stats: React.FC<Stats> = ({appointments, businesses, clients, services, availability}) => {
 
   const [start, end] = getCurrentWeek();
   const [formOpen, setFormOpen] = useState<boolean>(false);
@@ -44,7 +46,7 @@ export const Stats: React.FC<Stats> = ({appointments, businesses, clients, servi
         </div>
       </div>
       
-      <AppointmentForm services={services} clients={clients} businesses={businesses} open={formOpen} setOpen={setFormOpen} />
+      <AppointmentForm availability={availability} services={services} clients={clients} businesses={businesses} open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }

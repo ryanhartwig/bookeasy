@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Resets state of subsequent state when a state value changes, based on the order of inputs
+ * Resets state of subsequent state chunks when a state value changes, based on the order of inputs
  */
 export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<any>>][][], resetValue: any = undefined) => {
 

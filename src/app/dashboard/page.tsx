@@ -18,6 +18,7 @@ import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { Stats } from './stats';
 import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
+import { getUserAvailability } from '@/utility/functions/fetch/getUserAvailability';
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
@@ -25,6 +26,7 @@ export default async function Page() {
   const { data: services } = await getAllServices(userId);
   const { data: clients } = await getAllClients(userId);
   const { data: businesses } = await  getAllBusinesses(userId);
+  const { data: availability} = await getUserAvailability(userId);
 
   const [start, end] = getCurrentWeek();
   return (
@@ -32,7 +34,7 @@ export default async function Page() {
       <Header text='Dashboard' />
       <div id="dashboard" className={styles.dashboard}>
         <SecondaryHeader>
-          <Stats services={services} clients={clients} appointments={appointments} businesses={businesses} />
+          <Stats availability={availability} services={services} clients={clients} appointments={appointments} businesses={businesses} />
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />

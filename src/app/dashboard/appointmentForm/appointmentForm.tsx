@@ -16,6 +16,8 @@ import { BsFillCameraVideoFill } from 'react-icons/bs';
 import styles from './appointmentForm.module.scss';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
+import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
+import { getUserAvailability } from "@/utility/functions/fetch/getUserAvailability"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -23,6 +25,7 @@ interface AppointmentFormProps {
   businesses: Business[],
   clients: Client[],
   services: Service[],
+  availability: BaseAvailability[],
 }
 
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses, clients, services}) => {
@@ -34,6 +37,12 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
+
+  const [availabilitySlices, setAvailabilitySlices] = useState<AvailabilitySlice[]>();
+  const [availabilityMap, setAvailabilityMap] = useState<Map<string, BaseAvailability>>(new Map());
+
+
+  
 
   const startEndDates = useMemo(() => {
     if (!date || !hours || min === undefined || !period || !selectedService) return [0, 0];
@@ -52,6 +61,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
     return [start,end];
   }, [date, hours, min, period, selectedService]);
+
+
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
