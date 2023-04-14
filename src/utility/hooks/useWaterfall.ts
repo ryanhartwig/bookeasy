@@ -10,17 +10,20 @@ export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<an
   const refs = useRef<any[]>(states);
 
   useEffect(() => {
+    
     for (let i = 0; i < states.length; i++) {
       if (refs.current[i] !== states[i]) {
-        // setters.slice(i + 1).forEach(setter => setter(resetValue));
-        console.log(refs.current[i])
-        refs.current = refs.current.map((stateRef, ind) => {
-          return ind <= i
-            ? stateRef
-            : undefined
-        });
+        console.log('found diff');
+        setters.slice(i + 1).forEach(setter => setter(resetValue));
+
+        for (let j = 0; j < states.length; j++) {
+          refs.current[j] = j <= i ? states[j] : undefined;
+        }
+
+        console.log(states);
+        console.log(refs.current);
         break;
       }
     }
-  }, [resetValue, setters, states]);
+  }, [resetValue, setters, state, states]);
 }

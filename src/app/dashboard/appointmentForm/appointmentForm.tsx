@@ -7,7 +7,7 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
