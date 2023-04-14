@@ -108,7 +108,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <Select list={servicesList} selected={serviceElement} placeholder="..." />
         <p>Select date and time</p>
         <input type='date' className={styles.dateInput} />
-        
+        <div className={styles.timeSelect}>
+          <Select list={[]} placeholder="hr" />
+          <Select list={[]} placeholder="min" />
+          <Select list={[]} />
+        </div>
       </div>
       <hr />
       <p className={styles.appointmentDate}>...</p>        
