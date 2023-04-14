@@ -135,7 +135,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>
           <Select list={hoursList} selected={hours ? <p>{hours}</p> : undefined} placeholder="hr" />
-          <Select list={minList} selected={min ? <p>{min}</p> : undefined} placeholder="min" />
+          <p>:</p>
+          <Select list={minList} selected={min !== undefined ? <p>{min === 0 ? '00' : min}</p> : undefined} placeholder="min" />
           <Select list={periodList} selected={<p>{period}</p>} />
         </div>
       </div>
