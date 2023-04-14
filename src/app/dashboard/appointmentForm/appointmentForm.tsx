@@ -73,10 +73,20 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }) ?? [];
 
     // Convert start and end times to military HR:MN time for comparison check
-    const [start, end] = startEndDates.map(d => new Date(d).toTimeString().split(' ')[0].split(':').slice(0, 2).join(':'));
+    const [start, end]: [number, number] = startEndDates
+      .map(d => new Date(d)
+        .toTimeString()
+        .split(' ')[0]
+        .split(':')
+        .slice(0, 2)
+        .join(''))
+      .map(d => Number(d)) as [number,number]
+
+      console.log(start, end);
 
     return current.some((slice) => {
-      const range: [string, string] = [slice.start, slice.end];
+      const range: [number, number] = [slice.start, slice.end]
+        .map(str => Number(str.split(':').join(''))) as [number, number];
       return inRange(range, start) && inRange(range, end);
     });
   }, [availabilityMap, selectedBusiness, startEndDates]);
