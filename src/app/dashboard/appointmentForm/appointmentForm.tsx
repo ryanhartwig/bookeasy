@@ -95,20 +95,23 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [availabilityMap, selectedBusiness, startEndDates]);
 
   
+  const appointment = useMemo<Appointment | null>(() => {
+    if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
 
-  const [appointment, setAppointment] = useState<Appointment>({
-    businessId: selectedBusiness?.id ?? '',
-    clientId: selectedClient?.id ?? "",
-    endDate: 0,
-    id: "",
-    isPaid: false,
-    isVideo: false,
-    serviceCost: 0,
-    serviceDuration: 0,
-    serviceId: "",
-    startDate: 0,
-    userId: userId,
-  });
+    return {
+      businessId: selectedBusiness.id,
+      clientId: selectedClient.id,
+      endDate: startEndDates[1],
+      id: "",
+      isPaid: false,
+      isVideo: selectedService.isVideo,
+      serviceCost: selectedService.cost,
+      serviceDuration: selectedService.duration,
+      serviceId: selectedService.id,
+      startDate: startEndDates[0],
+      userId: userId,
+    }
+  }, [selectedBusiness, selectedClient, selectedService, startEndDates]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -198,7 +201,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <hr />
       <p className={styles.appointmentDate}>{startEndDates ? formatFullDateString(startEndDates[0]) : '...'}</p>        
       <AppointmentActionCard 
-        app={appointment} 
+        app={{startDate: startEndDates?.[0] ?? 0, id: "template"} as Appointment} 
         service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
         client={selectedClient ?? {name: '...'} as Client}
         mini
