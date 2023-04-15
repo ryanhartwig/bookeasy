@@ -17,9 +17,10 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   escapeCloses?: boolean,
   actionButtonText?: string,
   onAction?: (...args: any) => any,
+  actionButtonDisabled?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -57,7 +58,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCl
             {content}
           </div>
           {actionButtonText && 
-            <div className='Modal-actions' onClick={onAction}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={!actionButtonDisabled ? onAction : undefined}>
               <hr/>
               <p>{actionButtonText}</p>
             </div>
