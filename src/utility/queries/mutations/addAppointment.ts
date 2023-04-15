@@ -77,23 +77,23 @@ export const addAppointment = async (appointment: AppointmentInput) => {
   let lastSuccessfulOperation = 'none';
   
   try {
-    const { data } = await client.query({ query: appointmentCreate, variables: {
+    const { data } = await client.mutate({ mutation: appointmentCreate, variables: {
       ...appointment,
       id: undefined
     } });
 
     lastSuccessfulOperation = 'create appointment';
 
-    appointmentId = data.appointment.id;
+    appointmentId = data.appointmentCreate.appointment.id;
 
-    await client.query({ query: linkUser, variables: {
+    await client.mutate({ mutation: linkUser, variables: {
       userId: appointment.userId,
       appointmentId,
     }});
 
     lastSuccessfulOperation = 'link user';
     
-    await client.query({ query: linkClient, variables: {
+    await client.mutate({ mutation: linkClient, variables: {
       clientId: appointment.clientId,
       appointmentId,
     }});
