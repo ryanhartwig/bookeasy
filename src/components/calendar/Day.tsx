@@ -49,10 +49,10 @@ export const Day: React.FC<DayProps> = ({date, style, viewing, onSelect, selecte
             const service = services.get(app.serviceId);
             const client = clients.get(app.clientId);
             const color = service?.color ?? 'initial';
-
+            console.log(service)
             return (
               <div key={app.id} className='Day-appointment' style={{borderColor: color}}>
-                <p>{app.serviceName}</p>
+                <p>{service?.name}</p>
               </div>
             )
           }

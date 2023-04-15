@@ -106,8 +106,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     serviceCost: 0,
     serviceDuration: 0,
     serviceId: "",
-    serviceName: "...",
-    serviceProvider: "...",
     startDate: 0,
     userId: userId,
   });
