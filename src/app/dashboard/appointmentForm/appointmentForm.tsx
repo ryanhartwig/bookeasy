@@ -45,8 +45,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     return map;
   }, [availability]);
 
-  const startEndDates: [number, number] = useMemo(() => {
-    if (!date || !hours || min === undefined || !period || !selectedService) return [0, 0];
+  const startEndDates: [number, number] | undefined = useMemo(() => {
+    if (!date || !hours || min === undefined || !period || !selectedService) return;
 
     const dateObj = new Date();
     const [year, month, day] = date.split('-').map(d => Number(d));
@@ -205,7 +205,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         client={selectedClient ?? {name: '...'} as Client}
         mini
       />
-      {!isWithinBookingHours && <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>}
+      {!isWithinBookingHours && startEndDates && <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>}
     </Modal>
   )
 }
