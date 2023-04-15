@@ -7,17 +7,15 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 
-
 import styles from './appointmentForm.module.scss';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
-import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
-import { getUserAvailability } from "@/utility/functions/fetch/getUserAvailability"
+import { BaseAvailability } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
 
 interface AppointmentFormProps {
@@ -38,6 +36,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
+
+  useWaterfall([
+    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
+  ]);
 
   const availabilityMap = useMemo(() => {
     const map = new Map<string, BaseAvailability>();
@@ -91,10 +94,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     });
   }, [availabilityMap, selectedBusiness, startEndDates]);
 
-  useWaterfall([
-    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
-  ]);
+  
 
   const [appointment, setAppointment] = useState<Appointment>({
     businessId: selectedBusiness?.id ?? '',
@@ -205,7 +205,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         client={selectedClient ?? {name: '...'} as Client}
         mini
       />
-      {!isWithinBookingHours && startEndDates && <p className={styles.warning}>* warning: this appointment falls out of booking hours</p>}
+      <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
     </Modal>
   )
 }
