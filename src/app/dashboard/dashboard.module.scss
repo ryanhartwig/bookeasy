@@ -1,5 +1,9 @@
+@use 'src/app/globalutil';
+
+
 .dashboard {
   height: calc(100% - var(--header-height));
+  position: relative;
 }
 
 .header {
@@ -9,18 +13,20 @@
   display: flex;
   align-content: center;
 
-  white-space: nowrap;
+  position: relative;
 
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  
-    padding: 8px 30px;
-    margin: 5px 0;
-    border-right: 1px solid var(--dividers);
-  }
+  white-space: nowrap;
+}
+
+.stat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  padding: 8px 30px;
+  margin: 5px 0;
+  border-right: 1px solid var(--dividers);
 }
 
 .headerLarge {
@@ -35,6 +41,51 @@
   flex-direction: column;
 }
 
+/* Add app button */
+.addApointment {
+  height: 100%;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  right: 0;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  
+  > div {
+    @include globalutil.shadow;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    
+    height: 33px;
+    width: 155px;
+  
+    background: #243666;
+    border-radius: 10000px;
+  
+    color: var(--font-on-dark);
+    border-right: none !important;
+
+    opacity: 0.85;
+
+    transition: opacity 200ms;
+
+    &:hover {
+      opacity: 1;
+    }
+  
+    p {
+      font-size: 13px;
+      font-weight: 300;
+    }
+  }
+}
 
 /* Appointment Cards */
 .appointments {

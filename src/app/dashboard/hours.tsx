@@ -19,7 +19,7 @@ interface HoursProps {
 }
 
 interface AppointmentData extends Appointment {
-  client_name: string,
+  clientName: string,
   serviceName: string,
   color: string,
 }
@@ -30,7 +30,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
 
   useEffect(() => {
     setAppointmentIndices(p => {
-      const prev = new Map();
+      const prev = new Map<number, AppointmentData>();
 
       appointments.forEach(app => {
         const date = new Date(app.startDate);
@@ -40,8 +40,8 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
   
         prev.set(calculatedIndex, {
           ...app,
-          client_name: client?.name || '',
-          service_name: service?.name || '',
+          clientName: client?.name || '',
+          serviceName: service?.name || '',
           color: service?.color || '',
         });
       });
@@ -107,7 +107,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
           {appointment && 
             <div className={clsx(styles.weekly_app, 'noselect')} style={{height, borderColor: color}}>
               <div>
-                <p style={{fontSize: 12}}>{appointment.client_name}</p>
+                <p style={{fontSize: 12}}>{appointment.clientName}</p>
                 <p>{formatTime(appointment.startDate)}</p>
               </div>
               <p>{appointment.serviceName}</p>

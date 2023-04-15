@@ -38,6 +38,14 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
       .toFixed(2)
   }, [booked, previous]);
 
+  const servicesMap = useMemo(() => {
+    const map = new Map<string, Service>();
+    previous.concat(booked)
+      .forEach(app => map.set(app.id, services.find(s => s.id === app.serviceId)!));
+
+    return map;
+  }, [booked, previous, services]);
+
   const [tab, setTab] = useState<number>(0);
 
   return (
@@ -97,8 +105,8 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
-              ? booked.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)
-              : previous.map((app) => <AppointmentCard key={app.id} app={app} services={services} />)}
+              ? booked.map((app) => <AppointmentCard key={app.id} app={app} service={servicesMap.get(app.id)!} />)
+              : previous.map((app) => <AppointmentCard key={app.id} app={app} service={servicesMap.get(app.id)!} />)}
           </div>
         </Card>
       </div>

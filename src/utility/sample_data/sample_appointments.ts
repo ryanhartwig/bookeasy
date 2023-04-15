@@ -16,8 +16,6 @@ export const sample_appointments: Appointment[] = [{
     endDate: sampleEnd.getTime(),
     serviceCost: 0,
     serviceDuration: 60,
-    serviceName: 'Initial Consult',
-    serviceProvider: 'Christina Bronson',
     isVideo: true,
     isPaid: true,
   }, {
@@ -30,8 +28,6 @@ export const sample_appointments: Appointment[] = [{
     endDate: sampleEnd.getTime() + 1000 * 60 * 60 * 1.75,
     serviceCost: 120,
     serviceDuration: 75,
-    serviceName: 'Full Consult',
-    serviceProvider: 'Johnson Team',
     isVideo: true,
     isPaid: true,
   }

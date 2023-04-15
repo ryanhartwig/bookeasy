@@ -1,0 +1,46 @@
+.input {
+  cursor: pointer;
+
+  position: relative;
+  
+  border: 1px solid grey;
+  border-radius: 5px;
+
+  padding-left: 8px;
+  
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 36px;
+}
+
+.down {
+  position: absolute;
+  right: 10px;
+  top: 0;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.options {
+  cursor: auto;
+  background: #f8f8f8;
+  
+  position: absolute;
+  top: 38px;
+  left: 0;
+
+  overflow-y: auto;
+
+  z-index: 20;
+  
+  width: 100%;
+  height: fit-content;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+

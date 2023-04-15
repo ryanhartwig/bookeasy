@@ -3,15 +3,15 @@
   justify-content: center;
   align-items: center;
   
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.465);
   z-index: 15;
 
-  top: 0;
-  left: 0;
+  top: 54px;
+  left: 206px;
 
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 54px);
+  width: calc(100% - 206px);
   max-width: 100%;
   max-height: 100%;
 
@@ -24,8 +24,6 @@
   height: fit-content;
   width: fit-content;
 
-  overflow: hidden;
-
   background: white;
 
   max-height: 95%;
@@ -36,7 +34,7 @@
 
 
 .Modal-header {
-  padding: 8px 0;
+  padding: 10px 0;
   text-align: center;
 
   h2 {
@@ -63,3 +61,32 @@
   top: 0;
   color: black;
 }
+
+.Modal-actions {
+  p {
+    font-size: 18px;
+    color: var(--font-utility);
+    text-align: center;
+    font-weight: 400;
+    margin: 10px auto;
+    padding: 0 8px;
+
+    width: fit-content;
+
+    cursor: pointer;
+
+    opacity: 0.8;
+
+    transition: opacity 200ms;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+

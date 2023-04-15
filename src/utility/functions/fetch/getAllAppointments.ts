@@ -15,9 +15,7 @@ export const query = gql`
           service { id }
           startDate
           endDate
-          serviceName
           serviceDuration
-          serviceProvider
           serviceCost
           isVideo
           isPaid
@@ -45,9 +43,7 @@ export const parseToAppointment = (data: any, userId: string): Appointment => {
     id: data.id,
     startDate: Number(data.startDate),
     endDate: Number(data.endDate),
-    serviceName: data.serviceName,
     serviceDuration: data.serviceDuration,
-    serviceProvider: data.serviceProvider,
     serviceCost: data.serviceCost,
     isVideo: data.isVideo,
     isPaid: data.isPaid,
