@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 import { getClient } from "@/utility/functions/getClient";
-import type { Appointment } from '@/types/Appointment';
 
 export const appointmentCreate = gql`
   mutation CreateAppointment(
@@ -58,16 +57,32 @@ const linkClient = gql`
   }
 `;
 
-export const addAppointment = async (appointment: Appointment) => {
+export interface AppointmentInput {
+  userId: string,
+  businessId: string,
+  clientId: string,
+  serviceId: string,
+  startDate: string,
+  endDate: string,
+  serviceDuration: number,
+  serviceCost: number,
+  isVideo: boolean,
+  isPaid: boolean,
+};
+
+export const addAppointment = async (appointment: AppointmentInput) => {
   const client = getClient();
   let error: any = undefined;
   let appointmentId: null | string = null;
+  let lastSuccessfulOperation = 'none';
   
   try {
     const { data } = await client.query({ query: appointmentCreate, variables: {
       ...appointment,
       id: undefined
     } });
+
+    lastSuccessfulOperation = 'create appointment';
 
     appointmentId = data.appointment.id;
 
@@ -76,10 +91,14 @@ export const addAppointment = async (appointment: Appointment) => {
       appointmentId,
     }});
 
+    lastSuccessfulOperation = 'link user';
+    
     await client.query({ query: linkClient, variables: {
       clientId: appointment.clientId,
       appointmentId,
     }});
+
+    lastSuccessfulOperation = 'link client';
   } catch(e) {
     error = e;
   }
@@ -87,5 +106,6 @@ export const addAppointment = async (appointment: Appointment) => {
   return {
     error,
     data: appointmentId,
+    lastSuccessfulOperation,
   }
 }

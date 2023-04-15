@@ -7,7 +7,7 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
@@ -17,6 +17,7 @@ import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 import { BaseAvailability } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
+import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/addAppointment"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -95,23 +96,43 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [availabilityMap, selectedBusiness, startEndDates]);
 
   
-  const appointment = useMemo<Appointment | null>(() => {
+  const appointment = useMemo<AppointmentInput | null>(() => {
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
 
     return {
       businessId: selectedBusiness.id,
       clientId: selectedClient.id,
-      endDate: startEndDates[1],
-      id: "",
+      endDate: startEndDates[1].toString(),
       isPaid: false,
       isVideo: selectedService.isVideo,
       serviceCost: selectedService.cost,
       serviceDuration: selectedService.duration,
       serviceId: selectedService.id,
-      startDate: startEndDates[0],
+      startDate: startEndDates[0].toString(),
       userId: userId,
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates]);
+
+  console.log(JSON.stringify(appointment));
+
+  const onSubmitForm = useCallback(() => {
+    if (!appointment) return;
+    
+    ;(async() => {
+      const { data, error, lastSuccessfulOperation } = await addAppointment(appointment);
+
+      if (error) {
+        console.log(error);
+        console.log(lastSuccessfulOperation);
+      } else { 
+        setSelectedBusiness(undefined);
+        setDate(undefined);
+        setHours(undefined);
+        setMin(undefined);
+        setPeriod('am');
+      }
+    })()
+  }, [appointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -180,7 +201,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   ));
 
   return (
-    <Modal actionButtonText='Confirm' actionButtonDisabled open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
+    <Modal actionButtonText='Confirm' onAction={onSubmitForm} actionButtonDisabled={!appointment} open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
