@@ -10,7 +10,7 @@ export const sample_user: User = {
   email: 'christina.bronson@gmail.com',
   businessIds: [['johnsonteam', false]],
   avatar: avatarFemale,
-  created: Date.now(),
+  created: Date.now().toString(),
 };
 
 export const sample_members: User[] = [{
@@ -20,7 +20,7 @@ export const sample_members: User[] = [{
   email: 'johng@gmail.com',
   businessIds: [['johnsonteam', false]],
   avatar: avatarMale,
-  created: Date.now(),
+  created: Date.now().toString(),
 }, {
   id: 'phillipwest',
   ownBusinessId: '',
@@ -28,7 +28,7 @@ export const sample_members: User[] = [{
   email: 'philwest@gmail.com',
   businessIds: [['johnsonteam', false]],
   avatar: avatarMale,
-  created: Date.now(),
+  created: Date.now().toString(),
 }, {
   id: 'Marly Johnson',
   ownBusinessId: '',
@@ -36,5 +36,5 @@ export const sample_members: User[] = [{
   email: 'mjohnson@gmail.com',
   businessIds: [['johnsonteam', true]],
   avatar: avatarFemale,
-  created: Date.now(),
+  created: Date.now().toString(),
 }]
