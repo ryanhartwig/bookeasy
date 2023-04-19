@@ -205,7 +205,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
-        <Select list={businessesList} selected={businessElement} placeholder="..." />
+        <Select disabled list={businessesList} selected={businessElement} placeholder="..." />
         <p>Select a client</p>
         <Select list={clientsList} selected={clientElement} placeholder="..." />
         <p>Select a service</p>
