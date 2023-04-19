@@ -37,11 +37,11 @@ export const Select: React.FC<SelectProps> = ({list, placeholder = "", selected,
       
       {optionsShowing && !disabled && 
         <div className={styles.options} ref={optionsRef}>
-          {list.map(option => (
+          {list.length ? list.map(option => (
             <div key={option.key} className={styles.option}>
               {option}
             </div>
-          ))}
+          )) : <p className={styles.empty}>No options to show</p>}
         </div>
       }
     </div>
