@@ -205,11 +205,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
-        <Select disabled list={businessesList} selected={businessElement} placeholder="..." />
+        <Select list={businessesList} selected={businessElement} placeholder="..." />
         <p>Select a client</p>
-        <Select list={clientsList} selected={clientElement} placeholder="..." />
+        <Select disabled={!selectedBusiness} list={clientsList} selected={clientElement} placeholder="..." />
         <p>Select a service</p>
-        <Select list={servicesList} selected={serviceElement} placeholder="..." />
+        <Select disabled={!selectedBusiness} list={servicesList} selected={serviceElement} placeholder="..." />
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>
