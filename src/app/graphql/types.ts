@@ -1,9 +1,4 @@
-export const typeDefs = `#graphql
-  type Query {
-    hello: String!,
-    testQuery: String!,
-  }
-
+export const types = `#graphql
   type UserPrefs {
     private_photo: Boolean!,
     private_email: Boolean!,

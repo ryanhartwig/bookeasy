@@ -6,6 +6,9 @@
 #   todo(id: String!, name: String!, completed: Boolean!): Todo!
 # }
 
+# type Query {
+
+# }
 
 type UserPrefs {
   private_photo: Boolean!,
