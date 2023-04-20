@@ -4,9 +4,15 @@ import { throwError } from "@/utility/gql/throwError";
 export const userResolvers = {
   Query: {
     getUser: async (parent: any, args: any) => {
+      const { id } = args;
 
-      const response = await db.query('select * from users where id = $1', [args.id]);
+      if (!id) {
+        throwError('No id argument provided');
+      }
       
+      const response = await db.query('select * from users where id = $1', [args.id]);
+
+      return response.rows[0];      
     }
   }
 }

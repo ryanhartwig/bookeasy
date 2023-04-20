@@ -11,7 +11,7 @@ export const types = `#graphql
 
   type User {
     id: ID!,
-    own_business: Business,
+    own_business_id: String,
     businesses: [Business!]!,
     name: String!,
     email: String!,
