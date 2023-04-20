@@ -1,141 +1,110 @@
-type BusinessPrefs {
-  minBookingNotice: Int @default(value: 86400000),
-  minCancelNotice: Int @default(value: 86400000),
-  maxBookAhead: Int @default(value: 2592000000),
-}
+# type Query {
+#   todos: [Todo!]!
+# }
 
-type UserMeta @model {
-  user: User!,
-  elevated: Boolean!,
-  dateAdded: String!,
-}
+# type Mutation {
+#   todo(id: String!, name: String!, completed: Boolean!): Todo!
+# }
 
-type Business @model {
-  name: String!,
-  email: String,
-  phone: String,
-  prefs: BusinessPrefs!,
-  users: [User!]!,
-  clients: [Client!]!,
-  services: [Service!]!,
-  appointments: [Appointment!]!,
-  userMeta: [UserMeta!]!,
-}
 
 type UserPrefs {
-  privatePhoto: Boolean! @default(value: false),
-  privateEmail: Boolean! @default(value: true),
-  privatePhone: Boolean! @default(value: true),
-  notificationBooking: Boolean! @default(value: true),
-  notificationReminder: Boolean! @default(value: true),
-  notificationOverview: Boolean! @default(value: false),
-  notificationOverviewTime: String,
+  private_photo: Boolean!,
+  private_email: Boolean!,
+  private_phone: Boolean!,
+  notification_booking: Boolean!,
+  notification_reminder: Boolean!,
+  notification_overview: Boolean!,
+  notification_overview_time: String
 }
 
-type User @model {
+type User {
+  id: ID!,
+  own_business: Business,
+  businesses: [Business!]!,
   name: String!,
-  email: String! @unique,
-  phone: String,
-  avatar: String,
-  businesses: [Business!]! @relation(name: "user_teams"),
-  ownBusiness: Business @relation(name: "user_own_business"),
-  prefs: UserPrefs!,  
-  assignedClients: [Client!]!,
-  notifications: [Notification!]!,
-  services: [Service!]!,
-  appointments: [Appointment!]!,
-  availability: [BaseAvailability!]!,
+  email: String!,
+  phone: String!,
+  created: String,
+  prefs: UserPrefs!,
 }
 
-type Notification @model {
-  user: User!,
-  text: String!,
-  link: String,
-  seen: Boolean @default(value: false),
-}
-
-type Client @model {
-  business: Business! @relation(name: "client_business"),
-  name: String!,
-  email: String! @unique,
-  notes: String,
-  address: String,
-  phone: String,
-  active: Boolean @default(value: true),
-  assignedUsers: [User!]!,
-  appointments: [Appointment!]!,
-  avatar: String,
-}
-
-type Service @model {
-  business: Business! @relation(name: "service_business"),
+type Service {
+  id: ID!,
+  business: Business!,
   name: String!,
   duration: Int!,
   provider: String!,
   cost: Int!,
-  isVideo: Boolean!,
+  is_video: Boolean!,
   color: String!,
-  assignedUsers: [User!]!,
+  assigned_users: [User!]!
 }
 
-type Appointment @model {
-  user: User! @relation(name: "app_user"),
-  business: Business! @relation(name: "app_business"),
-  client: Client! @relation(name: "app_client"),
-  service: Service! @relation(name: "app_service"),
-  startDate: String!,
-  endDate: String!,
-  serviceDuration: Int!,
-  serviceCost: Int!,
-  isVideo: Boolean!,
-  isPaid: Boolean! @default(value: false),
+type Notification {
+  user: User!,
+  notification: String!,
+  link: String,
+  seen: Boolean!,
+  created: String!
+}
+
+# This represents the role a user plays within a business and the date they were added.
+# It is only used when fetching a Businesses user list
+type BusinessUser {
+  user: User!,
+  elevated: Boolean!,
+  date_added: Boolean!
+}
+
+type BusinessClient {
+  client: Client,
+  business: Business!,
+  users: [BusinessUser!]!,
+  notes: String,
+  name: String!,
+  email: String,
+  address: String,
+  phone: String,
+  joined_date: String!
+}
+
+type Client {
+  id: ID!,
+  name: String!,
+  email: String!,
+  address: String,
+  phone: String,
+  avatar: String
+}
+
+type Business {
+  id: ID!,
+  name: String!,
+  email: String,
+  phone: String,
+  min_booking_notice: Int!,
+  min_cancel_notice: Int!,
+  max_book_ahead: Int!
 }
 
 type AvailabilitySlice {
+  user: User!,
+  business: Business!,
   day: Int!,
-  start: String!,
-  end: String!,
+  start_time: String!,
+  end_time: String!
 }
 
-type TimeOff {
-  startPeriod: Int!,
-  endPeriod: Int!,
-  reason: String!,
+type Appointment {
+  id: ID!,
+  user: User!,
+  service: Service!,
+  business: Business!,
+  client: Client!,
+  start_date: String!,
+  end_date: String!,
+  service_duration: Int!,
+  service_cost: Int!,
+  is_video: Boolean!,
+  is_paid: Boolean!
 }
-
-type BaseAvailability @model {
-  user: User! @relation(name: "base_avail_user"),
-  business: Business! @relation(name: "base_avail_business"),
-  slices: [AvailabilitySlice!]!,
-  timeOff: [TimeOff!]!,
-}
-
-
-# christina bronson: user_01GWHJK2PJ3C1DGYJY32YSJFQ3
-# john greenwood: user_01GWJ9XXHTZGAJJ28DZ47BEBQP
-# phillip west: user_01GWJ9XXHTZGAJJ28DZ47BEBQQ
-# marly johsnon: user_01GWJ9XXHTZGAJJ28DZ47BEBQR
-
-# christina bronson
-# business_01GWHNAX5BM0Q7K2GVS5YVJBKC
-
-# johnson team id
-# business_01GWJ9XXHTZGAJJ28DZ47BEBQN
-
-# steven price: client_01GWJEJWN2053A8HJSX4HGFJX5
-# alexander stewart: client_01GWJEP84FDSE3TKDBK6656S8C
-# samuel cooper: client_01GWJET8ERJ7PJYXZK6QVHFX5W
-# ethan blackwood: client_01GWJERVBTMTQRXX5VG6CWZ3HW
-# emilie gray: client_01GWJEQKW2ZBVS3N2PZRE0PV85
-
-# init consult: service_01GWJFHH8PQKE5QG8REM8KT90N
-# full consult: service_01GWJFK2RHYKTE4YRXWZNVD441
-# review meeting: service_01GWJFKVPW1M4JFESKNZV1AJ65
-
-# users, businesses, linked
-
-# appointments:
-# steven & christina init consult: appointment_01GWJGT2D7VCA17AN9PAG9A8QE
-# eimilie and chrsitina full cons: appointment_01GWJH273QQ47HAYAQWZGC6YWW
-
-# avail: baseavailability_01GWJGBHKXXBJPDA5FMGB70CXP

@@ -1,0 +1,111 @@
+type BusinessPrefs {
+  minBookingNotice: Int @default(value: 86400000),
+  minCancelNotice: Int @default(value: 86400000),
+  maxBookAhead: Int @default(value: 2592000000),
+}
+
+type UserMeta @model {
+  user: User!,
+  elevated: Boolean!,
+  dateAdded: String!,
+}
+
+type Business @model {
+  name: String!,
+  email: String,
+  phone: String,
+  prefs: BusinessPrefs!,
+  users: [User!]!,
+  clients: [Client!]!,
+  services: [Service!]!,
+  appointments: [Appointment!]!,
+  userMeta: [UserMeta!]!,
+}
+
+type UserPrefs {
+  privatePhoto: Boolean! @default(value: false),
+  privateEmail: Boolean! @default(value: true),
+  privatePhone: Boolean! @default(value: true),
+  notificationBooking: Boolean! @default(value: true),
+  notificationReminder: Boolean! @default(value: true),
+  notificationOverview: Boolean! @default(value: false),
+  notificationOverviewTime: String,
+}
+
+type User @model {
+  name: String!,
+  email: String! @unique,
+  phone: String,
+  avatar: String,
+  businesses: [Business!]! @relation(name: "user_teams"),
+  ownBusiness: Business @relation(name: "user_own_business"),
+  prefs: UserPrefs!,  
+  assignedClients: [Client!]!,
+  notifications: [Notification!]!,
+  services: [Service!]!,
+  appointments: [Appointment!]!,
+  availability: [BaseAvailability!]!,
+}
+
+type Notification @model {
+  user: User!,
+  text: String!,
+  link: String,
+  seen: Boolean @default(value: false),
+}
+
+type Client @model {
+  business: Business! @relation(name: "client_business"),
+  name: String!,
+  email: String! @unique,
+  notes: String,
+  address: String,
+  phone: String,
+  active: Boolean @default(value: true),
+  assignedUsers: [User!]!,
+  appointments: [Appointment!]!,
+  avatar: String,
+}
+
+type Service @model {
+  business: Business! @relation(name: "service_business"),
+  name: String!,
+  duration: Int!,
+  provider: String!,
+  cost: Int!,
+  isVideo: Boolean!,
+  color: String!,
+  assignedUsers: [User!]!,
+}
+
+type Appointment @model {
+  user: User! @relation(name: "app_user"),
+  business: Business! @relation(name: "app_business"),
+  client: Client! @relation(name: "app_client"),
+  service: Service! @relation(name: "app_service"),
+  startDate: String!,
+  endDate: String!,
+  serviceDuration: Int!,
+  serviceCost: Int!,
+  isVideo: Boolean!,
+  isPaid: Boolean! @default(value: false),
+}
+
+type AvailabilitySlice {
+  day: Int!,
+  start: String!,
+  end: String!,
+}
+
+type TimeOff {
+  startPeriod: Int!,
+  endPeriod: Int!,
+  reason: String!,
+}
+
+type BaseAvailability @model {
+  user: User! @relation(name: "base_avail_user"),
+  business: Business! @relation(name: "base_avail_business"),
+  slices: [AvailabilitySlice!]!,
+  timeOff: [TimeOff!]!,
+}
