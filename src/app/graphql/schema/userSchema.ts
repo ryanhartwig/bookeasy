@@ -10,8 +10,7 @@ export const userResolvers = {
         throwError('No id argument provided');
       }
       
-      const response = await db.query('select * from users where id = $1', [args.id]);
-
+      const response = await db.query('select * from users where id = $1', [id]);
       return response.rows[0];      
     }
   }
@@ -19,7 +18,7 @@ export const userResolvers = {
 
 export const userTypeDefs = `#graphql
   type Query {
-    getUser(id: ID!): User!,
+    getUser(id: ID!): User,
     # getUserPrefs(user_id: ID!): UserPrefs
   }
 `;
