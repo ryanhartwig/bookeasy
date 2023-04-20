@@ -17,7 +17,6 @@ export const types = `#graphql
     email: String!,
     phone: String!,
     created: String,
-    prefs: UserPrefs!,
   }
 
   type Service {

@@ -1,23 +1,19 @@
 import db from "@/utility/db";
+import { throwError } from "@/utility/gql/throwError";
 
 export const userResolvers = {
   Query: {
-    testQuery: async () => {
-      const response = await db.query('select * from users');
-  
-      if (response.rowCount) {
-        return response.rows[0].name as string;
-      } else {
-        return 'try again :('
-      }
-    },
-    testUser: () => 'teset user',
+    getUser: async (parent: any, args: any) => {
+
+      const response = await db.query('select * from users where id = $1', [args.id]);
+      
+    }
   }
 }
 
 export const userTypeDefs = `#graphql
   type Query {
-    testQuery: String!,
-    testUser: String!
+    getUser(id: ID!): User!,
+    # getUserPrefs(user_id: ID!): UserPrefs
   }
 `;
