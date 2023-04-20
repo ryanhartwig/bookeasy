@@ -1,24 +1,32 @@
 import db from "@/utility/db";
-import { throwError } from "@/utility/gql/throwError";
+import { throwGQLError } from "@/utility/gql/throwGQLError";
+
 
 export const userResolvers = {
   Query: {
     getUser: async (parent: any, args: any) => {
-      const { id } = args;
-
-      if (!id) {
-        throwError('No id argument provided');
+      try {
+        const response = await db.query('select * from users where id = $1', [args.id]);
+        return response.rows[0];   
+      } catch(e:any) {
+        throwGQLError(e.message);
       }
-      
-      const response = await db.query('select * from users where id = $1', [id]);
-      return response.rows[0];      
-    }
+    },
+    getUserPrefs: async (parent:any, args: any) => {
+      try {
+        const response = await db.query('select * from user_prefs where user_id = $1', [args.user_id]);
+        return response.rows[0];
+      } catch(e:any) {
+        throwGQLError(e.message);
+      }
+    },
+    
   }
 }
 
 export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
-    # getUserPrefs(user_id: ID!): UserPrefs
+    getUserPrefs(user_id: ID!): UserPrefs
   }
 `;
