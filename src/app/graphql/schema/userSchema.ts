@@ -1,4 +1,4 @@
-import db from "@/app/db";
+import db from "@/utility/db";
 
 export const userResolvers = {
   Query: {
