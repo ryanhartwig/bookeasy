@@ -20,13 +20,30 @@ export const userResolvers = {
         throwGQLError(e.message);
       }
     },
-    
+    getUserBusinesses: async (parent: any, args: any) => {
+      try {
+        const ids = await db.query('select business_id from users_businesses where user_id = $1', [args.user_id]);
+        if (!ids.rowCount) return [];
+
+        const businesses: any[] = [];
+
+        for (const { business_id } of ids.rows) {
+          const response = await db.query('select * from business where id = $1', [business_id]);
+          businesses.push(response.rows[0]);
+        }
+
+        return businesses;
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    }
   }
 }
 
 export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
-    getUserPrefs(user_id: ID!): UserPrefs
+    getUserPrefs(user_id: ID!): UserPrefs,
+    getUserBusinesses(user_id: ID!): [Business!]!,
   }
 `;
