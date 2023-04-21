@@ -72,9 +72,9 @@ export const types = `#graphql
     name: String!,
     email: String,
     phone: String,
-    min_booking_notice: Int!,
-    min_cancel_notice: Int!,
-    max_book_ahead: Int!
+    min_booking_notice: String!,
+    min_cancel_notice: String!,
+    max_book_ahead: String!
   }
 
   type AvailabilitySlice {
