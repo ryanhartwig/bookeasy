@@ -7,6 +7,7 @@ import { Appointment } from '@/types/Appointment';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
 import { AppointmentActionCard } from './appointmentActionCard';
+import { useMutation, useQuery } from '@apollo/client';
 
 interface AppointmentsProps {
   appointments: Appointment[],
@@ -14,7 +15,23 @@ interface AppointmentsProps {
   clients: Client[],
 }
 
+import { gql } from '@apollo/client';
+import { useEffect } from 'react';
+
+const query = gql`
+  query {
+    testQuery
+  }
+`
+
 export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
+
+  const { data, loading } = useQuery(query);
+
+  useEffect(() => {
+    if (loading) return;
+    console.log(data.testQuery);
+  }, [data, loading]);
 
   return (
     <div className={styles.appointments}>

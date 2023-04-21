@@ -3,6 +3,7 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const userResolvers = {
   Query: {
+    testQuery: () => "Success!",
     getUser: async (parent: any, args: any) => {
       try {
         const response = await db.query('select * from users where id = $1', [args.id]);
@@ -54,5 +55,6 @@ export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
     getUserBusinesses(user_id: ID!): [Business!]!,
+    testQuery: String!,
   }
 `;
