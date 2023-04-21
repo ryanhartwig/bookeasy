@@ -17,20 +17,27 @@ interface AppointmentsProps {
 
 import { gql } from '@apollo/client';
 import { useEffect } from 'react';
+import { userId } from '@/utility/sample_data/sample_userId';
 
 const query = gql`
-  query {
-    testQuery
-  }
+  query($userId: ID!) {
+    getUserAppointments(user_id: $userId) {
+      start_date
+    }
+  } 
 `;
 
 export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
 
-  const { data, loading } = useQuery(query);
+  const { data, loading } = useQuery(query, {
+    variables: {
+      userId,
+    }
+  });
 
   useEffect(() => {
     if (loading) return;
-    console.log(data.testQuery);
+    console.log(data);
   }, [data, loading]);
 
   return (
