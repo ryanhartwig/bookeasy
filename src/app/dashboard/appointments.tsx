@@ -7,7 +7,7 @@ import { Appointment } from '@/types/Appointment';
 import { Service } from '@/types/Service';
 import { Client } from '@/types/Client';
 import { AppointmentActionCard } from './appointmentActionCard';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 
 interface AppointmentsProps {
   appointments: Appointment[],
@@ -22,7 +22,7 @@ const query = gql`
   query {
     testQuery
   }
-`
+`;
 
 export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
 
