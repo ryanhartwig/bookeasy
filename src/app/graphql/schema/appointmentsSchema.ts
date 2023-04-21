@@ -11,9 +11,9 @@ export const appointmentsResolvers = {
         
         if (range_start && range_end) {
           params.push(range_start, range_end);
-          query += ' and start_date <= $2 and end_date >= $3';
+          query += ' and start_date >= $2 and start_date <= $3';
         }
-        
+
         const response = await db.query(query, params);
 
         if (!response.rowCount) {
@@ -29,6 +29,6 @@ export const appointmentsResolvers = {
 
 export const appointmentsTypeDefs = `#graphql
   type Query {
-    getUserAppointments(user_id: ID!, start_date: String, end_date: String): [Appointment!]!,
+    getUserAppointments(user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
   }
 `;
