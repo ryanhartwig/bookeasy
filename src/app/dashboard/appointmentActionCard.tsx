@@ -18,18 +18,18 @@ export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app
 
   return (
     <Card key={app.id} className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
-      <div className={styles.appointment} style={{borderLeftColor: app.service.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
+      <div className={styles.appointment} style={{borderLeftColor: app?.service?.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
         <div>
           <div className={styles.app_header}>
-            <p>{app.service.name}</p>
-            <p>{app.service.duration}m</p>
+            <p>{app.service?.name}</p>
+            <p>{app.service?.duration}m</p>
           </div>
           <p className={styles.alt}>{formatTime(app.start_date)}</p>
         </div>
 
         <div className={styles.client}>
           <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-          <p>{app.client.name}</p>
+          <p>{app.client?.name}</p>
         </div>
 
         {!mini && 

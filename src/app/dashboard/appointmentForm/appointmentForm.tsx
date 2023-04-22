@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
-import { Appointment } from "@/types/Appointment"
+import { Appointment, AppointmentData } from "@/types/Appointment"
 import { Business, NewBusiness } from "@/types/Business"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
@@ -20,7 +20,7 @@ import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/ad
 import { useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM } from "@/utility/queries/businessQueries"
 import { User } from "@/types/User"
 
 interface AppointmentFormProps {
@@ -33,11 +33,26 @@ interface AppointmentFormProps {
   // availability: BaseAvailability[],
 }
 
+export interface FormClient {
+  id: string,
+  name: string,
+  avatar: string,
+}
+
+export interface FormService {
+  id: string,
+  name: string,
+  color: string,
+  is_video: boolean,
+  cost: number,
+  duration: number,
+}
+
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId}) => {
 
-  const [selectedBusiness, setSelectedBusiness] = useState<Business>();
-  const [selectedClient, setSelectedClient] = useState<Client>();
-  const [selectedService, setSelectedService] = useState<Service>();
+  const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
+  const [selectedClient, setSelectedClient] = useState<FormClient>();
+  const [selectedService, setSelectedService] = useState<FormService>();
   const [date, setDate] = useState<string>();
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
@@ -47,10 +62,22 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
 
+  // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
-  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }, skip: !userOwnBusinessId});
-  const { data: ownBusinessData, loading: loadingOwnBusiness } = useQuery(GET_BUSINESS, { variables: { userId }}); 
+  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
+  const { data: ownBusinessData, loading: loadingOwnBusiness } = useQuery(GET_BUSINESS, { variables: { businessId: userOwnBusinessId }, skip: !userOwnBusinessId}); 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+
+  // Depends on selectedBusiness state
+  const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { business_id: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { business_id: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  
+  useEffect(() => {
+    console.log(businesses);
+    console.log(ownBusinessData);
+    console.log(userData);
+    console.log(availabilityData);
+  }, [availabilityData, businesses, ownBusinessData, userData]);
 
   useEffect(() => {
     if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
@@ -130,7 +157,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       clientId: selectedClient.id,
       endDate: startEndDates[1].toString(),
       isPaid: false,
-      isVideo: selectedService.isVideo,
+      isVideo: selectedService.is_video,
       serviceCost: selectedService.cost,
       serviceDuration: selectedService.duration,
       serviceId: selectedService.id,
@@ -142,20 +169,20 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
     
-    ;(async() => {
-      const { data, error, lastSuccessfulOperation } = await addAppointment(appointment);
+    // ;(async() => {
+    //   const { data, error, lastSuccessfulOperation } = await addAppointment(appointment);
 
-      if (error) {
-        console.log(error);
-        console.log(lastSuccessfulOperation);
-      } else { 
-        setSelectedBusiness(undefined);
-        setDate(undefined);
-        setHours(undefined);
-        setMin(undefined);
-        setPeriod('am');
-      }
-    })()
+    //   if (error) {
+    //     console.log(error);
+    //     console.log(lastSuccessfulOperation);
+    //   } else { 
+    //     setSelectedBusiness(undefined);
+    //     setDate(undefined);
+    //     setHours(undefined);
+    //     setMin(undefined);
+    //     setPeriod('am');
+    //   }
+    // })()
   }, [appointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
@@ -169,16 +196,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     </div>
   ) : undefined, [selectedBusiness]);
 
-  const clientsList = useMemo(() => selectedBusiness 
-    ? clients
-        .map(c => (
-          <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
+  const clientsList = useMemo(() => clientsData?.getBusinessClients 
+    ? clientsData.getBusinessClients
+        .map((c: FormClient) => (
+          <div key={c.name} className={styles.option} onClick={() => setSelectedClient(c)}>
             <Avatar src={c.avatar} size={28} />
             <p>{c.name}</p>
           </div>
         ))
     : []
-  , [selectedBusiness]);
+  , [clientsData]);
   const clientElement = useMemo(() => selectedClient ? (
     <div className={styles.selectedOption}>
       <Avatar src={selectedClient.avatar} size={28} />
@@ -186,19 +213,19 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     </div>
   ) : undefined, [selectedClient]);
 
-  const servicesList = useMemo(() => selectedBusiness
-    ? services
-      .map(s => (
+  const servicesList = useMemo(() => servicesData?.getBusinessServices 
+    ? servicesData.getBusinessServices 
+      .map((s: FormService) => (
         <div key={s.id} style={{borderLeftColor: s.color}} className={clsx(styles.option, styles.service)} onClick={() => setSelectedService(s)}>
-          {s.isVideo && <BsFillCameraVideoFill size={16} color={'grey'} />}
+          {s.is_video && <BsFillCameraVideoFill size={16} color={'grey'} />}
           <p>{s.name}</p>
         </div>
       ))
     : []
-  , [selectedBusiness]);
+  , [servicesData]);
   const serviceElement = useMemo(() => selectedService 
     ? <div className={styles.selectedOption}>
-        {selectedService.isVideo && <BsFillCameraVideoFill size={16} color={'grey'} />}
+        {selectedService.is_video && <BsFillCameraVideoFill size={16} color={'grey'} />}
         <p>{selectedService.name}</p>
       </div>
     : undefined
@@ -244,9 +271,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <hr />
       <p className={styles.appointmentDate}>{startEndDates ? formatFullDateString(startEndDates[0]) : '...'}</p>        
       <AppointmentActionCard 
-        app={{startDate: startEndDates?.[0] ?? 0, id: "template"} as Appointment} 
-        service={selectedService ?? {color: 'blue', name: '...', duration: 0} as Service} 
-        client={selectedClient ?? {name: '...'} as Client}
+        app={{ start_date: startEndDates?.[0] ?? 0, id: "template" } as unknown as AppointmentData} 
         mini
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>

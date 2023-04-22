@@ -17,6 +17,7 @@ export const GET_BUSINESS = gql`
 export const GET_BUSINESS_CLIENTS_FORM = gql`
   query($businessId: ID!) {
     getBusinessClients(business_id: $businessId) {
+      id
       name
       avatar
     }
@@ -26,9 +27,12 @@ export const GET_BUSINESS_CLIENTS_FORM = gql`
 export const GET_BUSINESS_SERVICES_FORM = gql`
   query($businessId: ID!) {
     getBusinessServices(business_id: $businessId) {
+      id
       name
       color
       is_video
+      cost
+      duration
     }
   }
 `;
