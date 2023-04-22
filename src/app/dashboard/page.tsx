@@ -22,7 +22,6 @@ import { getUserAvailability } from '@/utility/functions/fetch_old/getUserAvaila
 
 export default async function Page() {
   // Cached / deduped after first call in any server component
-  const { data: appointments } = await getAllAppointments(userId);
   const { data: services } = await getAllServices(userId);
   const { data: clients } = await getAllClients(userId);
   const { data: businesses } = await  getAllBusinesses(userId);
@@ -34,7 +33,7 @@ export default async function Page() {
       <Header text='Dashboard' />
       <div id="dashboard" className={styles.dashboard}>
         <SecondaryHeader>
-          <Stats availability={availability} services={services} clients={clients} appointments={appointments} businesses={businesses} />
+          <Stats availability={availability} services={services} clients={clients} businesses={businesses} />
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
