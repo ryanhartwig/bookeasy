@@ -11,6 +11,7 @@ import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { getMonthRange } from '@/utility/functions/dateRanges/getMonthRange';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 
 interface AppointmentsProps {
   userId: string,
@@ -18,13 +19,7 @@ interface AppointmentsProps {
 
 export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
-  const [rangeStart, rangeEnd] = useMemo(() => {
-    let [start, end] = getMonthRange();
-    return [
-      new Date(start).toISOString(),
-      new Date(end).toISOString(),
-    ];
-  }, []);
+  const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
   const todayRange = useMemo(() => getDayRange(), []);
 
   const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
