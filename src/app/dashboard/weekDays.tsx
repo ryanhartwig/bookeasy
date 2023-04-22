@@ -7,14 +7,12 @@ import { Hours } from './hours';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
-import { Appointment, AppointmentData } from '@/types/Appointment';
-import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 
 interface WeekDaysProps {
   userId: string,
@@ -35,7 +33,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   useEffect(() => {
     if (loading) return;
     setAppointments(data.getUserAppointments);
-  }, [data.getUserAppointments, loading]);
+  }, [data, loading]);
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -56,9 +54,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
         {days.map((_, i) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
-
-          const [dayStart, dayEnd] = getDayRange(date);
-          const thisDayApps = appointments.filter((app) => dayStart <= app.startDate && dayEnd >= app.startDate);
+          const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
           
           return <Hours key={i} day={i} appointments={thisDayApps} />
         })}
