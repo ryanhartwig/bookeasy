@@ -2,18 +2,12 @@
 
 import styles from './dashboard.module.scss';
 
-import { AppointmentData } from '@/types/Appointment';
-
 import { AppointmentActionCard } from './appointmentActionCard';
 import { useQuery } from '@apollo/client';
 
-interface AppointmentsProps {
-  appointments: AppointmentData[],
-}
-
 import { gql } from '@apollo/client';
-import { useEffect } from 'react';
-import { userId } from '@/utility/sample_data/sample_userId';
+import { useEffect, useState } from 'react';
+import { AppointmentData } from '@/types/Appointment';
 
 const query = gql`
   query($userId: ID!) {
@@ -23,7 +17,13 @@ const query = gql`
   } 
 `;
 
-export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
+interface AppointmentsProps {
+  userId: string,
+}
+
+export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
+
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
 
   const { data, loading } = useQuery(query, {
     variables: {

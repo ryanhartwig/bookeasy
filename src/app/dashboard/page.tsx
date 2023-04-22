@@ -38,7 +38,7 @@ export default async function Page() {
         </SecondaryHeader>
         <div className={styles.content}>
           <SectionLabel label='Today' />
-          <Appointments appointments={appointments.filter(app => inRange(getDayRange(), app.startDate))} services={services} clients={clients} />
+          <Appointments userId={userId}/>
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
