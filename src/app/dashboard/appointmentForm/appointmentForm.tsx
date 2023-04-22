@@ -2,10 +2,9 @@ import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { Appointment } from "@/types/Appointment"
-import { Business } from "@/types/Business"
+import { Business, NewBusiness } from "@/types/Business"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
-import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
@@ -20,6 +19,9 @@ import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/addAppointment"
 import { useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
+import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
+import { GET_BUSINESS } from "@/utility/queries/businessQueries"
+import { User } from "@/types/User"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -33,16 +35,6 @@ interface AppointmentFormProps {
 
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId}) => {
 
-  const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
-  const [businesses, setBusinesses] = useState([]);
-
-  const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
-  
-
-  useEffect(() => {
-    if (!loadingAvailability) setAvailability(availabilityData)
-  }, [availabilityData, loadingAvailability]);
-  
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
@@ -51,14 +43,37 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
 
+  const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
+  const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
+  const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
+
+  const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
+  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }, skip: !userOwnBusinessId});
+  const { data: ownBusinessData, loading: loadingOwnBusiness } = useQuery(GET_BUSINESS, { variables: { userId }}); 
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+
+  useEffect(() => {
+    if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
+  }, [loadingUserData, userData]);
+
+  useEffect(() => {
+    if (!loadingAvailability) setAvailability(availabilityData.getUserAvailability)
+  }, [availabilityData, loadingAvailability]);
+
+  useEffect(() => {
+    if (userBusinessesData && ownBusinessData) {
+      setBusinesses([...userBusinessesData.getUserBusinesses, ...ownBusinessData.getBusiness])
+    }
+  }, [loadingOwnBusiness, loadingUserBusinesses, ownBusinessData, userBusinessesData]);
+
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
     [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
   ]);
 
   const availabilityMap = useMemo(() => {
-    const map = new Map<string, BaseAvailability>();
-    availability.forEach(avail => map.set(avail.businessId, avail));
+    const map = new Map<string, AvailabilitySlice[]>();
+    availability.forEach(avail => map.set(avail.business_id, [...map.get(avail.business_id) ?? [], avail]));
     return map;
   }, [availability]);
 
@@ -83,7 +98,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     if (!selectedBusiness || !startEndDates) return true;
     const day = new Date(startEndDates[0]).getDay();
 
-    const current = availabilityMap.get(selectedBusiness.id)?.slices.filter(s => {
+    const current = availabilityMap.get(selectedBusiness.id)?.filter(s => {
       let dayind = s.day;
       let converted = dayind === 6 ? 0 : dayind + 1;
       return day === converted;
@@ -122,7 +137,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       startDate: startEndDates[0].toString(),
       userId: userId,
     }
-  }, [selectedBusiness, selectedClient, selectedService, startEndDates]);
+  }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
@@ -156,7 +171,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const clientsList = useMemo(() => selectedBusiness 
     ? clients
-        .filter(c => c.businessId === selectedBusiness.id) 
         .map(c => (
           <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
             <Avatar src={c.avatar} size={28} />
@@ -164,7 +178,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
           </div>
         ))
     : []
-  , [clients, selectedBusiness]);
+  , [selectedBusiness]);
   const clientElement = useMemo(() => selectedClient ? (
     <div className={styles.selectedOption}>
       <Avatar src={selectedClient.avatar} size={28} />
@@ -174,7 +188,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const servicesList = useMemo(() => selectedBusiness
     ? services
-      .filter(s => s.businessId === selectedBusiness.id)
       .map(s => (
         <div key={s.id} style={{borderLeftColor: s.color}} className={clsx(styles.option, styles.service)} onClick={() => setSelectedService(s)}>
           {s.isVideo && <BsFillCameraVideoFill size={16} color={'grey'} />}
@@ -182,7 +195,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         </div>
       ))
     : []
-  , [selectedBusiness, services]);
+  , [selectedBusiness]);
   const serviceElement = useMemo(() => selectedService 
     ? <div className={styles.selectedOption}>
         {selectedService.isVideo && <BsFillCameraVideoFill size={16} color={'grey'} />}

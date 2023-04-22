@@ -10,3 +10,13 @@ export interface Business {
     max_book_ahead: number | null,
   }
 };
+
+export interface NewBusiness {
+  id: string,
+  name: string,
+  email: string,
+  phone: string,
+  min_booking_notice: string,
+  min_cancel_notice: string,
+  max_book_ahead: string,
+}
