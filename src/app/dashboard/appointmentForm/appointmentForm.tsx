@@ -22,14 +22,13 @@ import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/ad
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
-  businesses: Business[],
-  clients: Client[],
-  services: Service[],
-  availability: BaseAvailability[],
+  // businesses: Business[],
+  // clients: Client[],
+  // services: Service[],
+  // availability: BaseAvailability[],
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, businesses, clients, services, availability}) => {
-  
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
@@ -37,6 +36,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
+
+
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -110,8 +111,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       userId: userId,
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates]);
-
-  console.log(JSON.stringify(appointment));
 
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;

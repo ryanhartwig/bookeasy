@@ -48,15 +48,14 @@ export const types = `#graphql
   }
 
   type BusinessClient {
-    client: Client,
-    business: Business!,
-    users: [BusinessUser!]!,
+    # users: [BusinessUser!]!,
     notes: String,
     name: String!,
     email: String,
     address: String,
     phone: String,
-    joined_date: String!
+    joined_date: String!,
+    avatar: String,
   }
 
   type Client {

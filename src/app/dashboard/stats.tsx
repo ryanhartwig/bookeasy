@@ -1,10 +1,6 @@
 'use client';
 
-import { Appointment, AppointmentData } from '@/types/Appointment';
-import { BaseAvailability } from '@/types/BaseAvailability';
-import { Business } from '@/types/Business';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { AppointmentData } from '@/types/Appointment';
 import { getCurrentISOWeek } from '@/utility/functions/dateRanges/getCurrentISOWeek';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
@@ -16,18 +12,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import styles from './dashboard.module.scss';
 
-interface Stats {
-  businesses: Business[],
-  clients: Client[],
-  services: Service[],
-  availability: BaseAvailability[],
-}
-
-export const Stats: React.FC<Stats> = ({businesses, clients, services, availability}) => {
+export const Stats: React.FC = () => {
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
 
-  // Use whole month range so that input is the same, therefore will use cached data
+  // Use whole month range so that input is the same, (and will therefore use cached data for subsequent request)
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
 
   const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
@@ -69,7 +58,7 @@ export const Stats: React.FC<Stats> = ({businesses, clients, services, availabil
         </div>
       </div>
       
-      <AppointmentForm availability={availability} services={services} clients={clients} businesses={businesses} open={formOpen} setOpen={setFormOpen} />
+      <AppointmentForm open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }
