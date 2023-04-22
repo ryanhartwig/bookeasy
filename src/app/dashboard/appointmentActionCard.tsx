@@ -1,5 +1,5 @@
 import { Card } from "@/components/UI/Card/Card"
-import { Appointment } from "@/types/Appointment"
+import { Appointment, AppointmentData } from "@/types/Appointment"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { formatTime } from "@/utility/functions/formatting/formatTime"
@@ -9,29 +9,27 @@ import styles from './dashboard.module.scss';
 
 
 interface AppointmentActionCardProps {
-  app: Appointment,
-  service: Service,
-  client: Client,
+  app: AppointmentData,
   canEnterSession?: boolean,
   mini?: boolean,
 }
 
-export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, service, client, canEnterSession = false, mini = false}) => {
+export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, canEnterSession = false, mini = false}) => {
 
   return (
     <Card key={app.id} className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
-      <div className={styles.appointment} style={{borderLeftColor: service.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
+      <div className={styles.appointment} style={{borderLeftColor: app.service.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
         <div>
           <div className={styles.app_header}>
-            <p>{service.name}</p>
-            <p>{service.duration}m</p>
+            <p>{app.service.name}</p>
+            <p>{app.service.duration}m</p>
           </div>
-          <p className={styles.alt}>{formatTime(app.startDate)}</p>
+          <p className={styles.alt}>{formatTime(app.start_date)}</p>
         </div>
 
         <div className={styles.client}>
           <p className={styles.alt} style={{fontWeight: 100}}>with</p>
-          <p>{client.name}</p>
+          <p>{app.client.name}</p>
         </div>
 
         {!mini && 

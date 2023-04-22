@@ -2,17 +2,13 @@
 
 import styles from './dashboard.module.scss';
 
-import { Appointment } from '@/types/Appointment';
+import { AppointmentData } from '@/types/Appointment';
 
-import { Service } from '@/types/Service';
-import { Client } from '@/types/Client';
 import { AppointmentActionCard } from './appointmentActionCard';
 import { useQuery } from '@apollo/client';
 
 interface AppointmentsProps {
-  appointments: Appointment[],
-  services: Service[],
-  clients: Client[],
+  appointments: AppointmentData[],
 }
 
 import { gql } from '@apollo/client';
@@ -27,7 +23,7 @@ const query = gql`
   } 
 `;
 
-export const Appointments: React.FC<AppointmentsProps> = ({appointments, services, clients}) => {
+export const Appointments: React.FC<AppointmentsProps> = ({appointments}) => {
 
   const { data, loading } = useQuery(query, {
     variables: {
@@ -43,15 +39,15 @@ export const Appointments: React.FC<AppointmentsProps> = ({appointments, service
   return (
     <div className={styles.appointments}>
       {appointments.length ? appointments.map(app => {
-        const service = services.find(s => app.serviceId === s.id);
-        if (!service) return <></>
-        const canEnterSession = Date.now() < app.startDate + (1000 * 60 * service.duration) && Date.now() > app.startDate - (1000 * 60 * 60);
+        const app_start = new Date(app.start_date).getTime();
+        const now = new Date().getTime();
+        const earliestEntry = app_start - (1000 * 60 * 60);
+        const latestEntry = app_start + (1000 * 60 * app.service.duration);
+        const canEnterSession = earliestEntry <= now && now <= latestEntry;
 
         return <AppointmentActionCard 
           key={app.id} 
-          service={service} 
           app={app} 
-          client={clients.find(c => c.id === app.clientId)!} 
           canEnterSession={canEnterSession} 
         />
       }) : <p className={styles.no_apps}>No appointments to show</p> }
