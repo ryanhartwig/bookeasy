@@ -42,7 +42,7 @@ export default async function Page() {
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames start={start} />
-            <WeekDays appointments={appointments.filter(app => inRange([start.getTime(), end.getTime()], app.startDate))} services={services} clients={clients} />
+            <WeekDays userId={userId} />
           </Card>
         </div>
       </div>

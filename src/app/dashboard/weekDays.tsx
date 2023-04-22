@@ -9,16 +9,33 @@ import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { Appointment } from '@/types/Appointment';
+import { Appointment, AppointmentData } from '@/types/Appointment';
 import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { useQuery } from '@apollo/client';
+import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 
 interface WeekDaysProps {
-  appointments: Appointment[],
-  services: Service[],
-  clients: Client[],
+  userId: string,
 }
 
-export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clients}) => {
+export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
+  
+  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
+    variables: {
+      userId,
+      rangeStart,
+      rangeEnd,
+    }
+  });
+
+  useEffect(() => {
+    if (loading) return;
+    setAppointments(data.getUserAppointments);
+  }, [data.getUserAppointments, loading]);
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -26,9 +43,6 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clien
   const [width, setWidth] = useState<string>('auto');
   const [start] = getCurrentWeek();
 
-  const servicesMap = useMemo(() => new Map<string, Service>(), []);
-  const clientsMap = useMemo(() => new Map<string, Client>(), []);
-  
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
 
@@ -36,11 +50,6 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clien
     setWidth(`calc(100% + ${hourlyRef.current.offsetWidth - hourlyRef.current.clientWidth}px)`)
   }, []);
 
-  useEffect(() => {
-    services.forEach(s => servicesMap.set(s.id, s));
-    clients.forEach(c => clientsMap.set(c.id, c));
-  }, [clients, clientsMap, services, servicesMap]);
-  
   return (
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
@@ -51,7 +60,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clien
           const [dayStart, dayEnd] = getDayRange(date);
           const thisDayApps = appointments.filter((app) => dayStart <= app.startDate && dayEnd >= app.startDate);
           
-          return <Hours key={i} day={i} appointments={thisDayApps} services={servicesMap} clients={clientsMap} />
+          return <Hours key={i} day={i} appointments={thisDayApps} />
         })}
       </div>
     </div>
