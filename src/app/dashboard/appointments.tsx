@@ -5,36 +5,42 @@ import styles from './dashboard.module.scss';
 import { AppointmentActionCard } from './appointmentActionCard';
 import { useQuery } from '@apollo/client';
 
-import { gql } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
-
-const query = gql`
-  query($userId: ID!) {
-    getUserAppointments(user_id: $userId) {
-      start_date
-    }
-  } 
-`;
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { getMonthRange } from '@/utility/functions/dateRanges/getMonthRange';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 
 interface AppointmentsProps {
   userId: string,
 }
 
 export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
-
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  const [rangeStart, rangeEnd] = useMemo(() => {
+    let [start, end] = getMonthRange();
+    return [
+      new Date(start).toISOString(),
+      new Date(end).toISOString(),
+    ];
+  }, []);
+  const todayRange = useMemo(() => getDayRange(), []);
 
-  const { data, loading } = useQuery(query, {
+  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
       userId,
+      rangeStart,
+      rangeEnd,
     }
   });
 
   useEffect(() => {
     if (loading) return;
-    console.log(data);
-  }, [data, loading]);
+    setAppointments(data.getUserAppointments
+      .filter((app: AppointmentData) => inRange(todayRange, app.start_date))
+    );
+  }, [data, loading, todayRange]);
 
   return (
     <div className={styles.appointments}>
