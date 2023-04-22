@@ -37,7 +37,25 @@ export const appointmentsResolvers = {
         duration,
         color,
       }
-    }
+    },
+    business: async (parent: any) => {
+      const response = await db.query('select name from business where id = $1', [parent.business_id]);
+
+      if (!response.rowCount) throwGQLError(`No business found for appointment with id: ${parent.id}, business_id: ${parent.business_id}`);
+
+      return {
+        name: response.rows[0].name,
+      }
+    },
+    client: async (parent: any) => {
+      const response = await db.query('select name from client where id = $1', [parent.client_id]);
+
+      if (!response.rowCount) throwGQLError(`No client found for appointment with id: ${parent.id}, client_id: ${parent.client_id}`);
+
+      return {
+        name: response.rows[0].name,
+      }
+    },
   }
 }
 
