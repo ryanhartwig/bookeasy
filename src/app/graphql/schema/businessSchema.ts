@@ -3,6 +3,11 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const businessResolvers = {
   Query: {
+    getBusiness: async (parent: any, args: any) => {
+      const response = await db.query('select * from business where id = $1', [args.business_id]);
+      if (!response.rows[0]) throwGQLError(`No business found for id: ${args.business_id}`);
+      return response.rows[0];
+    },
     getBusinessClients: async (parent: any, args: any) => {
       try {
         const clientIds = await db.query('select * from clients_businesses where business_id = $1', [args.business_id]);
@@ -41,6 +46,7 @@ export const businessResolvers = {
 
 export const businessTypeDefs = `#graphql
   type Query {
+    getBusiness(business_id: ID!): Business!,
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
     getBusinessServices(business_id: ID!): [Service!]!,
   }

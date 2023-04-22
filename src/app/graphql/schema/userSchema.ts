@@ -28,7 +28,15 @@ export const userResolvers = {
       } catch(e: any) {
         throwGQLError(e.message)
       }
-    }
+    },
+    getUserAvailability: async (parent: any, args: any) => {
+      try {
+        const response = await db.query('select * from availability_slice where user_id = $1', [args.user_id]);
+        return response.rows;
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    },
   },
   User: {
     own_business: async (parent: any, args: any) => {
@@ -48,13 +56,14 @@ export const userResolvers = {
         throwGQLError(e.message);
       }
     },
-  }
+  },
 }
 
 export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
     getUserBusinesses(user_id: ID!): [Business!]!,
+    getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
     testQuery: String!,
   }
 `;

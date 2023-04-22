@@ -7,7 +7,7 @@ import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
 import { userId } from "@/utility/sample_data/sample_userId"
 import clsx from "clsx"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
@@ -15,20 +15,34 @@ import { BsFillCameraVideoFill } from 'react-icons/bs';
 import styles from './appointmentForm.module.scss';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
-import { BaseAvailability } from "@/types/BaseAvailability"
+import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/addAppointment"
+import { useQuery } from "@apollo/client"
+import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
+  userId: string,
   // businesses: Business[],
   // clients: Client[],
   // services: Service[],
   // availability: BaseAvailability[],
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId}) => {
+
+  const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
+  const [businesses, setBusinesses] = useState([]);
+
+  const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
+  
+
+  useEffect(() => {
+    if (!loadingAvailability) setAvailability(availabilityData)
+  }, [availabilityData, loadingAvailability]);
+  
   const [selectedBusiness, setSelectedBusiness] = useState<Business>();
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [selectedService, setSelectedService] = useState<Service>();
@@ -36,8 +50,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen})
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
-
-
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -88,7 +100,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen})
       .map(d => Number(d)) as [number,number];
 
     return current.some((slice) => {
-      const range: [number, number] = [slice.start, slice.end]
+      const range: [number, number] = [slice.start_time, slice.end_time]
         .map(str => Number(str.split(':').join(''))) as [number, number];
       return inRange(range, start) && inRange(range, end);
     });

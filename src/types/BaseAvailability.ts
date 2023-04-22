@@ -1,10 +1,11 @@
 export interface AvailabilitySlice {
+  business_id: string,
   /**
    * Indexed day of week, 0 (monday) - 6 (sunday)
    */
   day: number,
-  start: string,
-  end: string,
+  start_time: string,
+  end_time: string,
 }
 
 interface Recurring {

@@ -1,6 +1,5 @@
 export interface Client {
   id: string,
-  businessId: string,
   name: string,
   email: string,
   notes?: string,

@@ -78,8 +78,7 @@ export const types = `#graphql
   }
 
   type AvailabilitySlice {
-    user: User!,
-    business: Business!,
+    business_id: String!,
     day: Int!,
     start_time: String!,
     end_time: String!

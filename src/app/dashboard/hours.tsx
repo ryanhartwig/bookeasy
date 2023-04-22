@@ -38,7 +38,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments}) => {
       const prev = new Map(p);
 
       sample_base_availability.slices.forEach(slice => {
-        const {start, end, day} = slice;
+        const {start_time: start, end_time: end, day} = slice;
         const current = prev.get(day) || [];
     
         current.push([start, end]);

@@ -6,13 +6,16 @@ import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
-import { userId } from '@/utility/sample_data/sample_userId';
 import { useQuery } from '@apollo/client';
 import { useEffect, useMemo, useState } from 'react';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import styles from './dashboard.module.scss';
 
-export const Stats: React.FC = () => {
+interface StatsProps {
+  userId: string,
+}
+
+export const Stats: React.FC<StatsProps> = ({userId}) => {
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
 
@@ -58,7 +61,7 @@ export const Stats: React.FC = () => {
         </div>
       </div>
       
-      <AppointmentForm open={formOpen} setOpen={setFormOpen} />
+      <AppointmentForm userId={userId} open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }
