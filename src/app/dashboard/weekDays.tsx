@@ -55,7 +55,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
-          
+
           return <Hours key={i} day={i} appointments={thisDayApps} />
         })}
       </div>

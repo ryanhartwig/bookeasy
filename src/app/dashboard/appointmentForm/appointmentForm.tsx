@@ -84,9 +84,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         .split(':')
         .slice(0, 2)
         .join(''))
-      .map(d => Number(d)) as [number,number]
-
-      console.log(start, end);
+      .map(d => Number(d)) as [number,number];
 
     return current.some((slice) => {
       const range: [number, number] = [slice.start, slice.end]
