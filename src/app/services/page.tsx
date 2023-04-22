@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
-import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
-import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getAllBusinesses } from '@/utility/functions/fetch_old/getAllBusinesses';
+import { getAllServices } from '@/utility/functions/fetch_old/getAllServices';
 import { sample_user } from '@/utility/sample_data/sample_user';
 import { userId } from '@/utility/sample_data/sample_userId';
 import ServiceCard from './service';

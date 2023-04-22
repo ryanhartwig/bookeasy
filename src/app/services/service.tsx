@@ -4,7 +4,7 @@ import styles from './services.module.scss';
 import { Service } from "@/types/Service"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
-import { ServiceUser } from '@/utility/functions/fetch/getServiceUsers';
+import { ServiceUser } from '@/utility/functions/fetch_old/getServiceUsers';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { useEffect, useState } from 'react';
 

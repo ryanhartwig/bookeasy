@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
-import { getAllBusinesses } from "@/utility/functions/fetch/getAllBusinesses";
-import { getUser } from "@/utility/functions/fetch/getUserDetails";
+import { getAllBusinesses } from "@/utility/functions/fetch_old/getAllBusinesses";
+import { getUser } from "@/utility/functions/fetch_old/getUserDetails";
 import { userId } from "@/utility/sample_data/sample_userId";
 import { TeamsView } from "./teamsView";
 

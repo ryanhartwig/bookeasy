@@ -1,8 +1,8 @@
 import { Header } from '@/components/Header';
-import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
-import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
-import { getAllClients } from '@/utility/functions/fetch/getAllClients';
-import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getAllAppointments } from '@/utility/functions/fetch_old/getAllAppointments';
+import { getAllBusinesses } from '@/utility/functions/fetch_old/getAllBusinesses';
+import { getAllClients } from '@/utility/functions/fetch_old/getAllClients';
+import { getAllServices } from '@/utility/functions/fetch_old/getAllServices';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { ClientsView } from './clientsView';
 

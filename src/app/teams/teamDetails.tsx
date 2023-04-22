@@ -8,7 +8,7 @@ import { Business } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
-import { UserMeta } from '@/utility/functions/fetch/business/getBusinessUserMeta';
+import { UserMeta } from '@/utility/functions/fetch_old/business/getBusinessUserMeta';
 import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { Members } from './members';

@@ -25,6 +25,20 @@ export const appointmentsResolvers = {
       }
     }
   },
+  Appointment: {
+    service: async (parent: any) => {
+      const response = await db.query('select name, duration, color from service where id = $1', [parent.service_id]);
+      const { name, duration, color } = response.rows[0];
+
+      if (!name || !duration || !color) throwGQLError(`No service found for appointment with id: ${parent.id} and service_id: ${parent.service_id}`);
+      
+      return {
+        name,
+        duration,
+        color,
+      }
+    }
+  }
 }
 
 export const appointmentsTypeDefs = `#graphql
