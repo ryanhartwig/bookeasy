@@ -15,15 +15,23 @@ export const businessResolvers = {
 
         for (const businessClient of clientIds.rows) {
           const response = await db.query('select * from client where id = $1', [businessClient.client_id]);
-          const merged = Object.fromEntries(Object.entries(businessClient).filter(([_, value]) => !!value));
+          const overWrites = Object.fromEntries(Object.entries(businessClient).filter(([_, value]) => !!value));
 
           clients.push({
             ...response.rows[0],
-            ...merged,
+            ...overWrites,
           });
         }
 
         return clients;
+      } catch(e: any) {
+        throwGQLError(e.message);
+      }
+    },
+    getBusinessServices: async (parent: any, args: any) => {
+      try {
+        const response = await db.query('select * from service where business_id = $1', [args.business_id]);
+        return response.rows;
       } catch(e: any) {
         throwGQLError(e.message);
       }
@@ -34,5 +42,6 @@ export const businessResolvers = {
 export const businessTypeDefs = `#graphql
   type Query {
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
+    getBusinessServices(business_id: ID!): [Service!]!,
   }
 `;
