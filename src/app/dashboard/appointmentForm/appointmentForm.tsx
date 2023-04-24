@@ -20,7 +20,7 @@ import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/ad
 import { useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { User } from "@/types/User"
 
 interface AppointmentFormProps {
@@ -69,15 +69,12 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
 
   // Depends on selectedBusiness state
-  const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { business_id: selectedBusiness?.id }, skip: !selectedBusiness}); 
-  const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { business_id: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   
   useEffect(() => {
-    console.log(businesses);
-    console.log(ownBusinessData);
-    console.log(userData);
-    console.log(availabilityData);
-  }, [availabilityData, businesses, ownBusinessData, userData]);
+    console.log(servicesData);
+  }, [servicesData]);
 
   useEffect(() => {
     if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
