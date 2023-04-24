@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
-import { Appointment, AppointmentData } from "@/types/Appointment"
+import { Appointment, AppointmentData, AppointmentInput } from "@/types/Appointment"
 import { Business, NewBusiness } from "@/types/Business"
 import { Client } from "@/types/Client"
 import { Service } from "@/types/Service"
@@ -16,7 +16,6 @@ import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
-import { addAppointment, AppointmentInput } from "@/utility/queries/mutations/addAppointment"
 import { useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
@@ -153,16 +152,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
     return {
       id: uuid(),
-      businessId: selectedBusiness.id,
-      clientId: selectedClient.id,
-      endDate: startEndDates[1].toString(),
-      isPaid: false,
-      isVideo: selectedService.is_video,
-      serviceCost: selectedService.cost,
-      serviceDuration: selectedService.duration,
-      serviceId: selectedService.id,
-      startDate: startEndDates[0].toString(),
-      userId: userId,
+      user_id: userId,
+      service_id: selectedService.id,
+      business_id: selectedBusiness.id,
+      client_id: selectedClient.id,
+      start_date: startEndDates[0].toString(),
+      end_date: startEndDates[1].toString(),
+      service_duration: selectedService.duration,
+      service_cost: selectedService.cost,
+      is_video: selectedService.is_video,
+      is_paid: false,
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
