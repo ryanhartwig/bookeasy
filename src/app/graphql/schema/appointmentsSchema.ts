@@ -2,6 +2,20 @@ import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const appointmentsResolvers = {
+  Mutation: {
+    addAppointment: async (parent: any, args: any) => {
+      try {
+        const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args; 
+        const response = await db.query(`insert into appointment values (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+        ) returning id`, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration]);
+
+        return response.rows[0];
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    }
+  },
   Query: {
     getUserAppointments: async (parent: any, args: any) => {
       try {
@@ -25,6 +39,7 @@ export const appointmentsResolvers = {
       }
     }
   },
+  
   Appointment: {
     service: async (parent: any) => {
       const response = await db.query('select name, duration, color from service where id = $1', [parent.service_id]);
@@ -60,7 +75,27 @@ export const appointmentsResolvers = {
 }
 
 export const appointmentsTypeDefs = `#graphql
+  input AppointmentInput {
+    id: String!,
+    user_id: String!,
+    service_id: String!,
+    business_id: String!,
+    client_id: String!,
+    start_date: String!,
+    end_date: String!,
+    service_cost: Int!,
+    is_video: Boolean!,
+    is_paid: Boolean!,
+    service_duration: Int!,
+  }
+
   type Query {
     getUserAppointments(user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
   }
+  type Mutation {
+    addAppointment(appointment: AppointmentInput): Appointment!,
+  }
+
+  
 `;
+
