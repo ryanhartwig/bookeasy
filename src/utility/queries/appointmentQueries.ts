@@ -49,3 +49,26 @@ export const ADD_APPOINTMENT = gql`
     } 
   }
 `
+
+export const NEW_APPOINTMENT_FRAGMENT = gql`
+  fragment NewAppointment on Appointment {
+    id
+    service {
+      name
+      duration
+      color
+    }
+    business {
+      name
+    }
+    client {
+      name 
+    }
+    start_date
+    end_date
+    service_duration
+    service_cost
+    is_video
+    is_paid
+  }
+`

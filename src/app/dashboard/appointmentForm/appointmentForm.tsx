@@ -18,9 +18,10 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { ADD_APPOINTMENT } from "@/utility/queries/appointmentQueries"
+import { ADD_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
+import { gql } from '@apollo/client';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -139,12 +140,28 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
-  const [addAppointmentMutation, { 
+  const [addAppointment, { 
     data: appMutationData, 
     loading: appMutationLoading, 
     error: appMutationError, 
     reset: appMutationReset 
-  }] = useMutation(ADD_APPOINTMENT);
+  }] = useMutation(ADD_APPOINTMENT, {
+    update(cache, { data: { addAppointment }}) {
+      cache.modify({
+        fields: {
+          getUserAppointments(existingAppointments = []) {
+            const newAppointmentRef = cache.writeFragment({
+              data: addAppointment,
+              fragment: gql`
+                ${NEW_APPOINTMENT_FRAGMENT}
+              `
+            });
+            return [...existingAppointments, newAppointmentRef];
+          }
+        }
+      })
+    }
+  });
 
   useEffect(() => {
     if (!appMutationData || appMutationLoading) return;
@@ -163,8 +180,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    addAppointmentMutation({variables: { appointment }});
-  }, [addAppointmentMutation, appointment]);
+    addAppointment({variables: { appointment }});
+  }, [addAppointment, appointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
