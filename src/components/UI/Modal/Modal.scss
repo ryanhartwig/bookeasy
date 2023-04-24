@@ -51,7 +51,11 @@
 
   z-index: 5;
 
-  background: rgba(0, 0, 0, 0.279);
+  background: rgba(0, 0, 0, 0.59);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Modal-header {

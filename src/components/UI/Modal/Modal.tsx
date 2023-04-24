@@ -6,6 +6,8 @@ import { useRef } from 'react';
 import { TfiClose } from 'react-icons/tfi';
 import './Modal.scss';
 
+import { ClipLoader } from 'react-spinners';
+
 /* React Icons */
 
 interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
@@ -45,7 +47,9 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCl
       {open && 
       <div className='Modal noselect' style={{zIndex}} ref={modalRef}>
         <div className={clsx('Modal-box', {'Modal-box-disabled': loading})} ref={contentRef} >
-          <div className='Loading-cover' />
+          <div className='Loading-cover'>
+            <ClipLoader loading={loading} color="white" size={40} />
+          </div>
 
           {!!header?.length && 
             <div className='Modal-header'>
