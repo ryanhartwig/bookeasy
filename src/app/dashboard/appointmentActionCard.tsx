@@ -17,7 +17,7 @@ interface AppointmentActionCardProps {
 export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, canEnterSession = false, mini = false}) => {
 
   return (
-    <Card key={app.id} className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
+    <Card className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
       <div className={styles.appointment} style={{borderLeftColor: app?.service?.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
         <div>
           <div className={styles.app_header}>

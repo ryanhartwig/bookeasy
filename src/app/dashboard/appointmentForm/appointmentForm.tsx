@@ -268,7 +268,17 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <hr />
       <p className={styles.appointmentDate}>{startEndDates ? formatFullDateString(startEndDates[0]) : '...'}</p>        
       <AppointmentActionCard 
-        app={{ start_date: startEndDates?.[0] ?? 0, id: "template" } as unknown as AppointmentData} 
+        app={{ 
+          start_date: startEndDates?.[0] ?? 0, 
+          service: {
+            name: selectedService?.name ?? '...',
+            duration: selectedService?.duration ?? 0,
+            color: selectedService?.color
+          },
+          client: {
+            name: selectedClient?.name ?? '...',
+          }
+        } as unknown as AppointmentData} 
         mini
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
