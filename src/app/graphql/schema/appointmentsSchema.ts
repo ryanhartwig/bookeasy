@@ -3,7 +3,7 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const appointmentsResolvers = {
   Mutation: {
-    addAppointment: async (parent: any, args: any) => {
+    addEditAppointment: async (parent: any, args: any) => {
       try {
         const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args.appointment; 
         const response = await db.query(`insert into appointment values (
@@ -93,7 +93,7 @@ export const appointmentsTypeDefs = `#graphql
     getUserAppointments(user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
   }
   type Mutation {
-    addAppointment(appointment: AppointmentInput!): Appointment!,
+    addEditAppointment(appointment: AppointmentInput!, edit: Boolean): Appointment!,
   }
 `;
 

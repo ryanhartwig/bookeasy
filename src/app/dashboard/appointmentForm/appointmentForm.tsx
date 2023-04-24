@@ -18,7 +18,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { ADD_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
+import { ADD_EDIT_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
@@ -27,9 +27,10 @@ interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
+  edit?: boolean,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, edit = false}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
@@ -145,7 +146,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     loading: appMutationLoading, 
     error: appMutationError, 
     reset: appMutationReset 
-  }] = useMutation(ADD_APPOINTMENT, {
+  }] = useMutation(ADD_EDIT_APPOINTMENT, {
     update(cache, { data: { addAppointment }}) {
       cache.modify({
         fields: {
@@ -181,8 +182,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    addAppointment({variables: { appointment }});
-  }, [addAppointment, appointment]);
+    addAppointment({variables: { appointment, edit }});
+  }, [addAppointment, appointment, edit]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>

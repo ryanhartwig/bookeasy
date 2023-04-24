@@ -25,9 +25,9 @@ export const GET_USER_APPOINTMENTS = gql`
   }
 `;
 
-export const ADD_APPOINTMENT = gql`
+export const ADD_EDIT_APPOINTMENT = gql`
   mutation($appointment: AppointmentInput!) {
-    addAppointment(appointment: $appointment) {
+    addEditAppointment(appointment: $appointment) {
       id
       service {
         name
