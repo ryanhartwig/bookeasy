@@ -16,7 +16,7 @@ export const GET_USER_BUSINESSES = gql`
 
 export const GET_USER = gql`
   query($userId: ID!) {
-    getUser(id: $getUserId) {
+    getUser(id: $userId) {
       id
       own_business {
         id

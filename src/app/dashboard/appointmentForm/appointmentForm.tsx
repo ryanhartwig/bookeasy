@@ -84,12 +84,12 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [loadingUserData, userData]);
 
   useEffect(() => {
-    if (!loadingAvailability) setAvailability(availabilityData.getUserAvailability)
+    if (availabilityData) setAvailability(availabilityData.getUserAvailability)
   }, [availabilityData, loadingAvailability]);
 
   useEffect(() => {
     if (userBusinessesData && ownBusinessData) {
-      setBusinesses([...userBusinessesData.getUserBusinesses, ...ownBusinessData.getBusiness])
+      setBusinesses([...userBusinessesData.getUserBusinesses, {...ownBusinessData.getBusiness}])
     }
   }, [loadingOwnBusiness, loadingUserBusinesses, ownBusinessData, userBusinessesData]);
 
