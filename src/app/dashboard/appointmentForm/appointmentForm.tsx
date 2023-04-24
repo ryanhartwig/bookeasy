@@ -228,7 +228,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   ));
 
   return (
-    <Modal actionButtonText='Confirm' onAction={onSubmitForm} actionButtonDisabled={!appointment} open={open} onClose={() => setOpen(false)} className={styles.appointmentForm}>
+    <Modal actionButtonText='Confirm' 
+      onAction={onSubmitForm} 
+      actionButtonDisabled={!appointment} 
+      open={open} 
+      onClose={() => setOpen(false)} 
+      className={styles.appointmentForm}
+      loading
+    >
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>

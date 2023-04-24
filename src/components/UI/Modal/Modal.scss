@@ -24,6 +24,9 @@
   height: fit-content;
   width: fit-content;
 
+
+  position: relative;
+
   background: white;
 
   max-height: 95%;
@@ -32,6 +35,24 @@
   border-radius: 10px;
 }
 
+.Modal-box-disabled {
+  pointer-events: none;
+}
+
+.Loading-cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 10px;
+  pointer-events: none;
+
+  z-index: 5;
+
+  background: rgba(0, 0, 0, 0.279);
+}
 
 .Modal-header {
   padding: 10px 0;

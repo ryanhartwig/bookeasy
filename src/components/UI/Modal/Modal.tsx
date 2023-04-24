@@ -18,16 +18,17 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   actionButtonText?: string,
   onAction?: (...args: any) => any,
   actionButtonDisabled?: boolean,
+  loading?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
   const modalRef = useRef<HTMLDivElement>(undefined!)
   const contentRef = useRef<HTMLDivElement>(undefined!);
 
-  const onClick = useClickout(onClose, open, contentRef, ...refs);
+  const onClick = useClickout(onClose, open, loading, contentRef, ...refs);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Escape') onClose();
@@ -43,7 +44,9 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCl
     <>
       {open && 
       <div className='Modal noselect' style={{zIndex}} ref={modalRef}>
-        <div className={'Modal-box '} ref={contentRef} >
+        <div className={clsx('Modal-box', {'Modal-box-disabled': loading})} ref={contentRef} >
+          <div className='Loading-cover' />
+
           {!!header?.length && 
             <div className='Modal-header'>
               <div className='Modal-heading'>
