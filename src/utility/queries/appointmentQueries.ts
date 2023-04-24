@@ -29,6 +29,23 @@ export const ADD_APPOINTMENT = gql`
   mutation($appointment: AppointmentInput!) {
     addAppointment(appointment: $appointment) {
       id
-    }
+      service {
+        name
+        duration
+        color
+      }
+      business {
+        name
+      }
+      client {
+        name 
+      }
+      start_date
+      end_date
+      service_duration
+      service_cost
+      is_video
+      is_paid
+    } 
   }
 `
