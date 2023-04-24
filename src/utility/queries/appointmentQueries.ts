@@ -23,4 +23,12 @@ export const GET_USER_APPOINTMENTS = gql`
       is_paid
     }
   }
+`;
+
+export const ADD_APPOINTMENT = gql`
+  mutation($appointment: AppointmentInput!) {
+    addAppointment(appointment: $appointment) {
+      id
+    }
+  }
 `

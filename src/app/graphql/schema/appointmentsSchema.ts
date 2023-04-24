@@ -5,7 +5,7 @@ export const appointmentsResolvers = {
   Mutation: {
     addAppointment: async (parent: any, args: any) => {
       try {
-        const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args; 
+        const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args.appointment; 
         const response = await db.query(`insert into appointment values (
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
         ) returning id`, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration]);
@@ -93,9 +93,7 @@ export const appointmentsTypeDefs = `#graphql
     getUserAppointments(user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
   }
   type Mutation {
-    addAppointment(appointment: AppointmentInput): Appointment!,
+    addAppointment(appointment: AppointmentInput!): Appointment!,
   }
-
-  
 `;
 

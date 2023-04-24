@@ -16,13 +16,14 @@ import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { User } from "@/types/User"
 import { randomUUID } from "crypto"
 import uuid from "react-uuid"
+import { ADD_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -58,6 +59,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
+  const [error, setError] = useState<string>();
 
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
@@ -102,7 +104,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     return map;
   }, [availability]);
 
-  const startEndDates: [number, number] | undefined = useMemo(() => {
+  const startEndDates: [string, string] | undefined = useMemo(() => {
     if (!date || !hours || min === undefined || !period || !selectedService) return;
 
     const dateObj = new Date();
@@ -112,9 +114,9 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     dateObj.setDate(day);
     dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
 
-    const start = dateObj.getTime();
+    const start = dateObj.toISOString();
     dateObj.setTime(dateObj.getTime() + 1000 * 60 * selectedService.duration);
-    const end = dateObj.getTime();
+    const end = dateObj.toISOString();
 
     return [start,end];
   }, [date, hours, min, period, selectedService]);
@@ -165,24 +167,34 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
+
+
+  const [addAppointmentMutation, { 
+    data: appMutationData, 
+    loading: appMutationLoading, 
+    error: appMutationError, 
+    reset: appMutationReset 
+  }] = useMutation(ADD_APPOINTMENT);
+
+  useEffect(() => {
+    if (!appMutationData || appMutationLoading) return;
+    if (appMutationError) {
+      return setError('Something went wrong'); // for now
+    }
+    
+    setSelectedBusiness(undefined);
+    setDate(undefined);
+    setHours(undefined);
+    setMin(undefined);
+    setPeriod('am');
+    setError(undefined);
+    appMutationReset();
+  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset]);
+  
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    
-    // ;(async() => {
-    //   const { data, error, lastSuccessfulOperation } = await addAppointment(appointment);
-
-    //   if (error) {
-    //     console.log(error);
-    //     console.log(lastSuccessfulOperation);
-    //   } else { 
-    //     setSelectedBusiness(undefined);
-    //     setDate(undefined);
-    //     setHours(undefined);
-    //     setMin(undefined);
-    //     setPeriod('am');
-    //   }
-    // })()
-  }, [appointment]);
+    addAppointmentMutation({variables: { appointment }});
+  }, [addAppointmentMutation, appointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -284,6 +296,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         mini
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
+      {error && <p className={styles.warning}>{error}</p>}
     </Modal>
   )
 }
