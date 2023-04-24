@@ -1,57 +1,34 @@
+import styles from './appointmentForm.module.scss';
+import clsx from "clsx"
+import uuid from "react-uuid"
+
 import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
-import { Appointment, AppointmentData, AppointmentInput } from "@/types/Appointment"
-import { Business, NewBusiness } from "@/types/Business"
-import { Client } from "@/types/Client"
-import { Service } from "@/types/Service"
-import clsx from "clsx"
+import { AppointmentData, AppointmentInput } from "@/types/Appointment"
+import { NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
-
 import { BsFillCameraVideoFill } from 'react-icons/bs';
-
-import styles from './appointmentForm.module.scss';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
-import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability"
+import { AvailabilitySlice } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { User } from "@/types/User"
-import { randomUUID } from "crypto"
-import uuid from "react-uuid"
 import { ADD_APPOINTMENT } from "@/utility/queries/appointmentQueries"
+import { FormClient } from '@/types/Client';
+import { FormService } from '@/types/Service';
 
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
-  // businesses: Business[],
-  // clients: Client[],
-  // services: Service[],
-  // availability: BaseAvailability[],
-}
-
-export interface FormClient {
-  id: string,
-  name: string,
-  avatar: string,
-}
-
-export interface FormService {
-  id: string,
-  name: string,
-  color: string,
-  is_video: boolean,
-  cost: number,
-  duration: number,
 }
 
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId}) => {
-
   const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
@@ -75,10 +52,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   
-  useEffect(() => {
-    console.log(servicesData);
-  }, [servicesData]);
-
   useEffect(() => {
     if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
   }, [loadingUserData, userData]);
@@ -147,7 +120,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       return inRange(range, start) && inRange(range, end);
     });
   }, [availabilityMap, selectedBusiness, startEndDates]);
-
   
   const appointment = useMemo<AppointmentInput | null>(() => {
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
@@ -166,8 +138,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       is_paid: false,
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
-
-
 
   const [addAppointmentMutation, { 
     data: appMutationData, 
@@ -247,13 +217,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <p>{i + 1}</p>
     </div>
   ));
-
   const minList = new Array(4).fill(0).map((_, i) => (
     <div key={i} className={styles.option} onClick={() => setMin(i * 15)}>
       <p>{i * 15}</p>
     </div>
   ));
-
   const periodList = new Array(2).fill(0).map((_, i) => (
     <div key={i} className={styles.option} onClick={() => setPeriod(!i ? 'am' : 'pm')}>
       <p>{!i ? 'am' : 'pm'}</p>

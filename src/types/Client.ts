@@ -10,3 +10,9 @@ export interface Client {
   active?: boolean,
   assignedUserIds: string[],
 };
+
+export interface FormClient {
+  id: string,
+  name: string,
+  avatar: string,
+}

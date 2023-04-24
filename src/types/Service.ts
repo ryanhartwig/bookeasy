@@ -9,3 +9,12 @@ export interface Service {
   color: string,
   userIds: string[],
 };
+
+export interface FormService {
+  id: string,
+  name: string,
+  color: string,
+  is_video: boolean,
+  cost: number,
+  duration: number,
+}
