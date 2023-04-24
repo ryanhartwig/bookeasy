@@ -53,33 +53,36 @@ export const appointmentsResolvers = {
   
   Appointment: {
     service: async (parent: any) => {
-      const response = await db.query('select name, duration, color from service where id = $1', [parent.service_id]);
-      const { name, duration, color } = response.rows[0];
+      const response = await db.query('select name, duration, color, id from service where id = $1', [parent.service_id]);
+      const { name, duration, color, id } = response.rows[0];
 
-      if (!name || !duration || !color) throwGQLError(`No service found for appointment with id: ${parent.id} and service_id: ${parent.service_id}`);
+      if (!name || !duration || !color || !id) throwGQLError(`No service found for appointment with id: ${parent.id} and service_id: ${parent.service_id}`);
       
       return {
+        id,
         name,
         duration,
         color,
       }
     },
     business: async (parent: any) => {
-      const response = await db.query('select name from business where id = $1', [parent.business_id]);
+      const response = await db.query('select name, id from business where id = $1', [parent.business_id]);
 
       if (!response.rowCount) throwGQLError(`No business found for appointment with id: ${parent.id}, business_id: ${parent.business_id}`);
 
       return {
         name: response.rows[0].name,
+        id: response.rows[0].id,
       }
     },
     client: async (parent: any) => {
-      const response = await db.query('select name from client where id = $1', [parent.client_id]);
+      const response = await db.query('select name, id from client where id = $1', [parent.client_id]);
 
       if (!response.rowCount) throwGQLError(`No client found for appointment with id: ${parent.id}, client_id: ${parent.client_id}`);
 
       return {
         name: response.rows[0].name,
+        id: response.rows[0].id,
       }
     },
   }

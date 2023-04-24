@@ -30,7 +30,9 @@ export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
   });
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !data) return;
+    console.log(data);
+
     setAppointments(data.getUserAppointments
       .filter((app: AppointmentData) => inRange(todayRange, app.start_date))
     );

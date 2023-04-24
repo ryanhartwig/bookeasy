@@ -28,9 +28,10 @@ interface AppointmentFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
   edit?: boolean,
+  initialAppointment?: AppointmentData,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, edit = false}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
@@ -53,6 +54,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   // Depends on selectedBusiness state
   const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+
+  
   
   useEffect(() => {
     if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
@@ -182,8 +185,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    addEditAppointment({variables: { appointment, edit: false }});
-  }, [addEditAppointment, appointment]);
+    addEditAppointment({variables: { appointment, edit: !!initialAppointment }});
+  }, [addEditAppointment, appointment, initialAppointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>

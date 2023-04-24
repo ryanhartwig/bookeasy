@@ -18,14 +18,17 @@ export interface Appointment {
 export interface AppointmentData {
   id: string,
   service: {
+    id: string,
     name: string,
     duration: number,
     color: string,
   }
   business: {
+    id: string,
     name: string
   }
   client: {
+    id: string,
     name: string,
   }
   start_date: string,

@@ -31,7 +31,7 @@ export const Stats: React.FC<StatsProps> = ({userId}) => {
     });
 
     useEffect(() => {
-      if (loading) return;
+      if (loading || !data) return;
       setAppointments(data.getUserAppointments.filter((app: AppointmentData) => inRange(getCurrentISOWeek(), app.start_date)));
     }, [data, loading]);
   

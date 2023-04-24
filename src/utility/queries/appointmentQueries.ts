@@ -5,14 +5,17 @@ export const GET_USER_APPOINTMENTS = gql`
     getUserAppointments(user_id: $userId, range_start: $rangeStart, range_end: $rangeEnd) {
       id
       service {
+        id
         name
         duration
         color
       }
       business {
+        id
         name
       }
       client {
+        id
         name
       }
       start_date
