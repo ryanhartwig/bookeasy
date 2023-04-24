@@ -8,10 +8,9 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useMemo, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
 import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
-import { getMonthRange } from '@/utility/functions/dateRanges/getMonthRange';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
-import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 
 interface AppointmentsProps {
   userId: string,
@@ -20,7 +19,7 @@ interface AppointmentsProps {
 export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
-  const todayRange = useMemo(() => getDayRange(), []);
+  const todayRange = useMemo(() => getISODayRange(), []);
 
   const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
