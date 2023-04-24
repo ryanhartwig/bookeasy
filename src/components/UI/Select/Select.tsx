@@ -10,9 +10,10 @@ interface SelectProps {
   placeholder?: string,
   selected?: JSX.Element,
   disabled?: boolean,
+  hasSelected?: boolean,
 }
 
-export const Select: React.FC<SelectProps> = ({list, placeholder = "", selected, disabled = false}) => {
+export const Select: React.FC<SelectProps> = ({list, placeholder = "...", selected, disabled = false, hasSelected}) => {
 
   const [optionsShowing, setOptionsShowing] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement>(undefined!);
@@ -30,7 +31,7 @@ export const Select: React.FC<SelectProps> = ({list, placeholder = "", selected,
   
   return (
     <div className={clsx(styles.input, {[styles.disabled]: disabled})} ref={selectRef} onClick={showOptions} >
-      {selected ? selected : <p>{placeholder}</p>}
+      {hasSelected ? selected : <p>{placeholder}</p>}
       <div className={styles.down}>
         <BsChevronDown />
       </div>

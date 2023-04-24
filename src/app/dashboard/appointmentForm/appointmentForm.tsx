@@ -188,11 +188,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <p>{b.name}</p>
     </div>
   )), [businesses]);
-  const businessElement = useMemo(() => selectedBusiness ? (
-    <div className={styles.selectedOption}>
-      <p>{selectedBusiness.name}</p>
-    </div>
-  ) : undefined, [selectedBusiness]);
 
   const clientsList = useMemo(() => clientsData?.getBusinessClients 
     ? clientsData.getBusinessClients
@@ -204,12 +199,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         ))
     : []
   , [clientsData]);
-  const clientElement = useMemo(() => selectedClient ? (
-    <div className={styles.selectedOption}>
-      <Avatar src={selectedClient.avatar} size={28} />
-      <p>{selectedClient.name}</p>
-    </div>
-  ) : undefined, [selectedClient]);
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
@@ -221,13 +210,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       ))
     : []
   , [servicesData]);
-  const serviceElement = useMemo(() => selectedService 
-    ? <div className={styles.selectedOption}>
-        {selectedService.is_video && <BsFillCameraVideoFill size={16} color={'grey'} />}
-        <p>{selectedService.name}</p>
-      </div>
-    : undefined
-  , [selectedService]);
 
   const hoursList = new Array(12).fill(0).map((_, i) => (
     <div key={i} className={styles.option} onClick={() => setHours(i + 1)}>
@@ -250,11 +232,25 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
-        <Select list={businessesList} selected={businessElement} placeholder="..." />
+        <Select list={businessesList} selected={(
+          <div className={styles.selectedOption}>
+            <p>{selectedBusiness?.name}</p>
+          </div>
+        )} hasSelected={!!selectedBusiness}/>
         <p>Select a client</p>
-        <Select disabled={!selectedBusiness} list={clientsList} selected={clientElement} placeholder="..." />
+        <Select disabled={!selectedBusiness} list={clientsList} hasSelected={!!selectedClient} selected={(
+          <div className={styles.selectedOption}>
+            <Avatar src={selectedClient?.avatar} size={28} />
+            <p>{selectedClient?.name}</p>
+          </div>
+        )}/>
         <p>Select a service</p>
-        <Select disabled={!selectedBusiness} list={servicesList} selected={serviceElement} placeholder="..." />
+        <Select disabled={!selectedBusiness} list={servicesList} hasSelected={!!selectedService} selected={(
+          <div className={styles.selectedOption}>
+            {selectedService?.is_video && <BsFillCameraVideoFill size={16} color={'grey'} />}
+            <p>{selectedService?.name}</p>
+          </div>
+        )}/>
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>
