@@ -176,7 +176,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setPeriod('am');
     setError(undefined);
     appMutationReset();
-  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset]);
+    setOpen(false);
+  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, setOpen]);
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
@@ -234,7 +235,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading
+      loading={loadingClients || loadingServices || appMutationLoading}
     >
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
