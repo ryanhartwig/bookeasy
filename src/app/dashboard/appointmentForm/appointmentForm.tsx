@@ -22,6 +22,8 @@ import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { User } from "@/types/User"
+import { randomUUID } from "crypto"
+import uuid from "react-uuid"
 
 interface AppointmentFormProps {
   open: boolean,
@@ -150,6 +152,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
 
     return {
+      id: uuid(),
       businessId: selectedBusiness.id,
       clientId: selectedClient.id,
       endDate: startEndDates[1].toString(),
