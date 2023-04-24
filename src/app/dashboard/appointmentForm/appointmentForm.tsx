@@ -141,18 +141,18 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
-  const [addAppointment, { 
+  const [addEditAppointment, { 
     data: appMutationData, 
     loading: appMutationLoading, 
     error: appMutationError, 
     reset: appMutationReset 
   }] = useMutation(ADD_EDIT_APPOINTMENT, {
-    update(cache, { data: { addAppointment }}) {
+    update(cache, { data: { addEditAppointment }}) {
       cache.modify({
         fields: {
           getUserAppointments(existingAppointments = []) {
             const newAppointmentRef = cache.writeFragment({
-              data: addAppointment,
+              data: addEditAppointment,
               fragment: gql`
                 ${NEW_APPOINTMENT_FRAGMENT}
               `
@@ -182,8 +182,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    addAppointment({variables: { appointment, edit }});
-  }, [addAppointment, appointment, edit]);
+    addEditAppointment({variables: { appointment, edit: false }});
+  }, [addEditAppointment, appointment]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>

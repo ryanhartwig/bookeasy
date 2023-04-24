@@ -1,15 +1,26 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
+import { QueryResult } from "pg";
 
 export const appointmentsResolvers = {
   Mutation: {
     addEditAppointment: async (parent: any, args: any) => {
       try {
         const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args.appointment; 
-        const response = await db.query(`insert into appointment values (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
-        ) returning *`, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration]);
 
+        const query = args.edit 
+          // update existing appointment
+            ? `update appointment set
+            user_id = $2, service_id = $3, business_id = $4, client_id = $5, start_date = $6, end_date = $7, service_cost = $8, is_video = $9, is_paid = $10, service_duration = $11 
+            where id = $1 returning *`
+          // create new appointment
+            : `insert into appointment values (
+              $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+            ) returning *`
+        ;
+
+        const response = await db.query(query, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration])
+        console.log(response.rows);
         return response.rows[0];
       } catch(e: any) {
         throwGQLError(e.message)
