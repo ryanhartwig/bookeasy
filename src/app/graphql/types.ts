@@ -49,6 +49,7 @@ export const types = `#graphql
 
   type BusinessClient {
     # users: [BusinessUser!]!,
+    id: String!,
     notes: String,
     name: String!,
     email: String,
