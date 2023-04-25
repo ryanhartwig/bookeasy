@@ -26,7 +26,7 @@ export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
   // 14 days ahead assures second getMonthRange() helper function resets to the correct start date
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(new Date(startDate.getTime() + 1000 * 60 * 60 * 24 * 14)), [startDate]);
 
-  const { data, loading, error, fetchMore } = useQuery(GET_USER_APPOINTMENTS, { variables: {
+  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, { variables: {
     userId,
     rangeStart,
     rangeEnd,
