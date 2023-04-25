@@ -1,13 +1,15 @@
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
-import { Business } from '@/types/Business';
+import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
+import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
+import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './clients.module.scss';
 
 interface BusinessClientsListProps {
-  business: Business,
+  business: NewBusiness,
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
   query: string,
@@ -25,6 +27,15 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
         .every(slice => c.name.toLowerCase().includes(slice.toLowerCase()))
     )
   , [clients, query]);
+
+  const { data, loading } = useQuery(GET_BUSINESS_CLIENTS, { variables: {
+    businessId: business.id,
+  }});
+
+  useEffect(() => {
+    if (!data) return;
+    setClients(data.getBusinessClients)
+  }, [data]);
   
   return (
     <div className={styles.client_team}>
