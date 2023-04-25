@@ -56,7 +56,7 @@ export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
       </SecondaryHeader>
       <div className={styles.content}>
         <Daily day={selected[0]} appointments={selectedDayAppointments} userId={userId} />
-        {/* <Calendar appointments={selectedMonthAppointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} /> */}
+        <Calendar appointments={appointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} />
       </div>
     </div>
   )
