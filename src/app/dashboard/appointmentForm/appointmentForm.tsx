@@ -180,14 +180,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     update(cache, { data: { addEditAppointment }}) {
       cache.modify({
         fields: {
-          getUserAppointments(existingAppointments = []) {
+          getUserAppointments(existingAppointments = [], { readField }) {
             const newAppointmentRef = cache.writeFragment({
               data: addEditAppointment,
               fragment: gql`
                 ${NEW_APPOINTMENT_FRAGMENT}
               `
-            });
-            return [...existingAppointments, newAppointmentRef];
+            }); 
+            return existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref);
           }
         }
       })

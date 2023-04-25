@@ -46,6 +46,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   useEffect(() => {
     if (loading) return;
     if (error) return console.error(error.message);
+    console.log('from weekdays component: ', data.getUserAppointments)
 
     setAppointments(data.getUserAppointments);
   }, [data, error, loading]);

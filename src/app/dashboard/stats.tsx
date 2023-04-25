@@ -23,17 +23,20 @@ export const Stats: React.FC<StatsProps> = ({userId}) => {
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
 
   const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
-      variables: {
-        userId,
-        rangeStart,
-        rangeEnd,
-      }
-    });
+    variables: {
+      userId,
+      rangeStart,
+      rangeEnd,
+    }
+  });
 
-    useEffect(() => {
-      if (loading || !data) return;
-      setAppointments(data.getUserAppointments.filter((app: AppointmentData) => inRange(getCurrentISOWeek(), app.start_date)));
-    }, [data, loading]);
+
+  useEffect(() => console.log(appointments));
+  useEffect(() => {
+    if (loading || !data) return;
+    console.log('from stats component: ', data.getUserAppointments);
+    setAppointments(data.getUserAppointments.filter((app: AppointmentData) => inRange(getCurrentISOWeek(), app.start_date)));
+  }, [data, loading]);
   
   const [start, end] = getCurrentWeek();
   const [formOpen, setFormOpen] = useState<boolean>(false);
