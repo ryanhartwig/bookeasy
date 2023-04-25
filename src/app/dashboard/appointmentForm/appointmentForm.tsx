@@ -29,9 +29,10 @@ interface AppointmentFormProps {
   userId: string,
   edit?: boolean,
   initialAppointment?: AppointmentData,
+  onSubmit?: (...args: any) => any,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, onSubmit}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
@@ -181,7 +182,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setError(undefined);
     appMutationReset();
     setOpen(false);
-  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, setOpen]);
+    onSubmit && onSubmit();
+  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, onSubmit, setOpen]);
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;

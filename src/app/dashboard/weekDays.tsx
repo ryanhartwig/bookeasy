@@ -1,4 +1,4 @@
-'use client';
+  'use client';
 
 import styles from './weekly_overview.module.scss';
 
@@ -13,6 +13,7 @@ import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
+import { AppointmentForm } from './appointmentForm/appointmentForm';
 
 interface WeekDaysProps {
   userId: string,
@@ -21,6 +22,15 @@ interface WeekDaysProps {
 export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
+  const [editAppointment, setEditAppointment] = useState<AppointmentData>();
+
+  useEffect(() => {
+    if (!editAppointment) return;
+
+    console.log(editAppointment);
+    setFormOpen(true);
+  }, [editAppointment]);
   
   const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
@@ -36,6 +46,8 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
     setAppointments(data.getUserAppointments);
   }, [data, error, loading]);
+
+  
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -58,9 +70,11 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
 
-          return <Hours userId={userId} key={i} day={i} appointments={thisDayApps} />
+          return <Hours key={i} day={i} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
+
+      <AppointmentForm userId={userId} open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }

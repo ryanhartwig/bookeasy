@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
 
 import styles from './weekly_overview.module.scss';
 
@@ -8,18 +6,16 @@ import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { formatTime } from '@/utility/functions/formatting/formatTime';
 import { AppointmentData } from '@/types/Appointment';
-import { AppointmentForm } from './appointmentForm/appointmentForm';
 
 interface HoursProps {
   day?: number,
   appointments: AppointmentData[],
-  userId: string,
+  setEditAppointment: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
 }
 
-export const Hours: React.FC<HoursProps> = ({day, appointments, userId}) => {
+export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointment}) => {
   const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
-  const [formOpen, setFormOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setAppointmentIndices(p => {
@@ -50,7 +46,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, userId}) => {
 
       return prev;
     });
-  }, []);
+  }, [day]);
   
   const blocks = useMemo(() => {
     const b = new Array(96).fill(true)
@@ -90,19 +86,18 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, userId}) => {
           {covered && <div className={styles.cover} />}
           {isHour && <p>{hour12} {period}</p>}
           {appointment && 
-            <div className={clsx(styles.weekly_app, 'noselect')} style={{height, borderColor: color}}>
+            <div className={clsx(styles.weekly_app, 'noselect')} onClick={() => setEditAppointment(appointment)} style={{height, borderColor: color}}>
               <div>
                 <p style={{fontSize: 12}}>{appointment.client.name}</p>
                 <p>{formatTime(appointment.start_date)}</p>
               </div>
               <p>{appointment.service.name}</p>
-              <AppointmentForm userId={userId} open={formOpen} setOpen={setFormOpen} />
             </div>
           }
         </div>
       )
     })
-  }, [appointmentIndices, availability, day]);
+  }, [appointmentIndices, availability, day, setEditAppointment]);
   
   return (
     <div className={styles.hours}>
