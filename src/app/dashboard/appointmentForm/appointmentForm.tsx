@@ -298,7 +298,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       className={styles.appointmentForm}
       loading={prepopulating || loadingClients || loadingServices || appMutationLoading || deleteAppointmentLoading}
     >
-      <Modal.Header>Create an Appointment</Modal.Header>
+      <Modal.Header>{initialAppointment ? "Edit" : "Create an"} Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Select a provider</p>
         <Select list={businessesList} selected={(
