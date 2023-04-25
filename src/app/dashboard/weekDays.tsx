@@ -27,7 +27,6 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
   useEffect(() => {
     if (!editAppointment) return;
-
     setFormOpen(true);
   }, [editAppointment]);
 
@@ -76,7 +75,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
         })}
       </div>
 
-      {editAppointment && <AppointmentForm userId={userId} open={formOpen} setOpen={setFormOpen} initialAppointment={editAppointment} />}
+      {editAppointment && <AppointmentForm onSubmit={() => setEditAppointment(undefined)} userId={userId} open={formOpen} setOpen={setFormOpen} initialAppointment={editAppointment} />}
     </div>
   )
 }

@@ -20,7 +20,6 @@ export const Select: React.FC<SelectProps> = ({list, placeholder = "...", select
   const optionsRef = useRef<HTMLDivElement>(undefined!);
 
   useClickout(() => setOptionsShowing(false), optionsShowing, false, selectRef);
-  
   useEffect(() => setOptionsShowing(false), [selected]);
 
   const showOptions = useCallback((e: any) => {

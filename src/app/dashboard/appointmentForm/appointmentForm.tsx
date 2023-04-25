@@ -211,7 +211,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
-    console.log('edit value: ', !!initialAppointment)
     addEditAppointment({variables: { appointment, edit: !!initialAppointment }});
   }, [addEditAppointment, appointment, initialAppointment]);
 
