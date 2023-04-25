@@ -21,7 +21,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
   const todayRange = useMemo(() => getISODayRange(), []);
 
-  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
+  const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
       userId,
       rangeStart,
@@ -31,12 +31,12 @@ export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
 
   useEffect(() => {
     if (loading || !data) return;
-    console.log(data);
+    if (error) return console.error(error.message);
 
     setAppointments(data.getUserAppointments
       .filter((app: AppointmentData) => inRange(todayRange, app.start_date))
     );
-  }, [data, loading, todayRange]);
+  }, [data, error, loading, todayRange]);
 
   return (
     <div className={styles.appointments}>

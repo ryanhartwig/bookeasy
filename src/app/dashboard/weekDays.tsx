@@ -22,7 +22,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
   
-  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
+  const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
       userId,
       rangeStart,
@@ -32,8 +32,10 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
   useEffect(() => {
     if (loading) return;
+    if (error) return console.error(error.message);
+
     setAppointments(data.getUserAppointments);
-  }, [data, loading]);
+  }, [data, error, loading]);
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
