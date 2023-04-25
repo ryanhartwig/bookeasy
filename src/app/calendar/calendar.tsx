@@ -9,7 +9,7 @@ import { Daily } from './daily';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
 import { useQuery } from '@apollo/client';
 import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';

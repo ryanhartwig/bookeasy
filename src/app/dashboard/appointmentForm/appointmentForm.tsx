@@ -199,16 +199,15 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       return setError('Something went wrong'); // for now
     }
     
-    setId(uuid());
-    // setSelectedBusiness(undefined);
-    // setDate(undefined);
-    // setHours(undefined);
-    // setMin(undefined);
-    // setPeriod('am');
-    // setError(undefined);
-    // appMutationReset();
-    // setOpen(false);
-    // onSubmit && onSubmit();
+    setSelectedBusiness(undefined);
+    setDate(undefined);
+    setHours(undefined);
+    setMin(undefined);
+    setPeriod('am');
+    setError(undefined);
+    appMutationReset();
+    setOpen(false);
+    onSubmit && onSubmit();
   }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, onSubmit, setOpen]);
 
   const [deleteAppointment, { 
