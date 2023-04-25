@@ -43,15 +43,13 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [min, setMin] = useState<number>();
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
   const [error, setError] = useState<string>();
+  const [id, setId] = useState<string>();
 
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
 
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
-
-  useEffect(() => console.log(prepopulating))
-  useEffect(() => console.log(initialAppointment))
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -85,11 +83,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
     if (!prepopulating || !initialAppointment) return;
-    console.log('hello')
-    // setPrepopulating(true);
     setSelectedBusiness(initialAppointment.business);
     const date = new Date(initialAppointment.start_date);
     const [month, day, year] = date.toLocaleDateString().split('/').map(str => str.length === 1 ? `0${str}` : str);
+    setId(initialAppointment.id);
     setDate(`${year}-${month}-${day}`);
     setHours(date.getHours() % 12 || 12);
     setMin(date.getMinutes());
@@ -158,7 +155,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
 
     return {
-      id: uuid(),
+      id: id ?? uuid(),
       user_id: userId,
       service_id: selectedService.id,
       business_id: selectedBusiness.id,
@@ -170,7 +167,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       is_video: selectedService.is_video,
       is_paid: false,
     }
-  }, [selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
+  }, [id, selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
   const [addEditAppointment, { 
     data: appMutationData, 
@@ -214,6 +211,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
+    console.log('edit value: ', !!initialAppointment)
     addEditAppointment({variables: { appointment, edit: !!initialAppointment }});
   }, [addEditAppointment, appointment, initialAppointment]);
 

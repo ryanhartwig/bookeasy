@@ -1,13 +1,11 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
-import { QueryResult } from "pg";
 
 export const appointmentsResolvers = {
   Mutation: {
     addEditAppointment: async (parent: any, args: any) => {
       try {
         const { id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args.appointment; 
-
         const query = args.edit 
           // update existing appointment
             ? `update appointment set
@@ -19,8 +17,7 @@ export const appointmentsResolvers = {
             ) returning *`
         ;
 
-        const response = await db.query(query, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration])
-        console.log(response.rows);
+        const response = await db.query(query, [id, user_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration]);
         return response.rows[0];
       } catch(e: any) {
         throwGQLError(e.message)
@@ -110,4 +107,3 @@ export const appointmentsTypeDefs = `#graphql
     addEditAppointment(appointment: AppointmentInput!, edit: Boolean): Appointment!,
   }
 `;
-
