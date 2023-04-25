@@ -187,7 +187,9 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
                 ${NEW_APPOINTMENT_FRAGMENT}
               `
             }); 
-            return existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref);
+            return initialAppointment 
+              ? existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref)
+              : [...existingAppointments, newAppointmentRef];
           }
         }
       })
