@@ -30,11 +30,8 @@ export const Stats: React.FC<StatsProps> = ({userId}) => {
     }
   });
 
-
-  useEffect(() => console.log(appointments));
   useEffect(() => {
     if (loading || !data) return;
-    console.log('from stats component: ', data.getUserAppointments);
     setAppointments(data.getUserAppointments.filter((app: AppointmentData) => inRange(getCurrentISOWeek(), app.start_date)));
   }, [data, loading]);
   
