@@ -30,6 +30,11 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
     setFormOpen(true);
   }, [editAppointment]);
+
+  useEffect(() => {
+    if (formOpen) return;
+    setEditAppointment(undefined);
+  }, [formOpen]);
   
   const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, {
     variables: {
@@ -45,8 +50,6 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
     setAppointments(data.getUserAppointments);
   }, [data, error, loading]);
-
-  
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
