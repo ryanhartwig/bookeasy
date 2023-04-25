@@ -6,9 +6,8 @@ export interface Client {
   avatar?: any,
   address?: string,
   phone?: string,
-  created: number,
-  active?: boolean,
-  assignedUserIds: string[],
+  joined_date: number,
+  active: boolean,
 };
 
 export interface FormClient {

@@ -14,6 +14,22 @@ export const GET_BUSINESS = gql`
   }
 `;
 
+export const GET_BUSINESS_CLIENTS = gql`
+  query($businessId: ID!) {
+    getBusinessClients(business_id: $businessId) {
+      id
+      notes
+      name
+      email
+      address
+      phone
+      joined_date
+      avatar
+      active
+    }
+  }
+`;
+
 export const GET_BUSINESS_CLIENTS_FORM = gql`
   query($businessId: ID!) {
     getBusinessClients(business_id: $businessId) {

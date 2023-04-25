@@ -1,53 +1,36 @@
 import styles from './clients.module.scss';
 
 import { useMemo, useState } from 'react';
-import clsx from 'clsx';
 import { Client } from '@/types/Client';
-import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Business } from '@/types/Business';
-import { Avatar } from '@/components/UI/Avatar/Avatar';
+import { useQuery } from '@apollo/client';
+import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
+import { BusinessClientsList } from './businessClientsList';
 
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
-  clients: Client[],
-  businesses: Business[],
+  userId: string,
 }
 
-export const Clients: React.FC<ClientsProps> = ({selected, setSelected, clients, businesses}) => {
+export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId}) => {
   const [query, setQuery] = useState<string>('');
+
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+
+  const { data, loading } = useQuery(GET_USER_BUSINESSES, { variables: {
+    userId,
+  }});
 
   const results = useMemo(() => {    
     return (
       businesses.map(b => {
-        const filteredClients = clients
-          // organize by team
-          .filter(c => c.businessId === b.id)
-          // space separated lazy search
-          .filter(c => !query.length || query.split(' ').every(slice => c.name.toLowerCase().includes(slice.toLowerCase())))
-        ;
-
         return (
-          <div key={b.id} className={styles.client_team}>
-            <SectionLabel label={b.name} />
-            {filteredClients.map(c => (
-              <div 
-                key={c.id} 
-                className={clsx(styles.client, {[styles.selected]: selected?.id === c.id})}
-                onClick={() => {
-                  setSelected(c);
-                }}
-              >
-                <Avatar src={c.avatar} />
-                <p>{c.name}</p>
-              </div>
-            ))}
-          </div>
+          <BusinessClientsList key={b.id} business={b} query={query} selected={selected} setSelected={setSelected} />
         )
       })
     )
-    
-  }, [businesses, clients, query, selected?.id, setSelected]);
+  }, [businesses, query, selected, setSelected]);
 
   return (
     <div className={styles.clients}>

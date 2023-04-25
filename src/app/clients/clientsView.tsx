@@ -5,25 +5,23 @@ import { Details } from './details';
 import styles from './clients.module.scss';
 import { Client } from '@/types/Client';
 import React, { useState } from 'react';
-import { Business } from '@/types/Business';
-import { Appointment } from '@/types/Appointment';
-import { Service } from '@/types/Service';
+import { useQuery } from '@apollo/client';
+import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 
 interface ClientsViewProps {
-  clients: Client[],
-  businesses: Business[],
-  appointments: Appointment[],
-  services: Service[],
+  userId: string,
 }
 
-export const ClientsView: React.FC<ClientsViewProps> = ({clients, businesses, appointments, services}) => {
+export const ClientsView: React.FC<ClientsViewProps> = ({userId}) => {
   const [selected, setSelected] = useState<Client>();
+
+
 
   return (
     <div className={styles.wrapper}>
-      <Clients selected={selected} setSelected={setSelected} clients={clients} businesses={businesses} />
-      {selected ? <Details selected={selected} appointments={appointments} services={services} />
-        : <p style={{width: '100%', padding: 20, fontWeight: 300, fontSize: 14, color: 'grey'}}>Select a client to see details</p>}
+      <Clients userId={userId} selected={selected} setSelected={setSelected}/>
+      {/* {selected ? <Details selected={selected} appointments={appointments} services={services} />
+        : <p style={{width: '100%', padding: 20, fontWeight: 300, fontSize: 14, color: 'grey'}}>Select a client to see details</p>} */}
     </div>
   )
 }
