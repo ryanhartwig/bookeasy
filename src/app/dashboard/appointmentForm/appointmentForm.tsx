@@ -51,6 +51,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
 
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
     [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
@@ -343,11 +345,31 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
       {error && <p className={styles.warning}>{error}</p>}
-      {!!initialAppointment && <div className={styles.delete} onClick={onDeleteAppointment}>
+      {!!initialAppointment && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />
         <p>Unschedule</p>
       </div>}
-
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteAppointment()}} >
+        <Modal.Header>Confirm Unschedule</Modal.Header>
+        <div className={styles.confirmDelete}>
+          <p>Are you sure you want to unschedule this appointment?</p>
+          <p className={styles.appointmentDate}>{startEndDates ? formatFullDateString(startEndDates[0]) : '...'}</p>        
+          <AppointmentActionCard 
+            app={{ 
+              start_date: startEndDates?.[0] ?? 0, 
+              service: {
+                name: selectedService?.name ?? '...',
+                duration: selectedService?.duration ?? 0,
+                color: selectedService?.color
+              },
+              client: {
+                name: selectedClient?.name ?? '...',
+              }
+            } as unknown as AppointmentData} 
+            mini
+          />
+        </div>
+      </Modal>
     </Modal>
   )
 }
