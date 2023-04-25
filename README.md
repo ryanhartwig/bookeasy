@@ -2,7 +2,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started!
 
-
 First, run the development server:
 
 ```bash
@@ -13,19 +12,10 @@ yarn dev
 pnpm dev
 ```
 
-Spin up the grafbase server: 
-
-```bash
-npx grafbase dev
-```
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Important
+Note: This project is in early development.
 
-No data will show unless the grafbase server is running. This project currently has no mutations implemented, therefore it is read-only.
-
-Grafbase is only recently released and there may be some issues getting it started / working properly. 
 
 ## Screenshots
 
