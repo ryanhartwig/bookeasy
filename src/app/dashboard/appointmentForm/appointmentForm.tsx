@@ -27,7 +27,6 @@ interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
-  edit?: boolean,
   initialAppointment?: AppointmentData,
   onSubmit?: (...args: any) => any,
 }
@@ -48,9 +47,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
-
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
-
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   useWaterfall([
@@ -202,15 +199,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       return setError('Something went wrong'); // for now
     }
     
-    setSelectedBusiness(undefined);
-    setDate(undefined);
-    setHours(undefined);
-    setMin(undefined);
-    setPeriod('am');
-    setError(undefined);
-    appMutationReset();
-    setOpen(false);
-    onSubmit && onSubmit();
+    setId(uuid());
+    // setSelectedBusiness(undefined);
+    // setDate(undefined);
+    // setHours(undefined);
+    // setMin(undefined);
+    // setPeriod('am');
+    // setError(undefined);
+    // appMutationReset();
+    // setOpen(false);
+    // onSubmit && onSubmit();
   }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, onSubmit, setOpen]);
 
   const [deleteAppointment, { 

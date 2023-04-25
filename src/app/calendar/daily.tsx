@@ -1,24 +1,35 @@
 'use client';
 
 import { Card } from '@/components/UI/Card/Card';
-import { Appointment } from '@/types/Appointment';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { Appointment, AppointmentData } from '@/types/Appointment';
 import { useEffect, useState, useRef } from 'react';
+import { AppointmentForm } from '../dashboard/appointmentForm/appointmentForm';
 import { Hours } from '../dashboard/hours';
 import styles from './daily.module.scss';
 
 interface DailyProps {
   day: number,
-  services: Map<string, Service>,
-  clients: Map<string, Client>,
-  appointments: Appointment[],
+  appointments: AppointmentData[],
+  userId: string,
 }
 
-export const Daily: React.FC<DailyProps> = ({day, services, clients, appointments}) => {
+export const Daily: React.FC<DailyProps> = ({day, appointments, userId}) => {
 
   const [width, setWidth] = useState<string>('100%');
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
+
+  const [editAppointment, setEditAppointment] = useState<AppointmentData>();
+  const [formOpen, setFormOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!editAppointment) return;
+    setFormOpen(true);
+  }, [editAppointment]);
+
+  useEffect(() => {
+    if (formOpen) return;
+    setEditAppointment(undefined);
+  }, [formOpen]);
 
   useEffect(() => {
     if (!wrapperRef.current ) return;
@@ -31,11 +42,13 @@ export const Daily: React.FC<DailyProps> = ({day, services, clients, appointment
       <div className={styles.day_wrapper} >
         <Card ref={wrapperRef} className={styles.day_card} style={{width}}>
           <Hours 
-            services={services} 
-            clients={clients} 
             appointments={appointments}
+            setEditAppointment={setEditAppointment}
           />
         </Card>  
+        {editAppointment && 
+          <AppointmentForm open={formOpen} setOpen={setFormOpen} userId={userId} initialAppointment={editAppointment} onSubmit={() => setEditAppointment(undefined)} />
+        }
       </div>
     </div>
     
