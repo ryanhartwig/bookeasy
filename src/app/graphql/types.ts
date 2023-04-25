@@ -11,11 +11,12 @@ export const types = `#graphql
 
   type User {
     id: ID!,
-    own_business_id: String,
+    own_business: Business!,
     name: String!,
     email: String!,
     phone: String!,
     created: String,
+    prefs: UserPrefs!,
   }
 
   type Service {
@@ -47,15 +48,15 @@ export const types = `#graphql
   }
 
   type BusinessClient {
-    client: Client,
-    business: Business!,
-    users: [BusinessUser!]!,
+    # users: [BusinessUser!]!,
+    id: String!,
     notes: String,
     name: String!,
     email: String,
     address: String,
     phone: String,
-    joined_date: String!
+    joined_date: String!,
+    avatar: String,
   }
 
   type Client {
@@ -72,14 +73,13 @@ export const types = `#graphql
     name: String!,
     email: String,
     phone: String,
-    min_booking_notice: Int!,
-    min_cancel_notice: Int!,
-    max_book_ahead: Int!
+    min_booking_notice: String!,
+    min_cancel_notice: String!,
+    max_book_ahead: String!
   }
 
   type AvailabilitySlice {
-    user: User!,
-    business: Business!,
+    business_id: String!,
     day: Int!,
     start_time: String!,
     end_time: String!

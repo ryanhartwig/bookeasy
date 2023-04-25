@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { User } from '@/types/User';
-import { getBusinessClients } from '@/utility/functions/fetch/business/getBusinessClients';
-import { getBusinessServices } from '@/utility/functions/fetch/business/getBusinessServices';
-import { getBusinessMembers } from '@/utility/functions/fetch/business/getBusinessMembers';
+import { getBusinessClients } from '@/utility/functions/fetch_old/business/getBusinessClients';
+import { getBusinessServices } from '@/utility/functions/fetch_old/business/getBusinessServices';
+import { getBusinessMembers } from '@/utility/functions/fetch_old/business/getBusinessMembers';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { TeamDetails } from './teamDetails';
-import { getBusinessUserMeta, UserMeta } from '@/utility/functions/fetch/business/getBusinessUserMeta';
+import { getBusinessUserMeta, UserMeta } from '@/utility/functions/fetch_old/business/getBusinessUserMeta';
 
 interface TeamsViewProps {
   teams: Business[],

@@ -1,4 +1,4 @@
-'use client';
+  'use client';
 
 import styles from './weekly_overview.module.scss';
 
@@ -7,18 +7,48 @@ import { Hours } from './hours';
 import { useOptimizedResize } from '@/utility/hooks/useOptimizedResize';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
-import { Appointment } from '@/types/Appointment';
-import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { AppointmentData } from '@/types/Appointment';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { useQuery } from '@apollo/client';
+import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
+import { AppointmentForm } from './appointmentForm/appointmentForm';
 
 interface WeekDaysProps {
-  appointments: Appointment[],
-  services: Service[],
-  clients: Client[],
+  userId: string,
 }
 
-export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clients}) => {
+export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
+  const [editAppointment, setEditAppointment] = useState<AppointmentData>();
+
+  useEffect(() => {
+    if (!editAppointment) return;
+    setFormOpen(true);
+  }, [editAppointment]);
+
+  useEffect(() => {
+    if (formOpen) return;
+    setEditAppointment(undefined);
+  }, [formOpen]);
+  
+  const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, {
+    variables: {
+      userId,
+      rangeStart,
+      rangeEnd,
+    }
+  });
+
+  useEffect(() => {
+    if (loading) return;
+    if (error) return console.error(error.message);
+
+    setAppointments(data.getUserAppointments);
+  }, [data, error, loading]);
 
   const days = Array(7).fill(true);
   const hourlyRef = useRef<HTMLDivElement>(undefined!);
@@ -26,9 +56,6 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clien
   const [width, setWidth] = useState<string>('auto');
   const [start] = getCurrentWeek();
 
-  const servicesMap = useMemo(() => new Map<string, Service>(), []);
-  const clientsMap = useMemo(() => new Map<string, Client>(), []);
-  
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
 
@@ -36,24 +63,19 @@ export const WeekDays: React.FC<WeekDaysProps> = ({appointments, services, clien
     setWidth(`calc(100% + ${hourlyRef.current.offsetWidth - hourlyRef.current.clientWidth}px)`)
   }, []);
 
-  useEffect(() => {
-    services.forEach(s => servicesMap.set(s.id, s));
-    clients.forEach(c => clientsMap.set(c.id, c));
-  }, [clients, clientsMap, services, servicesMap]);
-  
   return (
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
         {days.map((_, i) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
+          const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
 
-          const [dayStart, dayEnd] = getDayRange(date);
-          const thisDayApps = appointments.filter((app) => dayStart <= app.startDate && dayEnd >= app.startDate);
-          
-          return <Hours key={i} day={i} appointments={thisDayApps} services={servicesMap} clients={clientsMap} />
+          return <Hours key={i} day={i} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
+
+      {editAppointment && <AppointmentForm onSubmit={() => setEditAppointment(undefined)} userId={userId} open={formOpen} setOpen={setFormOpen} initialAppointment={editAppointment} />}
     </div>
   )
 }

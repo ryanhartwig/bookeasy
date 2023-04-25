@@ -1,21 +1,12 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
 
-
 export const userResolvers = {
   Query: {
     getUser: async (parent: any, args: any) => {
       try {
         const response = await db.query('select * from users where id = $1', [args.id]);
         return response.rows[0];   
-      } catch(e:any) {
-        throwGQLError(e.message);
-      }
-    },
-    getUserPrefs: async (parent:any, args: any) => {
-      try {
-        const response = await db.query('select * from user_prefs where user_id = $1', [args.user_id]);
-        return response.rows[0];
       } catch(e:any) {
         throwGQLError(e.message);
       }
@@ -36,14 +27,41 @@ export const userResolvers = {
       } catch(e: any) {
         throwGQLError(e.message)
       }
-    }
-  }
+    },
+    getUserAvailability: async (parent: any, args: any) => {
+      try {
+        const response = await db.query('select * from availability_slice where user_id = $1', [args.user_id]);
+        return response.rows;
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    },
+  },
+  User: {
+    own_business: async (parent: any, args: any) => {
+      try {
+        const { own_business_id } = parent;
+        const response = await db.query('select * from business where id = $1', [own_business_id]);
+        return response.rows[0];
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    },
+    prefs: async (parent:any, args: any) => {
+      try {
+        const response = await db.query('select * from user_prefs where user_id = $1', [parent.id]);
+        return response.rows[0];
+      } catch(e:any) {
+        throwGQLError(e.message);
+      }
+    },
+  },
 }
 
 export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
-    getUserPrefs(user_id: ID!): UserPrefs,
     getUserBusinesses(user_id: ID!): [Business!]!,
+    getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
   }
 `;

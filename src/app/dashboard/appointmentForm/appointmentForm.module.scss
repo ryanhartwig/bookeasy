@@ -103,3 +103,41 @@
     }
   }
 }
+
+.delete {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  
+  color: #a8241d;
+
+  opacity: 0.8;
+  transition: opacity 200ms;
+  cursor: pointer;
+  
+  font-size: 16px;
+
+  margin-bottom: 20px;
+  
+  &:hover {
+    opacity: 1;
+  }
+  > *:first-child {
+    margin-right: 8px;
+  }
+
+}
+
+.confirmDelete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 10px auto 20px auto;
+
+  > p:first-child {
+    text-align: center;
+    font-size: 14px;
+    color: rgb(188, 48, 48);
+  }
+}

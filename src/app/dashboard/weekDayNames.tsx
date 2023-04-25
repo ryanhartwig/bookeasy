@@ -1,12 +1,9 @@
+import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
 import styles from './weekly_overview.module.scss';
 
-interface WeekDayNames {
-  start: Date,
-}
-
-export const WeekDayNames: React.FC<WeekDayNames> = ({start}) => {
+export const WeekDayNames = () => {
   const days = new Array(7).fill(true);
-
+  const [start] = getCurrentWeek();
   return (
     <div className={styles.weekdays}>
       {days.map((_, i) => {

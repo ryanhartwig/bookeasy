@@ -1,11 +1,11 @@
 import { Header } from '@/components/Header';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
-import { getAllBusinesses } from '@/utility/functions/fetch/getAllBusinesses';
-import { getAllClients } from '@/utility/functions/fetch/getAllClients';
-import { getAllServices } from '@/utility/functions/fetch/getAllServices';
-import { getUserAvailability } from '@/utility/functions/fetch/getUserAvailability';
-import { getUser } from '@/utility/functions/fetch/getUserDetails';
+import { getAllBusinesses } from '@/utility/functions/fetch_old/getAllBusinesses';
+import { getAllClients } from '@/utility/functions/fetch_old/getAllClients';
+import { getAllServices } from '@/utility/functions/fetch_old/getAllServices';
+import { getUserAvailability } from '@/utility/functions/fetch_old/getUserAvailability';
+import { getUser } from '@/utility/functions/fetch_old/getUserDetails';
 import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
 import styles from './business.module.scss';

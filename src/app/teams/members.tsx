@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/UI/Avatar/Avatar";
 import { User } from "@/types/User";
-import { UserMeta } from "@/utility/functions/fetch/business/getBusinessUserMeta";
+import { UserMeta } from "@/utility/functions/fetch_old/business/getBusinessUserMeta";
 import styles from './teams.module.scss';
 
 interface MembersProps {

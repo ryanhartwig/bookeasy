@@ -1,25 +1,40 @@
 'use client';
 
-import { Appointment } from '@/types/Appointment';
-import { BaseAvailability } from '@/types/BaseAvailability';
-import { Business } from '@/types/Business';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { AppointmentData } from '@/types/Appointment';
+import { getCurrentISOWeek } from '@/utility/functions/dateRanges/getCurrentISOWeek';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
-import { useState } from 'react';
+import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { useQuery } from '@apollo/client';
+import { useEffect, useMemo, useState } from 'react';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import styles from './dashboard.module.scss';
 
-interface Stats {
-  appointments: Appointment[],
-  businesses: Business[],
-  clients: Client[],
-  services: Service[],
-  availability: BaseAvailability[],
+interface StatsProps {
+  userId: string,
 }
 
-export const Stats: React.FC<Stats> = ({appointments, businesses, clients, services, availability}) => {
+export const Stats: React.FC<StatsProps> = ({userId}) => {
 
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+
+  // Use whole month range so that input is the same, (and will therefore use cached data for subsequent request)
+  const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
+
+  const { data, loading } = useQuery(GET_USER_APPOINTMENTS, {
+    variables: {
+      userId,
+      rangeStart,
+      rangeEnd,
+    }
+  });
+
+  useEffect(() => {
+    if (loading || !data) return;
+    setAppointments(data.getUserAppointments.filter((app: AppointmentData) => inRange(getCurrentISOWeek(), app.start_date)));
+  }, [data, loading]);
+  
   const [start, end] = getCurrentWeek();
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
@@ -46,7 +61,7 @@ export const Stats: React.FC<Stats> = ({appointments, businesses, clients, servi
         </div>
       </div>
       
-      <AppointmentForm availability={availability} services={services} clients={clients} businesses={businesses} open={formOpen} setOpen={setFormOpen} />
+      <AppointmentForm userId={userId} open={formOpen} setOpen={setFormOpen} />
     </div>
   )
 }

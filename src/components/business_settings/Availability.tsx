@@ -17,7 +17,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
     availabilitySlices.forEach(slice => {
       map.set(slice.day, 
         (map.get(slice.day) ?? [])
-          .concat([{ start: slice.start, end: slice.end }])
+          .concat([{ start: slice.start_time, end: slice.end_time }])
           .sort((a, b) => 
             Number(a.start.split(':').join('')) - Number(b.start.split(':').join(''))
           )

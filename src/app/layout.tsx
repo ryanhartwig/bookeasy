@@ -2,6 +2,7 @@ import './globals.css'
 import './home.scss';
 
 import { Navigator } from '@/components/Navigator';
+import { Providers } from './Providers';
 
 export default async function RootLayout({children}: { children: React.ReactNode}) {
 
@@ -11,7 +12,9 @@ export default async function RootLayout({children}: { children: React.ReactNode
         <main className='main'>
           <Navigator />
           <div className='Content'>
-            {children}
+            <Providers>
+              {children}
+            </Providers>
           </div>
         </main>
       </body>

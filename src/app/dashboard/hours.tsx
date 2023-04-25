@@ -1,30 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
 
 import styles from './weekly_overview.module.scss';
 
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
-import { Appointment } from '@/types/Appointment';
 import { useEffect, useMemo, useState } from 'react';
-import { Service } from '@/types/Service';
-import { Client } from '@/types/Client';
 import clsx from 'clsx';
 import { formatTime } from '@/utility/functions/formatting/formatTime';
+import { AppointmentData } from '@/types/Appointment';
 
 interface HoursProps {
   day?: number,
-  appointments: Appointment[],
-  services: Map<string, Service>,
-  clients: Map<string, Client>,
+  appointments: AppointmentData[],
+  setEditAppointment: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
 }
 
-interface AppointmentData extends Appointment {
-  clientName: string,
-  serviceName: string,
-  color: string,
-}
-
-export const Hours: React.FC<HoursProps> = ({day, appointments, services, clients}) => {
+export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointment}) => {
   const [availability, setAvailability] = useState<Map<number, string[][]>>();
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
 
@@ -33,22 +22,14 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
       const prev = new Map<number, AppointmentData>();
 
       appointments.forEach(app => {
-        const date = new Date(app.startDate);
+        const date = new Date(app.start_date);
         const calculatedIndex = (date.getHours() * 4) + (date.getMinutes() / 15);
-        const client = clients.get(app.clientId);
-        const service = services.get(app.serviceId);
-  
-        prev.set(calculatedIndex, {
-          ...app,
-          clientName: client?.name || '',
-          serviceName: service?.name || '',
-          color: service?.color || '',
-        });
+        prev.set(calculatedIndex, app);
       });
 
       return prev;
     })
-  }, [appointments, clients, services]);
+  }, [appointments]);
   
   useEffect(() => {
     if (day === undefined) return;
@@ -56,7 +37,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
       const prev = new Map(p);
 
       sample_base_availability.slices.forEach(slice => {
-        const {start, end, day} = slice;
+        const {start_time: start, end_time: end, day} = slice;
         const current = prev.get(day) || [];
     
         current.push([start, end]);
@@ -65,7 +46,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
 
       return prev;
     });
-  }, []);
+  }, [day]);
   
   const blocks = useMemo(() => {
     const b = new Array(96).fill(true)
@@ -76,7 +57,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
       let height: string = '';
 
       if (appointment) {
-        height = `${(appointment.endDate - appointment.startDate) / 1000 / 60 - 3}px`;
+        height = `${appointment.service_duration - 3}px`;
       }
 
       const hour = i / 4; // 0 - 23
@@ -98,25 +79,25 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, services, client
         });
       }
 
-      const color = appointment?.color || 'blue';
+      const color = appointment?.service.color;
 
       return (
         <div key={i} className={styles.block} style={{borderBottomColor}}>
           {covered && <div className={styles.cover} />}
           {isHour && <p>{hour12} {period}</p>}
           {appointment && 
-            <div className={clsx(styles.weekly_app, 'noselect')} style={{height, borderColor: color}}>
+            <div className={clsx(styles.weekly_app, 'noselect')} onClick={() => setEditAppointment(appointment)} style={{height, borderColor: color}}>
               <div>
-                <p style={{fontSize: 12}}>{appointment.clientName}</p>
-                <p>{formatTime(appointment.startDate)}</p>
+                <p style={{fontSize: 12}}>{appointment.client.name}</p>
+                <p>{formatTime(appointment.start_date)}</p>
               </div>
-              <p>{appointment.serviceName}</p>
+              <p>{appointment.service.name}</p>
             </div>
           }
         </div>
       )
     })
-  }, [appointmentIndices, availability, day]);
+  }, [appointmentIndices, availability, day, setEditAppointment]);
   
   return (
     <div className={styles.hours}>

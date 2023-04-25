@@ -1,6 +1,5 @@
 export interface Client {
   id: string,
-  businessId: string,
   name: string,
   email: string,
   notes?: string,
@@ -11,3 +10,9 @@ export interface Client {
   active?: boolean,
   assignedUserIds: string[],
 };
+
+export interface FormClient {
+  id: string,
+  name: string,
+  avatar: string,
+}

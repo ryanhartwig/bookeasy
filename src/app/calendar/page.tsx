@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
-import { getAllAppointments } from '@/utility/functions/fetch/getAllAppointments';
-import { getAllClients } from '@/utility/functions/fetch/getAllClients';
-import { getAllServices } from '@/utility/functions/fetch/getAllServices';
+import { getAllAppointments } from '@/utility/functions/fetch_old/getAllAppointments';
+import { getAllClients } from '@/utility/functions/fetch_old/getAllClients';
+import { getAllServices } from '@/utility/functions/fetch_old/getAllServices';
 import { getClient } from '@/utility/functions/getClient';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { CalendarView } from './calendar';
