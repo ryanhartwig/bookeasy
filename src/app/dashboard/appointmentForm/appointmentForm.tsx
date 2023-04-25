@@ -9,7 +9,7 @@ import { AppointmentData, AppointmentInput } from "@/types/Appointment"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
-import { BsFillCameraVideoFill } from 'react-icons/bs';
+import { BsFillCameraVideoFill, BsTrash3 } from 'react-icons/bs';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { formatFullDateString } from "@/utility/functions/formatting/formatFullDateString"
 import { AvailabilitySlice } from "@/types/BaseAvailability"
@@ -316,6 +316,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
       {error && <p className={styles.warning}>{error}</p>}
+      <div className={styles.delete}>
+        <BsTrash3 />
+        {!!initialAppointment && <p>Unschedule</p>}
+      </div>
     </Modal>
   )
 }
