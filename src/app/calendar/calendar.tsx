@@ -1,47 +1,37 @@
 'use client';
 
 import styles from './calendar.module.scss';
-import { Appointment } from "@/types/Appointment"
 import { Calendar, months } from '@/components/calendar/Calendar';
 import { SecondaryHeader } from '@/components/SecondaryHeader';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { Daily } from './daily';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
+import { useQuery } from '@apollo/client';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useEffect, useMemo, useState } from 'react';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
-import { getMonthRange } from '@/utility/functions/dateRanges/getMonthRange';
+import { AppointmentData } from '@/types/Appointment';
+import { inRange } from '@/utility/functions/dateRanges/inRange';
 
 interface CalendarProps {
-  appointments: Appointment[],
-  services: Service[],
-  clients: Client[],
+  userId: string,
 }
 
-export const CalendarView: React.FC<CalendarProps> = ({appointments, services, clients}) => {
+export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
-  const [start, end] = useMemo(() => getMonthRange(new Date(startDate).setMonth(viewing.month)), [startDate, viewing.month]);
 
-  const [servicesMap, setServicesMap] = useState(() => new Map<string, Service>());
-  const [clientsMap, setClientsMap] = useState(() => new Map<string, Client>());
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+
+  const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, { variables: {
+    userId,
+  } });
 
   useEffect(() => {
-    const sMap = new Map<string, Service>();
-    const cMap = new Map<string, Client>();
+    if (!data) return;
+    setAppointments(data.getUserAppointments);
+  }, [data]);
 
-    services.forEach(s => sMap.set(s.id, s));
-    clients.forEach(c => cMap.set(c.id, c));
-
-    setServicesMap(sMap);
-    setClientsMap(cMap);
-  }, [clients, services]);
-
-  const selectedMonthAppointments = useMemo<Appointment[]>(() => appointments
-    .filter(app => app.startDate >= start && app.startDate <= end)
-    .sort((a, b) => a.startDate - b.startDate)
-  , [appointments, end, start]);
-  const selectedDayAppointments = useMemo(() => appointments.filter(app => app.startDate >= selected[0] && app.startDate <= selected[1]), [appointments, selected]);
+  const selectedDayAppointments = useMemo(() => appointments.filter(app => inRange(selected.map(num => new Date(num).toISOString()) as [string, string], app.start_date)), [appointments, selected]);
 
   return (
     <div className={styles.calendar}>
@@ -65,8 +55,8 @@ export const CalendarView: React.FC<CalendarProps> = ({appointments, services, c
         </div>
       </SecondaryHeader>
       <div className={styles.content}>
-        <Daily day={selected[0]} appointments={selectedDayAppointments} services={servicesMap} clients={clientsMap} />
-        <Calendar appointments={selectedMonthAppointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} clients={clientsMap} services={servicesMap} />
+        <Daily day={selected[0]} appointments={selectedDayAppointments} />
+        {/* <Calendar appointments={selectedMonthAppointments} selected={selected} onSelect={onSelect} startDate={startDate} viewing={viewing} /> */}
       </div>
     </div>
   )
