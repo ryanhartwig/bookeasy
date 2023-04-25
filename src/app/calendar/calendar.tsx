@@ -9,9 +9,10 @@ import { Daily } from './daily';
 import { useCalendarNavigation } from '@/utility/hooks/useCalendarNavigation';
 import { useQuery } from '@apollo/client';
 import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
+import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 
 interface CalendarProps {
   userId: string,
@@ -22,14 +23,19 @@ export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
 
-  const { data, loading, error } = useQuery(GET_USER_APPOINTMENTS, { variables: {
-    userId,
-  } });
+  // 14 days ahead assures second getMonthRange() helper function resets to the correct start date
+  const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(new Date(startDate.getTime() + 1000 * 60 * 60 * 24 * 14)), [startDate]);
 
+  const { data, loading, error, fetchMore } = useQuery(GET_USER_APPOINTMENTS, { variables: {
+    userId,
+    rangeStart,
+    rangeEnd,
+  }});
+  
   useEffect(() => {
     if (!data) return;
     setAppointments(data.getUserAppointments);
-  }, [data]);
+  }, [data, loading, rangeStart]);
 
   const selectedDayAppointments = useMemo(() => appointments.filter(app => inRange(selected.map(num => new Date(num).toISOString()) as [string, string], app.start_date)), [appointments, selected]);
 
