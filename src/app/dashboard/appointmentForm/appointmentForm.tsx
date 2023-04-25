@@ -27,7 +27,6 @@ interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
-  edit?: boolean,
   initialAppointment?: AppointmentData,
   onSubmit?: (...args: any) => any,
 }
