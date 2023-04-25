@@ -6,7 +6,7 @@ import { Avatar } from "@/components/UI/Avatar/Avatar"
 import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { AppointmentData, AppointmentInput } from "@/types/Appointment"
-import { NewBusiness } from "@/types/Business"
+import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 import { BsFillCameraVideoFill } from 'react-icons/bs';
@@ -32,8 +32,10 @@ interface AppointmentFormProps {
   onSubmit?: (...args: any) => any,
 }
 
+
+
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, onSubmit}) => {
-  const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
+  const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
   const [date, setDate] = useState<string>();
@@ -46,6 +48,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
 
+  const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
+
+  useEffect(() => console.log(prepopulating))
+  useEffect(() => console.log(initialAppointment))
+
+  useWaterfall([
+    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
+  ]);
+  
   // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
   const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
@@ -56,8 +68,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
-  
-  
   useEffect(() => {
     if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
   }, [loadingUserData, userData]);
@@ -72,10 +82,27 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   }, [loadingOwnBusiness, loadingUserBusinesses, ownBusinessData, userBusinessesData]);
 
-  useWaterfall([
-    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
-  ]);
+  // Prepopulate data incrementally if editing an existing appointment
+  useEffect(() => {
+    if (!prepopulating || !initialAppointment) return;
+    console.log('hello')
+    // setPrepopulating(true);
+    setSelectedBusiness(initialAppointment.business);
+    const date = new Date(initialAppointment.start_date);
+    const [month, day, year] = date.toLocaleDateString().split('/').map(str => str.length === 1 ? `0${str}` : str);
+    setDate(`${year}-${month}-${day}`);
+    setHours(date.getHours() % 12 || 12);
+    setMin(date.getMinutes());
+    setPeriod(date.getHours() > 11 ? 'pm' : 'am');
+  }, [initialAppointment, prepopulating]);
+  useEffect(() => {
+    if (!prepopulating || !initialAppointment) return;
+    if (!clientsData || !servicesData) return;
+
+    setSelectedClient(clientsData.getBusinessClients.find((c: FormClient) => c.id === initialAppointment.client.id));
+    setSelectedService(servicesData.getBusinessServices.find((s: FormService) => s.id === initialAppointment.service.id));
+    setPrepopulating(false);
+  }, [clientsData, initialAppointment, prepopulating, servicesData]);
 
   const availabilityMap = useMemo(() => {
     const map = new Map<string, AvailabilitySlice[]>();
@@ -241,7 +268,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={loadingClients || loadingServices || appMutationLoading}
+      loading={prepopulating || loadingClients || loadingServices || appMutationLoading}
     >
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>

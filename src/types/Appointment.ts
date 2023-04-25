@@ -25,7 +25,7 @@ export interface AppointmentData {
   }
   business: {
     id: string,
-    name: string
+    name: string,
   }
   client: {
     id: string,

@@ -20,3 +20,8 @@ export interface NewBusiness {
   min_cancel_notice: string,
   max_book_ahead: string,
 }
+
+export interface FormBusiness {
+  id: string,
+  name: string,
+}
