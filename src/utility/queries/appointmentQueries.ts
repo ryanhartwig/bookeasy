@@ -80,4 +80,12 @@ export const NEW_APPOINTMENT_FRAGMENT = gql`
     is_video
     is_paid
   }
-`
+`;
+
+export const DELETE_APPOINTMENT = gql`
+  mutation($appointmentId: String!) {
+    deleteAppointment(id: $appointmentId) {
+      id
+    }
+  }
+`;

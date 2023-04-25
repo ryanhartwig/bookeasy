@@ -22,7 +22,15 @@ export const appointmentsResolvers = {
       } catch(e: any) {
         throwGQLError(e.message)
       }
-    }
+    },
+    deleteAppointment: async (parent: any, args: any) => {
+      try {
+        const response = await db.query('delete from appointment where id = $1 returning id', [args.id]);
+        return response.rows[0];
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    },
   },
   Query: {
     getUserAppointments: async (parent: any, args: any) => {
@@ -105,5 +113,6 @@ export const appointmentsTypeDefs = `#graphql
   }
   type Mutation {
     addEditAppointment(appointment: AppointmentInput!, edit: Boolean): Appointment!,
+    deleteAppointment(id: String!): String!,
   }
 `;
