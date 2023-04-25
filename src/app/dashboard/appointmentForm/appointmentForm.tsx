@@ -18,7 +18,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { ADD_EDIT_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
+import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
@@ -208,7 +208,34 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setOpen(false);
     onSubmit && onSubmit();
   }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, onSubmit, setOpen]);
-  
+
+  const [deleteAppointment, { 
+    data: deleteAppointmentData, 
+    loading: deleteAppointmentLoading, 
+    error: deleteAppointmentError, 
+    reset: deleteAppointmentReset 
+  }] = useMutation(DELETE_APPOINTMENT, {
+    update(cache) {
+      cache.modify({
+        fields: {
+          getUserAppointments(existingAppointments = [], { readField }) {
+            return existingAppointments.filter((ref: any) => appointment!.id !== readField('id', ref));
+          }
+        }
+      })
+    }
+  });
+
+  useEffect(() => {
+    if (deleteAppointmentData && !deleteAppointmentLoading && !deleteAppointmentError) return setOpen(false);
+    if (deleteAppointmentError) setError(deleteAppointmentError.message);
+    deleteAppointmentReset();
+  }, [deleteAppointmentData, deleteAppointmentError, deleteAppointmentLoading, deleteAppointmentReset, setOpen]);
+
+  const onDeleteAppointment = useCallback(() => {
+    deleteAppointment({variables: { appointmentId: initialAppointment!.id }});
+  }, [deleteAppointment, initialAppointment]);
+
   const onSubmitForm = useCallback(() => {
     if (!appointment) return;
     addEditAppointment({variables: { appointment, edit: !!initialAppointment }});
@@ -265,7 +292,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={prepopulating || loadingClients || loadingServices || appMutationLoading}
+      loading={prepopulating || loadingClients || loadingServices || appMutationLoading || deleteAppointmentLoading}
     >
       <Modal.Header>Create an Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
@@ -316,10 +343,11 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       />
       <p className={styles.warning}>{!isWithinBookingHours && startEndDates && '* warning: this appointment falls out of booking hours'}</p>
       {error && <p className={styles.warning}>{error}</p>}
-      <div className={styles.delete}>
+      {!!initialAppointment && <div className={styles.delete} onClick={onDeleteAppointment}>
         <BsTrash3 />
-        {!!initialAppointment && <p>Unschedule</p>}
-      </div>
+        <p>Unschedule</p>
+      </div>}
+
     </Modal>
   )
 }

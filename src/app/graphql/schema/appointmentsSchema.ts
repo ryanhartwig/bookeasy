@@ -26,7 +26,7 @@ export const appointmentsResolvers = {
     deleteAppointment: async (parent: any, args: any) => {
       try {
         const response = await db.query('delete from appointment where id = $1 returning id', [args.id]);
-        return response.rows[0];
+        return response.rows[0].id;
       } catch(e: any) {
         throwGQLError(e.message)
       }

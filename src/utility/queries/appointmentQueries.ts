@@ -84,8 +84,6 @@ export const NEW_APPOINTMENT_FRAGMENT = gql`
 
 export const DELETE_APPOINTMENT = gql`
   mutation($appointmentId: String!) {
-    deleteAppointment(id: $appointmentId) {
-      id
-    }
+    deleteAppointment(id: $appointmentId)
   }
 `;
