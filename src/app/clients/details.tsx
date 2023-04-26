@@ -3,9 +3,9 @@
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
-import { Appointment, AppointmentData } from '@/types/Appointment';
+import { AppointmentData } from '@/types/Appointment';
 import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { AppointmentCard } from './appointment';
@@ -17,7 +17,9 @@ interface DetailsProps {
 
 export const Details: React.FC<DetailsProps> = ({selected}) => {
 
-  const appointments: AppointmentData[] =  useMemo(() => [], []);
+  const [appointments, setAppointments] = useState<AppointmentData[]>([]);
+  
+  // const { data, loading, error } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
   
   const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 

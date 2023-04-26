@@ -53,8 +53,21 @@ export const appointmentsResolvers = {
       } catch(e: any) {
         throwGQLError(e.message)
       }
-    }
+    },
+    getClientAppointments: async (parent: any, args: any) => {
+      try {
+        const response = await db.query('select * from appointment where client_id = $1', [args.client_id]);
+
+        if (!response.rowCount) {
+          return [];
+        }
+        return response.rows;
+      } catch(e: any) {
+        throwGQLError(e.message)
+      }
+    },
   },
+  
   
   Appointment: {
     service: async (parent: any) => {
@@ -89,6 +102,7 @@ export const appointmentsTypeDefs = `#graphql
 
   type Query {
     getUserAppointments(user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
+    getClientAppointments(client_id: ID!): [Appointment!]!,
   }
   type Mutation {
     addEditAppointment(appointment: AppointmentInput!, edit: Boolean): Appointment!,
