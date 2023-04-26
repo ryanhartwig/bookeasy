@@ -2,7 +2,7 @@ import styles from './clients.module.scss';
 
 import { useEffect, useMemo, useState } from 'react';
 import { Client } from '@/types/Client';
-import { Business, NewBusiness } from '@/types/Business';
+import { NewBusiness } from '@/types/Business';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { BusinessClientsList } from './businessClientsList';
@@ -23,10 +23,9 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
   }});
 
   useEffect(() => {
-    if (!data) return;
-    console.log(data);
+    if (!data ||loading) return;
     setBusinesses(data.getUserBusinesses);
-  }, [data]);
+  }, [data, loading]);
 
   const results = useMemo(() => {    
     return (

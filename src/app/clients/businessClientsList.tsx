@@ -33,9 +33,9 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
   }});
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || loading) return;
     setClients(data.getBusinessClients)
-  }, [data]);
+  }, [data, loading]);
   
   return (
     <div className={styles.client_team}>
@@ -49,7 +49,7 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
           }}
         >
           <Avatar src={c.avatar} />
-          <p>{c.name}</p>
+          <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p>
         </div>
       ))}
     </div>
