@@ -17,10 +17,8 @@ interface DetailsProps {
 }
 
 export const Details: React.FC<DetailsProps> = ({selected}) => {
-
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
-  
-  const { data, loading, error } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+  const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
 
   useEffect(() => {
     if (!data || loading) return;
