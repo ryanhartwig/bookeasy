@@ -1,4 +1,4 @@
-import styles from './appointmentForm.module.scss';
+import styles from './clientForm.module.scss';
 import clsx from "clsx"
 import uuid from "react-uuid"
 

@@ -1,11 +1,12 @@
 import styles from './clients.module.scss';
 
-import { useEffect, useMemo, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Client } from '@/types/Client';
 import { NewBusiness } from '@/types/Business';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { BusinessClientsList } from './businessClientsList';
+import { ClientForm } from './clientForm/clientForm';
 
 interface ClientsProps {
   selected: Client | undefined,
@@ -17,6 +18,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
   const [query, setQuery] = useState<string>('');
 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
 
   const { data, loading } = useQuery(GET_USER_BUSINESSES, { variables: {
     userId,
@@ -45,11 +47,12 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
         className={styles.input}
         placeholder='Search by client...'
       />
-      <div className={styles.addClient}>
+      <div className={styles.addClient} onClick={() => setFormOpen(true)}>
         <p>+</p>
         <p>Add Client</p>
       </div>
       {results}
+      <ClientForm open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />
     </div>
   )
 }
