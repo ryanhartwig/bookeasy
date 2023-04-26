@@ -6,7 +6,7 @@ export interface Client {
   avatar?: any,
   address?: string,
   phone?: string,
-  joined_date: number,
+  joined_date: string,
   active: boolean,
 };
 
