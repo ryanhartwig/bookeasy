@@ -6,10 +6,11 @@ import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { formatTime } from '@/utility/functions/formatting/formatTime';
 import { AppointmentData } from '@/types/Appointment';
+import { AvailabilitySlice } from '@/types/BaseAvailability';
 
 interface HoursProps {
   day?: number,
-  availability: String[][],
+  availability: AvailabilitySlice[],
   appointments: AppointmentData[],
   setEditAppointment: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
 }
@@ -54,9 +55,9 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
 
       // If day is undefined, then this component is being used in the calendar view and shouldn't show availability
       if (day !== undefined && availability.length) {
-        covered = !availability.some(([start, end]) => {
-          let [startHr, startMin] = start.split(':').map(s => Number(s));
-          let [endHr, endMin] = end.split(':').map(s => Number(s));
+        covered = !availability.some((slice) => {
+          let [startHr, startMin] = slice.start_time.split(':').map(s => Number(s));
+          let [endHr, endMin] = slice.end_time.split(':').map(s => Number(s));
 
           return (startHr === hour ? startMin <= segment : startHr < hour)
             && (endHr === hour ? endMin > segment : endHr > hour);

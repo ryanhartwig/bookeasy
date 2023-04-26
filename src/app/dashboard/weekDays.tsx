@@ -26,6 +26,10 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const [editAppointment, setEditAppointment] = useState<AppointmentData>();
 
+  const availabilityMap = useMemo(() => {
+    const map = new Map<number, string[][]>([]);
+  }, []);
+
   useEffect(() => {
     if (!editAppointment) return;
     setFormOpen(true);
@@ -71,7 +75,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
-          const availability = sample_base_availability.slices.filter(a => a.day === i).map((slice) => [slice.start_time, slice.end_time]);
+          const availability = sample_base_availability.slices.filter(a => a.day === i);
 
           return <Hours key={i} day={i} availability={availability} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
