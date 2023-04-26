@@ -45,6 +45,14 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
       .toFixed(2)
   }, [booked, previous]);
 
+  const paid = useMemo<string>(() => {
+    return previous.concat(booked)
+      .filter(app => app.is_paid)
+      .map(app => app.service_cost)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2)
+  }, [booked, previous]);
+
   const [tab, setTab] = useState<number>(0);
 
   return (
@@ -89,13 +97,13 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
             </div>
             <hr />
             <div className={styles.metric}>
-              <p>${previous.map(p => p.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
-              <p className={styles.label}>Total Estimated Revenue</p>
+              <p>${paid}</p>
+              <p className={styles.label}>Total Paid</p>
             </div>
             <hr />
             <div className={styles.metric}>
               <p>${unpaid}</p>
-              <p className={styles.label}>Unpaid</p>
+              <p className={styles.label}>Total Unpaid</p>
             </div>  
         </Card>
       </div>
