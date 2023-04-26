@@ -1,10 +1,14 @@
 .app {
-  height: 96px;
+  min-height: 85px;
   width: 100%;
   background-color: var(--secondary-background);
   border-left: 2px solid #20C2D8;
 
+  position: relative;
+
   padding: 7px;
+
+  margin-bottom: 4px;
 
   font-weight: 300;
 
@@ -12,6 +16,9 @@
   flex-direction: column;
   justify-content: space-between;
 
+  p:nth-child(1) {
+    font-size: 14px;
+  }
   p:nth-child(2) {
     color: var(--font-alt);
     margin: 3px;
@@ -40,4 +47,13 @@
       }
     }
   }
+}
+
+.paid {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  font-size: 12px !important;
+
+  color: rgb(174, 84, 39);
 }
