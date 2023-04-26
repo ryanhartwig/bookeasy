@@ -15,6 +15,7 @@ import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRang
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
+import { AvailabilitySlice } from '@/types/BaseAvailability';
 
 interface WeekDaysProps {
   userId: string,
@@ -27,7 +28,9 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [editAppointment, setEditAppointment] = useState<AppointmentData>();
 
   const availabilityMap = useMemo(() => {
-    const map = new Map<number, string[][]>([]);
+    const map = new Map<number, AvailabilitySlice[]>([]);
+    sample_base_availability.slices.forEach(slice => map.set(slice.day, [...(map.get(slice.day) || []), slice]));
+    return map;
   }, []);
 
   useEffect(() => {
@@ -75,9 +78,8 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
-          const availability = sample_base_availability.slices.filter(a => a.day === i);
 
-          return <Hours key={i} day={i} availability={availability} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
+          return <Hours key={i} day={i} availability={availabilityMap.get(i) || []} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
 
