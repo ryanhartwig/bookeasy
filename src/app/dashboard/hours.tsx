@@ -9,12 +9,12 @@ import { AppointmentData } from '@/types/Appointment';
 
 interface HoursProps {
   day?: number,
+  availability: String[][],
   appointments: AppointmentData[],
   setEditAppointment: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
 }
 
-export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointment}) => {
-  const [availability, setAvailability] = useState<Map<number, string[][]>>();
+export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointment, availability}) => {
   const [appointmentIndices, setAppointmentIndices] = useState<Map<number, AppointmentData>>(new Map());
 
   useEffect(() => {
@@ -30,23 +30,6 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
       return prev;
     })
   }, [appointments]);
-  
-  useEffect(() => {
-    if (day === undefined) return;
-    setAvailability(p => {
-      const prev = new Map(p);
-
-      sample_base_availability.slices.forEach(slice => {
-        const {start_time: start, end_time: end, day} = slice;
-        const current = prev.get(day) || [];
-    
-        current.push([start, end]);
-        prev.set(day, current);
-      });
-
-      return prev;
-    });
-  }, [day]);
   
   const blocks = useMemo(() => {
     const b = new Array(96).fill(true)
@@ -67,10 +50,11 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
       const hour12 = hour % 12 === 0 ? 12 : hour % 12;
       const period = hour < 12 ? 'am' : 'pm';
 
-      let covered = availability === undefined ? false : true;
+      let covered = availability !== undefined;
 
-      if (day !== undefined && availability?.has(day)) {
-        covered = !availability.get(day)!.some(([start, end]) => {
+      // If day is undefined, then this component is being used in the calendar view and shouldn't show availability
+      if (day !== undefined && availability.length) {
+        covered = !availability.some(([start, end]) => {
           let [startHr, startMin] = start.split(':').map(s => Number(s));
           let [endHr, endMin] = end.split(':').map(s => Number(s));
 

@@ -14,6 +14,7 @@ import { useQuery } from '@apollo/client';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
+import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 
 interface WeekDaysProps {
   userId: string,
@@ -70,8 +71,9 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
+          const availability = sample_base_availability.slices.filter(a => a.day === i).map((slice) => [slice.start_time, slice.end_time]);
 
-          return <Hours key={i} day={i} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
+          return <Hours key={i} day={i} availability={availability} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
 
@@ -79,3 +81,20 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
     </div>
   )
 }
+
+  // useEffect(() => {
+  //   if (day === undefined) return;
+  //   setAvailability(p => {
+  //     const prev = new Map(p);
+
+  //     sample_base_availability.slices.forEach(slice => {
+  //       const {start_time: start, end_time: end, day} = slice;
+  //       const current = prev.get(day) || [];
+    
+  //       current.push([start, end]);
+  //       prev.set(day, current);
+  //     });
+
+  //     return prev;
+  //   });
+  // }, [day]);
