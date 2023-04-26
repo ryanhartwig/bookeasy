@@ -3,7 +3,7 @@
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
-import { Appointment } from '@/types/Appointment';
+import { Appointment, AppointmentData } from '@/types/Appointment';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import clsx from 'clsx';
@@ -13,38 +13,31 @@ import styles from './clients.module.scss';
 
 interface DetailsProps {
   selected: Client,
-  appointments: Appointment[],
-  services: Service[],
 }
 
-export const Details: React.FC<DetailsProps> = ({selected, appointments, services}) => {
-  const previous = useMemo<Appointment[]>(() => {
+export const Details: React.FC<DetailsProps> = ({selected}) => {
+
+  const appointments: AppointmentData[] =  useMemo(() => [], []);
+  
+  const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
-      app.clientId === selected.id && app.startDate < Date.now()
+      app.client.id === selected.id && app.start_date < new Date().toISOString()
     );
   }, [appointments, selected.id]);
 
-  const booked = useMemo<Appointment[]>(() => {
+  const booked = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
-      app.clientId === selected.id && app.startDate >= Date.now()
+      app.client.id === selected.id && app.start_date >= new Date().toISOString()
     );
   }, [appointments, selected.id]);
 
   const unpaid = useMemo<string>(() => {
     return previous.concat(booked)
-      .filter(app => !app.isPaid)
-      .map(app => app.serviceCost)
+      .filter(app => !app.is_paid)
+      .map(app => app.service_cost)
       .reduce((a, b) => a + b, 0)
       .toFixed(2)
   }, [booked, previous]);
-
-  const servicesMap = useMemo(() => {
-    const map = new Map<string, Service>();
-    previous.concat(booked)
-      .forEach(app => map.set(app.id, services.find(s => s.id === app.serviceId)!));
-
-    return map;
-  }, [booked, previous, services]);
 
   const [tab, setTab] = useState<number>(0);
 
@@ -90,7 +83,7 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
             </div>
             <hr />
             <div className={styles.metric}>
-              <p>${previous.map(p => p.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
+              <p>${previous.map(p => p.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}</p>
               <p className={styles.label}>Total Estimated Revenue</p>
             </div>
             <hr />
@@ -105,8 +98,8 @@ export const Details: React.FC<DetailsProps> = ({selected, appointments, service
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
-              ? booked.map((app) => <AppointmentCard key={app.id} app={app} service={servicesMap.get(app.id)!} />)
-              : previous.map((app) => <AppointmentCard key={app.id} app={app} service={servicesMap.get(app.id)!} />)}
+              ? booked.map((app) => <AppointmentCard key={app.id} app={app} />)
+              : previous.map((app) => <AppointmentCard key={app.id} app={app} />)}
           </div>
         </Card>
       </div>
