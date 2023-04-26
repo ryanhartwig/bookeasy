@@ -16,6 +16,7 @@ import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
+import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 
 interface WeekDaysProps {
   userId: string,
@@ -27,11 +28,15 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const [editAppointment, setEditAppointment] = useState<AppointmentData>();
 
+  const { data: availability, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }});
+
   const availabilityMap = useMemo(() => {
+    if (!availability || loadingAvailability) return;
+
     const map = new Map<number, AvailabilitySlice[]>([]);
-    sample_base_availability.slices.forEach(slice => map.set(slice.day, [...(map.get(slice.day) || []), slice]));
+    availability.getUserAvailability.forEach((slice: AvailabilitySlice) => map.set(slice.day, [...(map.get(slice.day) || []), slice]));
     return map;
-  }, []);
+  }, [availability, loadingAvailability]);
 
   useEffect(() => {
     if (!editAppointment) return;
@@ -79,7 +84,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
 
-          return <Hours key={i} day={i} availability={availabilityMap.get(i) || []} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
+          return <Hours key={i} day={i} availability={availabilityMap?.get(i) || []} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
 
@@ -87,20 +92,3 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
     </div>
   )
 }
-
-  // useEffect(() => {
-  //   if (day === undefined) return;
-  //   setAvailability(p => {
-  //     const prev = new Map(p);
-
-  //     sample_base_availability.slices.forEach(slice => {
-  //       const {start_time: start, end_time: end, day} = slice;
-  //       const current = prev.get(day) || [];
-    
-  //       current.push([start, end]);
-  //       prev.set(day, current);
-  //     });
-
-  //     return prev;
-  //   });
-  // }, [day]);
