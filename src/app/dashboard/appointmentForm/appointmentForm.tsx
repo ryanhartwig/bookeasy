@@ -17,7 +17,7 @@ import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
@@ -58,8 +58,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   
   // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
-  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
-  const { data: ownBusinessData, loading: loadingOwnBusiness } = useQuery(GET_BUSINESS, { variables: { businessId: userOwnBusinessId }, skip: !userOwnBusinessId}); 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
 
   // Depends on selectedBusiness state
@@ -67,18 +65,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
   useEffect(() => {
-    if (userData) setUserOwnBusinessId(userData.getUser.own_business.id);
-  }, [loadingUserData, userData]);
-
-  useEffect(() => {
     if (availabilityData) setAvailability(availabilityData.getUserAvailability)
   }, [availabilityData, loadingAvailability]);
 
   useEffect(() => {
-    if (userBusinessesData && ownBusinessData) {
-      setBusinesses([...userBusinessesData.getUserBusinesses, {...ownBusinessData.getBusiness}])
+    if (userBusinessesData) {
+      setBusinesses(userBusinessesData.getUserBusinesses);
     }
-  }, [loadingOwnBusiness, loadingUserBusinesses, ownBusinessData, userBusinessesData]);
+  }, [userBusinessesData]);
 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
