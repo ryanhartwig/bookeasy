@@ -51,6 +51,11 @@
   margin: 5px;
   font-size: 14px;
   font-weight: 300;
+
+  border: 1px solid rgba(128, 128, 128, 0.254);
+  &:focus {
+    border: 1px solid rgb(128, 128, 128);
+  }
 }
 
 .label {
@@ -196,4 +201,43 @@
   flex-direction: column;
   padding: 15px;
   overflow-y: auto;
+}
+
+.addClient {
+  width: calc(100% - 10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  margin: 6px auto 0 auto;
+  border: 1px solid grey;
+  border-radius: 5px;
+
+  padding: 8px 0 7px 0;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  opacity: 0.8;
+  transition: background-color 200ms, opacity 200ms;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.302);
+    opacity: 1;
+  }
+
+  > *:first-child {
+    position: absolute;
+    left: 15px; 
+    font-size: 16px;
+    font-weight: 300;
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

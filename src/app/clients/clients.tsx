@@ -45,6 +45,10 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
         className={styles.input}
         placeholder='Search by client...'
       />
+      <div className={styles.addClient}>
+        <p>+</p>
+        <p>Add Client</p>
+      </div>
       {results}
     </div>
   )
