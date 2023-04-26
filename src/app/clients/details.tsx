@@ -5,9 +5,10 @@ import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { AppointmentData } from '@/types/Appointment';
 import { Client } from '@/types/Client';
+import { GET_CLIENT_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppointmentCard } from './appointment';
 import styles from './clients.module.scss';
 
@@ -19,7 +20,12 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   
-  // const { data, loading, error } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+  const { data, loading, error } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+
+  useEffect(() => {
+    if (!data || loading) return;
+    setAppointments(data.getClientAppointments);
+  }, [data, loading]);
   
   const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
