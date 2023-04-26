@@ -16,7 +16,7 @@ import { AvailabilitySlice } from "@/types/BaseAvailability"
 import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
-import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
+import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
@@ -31,8 +31,6 @@ interface AppointmentFormProps {
   initialAppointment?: AppointmentData,
   onSubmit?: (...args: any) => any,
 }
-
-
 
 export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, onSubmit}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
