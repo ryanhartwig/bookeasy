@@ -18,10 +18,11 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS, GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT, NEW_APPOINTMENT_FRAGMENT } from "@/utility/queries/appointmentQueries"
+import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
+import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 
 interface AppointmentFormProps {
   open: boolean,
