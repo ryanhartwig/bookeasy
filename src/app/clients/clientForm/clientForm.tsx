@@ -24,27 +24,27 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>();
 
-  const [name, setName] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [notes, setNotes] = useState<string>();
-  const [address, setAddress] = useState<string>();
-  const [phone, setPhone] = useState<string>();
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [notes, setNotes] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   const client = useMemo<Client | null>(() => {
-    if (!name || !email || !notes || !address || !phone) return null;
+    if (!name || !email) return null;
     
     return {
       id: id ?? uuid(),
       name,
       email,
-      notes,
-      address,
-      phone,
+      notes: notes ?? undefined,
+      address: notes ?? undefined,
+      phone: notes ?? undefined,
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [address, email, id, name, notes, phone]);
+  }, [email, id, name, notes]);
 
   const [addEditAppointment, { 
     data: appMutationData, 
@@ -127,19 +127,19 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Name</p>
-        <Input type='text' autoFocus placeholder='John Doe' />
+        <Input type='text' autoFocus placeholder='John Doe' value={name} onChange={(e) => setName(e.target.value)} />
 
         <p>Email</p>
-        <Input type='text' placeholder='johndoe@gmail.com' />
+        <Input type='text' placeholder='johndoe@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <p>Address</p>
-        <Input type='text' placeholder='1234 John Doe St.' />
+        <Input type='text' placeholder='1234 John Doe St.' value={address} onChange={(e) => setAddress(e.target.value)} />
 
         <p>Phone</p>
-        <Input type='text' placeholder='123-456-7890' />
+        <Input type='text' placeholder='123-456-7890' value={phone} onChange={(e) => setPhone(e.target.value)} />
 
         <p>Notes</p>
-        <textarea style={{resize: 'none', height: 80, paddingTop: 10}} placeholder='Modified rate to 90%.' className={styles.dateInput} />
+        <textarea placeholder='Modified rate to 90%.' value={notes} onChange={(e) => setNotes(e.target.value)} />
 
       </div>
       <hr />
