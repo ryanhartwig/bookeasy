@@ -5,13 +5,12 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { BsTrash3 } from 'react-icons/bs';
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { Client, ClientInput } from '@/types/Client';
 import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
-import { GET_MULTI_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
+import { DELETE_CLIENT, GET_MULTI_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
 import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
@@ -171,17 +170,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     complete();
   }, [clientEditData, clientEditError, clientEditLoading, complete, setSelected]);
 
-  const [deleteAppointment, { 
-    data: deleteAppointmentData, 
-    loading: deleteAppointmentLoading, 
-    error: deleteAppointmentError, 
-    reset: deleteAppointmentReset 
-  }] = useMutation(DELETE_APPOINTMENT, {
+  const [deleteClient, { 
+    data: deleteClientData, 
+    loading: deleteClientLoading, 
+    error: deleteClientError, 
+  }] = useMutation(DELETE_CLIENT, {
     update(cache) {
       cache.modify({
         fields: {
-          getUserAppointments(existingAppointments = [], { readField }) {
-            return existingAppointments.filter((ref: any) => client!.id !== readField('id', ref));
+          getBusinessClients(existingClients = [], { readField }) {
+            return existingClients.filter((ref: any) => editClient!.id !== readField('id', ref));
           }
         }
       })
@@ -189,15 +187,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   });
 
   useEffect(() => {
-    if (deleteAppointmentData && !deleteAppointmentLoading && !deleteAppointmentError) return setOpen(false);
-    if (deleteAppointmentError) setError(deleteAppointmentError.message);
-    deleteAppointmentReset();
-  }, [deleteAppointmentData, deleteAppointmentError, deleteAppointmentLoading, deleteAppointmentReset, setOpen]);
+    if (deleteClientData && !deleteClientLoading && !deleteClientError) {
+      // setSelected && setSelected(undefined);
+      // Find what is closing the modal on delete
+    };
+    if (deleteClientError) setError(deleteClientError.message);
+  }, [deleteClientData, deleteClientError, deleteClientLoading, setOpen, setSelected]);
 
   const onDeleteClient = useCallback(() => {
-    // implement
-
-  }, []);
+    deleteClient({variables: { clientId: editClient!.id }});
+  }, [deleteClient, editClient]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>

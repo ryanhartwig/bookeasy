@@ -41,3 +41,9 @@ export const GET_MULTI_CLIENT = gql`
     }
   }
 `;
+
+export const DELETE_CLIENT = gql`
+  mutation($clientId: String!){
+    deleteClient(client_id: $clientId)
+  }
+`;

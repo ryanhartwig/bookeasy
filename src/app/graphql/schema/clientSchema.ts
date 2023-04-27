@@ -67,7 +67,11 @@ export const clientResolvers = {
         ...Object.fromEntries(Object.entries(response.rows[0]).filter(([_, v]) => !!v)),
         client_id: undefined,
       };
-    }
+    },
+    deleteClient: async (parent: any, args: any) => {
+      const response = await db.query('delete from client where id = $1 returning id', [args.client_id]);
+      return response.rows[0].id;
+    },
   },
 }
 
@@ -102,5 +106,6 @@ export const clientTypeDefs = `#graphql
   type Mutation {
     userAddClient(client: UserAddClientInput!): BusinessClient!,
     userEditClient(client: UserEditClientInput!): BusinessClient!,
+    deleteClient(client_id: String!): String!,
   }
 `;
