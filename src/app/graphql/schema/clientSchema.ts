@@ -4,12 +4,12 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 export const clientResolvers = {
   Mutation: {
     userAddClient: async (parent: any, args: any) => {
-      const { id, business_id, notes, name, email, address, phone, joined_date, active } = args;
-      if (!id || !business_id || !name || !email) throwGQLError('Missing required arguments');
+      const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
+      if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
 
       const clientResponse = await db.query(`insert into client values (
         $1, $2, $3, $4, $5, $6
-      ) returning *`, [id, name, null, null, null, null]);
+      ) returning *`, [id, name, email, null, null, null]);
 
       if (!clientResponse.rows[0]) throwGQLError('Could not add client to client relation');
 
