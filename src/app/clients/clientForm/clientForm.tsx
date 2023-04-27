@@ -5,13 +5,15 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { AppointmentData } from "@/types/Appointment"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { BsTrash3 } from 'react-icons/bs';
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { Client, ClientInput } from '@/types/Client';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 import { Input } from '@/components/UI/Input/Input';
-import { FormBusiness } from '@/types/Business';
+import { FormBusiness, NewBusiness } from '@/types/Business';
+import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
+import { Select } from '@/components/UI/Select/Select';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -25,13 +27,23 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>();
 
-  const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+
+  const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
+  const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
+
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+
+  useEffect(() => {
+    if (userBusinessesData) {
+      setBusinesses(userBusinessesData.getUserBusinesses);
+    }
+  }, [userBusinessesData]);
 
   const client = useMemo<ClientInput | null>(() => {
     if (!name || !email || !selectedBusiness) return null;
@@ -118,6 +130,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     if (!client) return;
   }, [client]);
 
+  const businessesList = useMemo(() => businesses.map(b => (
+    <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
+      <p>{b.name}</p>
+    </div>
+  )), [businesses]);
+
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
@@ -125,10 +143,17 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={appMutationLoading || deleteAppointmentLoading}
+      loading={loadingUserBusinesses}
     >
       <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
+        <p>Select a provider</p>
+        <Select list={businessesList} selected={(
+          <div className={styles.selectedOption}>
+            <p>{selectedBusiness?.name}</p>
+          </div>
+        )} hasSelected={!!selectedBusiness}/>
+        
         <p>Name</p>
         <Input type='text' autoFocus placeholder='John Doe' value={name} onChange={(e) => setName(e.target.value)} />
 
