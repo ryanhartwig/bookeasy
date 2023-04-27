@@ -141,3 +141,14 @@
     color: rgb(188, 48, 48);
   }
 }
+
+.isActive {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  > input {
+    width: fit-content;
+    margin-left: 10px;
+  }
+}

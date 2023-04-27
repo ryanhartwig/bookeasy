@@ -124,16 +124,33 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       className={styles.appointmentForm}
       loading={appMutationLoading || deleteAppointmentLoading}
     >
-      <Modal.Header>{initialAppointment ? "Edit" : "Add a new"} Client</Modal.Header>
+      <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
-        <p>Select a provider</p>
-        <p>Select a service</p>
+        <p>Name</p>
+        <input type='text' placeholder='John Doe' className={styles.dateInput} />
 
-        <p>Select date and time</p>
-        <input type='text' className={styles.dateInput} />
+        <p>Email</p>
+        <input type='text' placeholder='johndoe@gmail.com' className={styles.dateInput} />
+
+        <p>Address</p>
+        <input type='text' placeholder='1234 John Doe St.' className={styles.dateInput} />
+
+        <p>Phone</p>
+        <input type='text' placeholder='123-456-7890' className={styles.dateInput} />
+
+        <p>Notes</p>
+        <textarea style={{resize: 'none', height: 80, paddingTop: 10}} placeholder='Modified rate to 90%.' className={styles.dateInput} />
+
+        <div className={styles.isActive}>
+          <label style={{fontSize: 14}} htmlFor='is_active' >Is Active</label>
+          <input type='checkbox' id='is_active' className={styles.dateInput} style={{height: 20}} />
+        </div>
+        
+
+
       </div>
       <hr />
-      <p className={styles.warning}>{!client && 'missing fields'}</p>
+      {/* <p className={styles.warning}>{!client && 'missing fields'}</p> */}
       {error && <p className={styles.warning}>{error}</p>}
       {!!initialAppointment && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />
