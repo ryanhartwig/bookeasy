@@ -126,7 +126,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Name</p>
-        <input type='text' placeholder='John Doe' className={styles.dateInput} />
+        <input type='text' autoFocus placeholder='John Doe' className={styles.dateInput} />
 
         <p>Email</p>
         <input type='text' placeholder='johndoe@gmail.com' className={styles.dateInput} />
