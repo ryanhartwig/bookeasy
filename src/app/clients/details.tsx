@@ -10,15 +10,19 @@ import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import { AppointmentCard } from './appointment';
+import { ClientForm } from './clientForm/clientForm';
 import styles from './clients.module.scss';
 
 interface DetailsProps {
   selected: Client,
+  userId: string,
 }
 
-export const Details: React.FC<DetailsProps> = ({selected}) => {
+export const Details: React.FC<DetailsProps> = ({selected, userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+
+  const [formOpen, setFormOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!data || loading) return;
@@ -81,7 +85,7 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
           <div className={styles.notes}>
             <p>{selected.notes}</p>
           </div>
-          <p className={styles.edit}>Edit</p>
+          <p className={styles.edit} onClick={() => setFormOpen(true)}>Edit</p>
         </Card>
 
         {/* Client metrics (total appointments, calculated revenue, etc) */}
@@ -106,6 +110,10 @@ export const Details: React.FC<DetailsProps> = ({selected}) => {
               <p className={styles.label}>Total Unpaid</p>
             </div>  
         </Card>
+
+        {/* EDIT CLIENT FORM */}
+        {formOpen && <ClientForm initialClient={selected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
+        
       </div>
       <div>
         <Card className={clsx(styles.card, styles.apps)} style={{height: 736}}>

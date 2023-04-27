@@ -213,7 +213,7 @@
 
   margin: 6px auto 0 auto;
   border: 1px solid grey;
-  border-radius: 5px;
+  border-radius: 1000px;
 
   padding: 8px 0 7px 0;
 
@@ -221,7 +221,7 @@
 
   cursor: pointer;
 
-  opacity: 0.8;
+  opacity: 0.7;
   transition: background-color 200ms, opacity 200ms;
 
   &:hover {
