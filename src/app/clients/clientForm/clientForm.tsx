@@ -14,6 +14,8 @@ import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
+import { USER_ADD_CLIENT } from '@/utility/queries/clientQueries';
+import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -61,25 +63,25 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     }
   }, [email, id, name, notes, selectedBusiness]);
 
-  const [addEditAppointment, { 
-    data: appMutationData, 
-    loading: appMutationLoading, 
-    error: appMutationError, 
-    reset: appMutationReset 
-  }] = useMutation(ADD_EDIT_APPOINTMENT, {
-    update(cache, { data: { addEditAppointment }}) {
+  const [userAddClient, { 
+    data: clientMutationData, 
+    loading: clientMutationLoading, 
+    error: clientMutationError, 
+    reset: clientMutationReset 
+  }] = useMutation(USER_ADD_CLIENT, {
+    update(cache, { data: { userAddClient }}) {
       cache.modify({
         fields: {
-          getUserAppointments(existingAppointments = [], { readField }) {
-            const newAppointmentRef = cache.writeFragment({
-              data: addEditAppointment,
+          getBusinessClients(existingClients = [], { readField }) {
+            const newClientRef = cache.writeFragment({
+              data: userAddClient,
               fragment: gql`
-                ${NEW_APPOINTMENT_FRAGMENT}
+                ${NEW_CLIENT_FRAGMENT}
               `
             }); 
             return initialAppointment 
-              ? existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref)
-              : [...existingAppointments, newAppointmentRef];
+              ? existingClients.map((ref: any) => readField('id', ref) === readField('id', newClientRef) ? newClientRef : ref)
+              : [...existingClients, newClientRef];
           }
         }
       })
@@ -87,16 +89,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   });
 
   useEffect(() => {
-    if (!appMutationData || appMutationLoading) return;
-    if (appMutationError) {
+    if (!clientMutationData || clientMutationLoading) return;
+    if (clientMutationError) {
       return setError('Something went wrong'); // for now
     }
     
     setError(undefined);
-    appMutationReset();
+    clientMutationReset();
     setOpen(false);
     onSubmit && onSubmit();
-  }, [appMutationData, appMutationError, appMutationLoading, appMutationReset, onSubmit, setOpen]);
+  }, [clientMutationData, clientMutationError, clientMutationLoading, clientMutationReset, onSubmit, setOpen]);
 
   const [deleteAppointment, { 
     data: deleteAppointmentData, 
