@@ -6,4 +6,12 @@ export const USER_ADD_CLIENT = gql`
       ...BusinessClientFragment
     }
   }
-`
+`;
+
+export const USER_EDIT_CLIENT = gql`
+  mutation($client: UserEditClientInput!) {
+    userEditClient(client: $client) {
+      ...BusinessClientFragment
+    }
+  }
+`;

@@ -26,6 +26,24 @@ export const clientResolvers = {
         ...overWrites,
       }
     },
+    userEditClient: async (parent: any, args: any) => {
+      const { id, notes, name, email, address, phone, active } = args.client;
+
+      const response = await db.query(`update clients_businesses set
+        notes = $1,
+        name = $2,
+        email = $3,
+        address = $4,
+        phone = $5,
+        active = $6
+        where client_id = $7
+        returning *
+      `, [notes, name, email, address, phone, active, id]);
+
+      if (!response.rowCount) throwGQLError('Could not update client');
+
+      return response.rows[0];
+    }
   },
 }
 
@@ -42,7 +60,18 @@ export const clientTypeDefs = `#graphql
     active: Boolean!
   }
 
+  input UserEditClientInput {
+    id: String!,
+    notes: String,
+    name: String,
+    email: String,
+    address: String,
+    phone: String,
+    active: Boolean,
+  }
+
   type Mutation {
-    userAddClient(client: UserAddClientInput): BusinessClient!,
+    userAddClient(client: UserAddClientInput!): BusinessClient!,
+    userEditClient(client: UserEditClientInput!): BusinessClient!,
   }
 `;

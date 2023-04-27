@@ -45,7 +45,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
-  const [userOwnBusinessId, setUserOwnBusinessId] = useState<string>();
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
