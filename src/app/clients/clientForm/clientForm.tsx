@@ -100,7 +100,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     
     return {
       id: raw.id,
-      business_id: '', // Not used in gql resolver
       name: name || raw.name,
       email: email || raw.email,
       notes: notes || raw.notes,
@@ -145,12 +144,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   });
 
   const onSubmitForm = useCallback(() => {
-    if (!client) return;
+    if (initialClient ? !editClient : !client) return;
     
     initialClient
-      ? userEditClient({ variables: { client } })
+      ? userEditClient({ variables: { client: editClient } })
       : userAddClient({ variables: { client } })
-  }, [client, initialClient, userAddClient, userEditClient]);
+  }, [client, editClient, initialClient, userAddClient, userEditClient]);
 
   const complete = useCallback(() => {
     setError(undefined);
