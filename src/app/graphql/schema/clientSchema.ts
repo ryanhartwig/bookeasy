@@ -5,7 +5,6 @@ export const clientResolvers = {
   Mutation: {
     userAddClient: async (parent: any, args: any) => {
       const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
-
       if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
 
       const clientResponse = await db.query(`insert into client values (

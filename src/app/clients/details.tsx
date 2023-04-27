@@ -1,5 +1,3 @@
-'use client';
-
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
@@ -15,10 +13,11 @@ import styles from './clients.module.scss';
 
 interface DetailsProps {
   selected: Client,
+  setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
   userId: string,
 }
 
-export const Details: React.FC<DetailsProps> = ({selected, userId}) => {
+export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
 
@@ -112,8 +111,8 @@ export const Details: React.FC<DetailsProps> = ({selected, userId}) => {
         </Card>
 
         {/* EDIT CLIENT FORM */}
-        {formOpen && <ClientForm initialClient={selected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
-        
+        {formOpen && <ClientForm initialClient={selected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} setSelected={setSelected} />}
+
       </div>
       <div>
         <Card className={clsx(styles.card, styles.apps)} style={{height: 736}}>

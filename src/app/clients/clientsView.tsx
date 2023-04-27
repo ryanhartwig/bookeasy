@@ -17,7 +17,7 @@ export const ClientsView: React.FC<ClientsViewProps> = ({userId}) => {
     <div className={styles.wrapper}>
       <Clients userId={userId} selected={selected} setSelected={setSelected}/>
       
-      {selected ? <Details selected={selected} userId={userId} />
+      {selected ? <Details selected={selected} setSelected={setSelected} userId={userId} />
         : <p style={{width: '100%', padding: 20, fontWeight: 300, fontSize: 14, color: 'grey'}}>Select a client to see details</p>}
     </div>
   )
