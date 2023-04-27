@@ -57,7 +57,7 @@ export const types = `#graphql
     phone: String,
     joined_date: String!,
     avatar: String,
-    active: Boolean!,
+    active: Boolean!
   }
 
   type Client {

@@ -26,7 +26,7 @@ export const clientResolvers = {
         ...overWrites,
       }
     },
-  }
+  },
 }
 
 export const clientTypeDefs = `#graphql
@@ -43,6 +43,6 @@ export const clientTypeDefs = `#graphql
   }
 
   type Mutation {
-    userAddClient: (client: UserAddClientInput): BusinessClient!,
+    userAddClient(client: UserAddClientInput): BusinessClient!,
   }
 `;
