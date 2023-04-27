@@ -10,6 +10,7 @@ import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appo
 import { Client } from '@/types/Client';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
+import { Input } from '@/components/UI/Input/Input';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -126,16 +127,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
         <p>Name</p>
-        <input type='text' autoFocus placeholder='John Doe' className={styles.dateInput} />
+        <Input type='text' autoFocus placeholder='John Doe' />
 
         <p>Email</p>
-        <input type='text' placeholder='johndoe@gmail.com' className={styles.dateInput} />
+        <Input type='text' placeholder='johndoe@gmail.com' />
 
         <p>Address</p>
-        <input type='text' placeholder='1234 John Doe St.' className={styles.dateInput} />
+        <Input type='text' placeholder='1234 John Doe St.' />
 
         <p>Phone</p>
-        <input type='text' placeholder='123-456-7890' className={styles.dateInput} />
+        <Input type='text' placeholder='123-456-7890' />
 
         <p>Notes</p>
         <textarea style={{resize: 'none', height: 80, paddingTop: 10}} placeholder='Modified rate to 90%.' className={styles.dateInput} />
