@@ -18,14 +18,15 @@ import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
+  setSelected?: React.Dispatch<React.SetStateAction<Client | undefined>>,
   userId: string,
   initialClient?: Client,
   onSubmit?: (...args: any) => any,
 }
 
-export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialClient, onSubmit}) => {
+export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, userId, initialClient, onSubmit}) => {
   const [error, setError] = useState<string>();
-  const [id, setId] = useState<string>(initialClient?.id || '');
+  const [id, setId] = useState<string>(initialClient?.id || uuid());
   const [name, setName] = useState<string>(initialClient?.name || '');
   const [email, setEmail] = useState<string>(initialClient?.email || '');
   const [notes, setNotes] = useState<string>(initialClient?.notes || '');
@@ -48,17 +49,17 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     if (!name || !email || (!initialClient && !selectedBusiness)) return null;
     
     return {
-      id: id ?? uuid(),
+      id,
       business_id: selectedBusiness?.id,
       name,
       email,
       notes: notes ?? undefined,
-      address: notes ?? undefined,
-      phone: notes ?? undefined,
+      address: address ?? undefined,
+      phone: phone ?? undefined,
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [email, id, initialClient, name, notes, selectedBusiness]);
+  }, [address, email, id, initialClient, name, notes, phone, selectedBusiness]);
 
   const [userAddClient, { 
     data: clientMutationData, 
@@ -95,7 +96,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
 
   const onSubmitForm = useCallback(() => {
     if (!client) return;
-
+    
     initialClient
       ? userEditClient({ variables: { client } })
       : userAddClient({ variables: { client } })
@@ -110,14 +111,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   useEffect(() => {
     if (!clientMutationData || clientMutationLoading) return;
     if (clientMutationError) return setError('Something went wrong'); // for now
+    setSelected && setSelected(clientMutationData.userAddClient);
     complete();
-  }, [clientMutationData, clientMutationError, clientMutationLoading, complete]);
+  }, [clientMutationData, clientMutationError, clientMutationLoading, complete, setSelected]);
 
   useEffect(() => {
     if (!clientEditData || clientEditLoading) return;
     if (clientEditError) return setError('Something went wrong');
+    setSelected && setSelected(clientEditData.userEditClient);
     complete();
-  }, [clientEditData, clientEditError, clientEditLoading, complete]);
+  }, [clientEditData, clientEditError, clientEditLoading, complete, setSelected]);
 
   
 

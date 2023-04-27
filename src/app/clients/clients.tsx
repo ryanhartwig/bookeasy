@@ -52,7 +52,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
         <p>Add Client</p>
       </div>
       {results}
-      {formOpen && <ClientForm open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
+      {formOpen && <ClientForm setSelected={setSelected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
     </div>
   )
 }

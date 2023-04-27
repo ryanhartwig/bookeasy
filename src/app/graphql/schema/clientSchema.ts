@@ -5,6 +5,7 @@ export const clientResolvers = {
   Mutation: {
     userAddClient: async (parent: any, args: any) => {
       const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
+
       if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
 
       const clientResponse = await db.query(`insert into client values (
@@ -29,6 +30,8 @@ export const clientResolvers = {
     userEditClient: async (parent: any, args: any) => {
       const { id, notes, name, email, address, phone, active } = args.client;
 
+      console.log(args.client);
+
       const response = await db.query(`update clients_businesses set
         notes = $1,
         name = $2,
@@ -41,9 +44,14 @@ export const clientResolvers = {
       `, [notes, name, email, address, phone, active, id]);
 
       if (!response.rowCount) throwGQLError('Could not update client');
+
+      // Need to return patched client!
+
+      const clientResponse = await db.query('select * from client where id = $1', [id]);
+
       return {
-        ...response.rows[0],
-        id: response.rows[0].client_id,
+        ...clientResponse.rows[0],
+        ...Object.fromEntries(Object.entries(response.rows[0]).filter(([_, v]) => !!v)),
         client_id: undefined,
       };
     }
