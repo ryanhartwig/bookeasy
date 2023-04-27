@@ -28,11 +28,10 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   const [notes, setNotes] = useState<string>();
   const [address, setAddress] = useState<string>();
   const [phone, setPhone] = useState<string>();
-  const [active, setActive] = useState<boolean>();
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   const client = useMemo<Client | null>(() => {
-    if (!name || !email || !notes || !address || !phone || !active) return null;
+    if (!name || !email || !notes || !address || !phone) return null;
     
     return {
       id: id ?? uuid(),
@@ -42,9 +41,9 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       address,
       phone,
       joined_date: new Date().toISOString(),
-      active,
+      active: true,
     }
-  }, [active, address, email, id, name, notes, phone]);
+  }, [address, email, id, name, notes, phone]);
 
   const [addEditAppointment, { 
     data: appMutationData, 
@@ -140,13 +139,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
 
         <p>Notes</p>
         <textarea style={{resize: 'none', height: 80, paddingTop: 10}} placeholder='Modified rate to 90%.' className={styles.dateInput} />
-
-        <div className={styles.isActive}>
-          <label style={{fontSize: 14}} htmlFor='is_active' >Is Active</label>
-          <input type='checkbox' id='is_active' className={styles.dateInput} style={{height: 20}} />
-        </div>
-        
-
 
       </div>
       <hr />
