@@ -2,6 +2,20 @@ import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const clientResolvers = {
+  Query: {
+    getMultiClientData: async (parent: any, args: any) => {
+      // This is the client, as in the client relation
+      const clientResponse = await db.query('select * from client where id = $1', [args.client_id]);
+
+      // This is the client as in the clients_businesses relation (thus, business detail overrides)
+      const clientPatchResponse = await db.query('select * from clients_businesses where client_id = $1', [args.client_id]);
+
+      return {
+        client: clientResponse.rows[0],
+        business_patch: { ...clientPatchResponse.rows[0], id: clientPatchResponse.rows[0].client_id },
+      }
+    },
+  },
   Mutation: {
     userAddClient: async (parent: any, args: any) => {
       const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
@@ -79,6 +93,10 @@ export const clientTypeDefs = `#graphql
     phone: String,
     active: Boolean,
     joined_date: String #included for request compatibility, but not used
+  }
+
+  type Query {
+    getMultiClientData(client_id: String!): MultiClient!,
   }
 
   type Mutation {

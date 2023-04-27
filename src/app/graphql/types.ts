@@ -69,6 +69,11 @@ export const types = `#graphql
     avatar: String
   }
 
+  type MultiClient {
+    client: Client!,
+    business_patch: BusinessClient!,
+  }
+
   type Business {
     id: ID!,
     name: String!,
