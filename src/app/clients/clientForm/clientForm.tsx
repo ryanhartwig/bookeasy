@@ -7,10 +7,11 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { BsTrash3 } from 'react-icons/bs';
 import { useMutation } from "@apollo/client"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
-import { Client } from '@/types/Client';
+import { Client, ClientInput } from '@/types/Client';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 import { Input } from '@/components/UI/Input/Input';
+import { FormBusiness } from '@/types/Business';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -24,6 +25,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>();
 
+  const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
@@ -31,11 +33,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
   const [phone, setPhone] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
-  const client = useMemo<Client | null>(() => {
-    if (!name || !email) return null;
+  const client = useMemo<ClientInput | null>(() => {
+    if (!name || !email || !selectedBusiness) return null;
     
     return {
       id: id ?? uuid(),
+      business_id: selectedBusiness.id,
       name,
       email,
       notes: notes ?? undefined,
@@ -44,7 +47,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [email, id, name, notes]);
+  }, [email, id, name, notes, selectedBusiness]);
 
   const [addEditAppointment, { 
     data: appMutationData, 

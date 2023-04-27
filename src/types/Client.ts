@@ -15,3 +15,7 @@ export interface FormClient {
   name: string,
   avatar: string,
 }
+
+export interface ClientInput extends Client {
+  business_id: string,
+}
