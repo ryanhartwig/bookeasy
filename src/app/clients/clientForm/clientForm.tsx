@@ -16,6 +16,7 @@ import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
 import { USER_ADD_CLIENT } from '@/utility/queries/clientQueries';
 import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
+import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -69,23 +70,10 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     error: clientMutationError, 
     reset: clientMutationReset 
   }] = useMutation(USER_ADD_CLIENT, {
-    update(cache, { data: { userAddClient }}) {
-      cache.modify({
-        fields: {
-          getBusinessClients(existingClients = [], { readField }) {
-            const newClientRef = cache.writeFragment({
-              data: userAddClient,
-              fragment: gql`
-                ${NEW_CLIENT_FRAGMENT}
-              `
-            }); 
-            return initialAppointment 
-              ? existingClients.map((ref: any) => readField('id', ref) === readField('id', newClientRef) ? newClientRef : ref)
-              : [...existingClients, newClientRef];
-          }
-        }
-      })
-    }
+    refetchQueries: [
+      {query: GET_BUSINESS_CLIENTS, variables: { businessId: selectedBusiness?.id }}, 
+      'getBusinessClients',
+    ]
   });
 
   useEffect(() => {
@@ -130,7 +118,8 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
 
   const onSubmitForm = useCallback(() => {
     if (!client) return;
-  }, [client]);
+    userAddClient({ variables: { client } });
+  }, [client, userAddClient]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -145,7 +134,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={loadingUserBusinesses}
+      loading={loadingUserBusinesses || clientMutationLoading}
     >
       <Modal.Header>{initialAppointment ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>

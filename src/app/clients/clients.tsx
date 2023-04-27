@@ -1,6 +1,6 @@
 import styles from './clients.module.scss';
 
-import { SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Client } from '@/types/Client';
 import { NewBusiness } from '@/types/Business';
 import { useQuery } from '@apollo/client';
@@ -52,7 +52,7 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
         <p>Add Client</p>
       </div>
       {results}
-      <ClientForm open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />
+      {formOpen && <ClientForm open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
     </div>
   )
 }
