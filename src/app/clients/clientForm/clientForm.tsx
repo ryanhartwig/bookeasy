@@ -2,18 +2,18 @@ import styles from './clientForm.module.scss';
 import uuid from "react-uuid"
 
 import { Modal } from "@/components/UI/Modal/Modal"
-import { AppointmentData } from "@/types/Appointment"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { BsTrash3 } from 'react-icons/bs';
-import { useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import { DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { Client, ClientInput } from '@/types/Client';
 import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
-import { USER_ADD_CLIENT } from '@/utility/queries/clientQueries';
+import { USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
 import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
+import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -64,7 +64,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     data: clientMutationData, 
     loading: clientMutationLoading, 
     error: clientMutationError, 
-    reset: clientMutationReset 
   }] = useMutation(USER_ADD_CLIENT, {
     refetchQueries: [
       {query: GET_BUSINESS_CLIENTS, variables: { businessId: selectedBusiness?.id }}, 
@@ -72,17 +71,55 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
     ]
   });
 
-  useEffect(() => {
-    if (!clientMutationData || clientMutationLoading) return;
-    if (clientMutationError) {
-      return setError('Something went wrong'); // for now
+  const [userEditClient, {
+    data: clientEditData,
+    loading: clientEditLoading,
+    error: clientEditError,
+  }] = useMutation(USER_EDIT_CLIENT, {
+    update(cache, { data: { userEditClient }}) {
+      cache.modify({
+        fields: {
+          getBusinessClients(existingClients = [], { readField }) {
+            const editClientRef = cache.writeFragment({
+              data: userEditClient,
+              fragment: gql`
+                ${NEW_CLIENT_FRAGMENT}
+              `
+            }); 
+            return existingClients.map((ref: any) => readField('id', ref) === readField('id', editClientRef) ? editClientRef : ref)
+          }
+        }
+      })
     }
-    
+  });
+
+  const onSubmitForm = useCallback(() => {
+    if (!client) return;
+
+    initialClient
+      ? userEditClient({ variables: { client } })
+      : userAddClient({ variables: { client } })
+  }, [client, initialClient, userAddClient, userEditClient]);
+
+  const complete = useCallback(() => {
     setError(undefined);
-    clientMutationReset();
     setOpen(false);
     onSubmit && onSubmit();
-  }, [clientMutationData, clientMutationError, clientMutationLoading, clientMutationReset, onSubmit, setOpen]);
+  }, [onSubmit, setOpen]);
+  
+  useEffect(() => {
+    if (!clientMutationData || clientMutationLoading) return;
+    if (clientMutationError) return setError('Something went wrong'); // for now
+    complete();
+  }, [clientMutationData, clientMutationError, clientMutationLoading, complete]);
+
+  useEffect(() => {
+    if (!clientEditData || clientEditLoading) return;
+    if (clientEditError) return setError('Something went wrong');
+    complete();
+  }, [clientEditData, clientEditError, clientEditLoading, complete]);
+
+  
 
   const [deleteAppointment, { 
     data: deleteAppointmentData, 
@@ -112,10 +149,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
 
   }, []);
 
-  const onSubmitForm = useCallback(() => {
-    if (!client) return;
-    userAddClient({ variables: { client } });
-  }, [client, userAddClient]);
+  
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -177,4 +211,5 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, userI
       </Modal>
     </Modal>
   )
+
 }

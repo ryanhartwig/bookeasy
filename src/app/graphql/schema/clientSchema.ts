@@ -41,8 +41,11 @@ export const clientResolvers = {
       `, [notes, name, email, address, phone, active, id]);
 
       if (!response.rowCount) throwGQLError('Could not update client');
-
-      return response.rows[0];
+      return {
+        ...response.rows[0],
+        id: response.rows[0].client_id,
+        client_id: undefined,
+      };
     }
   },
 }
@@ -68,6 +71,7 @@ export const clientTypeDefs = `#graphql
     address: String,
     phone: String,
     active: Boolean,
+    joined_date: String #included for request compatibility, but not used
   }
 
   type Mutation {
