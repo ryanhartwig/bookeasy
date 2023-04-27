@@ -11,7 +11,7 @@ import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
-import { USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
+import { GET_MULTI_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
 import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
@@ -26,18 +26,19 @@ interface AppointmentFormProps {
 
 export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, userId, initialClient, onSubmit}) => {
   const [error, setError] = useState<string>();
-  const [id, setId] = useState<string>(initialClient?.id || uuid());
-  const [name, setName] = useState<string>(initialClient?.name || '');
-  const [email, setEmail] = useState<string>(initialClient?.email || '');
-  const [notes, setNotes] = useState<string>(initialClient?.notes || '');
-  const [address, setAddress] = useState<string>(initialClient?.address || '');
-  const [phone, setPhone] = useState<string>(initialClient?.phone || '');
+  const [id, setId] = useState<string>(uuid());
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [notes, setNotes] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+  const { data: multiClientData, loading: loadingMultiClientData } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient});
 
   useEffect(() => {
     if (userBusinessesData) {
@@ -45,21 +46,57 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     }
   }, [userBusinessesData]);
 
+  // Initialize fields when editing existing client
+  useEffect(() => {
+    console.log('init', initialClient);
+    console.log('data', multiClientData);
+    if (!initialClient || (initialClient && !multiClientData)) return;
+
+    const { business_patch: { name, email, phone, address, notes } } = multiClientData.getMultiClientData;
+
+    console.log(name, email, phone, address, notes)
+
+    name && setName(name);
+    email && setEmail(email);
+    phone && setPhone(phone);
+    address && setAddress(address);
+    notes && setNotes(notes);
+  }, [initialClient, multiClientData]);
+
   const client = useMemo<ClientInput | null>(() => {
-    if (!name || !email || (!initialClient && !selectedBusiness)) return null;
+    if (!name || !email || !selectedBusiness) return null;
     
     return {
       id,
-      business_id: selectedBusiness?.id,
+      business_id: selectedBusiness.id,
       name,
       email,
-      notes: notes ?? undefined,
-      address: address ?? undefined,
-      phone: phone ?? undefined,
+      notes: notes || undefined,
+      address: address || undefined,
+      phone: phone || undefined,
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [address, email, id, initialClient, name, notes, phone, selectedBusiness]);
+  }, [address, email, id, name, notes, phone, selectedBusiness]);
+
+  const editClient = useMemo<ClientInput | null>(() => {
+    if (!initialClient || (initialClient && !multiClientData)) return null;
+
+    // Raw client data from client table 
+    const raw = multiClientData.getMultiClientData.client;
+    
+    return {
+      id: raw.id,
+      business_id: '', // Not used in gql resolver
+      name: name || raw.name,
+      email: email || raw.email,
+      notes: notes || raw.notes,
+      address: address || raw.address,
+      phone: phone || raw.phone,
+      joined_date: new Date().toISOString(),
+      active: true,
+    }
+  }, [address, email, initialClient, multiClientData, name, notes, phone]);
 
   const [userAddClient, { 
     data: clientMutationData, 
@@ -167,7 +204,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={loadingUserBusinesses || clientMutationLoading}
+      loading={loadingUserBusinesses || clientMutationLoading || (initialClient && loadingMultiClientData)}
     >
       <Modal.Header>{initialClient ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
