@@ -130,12 +130,15 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId})
 
       </div>
       <div>
-        <Card className={clsx(styles.card, styles.apps)} style={{height: 736}}>
+        <Card className={clsx(styles.card, styles.apps)} style={{height: 736, position: 'relative'}}>
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
               ? booked.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)
               : previous.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)}
+          </div>
+          <div className={styles.book}>
+            <p>+ Book New</p>
           </div>
         </Card>
         {selectedAppointment && <AppointmentForm open={appointmentFormOpen} setOpen={setAppointmentFormOpen} userId={userId} initialAppointment={selectedAppointment} onSubmit={() => setSelectedAppointment(undefined)} />}
