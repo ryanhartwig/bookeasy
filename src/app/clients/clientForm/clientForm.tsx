@@ -184,8 +184,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   useEffect(() => {
     if (deleteClientData && !deleteClientLoading && !deleteClientError) {
-      // setSelected && setSelected(undefined);
-      // Find what is closing the modal on delete
+      setSelected && setSelected(undefined);
     };
     if (deleteClientError) setError(deleteClientError.message);
   }, [deleteClientData, deleteClientError, deleteClientLoading, setOpen, setSelected]);
