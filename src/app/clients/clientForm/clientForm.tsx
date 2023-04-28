@@ -48,8 +48,8 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const [placeholderClient, setPlaceholderClient] = useState<RawClient>();
 
-  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
-  const { data: multiClientData, loading: loadingMultiClientData } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient});
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient }); 
+  const { data: multiClientData, loading: loadingMultiClientData } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache'});
 
   useEffect(() => {
     if (userBusinessesData) {
@@ -59,13 +59,11 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   // Initialize fields when editing existing client
   useEffect(() => {
-    console.log('init', initialClient);
-    console.log('data', multiClientData);
     if (!initialClient || (initialClient && !multiClientData)) return;
 
-    const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
+    console.log(multiClientData);
 
-    console.log(name, email, phone, address, notes)
+    const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
 
     setPlaceholderClient(client);
 
@@ -125,21 +123,25 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     loading: clientEditLoading,
     error: clientEditError,
   }] = useMutation(USER_EDIT_CLIENT, {
-    update(cache, { data: { userEditClient }}) {
-      cache.modify({
-        fields: {
-          getBusinessClients(existingClients = [], { readField }) {
-            const editClientRef = cache.writeFragment({
-              data: userEditClient,
-              fragment: gql`
-                ${NEW_CLIENT_FRAGMENT}
-              `
-            }); 
-            return existingClients.map((ref: any) => readField('id', ref) === readField('id', editClientRef) ? editClientRef : ref)
-          }
-        }
-      })
-    }
+    refetchQueries: [{
+      query: GET_BUSINESS_CLIENTS,
+      variables: { businessId: 'johnsonteam' }
+    }],
+    // update(cache, { data: { userEditClient }}) {
+    //   cache.modify({
+    //     fields: {
+    //       getBusinessClients(existingClients = [], { readField }) {
+    //         const editClientRef = cache.writeFragment({
+    //           data: userEditClient,
+    //           fragment: gql`
+    //             ${NEW_CLIENT_FRAGMENT}
+    //           `
+    //         }); 
+    //         return existingClients.map((ref: any) => readField('id', ref) === readField('id', editClientRef) ? editClientRef : ref)
+    //       }
+    //     }
+    //   })
+    // }
   });
 
   const onSubmitForm = useCallback(() => {

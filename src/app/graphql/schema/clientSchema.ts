@@ -45,8 +45,6 @@ export const clientResolvers = {
     userEditClient: async (parent: any, args: any) => {
       const { id, notes, name, email, address, phone, active } = args.client;
 
-      console.log(args.client);
-
       const response = await db.query(`update clients_businesses set
         notes = $1,
         name = $2,

@@ -32,8 +32,6 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
     businessId: business.id,
   }});
 
-  console.log('selected client:', selected);
-
   useEffect(() => {
     if (!data || loading) return;
     setClients(data.getBusinessClients)

@@ -27,7 +27,6 @@ export const GET_MULTI_CLIENT = gql`
         address
         phone
         joined_date
-        avatar
         active
       }
       client {
