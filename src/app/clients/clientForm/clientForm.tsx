@@ -65,11 +65,11 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
     setPlaceholderClient(client);
 
-    name && setName(name);
-    email && setEmail(email);
-    phone && setPhone(phone);
-    address && setAddress(address);
-    notes && setNotes(notes);
+    setName(name || '');
+    setEmail(email || '');
+    setPhone(phone || '');
+    setAddress(address || '');
+    setNotes(notes || '');
   }, [initialClient, multiClientData]);
 
   const client = useMemo<ClientInput | null>(() => {
@@ -109,6 +109,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     data: clientMutationData, 
     loading: clientMutationLoading, 
     error: clientMutationError, 
+    reset: clientMutationReset,
   }] = useMutation(USER_ADD_CLIENT, {
     refetchQueries: [
       {query: GET_BUSINESS_CLIENTS, variables: { businessId: selectedBusiness?.id }}, 
@@ -120,6 +121,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     data: clientEditData,
     loading: clientEditLoading,
     error: clientEditError,
+    reset: clientEditReset,
   }] = useMutation(USER_EDIT_CLIENT, {
     update(cache, { data: { userEditClient }}) {
       cache.modify({
@@ -156,15 +158,17 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     if (!clientMutationData || clientMutationLoading) return;
     if (clientMutationError) return setError('Something went wrong'); // for now
     setSelected && setSelected(clientMutationData.userAddClient);
+    clientMutationReset();
     complete();
-  }, [clientMutationData, clientMutationError, clientMutationLoading, complete, setSelected]);
+  }, [clientMutationData, clientMutationError, clientMutationLoading, clientMutationReset, complete, setSelected]);
 
   useEffect(() => {
     if (!clientEditData || clientEditLoading) return;
     if (clientEditError) return setError('Something went wrong');
     setSelected && setSelected(clientEditData.userEditClient);
+    clientEditReset();
     complete();
-  }, [clientEditData, clientEditError, clientEditLoading, complete, setSelected]);
+  }, [clientEditData, clientEditError, clientEditLoading, clientEditReset, complete, setSelected]);
 
   const [deleteClient, { 
     data: deleteClientData, 
