@@ -10,6 +10,7 @@ export const GET_USER_BUSINESSES = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
+      user_id
     }
   }
 `;
