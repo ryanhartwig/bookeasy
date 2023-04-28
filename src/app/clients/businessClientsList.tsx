@@ -19,13 +19,15 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
 
   const [clients, setClients] = useState<Client[]>([]);
 
-  // space separated lazy search
   const filteredClients = useMemo(() => clients
+    // Filter by query (space-separated lazy search)
     .filter(c => 
       !query.length || 
       query.split(' ')
         .every(slice => c.name.toLowerCase().includes(slice.toLowerCase()))
-    )
+    
+    // Sort alphabetically
+    ).sort((a, b) => a.name[0].toLowerCase() < b.name[0].toLowerCase() ? -1 : 1)
   , [clients, query]);
 
   const { data, loading } = useQuery(GET_BUSINESS_CLIENTS, { variables: {
@@ -49,8 +51,7 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
           }}
         >
           <Avatar src={c.avatar} />
-          <p>{c.name}</p>
-          {/* <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p> */}
+          <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p>
         </div>
       ))}
     </div>
