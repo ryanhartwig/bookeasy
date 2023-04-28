@@ -49,7 +49,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   const [placeholderClient, setPlaceholderClient] = useState<RawClient>();
 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient }); 
-  const { data: multiClientData, loading: loadingMultiClientData } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache'});
+  const { data: multiClientData, loading: loadingMultiClientData, refetch } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache' });
 
   useEffect(() => {
     if (userBusinessesData) {
@@ -63,6 +63,8 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
     const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
 
+    refetch({ clientId: initialClient?.id });
+
     setPlaceholderClient(client);
 
     setName(name || '');
@@ -70,7 +72,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     setPhone(phone || '');
     setAddress(address || '');
     setNotes(notes || '');
-  }, [initialClient, multiClientData]);
+  }, [initialClient, multiClientData, refetch]);
 
   const client = useMemo<ClientInput | null>(() => {
     if (!name || !email || !selectedBusiness) return null;
