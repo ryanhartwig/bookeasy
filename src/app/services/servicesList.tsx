@@ -16,7 +16,7 @@ export const ServicesList: React.FC<ServicesListProps> = ({business}) => {
   console.log(business);
   return (
     <div className={styles.services_wrapper}>
-      <SectionLabel label={business.name} />
+      <SectionLabel label={business.user_id ? `${business.name} (My Business)` : business.name} />
       {services.map(s => 
       <div key={s.id}>
         <ServiceCard service={s} />
