@@ -31,13 +31,13 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId})
   const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
       app.client.id === selected.id && app.start_date < new Date().toISOString()
-    );
+    ).sort((a, b) => a.start_date < b.start_date ? 1 : -1);
   }, [appointments, selected.id]);
 
   const booked = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
       app.client.id === selected.id && app.start_date >= new Date().toISOString()
-    );
+    ).sort((a, b) => a.start_date < b.start_date ? -1 : 1);
   }, [appointments, selected.id]);
 
   const unpaid = useMemo<string>(() => {
