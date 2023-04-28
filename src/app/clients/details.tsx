@@ -2,6 +2,7 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { AppointmentData } from '@/types/Appointment';
+import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { GET_CLIENT_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
@@ -16,14 +17,17 @@ interface DetailsProps {
   selected: Client,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
   userId: string,
+  selectedBusiness: NewBusiness,
 }
 
-export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId}) => {
+export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, selectedBusiness}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
 
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData>();
   const [appointmentFormOpen, setAppointmentFormOpen] = useState<boolean>(false);
+
+  const [bookFormOpen, setBookFormOpen] = useState<boolean>(false);
     
   useEffect(() => {
     if (!selectedAppointment) return;
@@ -142,6 +146,7 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId})
           </div>
         </Card>
         {selectedAppointment && <AppointmentForm open={appointmentFormOpen} setOpen={setAppointmentFormOpen} userId={userId} initialAppointment={selectedAppointment} onSubmit={() => setSelectedAppointment(undefined)} />}
+        {bookFormOpen && <AppointmentForm open={bookFormOpen} setOpen={setBookFormOpen} userId={userId} initialClientBusiness={{client: selected, business: selectedBusiness}} />}
       </div>
     </div>
   )

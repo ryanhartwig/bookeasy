@@ -12,10 +12,11 @@ interface BusinessClientsListProps {
   business: NewBusiness,
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
+  setSelectedBusiness: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
   query: string,
 }
 
-export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({business, selected, setSelected, query}) => {
+export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({business, selected, setSelected, query, setSelectedBusiness}) => {
 
   const [clients, setClients] = useState<Client[]>([]);
 
@@ -48,6 +49,7 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
           className={clsx(styles.client, {[styles.selected]: selected?.id === c.id})}
           onClick={() => {
             setSelected(c);
+            setSelectedBusiness(business)
           }}
         >
           <Avatar src={c.avatar} />

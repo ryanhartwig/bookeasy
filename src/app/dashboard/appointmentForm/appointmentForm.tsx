@@ -19,21 +19,26 @@ import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT, GET_CLIENT_APPOINTMENTS } from "@/utility/queries/appointmentQueries"
-import { FormClient } from '@/types/Client';
+import { Client, FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 import { Input } from '@/components/UI/Input/Input';
 
+interface ClientBusiness {
+  client: Client,
+  business: NewBusiness,
+}
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
   initialAppointment?: AppointmentData,
+  initialClientBusiness?: ClientBusiness,
   onSubmit?: (...args: any) => any,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, onSubmit}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, initialClientBusiness, onSubmit}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();

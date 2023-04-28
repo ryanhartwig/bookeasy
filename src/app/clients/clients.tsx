@@ -11,10 +11,11 @@ import { ClientForm } from './clientForm/clientForm';
 interface ClientsProps {
   selected: Client | undefined,
   setSelected: React.Dispatch<React.SetStateAction<Client | undefined>>,
+  setSelectedBusiness: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
   userId: string,
 }
 
-export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId}) => {
+export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId, setSelectedBusiness}) => {
   const [query, setQuery] = useState<string>('');
 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
@@ -33,11 +34,11 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId})
     return (
       businesses.map(b => {
         return (
-          <BusinessClientsList key={b.id} business={b} query={query} selected={selected} setSelected={setSelected} />
+          <BusinessClientsList key={b.id} business={b} setSelectedBusiness={setSelectedBusiness} query={query} selected={selected} setSelected={setSelected} />
         )
       })
     )
-  }, [businesses, query, selected, setSelected]);
+  }, [businesses, query, selected, setSelected, setSelectedBusiness]);
 
   return (
     <div className={styles.clients}>
