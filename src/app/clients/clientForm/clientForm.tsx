@@ -61,8 +61,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   useEffect(() => {
     if (!initialClient || (initialClient && !multiClientData)) return;
 
-    console.log(multiClientData);
-
     const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
 
     setPlaceholderClient(client);
@@ -123,25 +121,21 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     loading: clientEditLoading,
     error: clientEditError,
   }] = useMutation(USER_EDIT_CLIENT, {
-    refetchQueries: [{
-      query: GET_BUSINESS_CLIENTS,
-      variables: { businessId: 'johnsonteam' }
-    }],
-    // update(cache, { data: { userEditClient }}) {
-    //   cache.modify({
-    //     fields: {
-    //       getBusinessClients(existingClients = [], { readField }) {
-    //         const editClientRef = cache.writeFragment({
-    //           data: userEditClient,
-    //           fragment: gql`
-    //             ${NEW_CLIENT_FRAGMENT}
-    //           `
-    //         }); 
-    //         return existingClients.map((ref: any) => readField('id', ref) === readField('id', editClientRef) ? editClientRef : ref)
-    //       }
-    //     }
-    //   })
-    // }
+    update(cache, { data: { userEditClient }}) {
+      cache.modify({
+        fields: {
+          getBusinessClients(existingClients = [], { readField }) {
+            const editClientRef = cache.writeFragment({
+              data: userEditClient,
+              fragment: gql`
+                ${NEW_CLIENT_FRAGMENT}
+              `
+            }); 
+            return existingClients.map((ref: any) => readField('id', ref) === initialClient?.id ? editClientRef : ref)
+          }
+        }
+      })
+    }
   });
 
   const onSubmitForm = useCallback(() => {
