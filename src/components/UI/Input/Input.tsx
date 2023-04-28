@@ -8,6 +8,6 @@ interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
 export const Input: React.FC<InputProps> = ({...props}) => {
 
   return (
-    <input {...props} className={clsx('input', props.className || '')} />
+    <input {...props} className={clsx('input', props.className || '', {'checkbox': props.type === 'checkbox'})} />
   )
 }

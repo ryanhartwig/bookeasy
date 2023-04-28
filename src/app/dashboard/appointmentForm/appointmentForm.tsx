@@ -23,6 +23,7 @@ import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
+import { Input } from '@/components/UI/Input/Input';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -42,6 +43,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [period, setPeriod] = useState<'am' | 'pm'>('am');
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>();
+  const [isPaid, setIsPaid] = useState<boolean>(false);
 
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
@@ -82,6 +84,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setHours(date.getHours() % 12 || 12);
     setMin(date.getMinutes());
     setPeriod(date.getHours() > 11 ? 'pm' : 'am');
+    setIsPaid(initialAppointment.is_paid);
   }, [initialAppointment, prepopulating]);
   useEffect(() => {
     if (!prepopulating || !initialAppointment) return;
@@ -156,9 +159,9 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       service_duration: selectedService.duration,
       service_cost: selectedService.cost,
       is_video: selectedService.is_video,
-      is_paid: false,
+      is_paid: isPaid,
     }
-  }, [id, selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
+  }, [id, isPaid, selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
 
   const [addEditAppointment, { 
     data: appMutationData, 
@@ -324,6 +327,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
           <p>:</p>
           <Select list={minList} selected={<p>{min === 0 ? '00' : min}</p>} placeholder="min" hasSelected={min !== undefined} />
           <Select list={periodList} selected={<p>{period}</p>} hasSelected />
+        </div>
+        <div className={styles.ispaid}>
+          <label htmlFor='ispaid'>Mark as paid</label>
+          <Input id='ispaid' type='checkbox' checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} />  
         </div>
       </div>
       <hr />
