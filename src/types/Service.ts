@@ -1,13 +1,18 @@
+export interface AssignedUser {
+  id: string,
+  name: string,
+  avatar?: string,
+}
+
 export interface Service {
   id: string,
-  businessId: string,
   name: string,
   duration: number,
   provider: string,
   cost: number,
-  isVideo: boolean,
+  is_video: boolean,
   color: string,
-  userIds: string[],
+  assigned_users: AssignedUser[],
 };
 
 export interface FormService {
