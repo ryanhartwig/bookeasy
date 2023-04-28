@@ -51,12 +51,13 @@ export const types = `#graphql
     # users: [BusinessUser!]!,
     id: String!,
     notes: String,
-    name: String!,
+    name: String, 
     email: String,
     address: String,
     phone: String,
     joined_date: String!,
     avatar: String,
+    active: Boolean!
   }
 
   type Client {
@@ -66,6 +67,11 @@ export const types = `#graphql
     address: String,
     phone: String,
     avatar: String
+  }
+
+  type MultiClient {
+    client: Client!,
+    business_patch: BusinessClient!,
   }
 
   type Business {

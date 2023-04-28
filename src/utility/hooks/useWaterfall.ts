@@ -3,11 +3,12 @@ import { useEffect, useRef } from "react";
 /**
  * Resets state of subsequent state chunks when a parent state value changes, based on the order of inputs
  */
-export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<any>>][][], resetValue: any = undefined) => {
+export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<any>>][][], resetValue: any = undefined, skip: boolean = false) => {
 
   const refs = useRef<[any, React.Dispatch<React.SetStateAction<any>>][][]>(state);
 
   useEffect(() => {
+    if (skip) return;
     for (let i = 0; i < state.length; i++) {
       if (refs.current[i].some(([val], subind) => val !== state[i][subind][0])) {
         state.slice(i + 1).forEach(group => group.forEach(([_, setter]) => setter(undefined)));
@@ -18,5 +19,5 @@ export const useWaterfall = (state: [any, React.Dispatch<React.SetStateAction<an
         break;
       }
     }
-  }, [state]);
+  }, [skip, state]);
 }

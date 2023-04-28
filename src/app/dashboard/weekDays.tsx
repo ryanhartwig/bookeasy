@@ -14,7 +14,6 @@ import { useQuery } from '@apollo/client';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
-import { sample_base_availability } from '@/utility/sample_data/sample_base_availability';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 

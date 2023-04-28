@@ -5,24 +5,21 @@ import { Details } from './details';
 import styles from './clients.module.scss';
 import { Client } from '@/types/Client';
 import React, { useState } from 'react';
-import { Business } from '@/types/Business';
-import { Appointment } from '@/types/Appointment';
-import { Service } from '@/types/Service';
+import { NewBusiness } from '@/types/Business';
 
 interface ClientsViewProps {
-  clients: Client[],
-  businesses: Business[],
-  appointments: Appointment[],
-  services: Service[],
+  userId: string,
 }
 
-export const ClientsView: React.FC<ClientsViewProps> = ({clients, businesses, appointments, services}) => {
+export const ClientsView: React.FC<ClientsViewProps> = ({userId}) => {
   const [selected, setSelected] = useState<Client>();
+  const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
 
   return (
     <div className={styles.wrapper}>
-      <Clients selected={selected} setSelected={setSelected} clients={clients} businesses={businesses} />
-      {selected ? <Details selected={selected} appointments={appointments} services={services} />
+      <Clients userId={userId} selected={selected} setSelected={setSelected} setSelectedBusiness={setSelectedBusiness}/>
+      
+      {selected && selectedBusiness ? <Details selected={selected} setSelected={setSelected} selectedBusiness={selectedBusiness} userId={userId} />
         : <p style={{width: '100%', padding: 20, fontWeight: 300, fontSize: 14, color: 'grey'}}>Select a client to see details</p>}
     </div>
   )

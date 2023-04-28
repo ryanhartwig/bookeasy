@@ -6,13 +6,26 @@ export interface Client {
   avatar?: any,
   address?: string,
   phone?: string,
-  created: number,
-  active?: boolean,
-  assignedUserIds: string[],
+  joined_date: string,
+  active: boolean,
 };
 
 export interface FormClient {
   id: string,
   name: string,
   avatar: string,
+}
+
+export interface ClientInput extends Client {
+  business_id: string,
+}
+
+export interface EditClientInput {
+  id: string,
+  name: string | null,
+  email: string | null,
+  notes: string | null,
+  address: string | null,
+  phone: string | null,
+  active: boolean,
 }
