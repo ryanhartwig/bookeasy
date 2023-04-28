@@ -141,12 +141,12 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
               ? booked.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)
               : previous.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)}
           </div>
-          <div className={styles.book}>
+          <div className={styles.book} onClick={() => setBookFormOpen(true)}>
             <p>+ Book New</p>
           </div>
         </Card>
-        {selectedAppointment && <AppointmentForm open={appointmentFormOpen} setOpen={setAppointmentFormOpen} userId={userId} initialAppointment={selectedAppointment} onSubmit={() => setSelectedAppointment(undefined)} />}
-        {bookFormOpen && <AppointmentForm open={bookFormOpen} setOpen={setBookFormOpen} userId={userId} initialClientBusiness={{client: selected, business: selectedBusiness}} />}
+        {selectedAppointment && <AppointmentForm open={appointmentFormOpen} setOpen={setAppointmentFormOpen} userId={userId} initialAppointment={selectedAppointment} onSubmit={() => setSelectedAppointment(undefined)} fromClientForm />}
+        {bookFormOpen && selected && <AppointmentForm open={bookFormOpen} setOpen={setBookFormOpen} userId={userId} initialClientBusiness={{client: selected, business: selectedBusiness}} fromClientForm />}
       </div>
     </div>
   )

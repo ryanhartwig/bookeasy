@@ -36,9 +36,10 @@ interface AppointmentFormProps {
   initialAppointment?: AppointmentData,
   initialClientBusiness?: ClientBusiness,
   onSubmit?: (...args: any) => any,
+  fromClientForm?: boolean,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, initialClientBusiness, onSubmit}) => {
+export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, initialAppointment, initialClientBusiness, onSubmit, fromClientForm}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
@@ -58,7 +59,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
     [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
-  ]);
+  ], undefined, !!initialClientBusiness);
 
   // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
@@ -99,6 +100,20 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setSelectedService(servicesData.getBusinessServices.find((s: FormService) => s.id === initialAppointment.service.id));
     setPrepopulating(false);
   }, [clientsData, initialAppointment, prepopulating, servicesData]);
+
+
+  // Prepopulate client & business data if booking a new appointment in clients view
+  useEffect(() => {
+    if (!initialClientBusiness) return;
+
+    console.log(initialClientBusiness);
+    setSelectedBusiness(initialClientBusiness.business);
+    setSelectedClient({
+      avatar: initialClientBusiness.client.avatar,
+      id: initialClientBusiness.client.id,
+      name: initialClientBusiness.client.name,
+    });
+  }, [initialClientBusiness]);
 
   const availabilityMap = useMemo(() => {
     const map = new Map<string, AvailabilitySlice[]>();
@@ -151,7 +166,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [availabilityMap, selectedBusiness, startEndDates]);
   
   const appointment = useMemo<AppointmentInput | null>(() => {
+    console.log('from appointment memo', selectedClient);
+
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
+
 
     return {
       id: id ?? uuid(),
@@ -305,19 +323,23 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     >
       <Modal.Header>{initialAppointment ? "Edit" : "Create an"} Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
-        <p>Select a provider</p>
-        <Select list={businessesList} selected={(
-          <div className={styles.selectedOption}>
-            <p>{selectedBusiness?.name}</p>
-          </div>
-        )} hasSelected={!!selectedBusiness}/>
-        <p>Select a client</p>
-        <Select disabled={!selectedBusiness} list={clientsList} hasSelected={!!selectedClient} selected={(
-          <div className={styles.selectedOption}>
-            <Avatar src={selectedClient?.avatar} size={28} />
-            <p>{selectedClient?.name}</p>
-          </div>
-        )}/>
+        {!fromClientForm && <>
+          <p>Select a provider</p>
+          <Select list={businessesList} selected={(
+            <div className={styles.selectedOption}>
+              <p>{selectedBusiness?.name}</p>
+            </div>
+          )} hasSelected={!!selectedBusiness}/>
+        </>}
+        {!fromClientForm && <>
+          <p>Select a client</p>
+          <Select disabled={!selectedBusiness} list={clientsList} hasSelected={!!selectedClient} selected={(
+            <div className={styles.selectedOption}>
+              <Avatar src={selectedClient?.avatar} size={28} />
+              <p>{selectedClient?.name}</p>
+            </div>
+          )}/>
+        </>}
         <p>Select a service</p>
         <Select disabled={!selectedBusiness} list={servicesList} hasSelected={!!selectedService} selected={(
           <div className={styles.selectedOption}>
