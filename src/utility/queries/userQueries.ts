@@ -19,13 +19,11 @@ export const GET_USER = gql`
   query($userId: ID!) {
     getUser(id: $userId) {
       id
-      own_business {
-        id
-      }
       name
       email
       phone
       created
+      avatar
     }
   }
 `

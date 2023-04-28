@@ -11,17 +11,16 @@ export const types = `#graphql
 
   type User {
     id: ID!,
-    own_business: Business!,
     name: String!,
     email: String!,
     phone: String!,
     created: String,
     prefs: UserPrefs!,
+    avatar: String,
   }
 
   type Service {
     id: ID!,
-    business: Business!,
     name: String!,
     duration: Int!,
     provider: String!,

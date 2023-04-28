@@ -42,6 +42,26 @@ export const businessResolvers = {
       }
     }
   },
+  Service: {
+    assigned_users: async (parent: any) => {
+      try {
+        const userIdsResponse = await db.query('select user_id from users_services where service_id = $1', [parent.id]);
+
+        if (!userIdsResponse.rows[0]) throwGQLError('Could not find assigned users for service with id: ' + parent.id);
+
+        const assigned_users: any[] = [];
+
+        for (const { user_id } of userIdsResponse.rows) {
+          const response = await db.query('select id, name, avatar from users where id = $1', [user_id]);
+          assigned_users.push(response.rows[0]);
+        }
+
+        return assigned_users;
+      } catch(e: any) {
+        throwGQLError(e.message);
+      }
+    },
+  },
 }
 
 export const businessTypeDefs = `#graphql
