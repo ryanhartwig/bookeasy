@@ -37,10 +37,9 @@
     }
     p:last-child {
       cursor: pointer;
-      opacity: 0.8;
+      font-size: 12px;
 
       transition: opacity 200ms;
-      
       &:hover {
         opacity: 1;
         text-decoration: underline;

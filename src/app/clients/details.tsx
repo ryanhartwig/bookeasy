@@ -7,6 +7,7 @@ import { GET_CLIENT_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
+import { AppointmentForm } from '../dashboard/appointmentForm/appointmentForm';
 import { AppointmentCard } from './appointment';
 import { ClientForm } from './clientForm/clientForm';
 import styles from './clients.module.scss';
@@ -20,6 +21,20 @@ interface DetailsProps {
 export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+
+  const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData>();
+  const [appointmentFormOpen, setAppointmentFormOpen] = useState<boolean>(false);
+    
+  useEffect(() => {
+    if (!selectedAppointment) return;
+    setAppointmentFormOpen(true);
+  }, [selectedAppointment]);
+
+  useEffect(() => {
+    if (appointmentFormOpen) return;
+    setSelectedAppointment(undefined);
+  }, [appointmentFormOpen]);
+  
 
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
@@ -119,10 +134,11 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId})
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
             {tab === 0
-              ? booked.map((app) => <AppointmentCard key={app.id} app={app} />)
-              : previous.map((app) => <AppointmentCard key={app.id} app={app} />)}
+              ? booked.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)
+              : previous.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)}
           </div>
         </Card>
+        {selectedAppointment && <AppointmentForm open={appointmentFormOpen} setOpen={setAppointmentFormOpen} userId={userId} initialAppointment={selectedAppointment} onSubmit={() => setSelectedAppointment(undefined)} />}
       </div>
     </div>
   )

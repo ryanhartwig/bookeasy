@@ -18,7 +18,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
-import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT } from "@/utility/queries/appointmentQueries"
+import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT, GET_CLIENT_APPOINTMENTS } from "@/utility/queries/appointmentQueries"
 import { FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
@@ -166,6 +166,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     error: appMutationError, 
     reset: appMutationReset 
   }] = useMutation(ADD_EDIT_APPOINTMENT, {
+    refetchQueries: [{
+      query: GET_CLIENT_APPOINTMENTS,
+      variables: { clientId: selectedClient?.id }
+    }],
     update(cache, { data: { addEditAppointment }}) {
       cache.modify({
         fields: {
@@ -208,6 +212,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     error: deleteAppointmentError, 
     reset: deleteAppointmentReset 
   }] = useMutation(DELETE_APPOINTMENT, {
+    refetchQueries: [{
+      query: GET_CLIENT_APPOINTMENTS,
+      variables: { clientId: selectedClient?.id }
+    }],
     update(cache) {
       cache.modify({
         fields: {

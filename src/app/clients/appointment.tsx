@@ -4,10 +4,11 @@ import { AppointmentData } from "@/types/Appointment"
 import { useMemo } from 'react';
 
 interface AppointmentCardProps {
-  app: AppointmentData;
+  app: AppointmentData,
+  setSelectedAppointment: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
 }
 
-export const AppointmentCard: React.FC<AppointmentCardProps> = ({app}) => {
+export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelectedAppointment}) => {
 
   const date = useMemo<string>(() => new Date(app.start_date).toDateString(), [app.start_date]);
 
@@ -22,7 +23,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app}) => {
 
       <div>
         <p>{app.service.name}</p>
-        <p>See in calendar</p>
+        <p onClick={() => setSelectedAppointment(app)}>Edit</p>
       </div>
 
     </div>
