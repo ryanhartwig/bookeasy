@@ -17,5 +17,15 @@ export interface FormClient {
 }
 
 export interface ClientInput extends Client {
-  business_id?: string,
+  business_id: string,
+}
+
+export interface EditClientInput {
+  id: string,
+  name: string | null,
+  email: string | null,
+  notes: string | null,
+  address: string | null,
+  phone: string | null,
+  active: boolean,
 }

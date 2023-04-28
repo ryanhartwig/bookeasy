@@ -21,16 +21,17 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   onAction?: (...args: any) => any,
   actionButtonDisabled?: boolean,
   loading?: boolean,
+  pauseListener?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener = false, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
   const modalRef = useRef<HTMLDivElement>(undefined!)
   const contentRef = useRef<HTMLDivElement>(undefined!);
 
-  const onClick = useClickout(onClose, open, loading, contentRef, ...refs);
+  const onClick = useClickout(onClose, open, loading || pauseListener, contentRef, ...refs);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Escape') onClose();

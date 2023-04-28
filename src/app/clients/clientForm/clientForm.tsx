@@ -5,7 +5,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { BsTrash3 } from 'react-icons/bs';
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { Client, ClientInput } from '@/types/Client';
+import { Client, ClientInput, EditClientInput } from '@/types/Client';
 import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
@@ -13,6 +13,7 @@ import { Select } from '@/components/UI/Select/Select';
 import { DELETE_CLIENT, GET_MULTI_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
 import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface AppointmentFormProps {
   open: boolean,
@@ -91,7 +92,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     }
   }, [address, email, id, name, notes, phone, selectedBusiness]);
 
-  const editClient = useMemo<ClientInput | null>(() => {
+  const editClient = useMemo<EditClientInput | null>(() => {
     if (!initialClient || (initialClient && !multiClientData)) return null;
 
     // Raw client data from client table 
@@ -99,12 +100,11 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     
     return {
       id: raw.id,
-      name: name || raw.name,
-      email: email || raw.email,
-      notes: notes || raw.notes,
-      address: address || raw.address,
-      phone: phone || raw.phone,
-      joined_date: new Date().toISOString(),
+      name: name || null,
+      email: email || null,
+      notes: notes || null,
+      address: address || null,
+      phone: phone || null,
       active: true,
     }
   }, [address, email, initialClient, multiClientData, name, notes, phone]);
@@ -253,7 +253,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
       <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteClient()}} >
         <Modal.Header>Confirm Delete</Modal.Header>
         <div className={styles.confirmDelete}>
-          <p>This is a destructive action. Are you sure you want to remove this client?</p>
+          <p>Are you sure you want to remove this client?</p>
+          <div>
+            <Avatar src={initialClient?.avatar} />
+            <p>{initialClient?.name}</p>
+          </div>
+          <p>(all appointment data will be lost)</p>
         </div>
       </Modal>
     </Modal>

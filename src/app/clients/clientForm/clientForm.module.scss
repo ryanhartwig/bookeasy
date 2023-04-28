@@ -121,12 +121,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  // width: 80%;
+  width: 381px;
   margin: 10px auto 20px auto;
 
-  > p:first-child {
+  > p {
     text-align: center;
     font-size: 14px;
     color: rgb(188, 48, 48);
+
+    &:last-child { 
+      font-size: 12px;
+      color: rgb(222, 9, 9);
+      margin-top: 5px;
+    }
+  }
+
+  // Client delete preview
+  > div {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    
+    background-color: rgb(245, 238, 228);
+    border-radius: 10px;
+    padding: 5px 36px;
+
+    > p { margin-left: 10px;}
   }
 }

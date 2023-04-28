@@ -51,7 +51,7 @@ export const types = `#graphql
     # users: [BusinessUser!]!,
     id: String!,
     notes: String,
-    name: String!,
+    name: String, 
     email: String,
     address: String,
     phone: String,

@@ -32,6 +32,8 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
     businessId: business.id,
   }});
 
+  console.log('selected client:', selected);
+
   useEffect(() => {
     if (!data || loading) return;
     setClients(data.getBusinessClients)
@@ -49,7 +51,8 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
           }}
         >
           <Avatar src={c.avatar} />
-          <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p>
+          <p>{c.name}</p>
+          {/* <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p> */}
         </div>
       ))}
     </div>

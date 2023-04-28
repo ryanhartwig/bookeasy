@@ -10,6 +10,8 @@ export const clientResolvers = {
       // This is the client as in the clients_businesses relation (thus, business detail overrides)
       const clientPatchResponse = await db.query('select * from clients_businesses where client_id = $1', [args.client_id]);
 
+      if (!clientResponse.rows[0] || !clientPatchResponse.rows[0]) throwGQLError('Could not find client');
+
       return {
         client: clientResponse.rows[0],
         business_patch: { ...clientPatchResponse.rows[0], id: clientPatchResponse.rows[0].client_id },
@@ -59,7 +61,6 @@ export const clientResolvers = {
       if (!response.rowCount) throwGQLError('Could not update client');
 
       // Need to return patched client!
-
       const clientResponse = await db.query('select * from client where id = $1', [id]);
 
       return {
