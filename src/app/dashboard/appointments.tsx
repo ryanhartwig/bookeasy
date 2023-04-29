@@ -44,7 +44,7 @@ export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
         const app_start = new Date(app.start_date).getTime();
         const now = new Date().getTime();
         const earliestEntry = app_start - (1000 * 60 * 60);
-        const latestEntry = app_start + (1000 * 60 * app.service.duration);
+        const latestEntry = app_start + (1000 * 60 * app.service_duration);
         const canEnterSession = earliestEntry <= now && now <= latestEntry;
 
         return <AppointmentActionCard 

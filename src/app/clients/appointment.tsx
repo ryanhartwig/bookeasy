@@ -18,7 +18,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
       
       <div>
         <p>{date}</p>
-        <p>{app.service.duration} min</p>
+        <p>{app.service_duration} min</p>
       </div>
 
       <div>
