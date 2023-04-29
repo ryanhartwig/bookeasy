@@ -1,7 +1,6 @@
 'use client';
 
 import { Client } from '@/types/Client';
-import { sample_appointments } from '@/utility/sample_data/sample_appointments';
 import { useMemo } from 'react';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
@@ -11,7 +10,7 @@ interface ClientListProps {
 }
 
 export const ClientList: React.FC<ClientListProps> = ({clients}) => {
-
+  return <></>
   const clientApps = useMemo<Map<string, number>>(() => {
     const map = new Map<string, number>();
     

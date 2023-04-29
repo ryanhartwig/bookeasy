@@ -21,9 +21,9 @@ interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
 export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
 
   return (
-    <div {...props} style={{...props.style, width: size, height: size, borderRadius: '50%', overflow: 'hidden'}}>
+    <div {...props} style={{...props.style, width: size, height: size}}>
       {src
-        ? <Image alt={alt} src={src} width={size} height={size} style={{width: size, height: size}} />
+        ? <Image alt={alt} src={src} width={size} height={size} style={{borderRadius: '50%'}} />
         : <BsPersonCircle fontSize={size} color={defaultColor} />
       }
     </div>
