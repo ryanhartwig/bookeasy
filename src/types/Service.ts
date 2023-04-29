@@ -12,6 +12,7 @@ export interface Service {
   cost: number,
   is_video: boolean,
   color: string,
+  deleted: boolean,
   assigned_users: AssignedUser[],
 };
 
@@ -22,4 +23,5 @@ export interface FormService {
   is_video: boolean,
   cost: number,
   duration: number,
+  deleted: boolean,
 }

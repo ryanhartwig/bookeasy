@@ -42,6 +42,7 @@ export const GET_BUSINESS_SERVICES_FORM = gql`
       is_video
       cost
       duration
+      deleted
     }
   }
 `;
@@ -56,6 +57,7 @@ export const GET_BUSINESS_SERVICES = gql`
       cost
       is_video
       color
+      deleted
       assigned_users {
         id
         name

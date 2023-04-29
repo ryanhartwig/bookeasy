@@ -106,7 +106,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   useEffect(() => {
     if (!initialClientBusiness) return;
 
-    console.log(initialClientBusiness);
     setSelectedBusiness(initialClientBusiness.business);
     setSelectedClient({
       avatar: initialClientBusiness.client.avatar,
@@ -287,6 +286,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
+      .filter((s: FormService) => !s.deleted)
       .map((s: FormService) => (
         <div key={s.id} style={{borderLeftColor: s.color}} className={clsx(styles.option, styles.service)} onClick={() => setSelectedService(s)}>
           {s.is_video && <BsFillCameraVideoFill size={16} color={'grey'} />}
