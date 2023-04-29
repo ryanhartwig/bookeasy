@@ -25,3 +25,7 @@ export interface FormService {
   duration: number,
   deleted: boolean,
 }
+
+export interface ServiceInput extends Service {
+  business_id: string,
+};
