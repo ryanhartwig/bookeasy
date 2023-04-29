@@ -14,15 +14,14 @@ import { ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
 import { User } from '@/types/User';
 
-interface AppointmentFormProps {
+interface ServiceFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
   onSubmit?: (...args: any) => any,
-  fromClientForm?: boolean,
 }
 
-export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, userId, onSubmit, fromClientForm}) => {
+export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
 
