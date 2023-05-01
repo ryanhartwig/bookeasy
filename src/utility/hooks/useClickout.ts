@@ -26,9 +26,6 @@ export const useClickout = (
       listenerRef.current = true;
     }, 100);
 
-    return () => {
-      window.removeEventListener('click', onClick);
-    }
   }, [onClick, open]);
 
   return onClick;
