@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { ServiceForm } from "./serviceForm/serviceForm";
 import { ServicesList } from "./servicesList";
 
+import styles from './services.module.scss';
+import { AiOutlinePlus } from "react-icons/ai";
+
 interface BusinessesListProps {
   userId: string,
 }
@@ -14,7 +17,7 @@ interface BusinessesListProps {
 export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
-  const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(true);
+  const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
 
   const { data, loading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
 
@@ -29,6 +32,9 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
         <ServicesList key={b.id} business={b} />
       ))}
       <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId}  />
+      <div className={styles.add_service} onClick={() => setServiceFormOpen(true)}>
+        <AiOutlinePlus fontSize={18} />
+      </div>
     </>
   )
 }
