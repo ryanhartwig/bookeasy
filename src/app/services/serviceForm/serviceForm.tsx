@@ -8,11 +8,11 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS_SERVICES } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
-import { User } from '@/types/User';
+import { FormUser, User } from '@/types/User';
 import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 
@@ -36,15 +36,21 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
-  const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
+  const [businessUsers, setBusinessUsers] = useState<FormUser[]>([]);
+  const [assignedUsers, setAssignedUsers] = useState<Map<string, FormUser>>(new Map());
 
-  useWaterfall([
-    [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[assignedUsers, setAssignedUsers]], // second chunk, resets when first updates
-  ], undefined);
-
+  useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
+  
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
-  // const { data: serviceUsersData, loading: loadingServiceUsersData } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+  const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+
+  console.log(assignedUsers);
+
+  useEffect(() => {
+    if (!businessUsersData || loadingBusinessUsers) return;
+
+    setBusinessUsers(businessUsersData.getBusiness.users.map((data: any) => data.user));
+  }, [businessUsersData, loadingBusinessUsers]);
 
   useEffect(() => {
     if (userBusinessesData) {
@@ -53,7 +59,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
-    if (!selectedBusiness || !name || !duration || !cost || !color || !isVideo || !assignedUsers.length) return null;
+    if (!selectedBusiness || !name || !duration || !cost || !color || !isVideo || !assignedUsers.size) return null;
 
     return {
       id: uuid(),
@@ -65,7 +71,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       is_video: isVideo,
       color,
       deleted: false,
-      assigned_users: assignedUsers,
+      assigned_users: Array.from(assignedUsers.keys()),
     }
   }, [assignedUsers, color, cost, duration, isVideo, name, selectedBusiness]);
 
@@ -103,6 +109,19 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     </div>
   )), [businesses]);
 
+  const servicesList = useMemo(() => 
+    businessUsers
+      .map((u: FormUser) => (
+        <div key={u.id} className={styles.option} onClick={() => setAssignedUsers(p => {
+          const map = new Map(p);
+          return map.delete(u.id) ? map : map.set(u.id, u);
+        })}>
+          <Avatar src={u.avatar} size={28} />
+          <p>{u.name}</p>
+        </div>
+      ))
+  , [businessUsers]);
+
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
@@ -122,20 +141,16 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         )} hasSelected={!!selectedBusiness}/>
 
         <p>Select a Assignee(s)</p>
-        <Select list={businessesList} selected={(
-          <div className={styles.selectedOption}>
-            <p>{selectedBusiness?.name}</p>
+        <Select multiple list={servicesList} selected={(
+          <div className={styles.assignees} style={{left: 0}}>
+            {Array.from(assignedUsers.values()).map(user => 
+              <div key={user.id}>
+                <Avatar src={user.avatar} size={26} />
+                <p>{user.name}</p>
+              </div>
+            )}
           </div>
         )} hasSelected={!!selectedBusiness}/>
-
-        <div className={styles.assignees}>
-          {assignedUsers.map(user => 
-            <div key={user.id}>
-              <Avatar src={user.avatar} size={26} />
-              <p>{user.name}</p>
-            </div>
-          )}
-        </div>
 
         <p>Service Name</p>
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />

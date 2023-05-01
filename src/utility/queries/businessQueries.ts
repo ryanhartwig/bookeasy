@@ -66,3 +66,17 @@ export const GET_BUSINESS_SERVICES = gql`
     }
   }
 `;
+
+export const GET_BUSINESS_USERS = gql`
+  query($businessId: ID!) {
+    getBusiness(business_id: $businessId) {
+      users {
+        user {
+          id
+          name
+          avatar
+        }
+      }
+    }
+  }
+`;

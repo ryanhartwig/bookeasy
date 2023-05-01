@@ -11,9 +11,10 @@ interface SelectProps {
   selected?: JSX.Element,
   disabled?: boolean,
   hasSelected?: boolean,
+  multiple?: boolean,
 }
 
-export const Select: React.FC<SelectProps> = ({list, placeholder = "...", selected, disabled = false, hasSelected}) => {
+export const Select: React.FC<SelectProps> = ({list, placeholder = "...", selected, multiple, disabled = false, hasSelected}) => {
 
   const [optionsShowing, setOptionsShowing] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement>(undefined!);

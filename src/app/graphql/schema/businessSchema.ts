@@ -64,12 +64,10 @@ export const businessResolvers = {
   },
   Business: {
     users: async (parent: any) => {
-      const businessUsersResponse = await db.query('select * from users_businesses where business_id = $1', [parent.id]);
-
-      if (!businessUsersResponse.rowCount) throwGQLError('Could not fetch users for business with id: ' + parent.id);
-
       const businessUsers: any[] = [];
 
+      // Fetch business/user relations
+      const businessUsersResponse = await db.query('select * from users_businesses where business_id = $1', [parent.id]);
       for (const businessUser of businessUsersResponse.rows) {
         const { user_id, elevated, date_added } = businessUser;
         const userResponse = await db.query('select * from users where id = $1', [user_id]);
@@ -83,6 +81,20 @@ export const businessResolvers = {
         });
       }
 
+      // Fetch own business user when the property is present
+      if (parent.user_id) {
+        const ownUser = await db.query('select * from users where id = $1', [parent.user_id]);
+        const { elevated, date_added } = ownUser.rows[0];
+
+        businessUsers.push({
+          user: ownUser.rows[0],
+          date_added,
+          elevated,
+        });
+      }
+
+      if (!businessUsers.length) throwGQLError('Could not fetch users for business with id: ' + parent.id);
+      
       return businessUsers;
     }
   }

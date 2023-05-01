@@ -26,6 +26,15 @@ export interface FormService {
   deleted: boolean,
 }
 
-export interface ServiceInput extends Service {
+export interface ServiceInput {
+  id: string,
+  name: string,
+  duration: number,
+  provider: string,
+  cost: number,
+  is_video: boolean,
+  color: string,
+  deleted: boolean,
+  assigned_users: string[],
   business_id: string,
 };
