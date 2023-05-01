@@ -1,8 +1,4 @@
-export interface AssignedUser {
-  id: string,
-  name: string,
-  avatar?: string,
-}
+import { AssignedUser } from "./User";
 
 export interface Service {
   id: string,
@@ -13,6 +9,7 @@ export interface Service {
   is_video: boolean,
   color: string,
   deleted: boolean,
+  business_id: string,
   assigned_users: AssignedUser[],
 };
 

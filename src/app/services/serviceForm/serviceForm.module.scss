@@ -258,3 +258,16 @@
     }
   }
 }
+
+.cost {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  > p {
+    position: absolute;
+    left: 12px;
+    font-size: 12px;
+  }
+
+}

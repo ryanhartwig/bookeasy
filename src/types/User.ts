@@ -18,8 +18,8 @@ export interface User {
   };
 };
 
-export interface FormUser { 
+export interface AssignedUser {
   id: string,
   name: string,
-  avatar: string,
+  avatar?: string,
 }

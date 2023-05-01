@@ -11,7 +11,7 @@ import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/bus
 import { ADD_EDIT_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
-import { FormUser, User } from '@/types/User';
+import { AssignedUser, User } from '@/types/User';
 import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
@@ -41,8 +41,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
-  const [businessUsers, setBusinessUsers] = useState<FormUser[]>([]);
-  const [assignedUsers, setAssignedUsers] = useState<Map<string, FormUser>>(new Map());
+  const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
+  const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
 
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
   
@@ -60,6 +60,25 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       setBusinesses(userBusinessesData.getUserBusinesses);
     }
   }, [userBusinessesData]);
+
+  // Prepopulate
+  useEffect(() => {
+    if (!initialService) return;
+    if (!businesses.length || !userBusinessesData) return;
+
+    setSelectedBusiness(businesses.find(b => b.id === initialService.business_id));
+    setName(initialService.name);
+    setDuration(initialService.duration);
+    setCost(initialService.cost.toFixed(2).toString());
+    setIsVideo(initialService.is_video);
+    setColor(initialService.color);
+
+    const assignedUsersMap = new Map<string, AssignedUser>();
+    initialService.assigned_users.forEach(u => assignedUsersMap.set(u.id, u));
+
+    setAssignedUsers(assignedUsersMap)
+        
+  }, [businessUsers.length, businesses, initialService, userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
     if (!selectedBusiness || !name || !duration || !cost || !color || !assignedUsers.size) return null;
@@ -114,7 +133,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   const servicesList = useMemo(() => 
     businessUsers
-      .map((u: FormUser) => (
+      .map((u: AssignedUser) => (
         <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedUsers.has(u.id)})} onClick={() => setAssignedUsers(p => {
           const map = new Map(p);
           return map.delete(u.id) ? map : map.set(u.id, u);
@@ -132,16 +151,18 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={addServiceLoading}
+      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers}
     >
       <Modal.Header>Add a Service</Modal.Header>
       <div className={styles.appointmentOptions}>
-        <p>Select a provider</p>
-        <Select list={businessesList} selected={(
-          <div className={styles.selectedOption}>
-            <p>{selectedBusiness?.name}</p>
-          </div>
-        )} hasSelected={!!selectedBusiness}/>
+        {!initialService && <>
+          <p>Select a provider</p>
+          <Select list={businessesList} selected={(
+            <div className={styles.selectedOption}>
+              <p>{selectedBusiness?.name}</p>
+            </div>
+          )} hasSelected={!!selectedBusiness}/> 
+        </>}
 
         <p>Select Assignee(s)</p>
         <Select multiple list={servicesList} selected={(
@@ -159,7 +180,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
 
         <p>Cost</p>
-        <Input type='text' placeholder='120.00' value={cost} onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
+        <div className={styles.cost}>
+          <p>$</p>
+          <Input style={{paddingLeft: 25}} type='text' placeholder='120.00' value={cost} onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
+        </div>
+
 
         <p>Duration</p>
         <div className={styles.durationSelect}>
