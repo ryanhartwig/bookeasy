@@ -14,6 +14,7 @@ import { ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
 import { User } from '@/types/User';
 import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
+import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface ServiceFormProps {
   open: boolean,
@@ -32,15 +33,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
 
-  const [hours, setHours] = useState<number>();
-  const [min, setMin] = useState<number>();
-
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   const [assignedUsers, setAssignedUsers] = useState<User[]>([]);
-
-  console.log(color);
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
@@ -48,6 +44,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   ], undefined);
 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+  // const { data: serviceUsersData, loading: loadingServiceUsersData } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
 
   useEffect(() => {
     if (userBusinessesData) {
@@ -62,7 +59,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       id: uuid(),
       business_id: selectedBusiness.id,
       name,
-      duration: Number(duration),
+      duration,
       provider: selectedBusiness.name,
       cost: Number(cost), 
       is_video: isVideo,
@@ -106,17 +103,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     </div>
   )), [businesses]);
 
-  const hoursList = new Array(8).fill(0).map((_, i) => (
-    <div key={i} className={styles.option} onClick={() => setHours(i)}>
-      <p>{i}</p>
-    </div>
-  ));
-  const minList = new Array(4).fill(0).map((_, i) => (
-    <div key={i} className={styles.option} onClick={() => setMin(i * 15)}>
-      <p>{i * 15}</p>
-    </div>
-  ));
-
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
@@ -135,6 +121,22 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           </div>
         )} hasSelected={!!selectedBusiness}/>
 
+        <p>Select a Assignee(s)</p>
+        <Select list={businessesList} selected={(
+          <div className={styles.selectedOption}>
+            <p>{selectedBusiness?.name}</p>
+          </div>
+        )} hasSelected={!!selectedBusiness}/>
+
+        <div className={styles.assignees}>
+          {assignedUsers.map(user => 
+            <div key={user.id}>
+              <Avatar src={user.avatar} size={26} />
+              <p>{user.name}</p>
+            </div>
+          )}
+        </div>
+
         <p>Service Name</p>
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
 
@@ -148,13 +150,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} />
         </div>
 
-        <p>Select a Assignee(s)</p>
-        <Select list={businessesList} selected={(
-          <div className={styles.selectedOption}>
-            <p>{selectedBusiness?.name}</p>
-          </div>
-        )} hasSelected={!!selectedBusiness}/>
-        
         <p>Service Color</p>
         <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} />
 
