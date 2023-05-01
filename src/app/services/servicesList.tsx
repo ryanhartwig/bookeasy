@@ -9,9 +9,10 @@ import styles from './services.module.scss';
 
 interface ServicesListProps {
   business: NewBusiness,
+  setSelectedService: React.Dispatch<React.SetStateAction<Service | undefined>>,
 }
 
-export const ServicesList: React.FC<ServicesListProps> = ({business}) => {
+export const ServicesList: React.FC<ServicesListProps> = ({business, setSelectedService}) => {
 
   const { data, loading } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
   const [services, setServices] = useState<Service[]>([]);
@@ -28,7 +29,7 @@ export const ServicesList: React.FC<ServicesListProps> = ({business}) => {
         .filter(s => !s.deleted)
         .map(s => 
       <div key={s.id}>
-        <ServiceCard service={s} />
+        <ServiceCard service={s} onClick={() => setSelectedService(s)} />
       </div>
       )}
     </div>

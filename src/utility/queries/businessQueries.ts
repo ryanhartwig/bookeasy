@@ -58,6 +58,7 @@ export const GET_BUSINESS_SERVICES = gql`
       is_video
       color
       deleted
+      business_id
       assigned_users {
         id
         name

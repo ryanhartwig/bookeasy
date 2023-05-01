@@ -165,8 +165,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [availabilityMap, selectedBusiness, startEndDates]);
   
   const appointment = useMemo<AppointmentInput | null>(() => {
-    console.log('from appointment memo', selectedClient);
-
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
 
 

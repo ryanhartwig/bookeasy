@@ -9,7 +9,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT } from "@/utility/queries/appointmentQueries"
-import { ServiceInput } from '@/types/Service';
+import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
 import { FormUser, User } from '@/types/User';
 import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
@@ -25,9 +25,10 @@ interface ServiceFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
   userId: string,
   onSubmit?: (...args: any) => any,
+  initialService?: Service,
 }
 
-export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit}) => {
+export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, initialService}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
 
@@ -47,8 +48,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
   const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
-
-  console.log(assignedUsers);
 
   useEffect(() => {
     if (!businessUsersData || loadingBusinessUsers) return;

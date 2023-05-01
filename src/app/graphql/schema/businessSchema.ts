@@ -52,7 +52,7 @@ export const businessResolvers = {
         const assigned_users: any[] = [];
 
         for (const { user_id } of userIdsResponse.rows) {
-          const response = await db.query('select id, name, avatar from users where id = $1', [user_id]);
+          const response = await db.query('select * from users where id = $1', [user_id]);
           assigned_users.push(response.rows[0]);
         }
 

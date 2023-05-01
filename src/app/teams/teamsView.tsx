@@ -5,13 +5,9 @@ import { useEffect, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { User } from '@/types/User';
-import { getBusinessClients } from '@/utility/functions/fetch_old/business/getBusinessClients';
-import { getBusinessServices } from '@/utility/functions/fetch_old/business/getBusinessServices';
-import { getBusinessMembers } from '@/utility/functions/fetch_old/business/getBusinessMembers';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { TeamDetails } from './teamDetails';
-import { getBusinessUserMeta, UserMeta } from '@/utility/functions/fetch_old/business/getBusinessUserMeta';
 
 interface TeamsViewProps {
   teams: Business[],
@@ -19,7 +15,7 @@ interface TeamsViewProps {
 }
 
 export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
-
+  return <></>
   const [selected, setSelected] = useState<Business>();
 
   const [clients, setClients] = useState<Client[]>([]);

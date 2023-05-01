@@ -6,10 +6,10 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 import { FiEdit2 } from 'react-icons/fi';
 
-export default function ServiceCard({service}: { service: Service}) {
+export default function ServiceCard({service, onClick}: { service: Service, onClick?: (...args: any) => any}) {
    
   return (
-    <div className={clsx(styles.service)} style={{borderLeftColor: service.color}}>
+    <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={onClick && onClick}>
       {service.is_video && 
         <div className={styles.video}>
           <BsFillCameraVideoFill size={16} />

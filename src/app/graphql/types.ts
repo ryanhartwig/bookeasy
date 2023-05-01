@@ -28,6 +28,7 @@ export const types = `#graphql
     is_video: Boolean!,
     color: String!,
     deleted: Boolean!,
+    business_id: String!,
     assigned_users: [User!]!
   }
 
