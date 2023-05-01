@@ -15,6 +15,7 @@ import { Input } from '@/components/UI/Input/Input';
 import { FormUser, User } from '@/types/User';
 import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
+import clsx from 'clsx';
 
 interface ServiceFormProps {
   open: boolean,
@@ -59,7 +60,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
-    if (!selectedBusiness || !name || !duration || !cost || !color || !isVideo || !assignedUsers.size) return null;
+    if (!selectedBusiness || !name || !duration || !cost || !color || !assignedUsers.size) return null;
 
     return {
       id: uuid(),
@@ -112,7 +113,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const servicesList = useMemo(() => 
     businessUsers
       .map((u: FormUser) => (
-        <div key={u.id} className={styles.option} onClick={() => setAssignedUsers(p => {
+        <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedUsers.has(u.id)})} onClick={() => setAssignedUsers(p => {
           const map = new Map(p);
           return map.delete(u.id) ? map : map.set(u.id, u);
         })}>
@@ -120,7 +121,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <p>{u.name}</p>
         </div>
       ))
-  , [businessUsers]);
+  , [assignedUsers, businessUsers]);
 
   return (
     <Modal actionButtonText='Confirm' 
@@ -140,7 +141,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           </div>
         )} hasSelected={!!selectedBusiness}/>
 
-        <p>Select a Assignee(s)</p>
+        <p>Select Assignee(s)</p>
         <Select multiple list={servicesList} selected={(
           <div className={styles.assignees} style={{left: 0}}>
             {Array.from(assignedUsers.values()).map(user => 
@@ -150,7 +151,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
               </div>
             )}
           </div>
-        )} hasSelected={!!selectedBusiness}/>
+        )} hasSelected={!!assignedUsers.size}/>
 
         <p>Service Name</p>
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
