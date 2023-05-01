@@ -3,15 +3,18 @@ import { Service } from "@/types/Service"
 
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
+import clsx from 'clsx';
+import { FiEdit2 } from 'react-icons/fi';
 
 export default function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
    
   return (
-    <div className={styles.service} style={{borderLeftColor: service.color}}>
+    <div className={clsx(styles.service)} style={{borderLeftColor: service.color}}>
       {service.is_video && 
-      <div className={styles.video}>
-        <BsFillCameraVideoFill size={16} />
-      </div>}
+        <div className={styles.video}>
+          <BsFillCameraVideoFill size={16} />
+        </div>
+      }
       <p>{service.name}</p>
       <p>{service.duration} min</p>
       <p>{service.provider}</p>
@@ -24,7 +27,10 @@ export default function ServiceCard({service, edit}: { service: Service, edit?: 
         )}
       </div>
       <p>${service.cost.toFixed(2)}</p>
-      {edit && <p className={styles.edit}>Edit</p>}
+
+      <div className={styles.edit}>
+        <FiEdit2 />
+      </div>
     </div>
   )
 }
