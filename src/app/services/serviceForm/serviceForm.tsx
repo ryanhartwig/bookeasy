@@ -5,7 +5,6 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useWaterfall } from "@/utility/hooks/useWaterfall"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
@@ -19,6 +18,7 @@ import clsx from 'clsx';
 
 import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
+import { ADD_SERVICE } from '@/utility/queries/serviceQueries';
 
 interface ServiceFormProps {
   open: boolean,
@@ -84,7 +84,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     loading: addServiceLoading, 
     error: addServiceError, 
     reset: addServiceReset 
-  }] = useMutation(ADD_EDIT_APPOINTMENT, {
+  }] = useMutation(ADD_SERVICE, {
     refetchQueries: [{
       query: GET_BUSINESS_SERVICES,
       variables: { businessId: selectedBusiness?.id }
