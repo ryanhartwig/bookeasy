@@ -17,6 +17,9 @@ import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 
+import { GiRollingDices } from 'react-icons/gi';
+import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
+
 interface ServiceFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
@@ -167,7 +170,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         </div>
 
         <p>Service Color</p>
-        <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} />
+        <div className={styles.colorSelect}>
+          <GiRollingDices fontSize={34} onClick={() => setColor(getRandomHexColor([234, 6])!)} />
+          <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} style={{cursor: 'pointer'}} />
+        </div>
 
         <div className={styles.ispaid}>
           <label htmlFor='ispaid'>Is Video Service</label>

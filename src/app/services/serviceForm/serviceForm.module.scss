@@ -71,7 +71,7 @@
 }
 
 .multipleOption {
-  opacity: 0.4;
+  opacity: 0.5;
   border: 1px solid transparent;
   transition: opacity 200ms;
 
@@ -232,6 +232,29 @@
     }
     &:hover > p {
       opacity: 1;
+    }
+  }
+}
+
+.colorSelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > *:first-child {
+    opacity: 0.8;
+    transition: opacity 200ms, scale 200ms, rotate 200ms;
+    cursor: pointer;
+
+    margin: 0 15px;
+
+    &:hover { 
+      opacity: 1;
+      scale: 1.1;
+    }
+
+    &:active {
+      rotate: 15deg;
     }
   }
 }
