@@ -62,6 +62,30 @@ export const businessResolvers = {
       }
     },
   },
+  Business: {
+    users: async (parent: any) => {
+      const businessUsersResponse = await db.query('select * from users_businesses where business_id = $1', [parent.id]);
+
+      if (!businessUsersResponse.rowCount) throwGQLError('Could not fetch users for business with id: ' + parent.id);
+
+      const businessUsers: any[] = [];
+
+      for (const businessUser of businessUsersResponse.rows) {
+        const { user_id, elevated, date_added } = businessUser;
+        const userResponse = await db.query('select * from users where id = $1', [user_id]);
+
+        if (!userResponse.rowCount) throwGQLError('Error fetching user with id: ' + user_id);
+        
+        businessUsers.push({
+          user: userResponse.rows[0],
+          date_added,
+          elevated,
+        });
+      }
+
+      return businessUsers;
+    }
+  }
 }
 
 export const businessTypeDefs = `#graphql
