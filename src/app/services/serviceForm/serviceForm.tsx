@@ -139,7 +139,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
 
         <p>Cost</p>
-        <Input type='text' placeholder='120.00' value={cost} onChange={(e) => setCost(e.target.value)} />
+        <Input type='text' placeholder='120.00' value={cost} onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
 
         <p>Duration</p>
         <div className={styles.durationSelect}>
