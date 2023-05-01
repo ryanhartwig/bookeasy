@@ -6,7 +6,7 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 import { FiEdit2 } from 'react-icons/fi';
 
-export default function ServiceCard({service, edit}: { service: Service, edit?: boolean}) {
+export default function ServiceCard({service}: { service: Service}) {
    
   return (
     <div className={clsx(styles.service)} style={{borderLeftColor: service.color}}>
