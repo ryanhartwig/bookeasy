@@ -160,3 +160,27 @@
     cursor: pointer;
   }
 }
+
+.durationSelect {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 15px 0;
+
+  padding: 0 30px;
+
+  font-weight: 300;
+  font-size: 18px;
+
+  > *:not(p) {
+    cursor: pointer;
+    color: grey;
+    font-size: 20px;
+    
+    transition: color 200ms;
+    &:hover {
+      color: black;
+    }
+  }
+}
