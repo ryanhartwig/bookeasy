@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
 import { ADD_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
+import { BsTrash3 } from 'react-icons/bs';
 
 interface ServiceFormProps {
   open: boolean,
@@ -120,6 +121,18 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     }],
   });
 
+  // const [deleteService, { 
+  //   data: deleteServiceData, 
+  //   loading: deleteServiceLoading, 
+  //   error: deleteServiceError, 
+  //   reset: deleteServiceReset 
+  // }] = useMutation(DELETE_SERVICE, {
+  //   refetchQueries: [{
+  //     query: GET_BUSINESS_SERVICES,
+  //     variables: { businessId: selectedBusiness?.id }
+  //   }],
+  // });
+
   const reset = useCallback(() => {
     addServiceReset();
     editServiceReset();
@@ -151,6 +164,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     }
   }, [addService, editService, initialService, service]);
 
+  const onDeleteService = useCallback(() => {
+
+  }, []);
+
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
       <p>{b.name}</p>
@@ -180,7 +197,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       actionCloses
       loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading}
     >
-      <Modal.Header>Add a Service</Modal.Header>
+      <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
       <div className={styles.appointmentOptions}>
         {!initialService && <>
           <p>Select a provider</p>
@@ -233,6 +250,17 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       </div>
       <hr />
       {error && <p className={styles.warning}>{error}</p>}
+      {!!initialService && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
+        <BsTrash3 />
+        <p>Remove</p>
+      </div>}
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteService()}} >
+        <Modal.Header>Confirm Delete</Modal.Header>
+        <div className={styles.confirmDelete}>
+          <p>Are you sure you want to remove this service?</p>
+          <p>Note: appointment data will not change</p>
+        </div>
+      </Modal>
     </Modal>
   )
 }

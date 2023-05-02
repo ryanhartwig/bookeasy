@@ -148,9 +148,14 @@
   width: 80%;
   margin: 10px auto 20px auto;
 
+  p {
+    font-size: 12px;
+    margin-top: 40px;
+  }
   > p:first-child {
     text-align: center;
     font-size: 14px;
+    margin-top: 0;
     color: rgb(188, 48, 48);
   }
 }
