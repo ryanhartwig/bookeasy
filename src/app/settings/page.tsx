@@ -3,15 +3,13 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Setting } from '@/components/UI/Setting/Setting';
-import { getUser } from '@/utility/functions/fetch_old/getUserDetails';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
 import { userId } from '@/utility/sample_data/sample_userId';
 import styles from './settings.module.scss';
 
 export default async function Page() {
 
-  const { data: user } = await getUser(userId);
-
+return <></>
   return (
     <>
       <Header text="Settings" />

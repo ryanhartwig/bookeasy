@@ -1,11 +1,6 @@
 import { Header } from '@/components/Header';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
-import { getAllBusinesses } from '@/utility/functions/fetch_old/getAllBusinesses';
-import { getAllClients } from '@/utility/functions/fetch_old/getAllClients';
-import { getAllServices } from '@/utility/functions/fetch_old/getAllServices';
-import { getUserAvailability } from '@/utility/functions/fetch_old/getUserAvailability';
-import { getUser } from '@/utility/functions/fetch_old/getUserDetails';
 import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
 import styles from './business.module.scss';
@@ -14,14 +9,7 @@ import { Settings } from './settings';
 
 export default async function Page() {
   
-  const { data: clients } = await getAllClients(userId);
-  const { data: services } = await getAllServices(userId);
-  const { data: businesses} = await getAllBusinesses(userId);
-  const { data: user } = await getUser(userId);
-  const { data: availability } = await getUserAvailability(userId);
-
-  if (!user) return <></>
-
+return <></>
   return (
     <>
       <Header text='My Business' />

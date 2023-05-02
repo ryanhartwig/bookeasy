@@ -11,23 +11,24 @@ export const types = `#graphql
 
   type User {
     id: ID!,
-    own_business: Business!,
     name: String!,
     email: String!,
     phone: String!,
     created: String,
     prefs: UserPrefs!,
+    avatar: String,
   }
 
   type Service {
     id: ID!,
-    business: Business!,
     name: String!,
     duration: Int!,
     provider: String!,
     cost: Int!,
     is_video: Boolean!,
     color: String!,
+    deleted: Boolean!,
+    business_id: String!,
     assigned_users: [User!]!
   }
 
@@ -39,13 +40,7 @@ export const types = `#graphql
     created: String!
   }
 
-  # This represents the role a user plays within a business and the date they were added.
-  # It is only used when fetching a Businesses user list
-  type BusinessUser {
-    user: User!,
-    elevated: Boolean!,
-    date_added: Boolean!
-  }
+  
 
   type BusinessClient {
     # users: [BusinessUser!]!,
@@ -74,6 +69,14 @@ export const types = `#graphql
     business_patch: BusinessClient!,
   }
 
+  # This represents the role a user plays within a business and the date they were added.
+  # It is only used when fetching a Businesses user list
+  type BusinessUser {
+    user: User!,
+    elevated: Boolean!,
+    date_added: String!
+  }
+
   type Business {
     id: ID!,
     name: String!,
@@ -81,7 +84,9 @@ export const types = `#graphql
     phone: String,
     min_booking_notice: String!,
     min_cancel_notice: String!,
-    max_book_ahead: String!
+    max_book_ahead: String!,
+    user_id: String,
+    users: [BusinessUser!]!,
   }
 
   type AvailabilitySlice {

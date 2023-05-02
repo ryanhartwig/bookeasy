@@ -5,8 +5,6 @@ import { ReactIconButton } from "@/components/UI/IconButton/ReactIconButton";
 import { Appointment } from "@/types/Appointment";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";
-import { sample_appointments } from "@/utility/sample_data/sample_appointments";
-import { sample_clients } from "@/utility/sample_data/sample_clients";
 import clsx from "clsx";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
@@ -17,6 +15,7 @@ interface MetricsProps {
 }
 
 export const Metrics: React.FC<MetricsProps> = ({user}) => {
+  return <></>
   const today = new Date();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());  

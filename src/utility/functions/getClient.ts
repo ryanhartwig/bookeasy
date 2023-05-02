@@ -1,22 +1,22 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-let client: ApolloClient<any> | null = null;
+// let client: ApolloClient<any> | null = null;
 
-export const getClient = () => {
-  if (!client || typeof window === "undefined") {
-    client = new ApolloClient({
-      link: new HttpLink({
-        uri: 'http://127.0.0.1:3000/graphql', // process.env.GRAFBASE_API_URL,
-        headers: {
-          'x-api-key': process.env.GRAFBASE_API_KEY || ''
-        },
-      }),
-      cache: new InMemoryCache(),
-    });
-  }
+// export const getClient = () => {
+//   if (!client || typeof window === "undefined") {
+//     client = new ApolloClient({
+//       link: new HttpLink({
+//         uri: 'http://127.0.0.1:3000/graphql', // process.env.GRAFBASE_API_URL,
+//         headers: {
+//           'x-api-key': process.env.GRAFBASE_API_KEY || ''
+//         },
+//       }),
+//       cache: new InMemoryCache(),
+//     });
+//   }
 
-  return client;
-};
+//   return client;
+// };
 
 /* 
 

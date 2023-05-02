@@ -10,6 +10,7 @@ export const GET_BUSINESS = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
+      user_id
     }
   }
 `;
@@ -41,6 +42,29 @@ export const GET_BUSINESS_SERVICES_FORM = gql`
       is_video
       cost
       duration
+      deleted
+    }
+  }
+`;
+
+export const GET_BUSINESS_SERVICES = gql`
+  query($businessId: ID!) {
+    getBusinessServices(business_id: $businessId) {
+      ...ServiceFragment
+    }
+  }
+`;
+
+export const GET_BUSINESS_USERS = gql`
+  query($businessId: ID!) {
+    getBusiness(business_id: $businessId) {
+      users {
+        user {
+          id
+          name
+          avatar
+        }
+      }
     }
   }
 `;

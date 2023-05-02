@@ -18,11 +18,11 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
       
       <div>
         <p>{date}</p>
-        <p>{app.service.duration} min</p>
+        <p>{app.service_duration} min</p>
       </div>
 
       <div>
-        <p>{app.service.name}</p>
+        <p>{app.service.name} - ${app.service_cost.toFixed(2)}</p>
         <p onClick={() => setSelectedAppointment(app)}>Edit</p>
       </div>
 

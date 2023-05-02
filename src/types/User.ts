@@ -17,3 +17,9 @@ export interface User {
     notificationOverviewTime: string | null,
   };
 };
+
+export interface AssignedUser {
+  id: string,
+  name: string,
+  avatar?: string,
+}

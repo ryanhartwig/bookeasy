@@ -20,11 +20,12 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   actionButtonText?: string,
   onAction?: (...args: any) => any,
   actionButtonDisabled?: boolean,
+  actionCloses?: boolean,
   loading?: boolean,
   pauseListener?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener = false, open, escapeCloses = false, actionButtonText, onAction, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener = false, open, escapeCloses = false, actionButtonText, onAction, actionCloses = false, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -42,6 +43,14 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [escapeCloses, onKeyDown]);
+
+  const handleActionClick = useCallback(() => {
+    if (actionButtonDisabled) return;
+    if (actionCloses) {
+      onClick(undefined);
+    }
+    onAction && onAction();
+  }, [actionButtonDisabled, actionCloses, onAction, onClick]);
   
   return (
     <>
@@ -66,7 +75,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             {content}
           </div>
           {actionButtonText && 
-            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={!actionButtonDisabled ? onAction : undefined}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={handleActionClick}>
               <hr/>
               <p>{actionButtonText}</p>
             </div>

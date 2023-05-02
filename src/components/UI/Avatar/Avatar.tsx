@@ -23,7 +23,7 @@ export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size 
   return (
     <div {...props} style={{...props.style, width: size, height: size}}>
       {src
-        ? <Image alt={alt} src={src} width={size} height={size} style={{width: size, height: size}} />
+        ? <Image alt={alt} src={src} width={size} height={size} style={{borderRadius: '50%'}} />
         : <BsPersonCircle fontSize={size} color={defaultColor} />
       }
     </div>

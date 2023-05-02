@@ -11,20 +11,25 @@ interface SelectProps {
   selected?: JSX.Element,
   disabled?: boolean,
   hasSelected?: boolean,
+  multiple?: boolean,
 }
 
-export const Select: React.FC<SelectProps> = ({list, placeholder = "...", selected, disabled = false, hasSelected}) => {
+export const Select: React.FC<SelectProps> = ({list, placeholder = "...", selected, multiple, disabled = false, hasSelected}) => {
 
   const [optionsShowing, setOptionsShowing] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement>(undefined!);
   const optionsRef = useRef<HTMLDivElement>(undefined!);
 
   useClickout(() => setOptionsShowing(false), optionsShowing, false, selectRef);
-  useEffect(() => setOptionsShowing(false), [selected]);
+  useEffect(() => {
+    if (multiple) return;
+    setOptionsShowing(false)
+  }, [multiple, selected]);
 
   const showOptions = useCallback((e: any) => {
     if (!optionsRef.current) return setOptionsShowing(true);
     if (optionsRef.current.contains(e.target)) return;
+
     setOptionsShowing(p => !p);
   }, []);
   
