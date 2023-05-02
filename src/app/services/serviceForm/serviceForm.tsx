@@ -31,18 +31,22 @@ interface ServiceFormProps {
 export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, initialService}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
-
   const [name, setName] = useState<string>('');
   const [duration, setDuration] = useState<number>(30);
   const [cost, setCost] = useState<string>('');
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
-
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-
   const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
   const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
+
+  const [costUpdate, setCostUpdate] = useState<boolean>(false);
+  const [costUpdateDate, setCostUpdateDate] = useState<string>('');
+
+  const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
+  const [durationUpdateDate, setDurationUpdateDate] = useState<string>('');
+  
 
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
   
@@ -61,7 +65,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     }
   }, [userBusinessesData]);
 
-  // Prepopulate
+  // Prepopulate if editing
   useEffect(() => {
     if (!initialService) return;
     if (!businesses.length || !userBusinessesData) return;
@@ -228,7 +232,19 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <p>$</p>
           <Input style={{paddingLeft: 25}} type='text' placeholder='120.00' value={cost} onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
         </div>
-
+        {initialService && Number(cost) !== initialService.cost && (
+          <div className={styles.updateAppointment}>
+            <div className={styles.checkboxLabel}>
+              <Input id='ispaid' type='checkbox' checked={costUpdate} onChange={(e) => setCostUpdate(e.target.checked)} style={{height: 12, width: 12}} />  
+              <label htmlFor='ispaid'>Update cost on booked appointments?</label>
+            </div>
+            {costUpdate && <div className={styles.dateSelect}>
+              <p>After: </p>
+              <Input  type='date' value={costUpdateDate} onChange={(e) => setCostUpdateDate(e.target.value)} />
+            </div>}
+            
+          </div>
+        )}
 
         <p>Duration</p>
         <div className={styles.durationSelect}>

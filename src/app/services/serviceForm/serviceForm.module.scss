@@ -275,3 +275,27 @@
     font-size: 12px;
   }
 }
+
+// Updating existing appointments
+.updateAppointment {
+  padding: 0 20px;
+  font-size: 12px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  label {
+    margin-left: 8px;
+  }
+}
+
+.dateSelect {
+  margin-top: 8px;
+  
+  p {
+    margin-bottom: 3px;
+  }
+}
