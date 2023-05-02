@@ -11,7 +11,7 @@ import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/bus
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
 import { AssignedUser } from '@/types/User';
-import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
+import { AiOutlineCheck, AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 
@@ -184,7 +184,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     </div>
   )), [businesses]);
 
-  const servicesList = useMemo(() => 
+  const clientList = useMemo(() => 
     businessUsers
       .map((u: AssignedUser) => (
         <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedUsers.has(u.id)})} onClick={() => setAssignedUsers(p => {
@@ -193,6 +193,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         })}>
           <Avatar src={u.avatar} size={28} />
           <p>{u.name}</p>
+          <AiOutlineCheck className={styles.checked} />
         </div>
       ))
   , [assignedUsers, businessUsers]);
@@ -219,7 +220,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         </>}
 
         <p>Select Assignee(s)</p>
-        <Select multiple list={servicesList} selected={(
+        <Select multiple list={clientList} selected={(
           <div className={styles.assignees} style={{left: 0}}>
             {Array.from(assignedUsers.values()).map(user => 
               <div key={user.id}>

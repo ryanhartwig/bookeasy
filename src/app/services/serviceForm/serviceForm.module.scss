@@ -75,6 +75,15 @@
   border: 1px solid transparent;
   transition: opacity 200ms;
 
+  position: relative;
+
+  > *:first-child {
+    * {
+      border: 2px solid transparent;
+      transition: border-color 200ms;
+    }
+  }
+
   &:hover {
     opacity: 0.8;
   }
@@ -82,6 +91,25 @@
 
 .multipleSelected {
   opacity: 1 !important;
+
+  > .checked {
+    opacity: 1;
+  }
+
+  > *:first-child {
+    * {
+      border-color: var(--font-utility);
+    }
+  }
+}
+
+.checked {
+  position: absolute;
+
+  right: 5px;
+  opacity: 0;
+  color: var(--font-utility);
+  transition: opacity 200ms;
 }
 
 .dateInput {
