@@ -75,7 +75,7 @@ export const types = `#graphql
     user: User!,
     elevated: Boolean!,
     date_added: String!
-  }
+  } 
 
   type Business {
     id: ID!,
@@ -109,5 +109,10 @@ export const types = `#graphql
     service_cost: Int!,
     is_video: Boolean!,
     is_paid: Boolean!
+  }
+
+  type AppointmentMetric {
+    is_paid: Boolean!,
+    service_cost: Int!,
   }
 `

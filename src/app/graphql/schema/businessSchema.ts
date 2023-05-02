@@ -3,12 +3,12 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const businessResolvers = {
   Query: {
-    getBusiness: async (parent: any, args: any) => {
+    getBusiness: async (_: any, args: any) => {
       const response = await db.query('select * from business where id = $1', [args.business_id]);
       if (!response.rows[0]) throwGQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
     },
-    getBusinessClients: async (parent: any, args: any) => {
+    getBusinessClients: async (_: any, args: any) => {
       try {
         const clientIds = await db.query('select * from clients_businesses where business_id = $1', [args.business_id]);
 
@@ -33,13 +33,27 @@ export const businessResolvers = {
         throwGQLError(e.message);
       }
     },
-    getBusinessServices: async (parent: any, args: any) => {
+    getBusinessServices: async (_: any, args: any) => {
       try {
         const response = await db.query('select * from service where business_id = $1', [args.business_id]);
         return response.rows;
       } catch(e: any) {
         throwGQLError(e.message);
       }
+    },
+    getBusinessAppointmentMetrics: async (_: any, args: any) => {
+      const { business_id, start_date, end_date } = args;
+      
+      let query = 'select is_paid, service_cost from appointment where business_id = $1';
+      const params = [business_id];
+
+      if (start_date && end_date) {
+        query += ' and start_date > $2 and start_date < $3';
+        params.push(start_date, end_date);
+      }
+      
+      const response = await db.query(query, params);
+      return response.rows;
     }
   },
   Service: {
@@ -105,5 +119,6 @@ export const businessTypeDefs = `#graphql
     getBusiness(business_id: ID!): Business!,
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
     getBusinessServices(business_id: ID!): [Service!]!,
+    getBusinessAppointmentMetrics(business_id: ID!, start_date: String, end_date: String): [AppointmentMetric!]!,
   }
 `;

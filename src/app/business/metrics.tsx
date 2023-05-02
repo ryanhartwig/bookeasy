@@ -2,7 +2,7 @@
 
 
 import { ReactIconButton } from "@/components/UI/IconButton/ReactIconButton";
-import { Appointment } from "@/types/Appointment";
+import { Appointment, AppointmentMetrics } from "@/types/Appointment";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";
 import clsx from "clsx";
@@ -13,6 +13,7 @@ import styles from './business.module.scss';
 interface MetricsProps {
   user: User,
   clients: Client[],
+  businessId: string,
 }
 
 export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
@@ -34,11 +35,7 @@ export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
     return date.getFullYear();
   }, [user.created]);
 
-  // const appsInRange = useMemo<Appointment[]>(() => sample_appointments
-  //   .filter(app => new Date(app.startDate).getFullYear() === selectedDate.getFullYear())
-  // , [selectedDate]);
-
-  const appsInRange: Appointment[] = [];
+  const appsInRange: AppointmentMetrics[] = [];
 
   const clientsInRange = useMemo<Client[]>(() => clients
     .filter(c => new Date(c.joined_date).getFullYear() === selectedDate.getFullYear())
@@ -70,13 +67,13 @@ export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
       <div className={styles.metric_data}>
         <div style={{textAlign: 'center'}}>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => app.isPaid).map(app => app.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appsInRange.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
             Total Estimated Revenue
           </p>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => !app.isPaid).map(app => app.serviceCost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appsInRange.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
             Total Unpaid
