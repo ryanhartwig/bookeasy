@@ -1,7 +1,7 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import styles from './tabs.module.scss';
 
-import { Business, NewBusiness } from '@/types/Business';
+import { NewBusiness } from '@/types/Business';
 import { formatTimePeriod } from '@/utility/functions/formatting/formatTimePeriod';
 
 interface BookingSitePrefsProps {

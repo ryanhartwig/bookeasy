@@ -19,7 +19,7 @@ export const Prefs: React.FC<PrefsProps> = ({business}) => {
 
       <div className={styles.settings}>
         <Setting label='Business Photo'>
-          <Avatar size={50} alt='Business logo' />
+          <Avatar src={business.avatar} size={50} alt='Business logo' />
         </Setting>
         <Setting label='Business Name'>
           <p>{business.name}</p>
