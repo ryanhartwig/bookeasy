@@ -65,7 +65,7 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
           </div>
         </Card>
         <Card className={clsx(styles.card, styles.metrics)}>
-          {user && <Metrics user={user} />}
+          {user && <Metrics user={user} clients={clients} />}
         </Card>
       </div>
 

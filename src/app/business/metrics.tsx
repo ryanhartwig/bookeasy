@@ -12,10 +12,10 @@ import styles from './business.module.scss';
 
 interface MetricsProps {
   user: User,
+  clients: Client[],
 }
 
-export const Metrics: React.FC<MetricsProps> = ({user}) => {
-  return <></>
+export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
   const today = new Date();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());  
@@ -34,12 +34,15 @@ export const Metrics: React.FC<MetricsProps> = ({user}) => {
     return date.getFullYear();
   }, [user.created]);
 
-  const appsInRange = useMemo<Appointment[]>(() => sample_appointments
-    .filter(app => new Date(app.startDate).getFullYear() === selectedDate.getFullYear())
-  , [selectedDate]);
-  const clientsInRange = useMemo<Client[]>(() => sample_clients
-    .filter(c => new Date(c.created).getFullYear() === selectedDate.getFullYear() && c.businessId === user.ownBusinessId)
-  , [selectedDate, user.ownBusinessId]);
+  // const appsInRange = useMemo<Appointment[]>(() => sample_appointments
+  //   .filter(app => new Date(app.startDate).getFullYear() === selectedDate.getFullYear())
+  // , [selectedDate]);
+
+  const appsInRange: Appointment[] = [];
+
+  const clientsInRange = useMemo<Client[]>(() => clients
+    .filter(c => new Date(c.joined_date).getFullYear() === selectedDate.getFullYear())
+  , [clients, selectedDate]);
 
   return (
     <>
