@@ -23,7 +23,9 @@ export const ClientDetails: React.FC<ClientDetailsProps> = ({client}) => {
         <p>{client.name}</p>
         <p>{!appointmentCountData ? '...' : appointmentCountData.getClientAppointmentCount}</p>
         <p>{new Date(client.joined_date).toDateString().split(' ').slice(1).join(' ')}</p>
-        <p>Edit</p>
+        <div className={styles.edit}>
+          <p>Edit</p>
+        </div>
       </div>
     </div>
   )

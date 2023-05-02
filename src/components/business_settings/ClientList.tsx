@@ -1,7 +1,6 @@
 'use client';
 
 import { Client } from '@/types/Client';
-import { Avatar } from '../UI/Avatar/Avatar';
 import { ClientDetails } from './ClientDetails';
 import styles from './tabs.module.scss';
 

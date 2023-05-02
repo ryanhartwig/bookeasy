@@ -80,8 +80,10 @@
   > div:last-child {
     display: flex;
     width: 100%;
+    height: 100%;
 
     justify-content: space-around;
+    align-items: center;
 
     padding-left: 30px;
     text-align: center;
@@ -172,5 +174,28 @@
     align-items: center;
 
     > * { margin: 3px 10px 3px 0}
+  }
+}
+
+.edit {
+  color: var(--font-utility);
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  > p {
+    opacity: 0.8;
+    transition: opacity 200ms, background-color 200ms;
+    padding: 5px 12px;
+    border-radius: 3px;
+  }
+
+  &:hover > p {
+    opacity: 1;
+    background-color: #216fdb19;
   }
 }
