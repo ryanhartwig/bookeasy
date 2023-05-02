@@ -42,11 +42,13 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
   const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
 
+  const minimumDateInput = useMemo(() => dateToDateInput(), []);
+  
   const [costUpdate, setCostUpdate] = useState<boolean>(false);
-  const [costUpdateDate, setCostUpdateDate] = useState<string>(dateToDateInput());
+  const [costUpdateDate, setCostUpdateDate] = useState<string>(minimumDateInput);
 
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
-  const [durationUpdateDate, setDurationUpdateDate] = useState<string>('');
+  const [durationUpdateDate, setDurationUpdateDate] = useState<string>(minimumDateInput);
   
 
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
@@ -236,12 +238,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         {initialService && Number(cost) !== initialService.cost && (
           <div className={styles.updateAppointment}>
             <div className={styles.checkboxLabel}>
-              <Input id='ispaid' type='checkbox' checked={costUpdate} onChange={(e) => setCostUpdate(e.target.checked)} style={{height: 12, width: 12}} />  
-              <label htmlFor='ispaid'>Update cost on booked appointments?</label>
+              <Input id='updateprice' type='checkbox' checked={costUpdate} onChange={(e) => setCostUpdate(e.target.checked)} style={{height: 12, width: 12}} />  
+              <label htmlFor='updateprice'>Update price on booked appointments?</label>
             </div>
             {costUpdate && <div className={styles.dateSelect}>
-              <p>After: </p>
-              <Input  type='date' value={costUpdateDate} onChange={(e) => setCostUpdateDate(e.target.value)} />
+              <p>Starting: </p>
+              <Input  type='date' value={costUpdateDate} onChange={(e) => setCostUpdateDate(() => e.target.value < minimumDateInput ? minimumDateInput : e.target.value)} />
             </div>}
             
           </div>
@@ -253,6 +255,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <p>{duration > 45 && `${Math.floor(duration / 60)} hr${Math.floor(duration / 60) > 1 ? 's' : ''}`} {duration % 60} mins</p>
           <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} />
         </div>
+        {initialService && duration !== initialService.duration && (
+          <div className={styles.updateAppointment}>
+            <div className={styles.checkboxLabel}>
+              <Input id='updateduration' type='checkbox' checked={durationUpdate} onChange={(e) => setDurationUpdate(e.target.checked)} style={{height: 12, width: 12}} />  
+              <label htmlFor='updateduration'>Update duration on booked appointments?</label>
+            </div>
+            {durationUpdate && <div className={styles.dateSelect}>
+              <p>Starting: </p>
+              <Input type='date' value={durationUpdateDate} onChange={(e) => setDurationUpdateDate(() => e.target.value < minimumDateInput ? minimumDateInput : e.target.value)} />
+              {duration > initialService.duration && <p className={styles.warning}>Warning: This may cause overlapping</p>}
+            </div>}
+            
+          </div>
+        )}
 
         <p>Service Color</p>
         <div className={styles.colorSelect}>
