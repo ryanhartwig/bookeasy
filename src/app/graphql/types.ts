@@ -86,6 +86,7 @@ export const types = `#graphql
     min_cancel_notice: String!,
     max_book_ahead: String!,
     user_id: String,
+    avatar: String,
     users: [BusinessUser!]!,
   }
 

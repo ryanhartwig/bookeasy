@@ -6,29 +6,30 @@ import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
 import clsx from 'clsx';
+import { useState } from 'react';
 import styles from './business.module.scss';
 import { Metrics } from './metrics';
 import { Settings } from './settings';
 
 interface BusinessProps {
   user: User,
-  clients: Client[],
-  services: Service[],
-  availability: AvailabilitySlice[],
   business: NewBusiness,
 }
 
-export const Business: React.FC<BusinessProps> = ({user, clients, services, availability, business}) => {
+export const Business: React.FC<BusinessProps> = ({user, business}) => {
 
-
+  const [services, setServices] = useState<Service[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
+  
   return (
     <div className={styles.business}>
       {/* Left panels */}
       <div>    
         <Card className={clsx(styles.card, styles.overview)}>
           
-          <Avatar src={user.avatar} size={100} style={{margin: 15}} />
-          <p className={styles.name}>{user.name}</p>
+          <Avatar src={business.avatar} size={100} style={{margin: 15}} />
+          <p className={styles.name}>{business.name}</p>
           <hr />
           <div className={styles.details}>
             <div>

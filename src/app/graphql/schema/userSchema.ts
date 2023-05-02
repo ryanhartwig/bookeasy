@@ -41,6 +41,10 @@ export const userResolvers = {
         throwGQLError(e.message)
       }
     },
+    getUserOwnBusiness: async (parent: any, args: any) => {
+      const response = await db.query('select * from business where user_id = $1', [args.user_id]);
+      return response.rows[0];
+    }
   },
   User: {
     prefs: async (parent:any, args: any) => {
@@ -59,5 +63,6 @@ export const userTypeDefs = `#graphql
     getUser(id: ID!): User,
     getUserBusinesses(user_id: ID!): [Business!]!,
     getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
+    getUserOwnBusiness(user_id: ID!): Business!,
   }
 `;

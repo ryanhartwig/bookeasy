@@ -11,6 +11,7 @@ export const GET_BUSINESS = gql`
       min_cancel_notice
       max_book_ahead
       user_id
+      avatar
     }
   }
 `;
