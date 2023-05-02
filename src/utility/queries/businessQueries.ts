@@ -69,3 +69,12 @@ export const GET_BUSINESS_USERS = gql`
     }
   }
 `;
+
+export const GET_BUSINESS_APPOINTMENT_METRICS = gql`
+  query($businessId: ID!, $startDate: String, $endDate: String, ) {
+    getBusinessAppointmentMetrics(business_id: $businessId, start_date: $startDate, end_date: $endDate) {
+      is_paid
+      service_cost
+    }
+  }
+`;

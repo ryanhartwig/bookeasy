@@ -5,8 +5,11 @@ import { ReactIconButton } from "@/components/UI/IconButton/ReactIconButton";
 import { Appointment, AppointmentMetrics } from "@/types/Appointment";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";
+import { getISOYearRange } from "@/utility/functions/dateRanges/getISOYearRange";
+import { GET_BUSINESS_APPOINTMENT_METRICS } from "@/utility/queries/businessQueries";
+import { useQuery } from "@apollo/client";
 import clsx from "clsx";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import styles from './business.module.scss';
 
@@ -16,10 +19,20 @@ interface MetricsProps {
   businessId: string,
 }
 
-export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
+export const Metrics: React.FC<MetricsProps> = ({user, clients, businessId}) => {
   const today = new Date();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());  
+  const [startDate, endDate] = useMemo(() => getISOYearRange(selectedDate), [selectedDate]);
+
+  const [appMetrics, setAppMetrics] = useState<AppointmentMetrics[]>([]);
+
+  const { data: metricsData } = useQuery(GET_BUSINESS_APPOINTMENT_METRICS, { variables: { businessId, startDate, endDate }})
+
+  useEffect(() => {
+    if (!metricsData) return;
+    setAppMetrics(metricsData.getBusinessAppointmentMetrics);
+  }, [metricsData]);
 
   const onYearChange = useCallback((n: number) => {
     setSelectedDate(p => {
@@ -35,7 +48,6 @@ export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
     return date.getFullYear();
   }, [user.created]);
 
-  const appsInRange: AppointmentMetrics[] = [];
 
   const clientsInRange = useMemo<Client[]>(() => clients
     .filter(c => new Date(c.joined_date).getFullYear() === selectedDate.getFullYear())
@@ -67,19 +79,19 @@ export const Metrics: React.FC<MetricsProps> = ({user, clients}) => {
       <div className={styles.metric_data}>
         <div style={{textAlign: 'center'}}>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appMetrics.filter(app => app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
-            Total Estimated Revenue
+            Total Paid
           </p>
           <p className={styles.metric}>
-            ${appsInRange.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
+            ${appMetrics.filter(app => !app.is_paid).map(app => app.service_cost).reduce((a, b) => a + b, 0).toFixed(2)}
           </p>
           <p className={styles.metric_label}>
             Total Unpaid
           </p>
           <p className={styles.metric}>
-            {appsInRange.length}
+            {appMetrics.length}
           </p>
           <p className={styles.metric_label}>
             Appointment(s)
