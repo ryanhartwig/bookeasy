@@ -34,4 +34,6 @@ export interface ServiceInput {
   deleted: boolean,
   assigned_users: string[],
   business_id: string,
+  cost_start?: string,
+  duration_start?: string,
 };

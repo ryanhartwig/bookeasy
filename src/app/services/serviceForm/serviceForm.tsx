@@ -20,6 +20,7 @@ import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
 import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
 import { BsTrash3 } from 'react-icons/bs';
 import { dateToDateInput } from '@/utility/functions/conversions/dateToDateInput';
+import { dateInputToDate } from '@/utility/functions/conversions/dateInputToDate';
 
 interface ServiceFormProps {
   open: boolean,
@@ -101,8 +102,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       color,
       deleted: false,
       assigned_users: Array.from(assignedUsers.keys()),
+      cost_start: costUpdate ? dateInputToDate(costUpdateDate).toISOString() : undefined,
+      duration_start: durationUpdate ? dateInputToDate(durationUpdateDate).toISOString() : undefined,
     }
-  }, [assignedUsers, color, cost, duration, initialService?.id, isVideo, name, selectedBusiness]);
+  }, [assignedUsers, color, cost, costUpdate, costUpdateDate, duration, durationUpdate, durationUpdateDate, initialService?.id, isVideo, name, selectedBusiness]);
 
   const [addService, { 
     data: addServiceData, 
