@@ -17,9 +17,9 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface AppointmentFormProps {
   open: boolean,
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>,  
   setSelected?: React.Dispatch<React.SetStateAction<Client | undefined>>,
-  userId: string,
+  userId?: string,
   initialClient?: Client,
   onSubmit?: (...args: any) => any,
 }
@@ -152,7 +152,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const complete = useCallback(() => {
     setError(undefined);
-    setOpen(false);
+    setOpen && setOpen(false);
     onSubmit && onSubmit();
   }, [onSubmit, setOpen]);
   
@@ -209,8 +209,9 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
       actionButtonDisabled={initialClient ? !editClient : !client} 
-      open={open} 
-      onClose={() => setOpen(false)} 
+      open={open}
+      actionCloses
+      onClose={() => setOpen && setOpen(false)} 
       className={styles.appointmentForm}
       loading={loadingUserBusinesses || clientMutationLoading || (initialClient && loadingMultiClientData)}
     >
@@ -251,7 +252,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
         <BsTrash3 />
         <p>Remove Client</p>
       </div>}
-      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteClient()}} >
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" actionCloses onAction={() => {setConfirmDelete(false); onDeleteClient()}} >
         <Modal.Header>Confirm Delete</Modal.Header>
         <div className={styles.confirmDelete}>
           <p>Are you sure you want to remove this client?</p>

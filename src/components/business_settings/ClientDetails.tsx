@@ -7,13 +7,13 @@ import styles from './tabs.module.scss';
 
 interface ClientDetailsProps {
   client: Client,
+  setSelectedClient: React.Dispatch<React.SetStateAction<Client | undefined>>,
 }
 
-export const ClientDetails: React.FC<ClientDetailsProps> = ({client}) => {
+export const ClientDetails: React.FC<ClientDetailsProps> = ({client, setSelectedClient}) => {
 
   const { data: appointmentCountData } = useQuery(GET_CLIENT_APPOINTMENT_COUNT, { variables: { clientId: client.id }})
   
-
   return (
     <div className={styles.client} key={client.id}>
       <div>
@@ -23,7 +23,7 @@ export const ClientDetails: React.FC<ClientDetailsProps> = ({client}) => {
         <p>{client.name}</p>
         <p>{!appointmentCountData ? '...' : appointmentCountData.getClientAppointmentCount}</p>
         <p>{new Date(client.joined_date).toDateString().split(' ').slice(1).join(' ')}</p>
-        <div className={styles.edit}>
+        <div className={styles.edit} onClick={() => setSelectedClient(client)}>
           <p>Edit</p>
         </div>
       </div>
