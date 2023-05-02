@@ -17,7 +17,7 @@ export const serviceResolvers = {
       return id;
     },
     editService: async (parent: any, args: any) => {
-      const { id, name, cost, duration, color, is_video, assigned_users } = args.service;
+      const { id, name, cost, duration, color, is_video, assigned_users, cost_start, duration_start } = args.service;
 
       await db.query(`update service set
         name = $2,
@@ -30,6 +30,14 @@ export const serviceResolvers = {
       await db.query('delete from users_services where service_id = $1', [id]);
       for (const user_id of assigned_users) {
         await db.query('insert into users_services values ($1, $2)', [id, user_id]);
+      }
+
+      if (cost_start) {
+        await db.query('update appointment set service_cost = $1 where start_date > $2 and service_id = $3', [cost, cost_start, id])
+      }
+
+      if (duration_start) {
+        await db.query('update appointment set service_duration = $1 where start_date > $2 and service_id = $3', [cost, duration_start, id])
       }
 
       return id;
@@ -65,6 +73,8 @@ export const serviceTypeDefs = `#graphql
     deleted: Boolean!,
     business_id: String!,
     assigned_users: [String!]!,
+    cost_start: String,
+    duration_start: String,
   }
 
   type Mutation {
