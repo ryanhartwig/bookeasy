@@ -50,20 +50,7 @@ export const GET_BUSINESS_SERVICES_FORM = gql`
 export const GET_BUSINESS_SERVICES = gql`
   query($businessId: ID!) {
     getBusinessServices(business_id: $businessId) {
-      id
-      name
-      duration
-      provider
-      cost
-      is_video
-      color
-      deleted
-      business_id
-      assigned_users {
-        id
-        name
-        avatar
-      }
+      ...ServiceFragment
     }
   }
 `;

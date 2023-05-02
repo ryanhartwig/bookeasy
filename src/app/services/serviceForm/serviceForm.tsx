@@ -5,7 +5,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT } from "@/utility/queries/appointmentQueries"
@@ -18,7 +18,8 @@ import clsx from 'clsx';
 
 import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
-import { ADD_SERVICE } from '@/utility/queries/serviceQueries';
+import { ADD_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
+import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
 interface ServiceFormProps {
   open: boolean,
@@ -76,7 +77,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     const assignedUsersMap = new Map<string, AssignedUser>();
     initialService.assigned_users.forEach(u => assignedUsersMap.set(u.id, u));
 
-    setAssignedUsers(assignedUsersMap)
+    setAssignedUsers(assignedUsersMap);
         
   }, [businessUsers.length, businesses, initialService, userBusinessesData]);
 
@@ -84,7 +85,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     if (!selectedBusiness || !name || !duration || !cost || !color || !assignedUsers.size) return null;
 
     return {
-      id: uuid(),
+      id: initialService?.id || uuid(),
       business_id: selectedBusiness.id,
       name,
       duration,
@@ -95,7 +96,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       deleted: false,
       assigned_users: Array.from(assignedUsers.keys()),
     }
-  }, [assignedUsers, color, cost, duration, isVideo, name, selectedBusiness]);
+  }, [assignedUsers, color, cost, duration, initialService?.id, isVideo, name, selectedBusiness]);
 
   const [addService, { 
     data: addServiceData, 
@@ -107,6 +108,29 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       query: GET_BUSINESS_SERVICES,
       variables: { businessId: selectedBusiness?.id }
     }],
+  });
+
+  const [editService, { 
+    data: editServiceData, 
+    loading: editServiceLoading, 
+    error: editServiceError, 
+    reset: editServiceReset 
+  }] = useMutation(EDIT_SERVICE, {
+    update(cache, { data: { userEditClient }}) {
+      cache.modify({
+        fields: {
+          getBusinessClients(existingClients = [], { readField }) {
+            const editServiceRef = cache.writeFragment({
+              data: userEditClient,
+              fragment: gql`
+                ${NEW_CLIENT_FRAGMENT}
+              `
+            }); 
+            return existingClients.map((ref: any) => readField('id', ref) === initialService?.id ? editServiceRef : ref)
+          }
+        }
+      })
+    }
   });
 
   useEffect(() => {
