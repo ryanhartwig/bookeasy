@@ -17,6 +17,10 @@ export const clientResolvers = {
         business_patch: { ...clientPatchResponse.rows[0], id: clientPatchResponse.rows[0].client_id },
       }
     },
+    getClientAppointmentCount: async (_: any, args: any) => {
+      const response = await db.query('select count(*) from appointment where client_id = $1', [args.client_id]);
+      return response.rows[0].count;
+    },
   },
   Mutation: {
     userAddClient: async (parent: any, args: any) => {
@@ -100,6 +104,7 @@ export const clientTypeDefs = `#graphql
 
   type Query {
     getMultiClientData(client_id: String!): MultiClient!,
+    getClientAppointmentCount(client_id: String!): Int!,
   }
 
   type Mutation {

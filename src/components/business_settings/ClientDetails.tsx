@@ -1,4 +1,6 @@
 import { Client } from "@/types/Client"
+import { GET_CLIENT_APPOINTMENT_COUNT } from "@/utility/queries/clientQueries";
+import { useQuery } from "@apollo/client";
 import { Avatar } from "../UI/Avatar/Avatar";
 import styles from './tabs.module.scss';
 
@@ -9,7 +11,8 @@ interface ClientDetailsProps {
 
 export const ClientDetails: React.FC<ClientDetailsProps> = ({client}) => {
 
-
+  const { data: appointmentCountData } = useQuery(GET_CLIENT_APPOINTMENT_COUNT, { variables: { clientId: client.id }})
+  
 
   return (
     <div className={styles.client} key={client.id}>
@@ -18,7 +21,7 @@ export const ClientDetails: React.FC<ClientDetailsProps> = ({client}) => {
       </div>
       <div>
         <p>{client.name}</p>
-        <p>{0}</p>
+        <p>{!appointmentCountData ? '...' : appointmentCountData.getClientAppointmentCount}</p>
         <p>{new Date(client.joined_date).toDateString().split(' ').slice(1).join(' ')}</p>
         <p>Edit</p>
       </div>
