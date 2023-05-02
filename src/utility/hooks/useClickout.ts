@@ -10,7 +10,7 @@ export const useClickout = (
 
   const onClick = useCallback((e:any) => {
     if (pause) return;
-    if ([...refs].some(r => r?.current?.contains(e?.target))) return;
+    if (e && [...refs].some(r => r?.current?.contains(e.target))) return;
 
     onClickout();
     listenerRef.current = false;

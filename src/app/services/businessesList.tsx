@@ -24,7 +24,13 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
   const { data, loading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
 
   useEffect(() => {
+    if (!data || loading) return;
+    setBusinesses(data.getUserBusinesses);  
+  }, [data, loading]);
+
+  useEffect(() => {
     if (!selectedService) return;
+    
     setServiceFormOpen(true);
   }, [selectedService]);
 
@@ -33,17 +39,14 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
     setSelectedService(undefined);
   }, [serviceFormOpen]);
 
-  useEffect(() => {
-    if (!data || loading) return;
-    setBusinesses(data.getUserBusinesses);  
-  }, [data, loading]);
+
 
   return (
     <>
       {businesses.map(b => (  
         <ServicesList key={b.id} business={b} setSelectedService={setSelectedService} />
       ))}
-      <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService}  />
+      {serviceFormOpen && <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService} onSubmit={() => setSelectedService(undefined)} />}
       <div className={styles.add_service} onClick={() => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
       </div>

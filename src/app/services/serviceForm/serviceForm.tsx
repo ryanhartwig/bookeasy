@@ -5,21 +5,19 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
-import { ADD_EDIT_APPOINTMENT } from "@/utility/queries/appointmentQueries"
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
-import { AssignedUser, User } from '@/types/User';
-import { AiOutlineMinusCircle, AiOutlinePlus, AiOutlinePlusCircle } from 'react-icons/ai';
+import { AssignedUser } from '@/types/User';
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 
 import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
 import { ADD_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
-import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 
 interface ServiceFormProps {
   open: boolean,
@@ -116,38 +114,42 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     error: editServiceError, 
     reset: editServiceReset 
   }] = useMutation(EDIT_SERVICE, {
-    update(cache, { data: { userEditClient }}) {
-      cache.modify({
-        fields: {
-          getBusinessClients(existingClients = [], { readField }) {
-            const editServiceRef = cache.writeFragment({
-              data: userEditClient,
-              fragment: gql`
-                ${NEW_CLIENT_FRAGMENT}
-              `
-            }); 
-            return existingClients.map((ref: any) => readField('id', ref) === initialService?.id ? editServiceRef : ref)
-          }
-        }
-      })
-    }
+    refetchQueries: [{
+      query: GET_BUSINESS_SERVICES,
+      variables: { businessId: selectedBusiness?.id }
+    }],
   });
 
-  useEffect(() => {
-    if (!addServiceData || addServiceLoading) return;
-    if (addServiceError) {
-      return setError('Something went wrong'); // for now
-    }
-    
+  const reset = useCallback(() => {
     addServiceReset();
-    setOpen(false);
+    editServiceReset();
     onSubmit && onSubmit();
-  }, [addServiceData, addServiceError, addServiceLoading, addServiceReset, onSubmit, setOpen]);
+    setOpen(false);
+  }, [addServiceReset, editServiceReset, onSubmit, setOpen]);
+
+  useEffect(() => {
+    if (addServiceLoading || !addServiceData) return;
+    if (addServiceError) {
+      return setError('Something went wrong'); // fallback
+    }
+    reset();
+  }, [addServiceData, addServiceError, addServiceLoading, addServiceReset, editServiceError, editServiceLoading, editServiceReset, onSubmit, reset, setOpen]);
+  useEffect(() => {
+    if (editServiceLoading || !editServiceData) return;
+    if (editServiceError) {
+      return setError('Something went wrong'); // fallback
+    }
+    reset();
+  }, [editServiceData, editServiceError, editServiceLoading, reset]);
 
   const onSubmitForm = useCallback(() => {
     if (!service) return;
-    addService({variables: { service }});
-  }, [addService, service]);
+    if (initialService) {
+      editService({variables: { service }});
+    } else {
+      addService({variables: { service }});
+    }
+  }, [addService, editService, initialService, service]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -175,7 +177,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers}
+      actionCloses
+      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading}
     >
       <Modal.Header>Add a Service</Modal.Header>
       <div className={styles.appointmentOptions}>
