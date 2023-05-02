@@ -19,6 +19,7 @@ import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
 import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
 import { BsTrash3 } from 'react-icons/bs';
+import { dateToDateInput } from '@/utility/functions/conversions/dateToDateInput';
 
 interface ServiceFormProps {
   open: boolean,
@@ -42,7 +43,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
 
   const [costUpdate, setCostUpdate] = useState<boolean>(false);
-  const [costUpdateDate, setCostUpdateDate] = useState<string>('');
+  const [costUpdateDate, setCostUpdateDate] = useState<string>(dateToDateInput());
 
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
   const [durationUpdateDate, setDurationUpdateDate] = useState<string>('');
