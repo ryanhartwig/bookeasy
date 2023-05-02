@@ -5,8 +5,11 @@ import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
+import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
+import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES } from '@/utility/queries/businessQueries';
+import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './business.module.scss';
 import { Metrics } from './metrics';
 import { Settings } from './settings';
@@ -21,6 +24,25 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
   const [services, setServices] = useState<Service[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
+  
+  const { data: servicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
+  const { data: clientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
+  const { data: availabilityData } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: user.id }});
+
+  useEffect(() => {
+    if (!servicesData) return;
+    setServices(servicesData.getBusinessServices);
+  }, [servicesData]);
+
+  useEffect(() => {
+    if (!clientsData) return;
+    setClients(clientsData.getBusinessClients);
+  }, [clientsData]);
+
+  useEffect(() => {
+    if (!availabilityData) return;
+    setAvailability(availabilityData.getUserAvailability.filter((a: AvailabilitySlice) => a.business_id === business.id));
+  }, [availabilityData, business.id]);
   
   return (
     <div className={styles.business}>
