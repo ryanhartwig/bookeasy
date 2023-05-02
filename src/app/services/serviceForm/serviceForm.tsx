@@ -17,7 +17,7 @@ import clsx from 'clsx';
 
 import { GiRollingDices } from 'react-icons/gi';
 import { getRandomHexColor } from '@/utility/functions/misc/getRandomHexColor';
-import { ADD_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
+import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/serviceQueries';
 import { BsTrash3 } from 'react-icons/bs';
 
 interface ServiceFormProps {
@@ -121,24 +121,23 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     }],
   });
 
-  // const [deleteService, { 
-  //   data: deleteServiceData, 
-  //   loading: deleteServiceLoading, 
-  //   error: deleteServiceError, 
-  //   reset: deleteServiceReset 
-  // }] = useMutation(DELETE_SERVICE, {
-  //   refetchQueries: [{
-  //     query: GET_BUSINESS_SERVICES,
-  //     variables: { businessId: selectedBusiness?.id }
-  //   }],
-  // });
+  const [deleteService, { 
+    loading: deleteServiceLoading, 
+    reset: deleteServiceReset 
+  }] = useMutation(DELETE_SERVICE, {
+    refetchQueries: [{
+      query: GET_BUSINESS_SERVICES,
+      variables: { businessId: selectedBusiness?.id  }
+    }],
+  });
 
   const reset = useCallback(() => {
     addServiceReset();
     editServiceReset();
+    deleteServiceReset();
     onSubmit && onSubmit();
     setOpen(false);
-  }, [addServiceReset, editServiceReset, onSubmit, setOpen]);
+  }, [addServiceReset, deleteServiceReset, editServiceReset, onSubmit, setOpen]);
 
   useEffect(() => {
     if (addServiceLoading || !addServiceData) return;
@@ -165,8 +164,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [addService, editService, initialService, service]);
 
   const onDeleteService = useCallback(() => {
-
-  }, []);
+    deleteService({variables: { serviceId: initialService?.id }});
+    reset();
+  }, [deleteService, initialService?.id, reset]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -195,7 +195,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
       actionCloses
-      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading}
+      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
       <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
       <div className={styles.appointmentOptions}>
@@ -254,7 +254,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         <BsTrash3 />
         <p>Remove</p>
       </div>}
-      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteService()}} >
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteService()}} actionCloses >
         <Modal.Header>Confirm Delete</Modal.Header>
         <div className={styles.confirmDelete}>
           <p>Are you sure you want to remove this service?</p>

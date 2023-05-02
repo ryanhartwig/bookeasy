@@ -12,3 +12,9 @@ export const EDIT_SERVICE = gql`
     editService(service: $service)
   }
 `;
+
+export const DELETE_SERVICE = gql`
+  mutation($serviceId: String!) {
+    deleteService(service_id: $serviceId)
+  }
+`;

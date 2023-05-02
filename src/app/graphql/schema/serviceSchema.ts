@@ -1,4 +1,5 @@
 import db from "@/utility/db";
+import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const serviceResolvers = {
   Mutation: {
@@ -32,7 +33,23 @@ export const serviceResolvers = {
       }
 
       return id;
-    }
+    },
+    deleteService: async (parent: any, args: any) => {
+      const { service_id } = args;
+      try {
+        const response = await db.query('delete from service where id = $1 returning id', [service_id]);
+        return response.rows[0].id;
+      } catch(e: any) {
+        if(e?.constraint && e.constraint === 'appointment_service_id_fkey') {
+          // Appointment exists for service and won't allow full deletion
+          // - therefore we set deleted property to true, to allow appointments to ref service
+          const updateResponse = await db.query('update service set deleted = true where id = $1 returning id', [service_id]);
+          return updateResponse.rows[0].id;
+        }
+      }
+
+      return service_id;
+    },
   },
 }
 
@@ -53,5 +70,6 @@ export const serviceTypeDefs = `#graphql
   type Mutation {
     addService(service: ServiceInput): String!,
     editService(service: ServiceInput): String!,
+    deleteService(service_id: String!): String!,
   }
 `;
