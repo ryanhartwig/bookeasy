@@ -32,8 +32,6 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   const settingRef = useRef<HTMLDivElement>(undefined!);
 
-  console.log(settingRef);
-
   const onClose = useClickout(() => {
     if (onAction) return;
     setEditing(false);
@@ -48,16 +46,17 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   const handleSave = useCallback(() => {
     if (!onSave) return;
+    if (!value) return;
 
     setLoading(true);
 
     ;(async () => {
       await onSave();
-      setValue && setValue('');
       setLoading(false);
       setEditing(false);
+      setValue && setValue('');
     })();
-  }, [onSave, setValue]);
+  }, [onSave, setValue, value]);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();

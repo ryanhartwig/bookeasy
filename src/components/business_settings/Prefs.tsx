@@ -16,6 +16,8 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
 
   const [businessName, setBusinessName] = useState<string>('');
 
+  console.log(businessName);
+  
   const [updateBusinessName, { 
     data: updateBusinessNameData, 
     loading: updateBusinessNameLoading,
