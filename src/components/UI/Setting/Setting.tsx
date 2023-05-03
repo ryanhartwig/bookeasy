@@ -53,7 +53,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
       <p className={styles.label}>{label}</p>
       <div className={styles.value}>
         {!editing ? children
-        : <input autoFocus onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
+        : <input autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
       </div>
 
       
