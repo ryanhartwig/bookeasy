@@ -2,7 +2,7 @@
 
 import { MutationFunctionOptions, OperationVariables, DefaultContext, ApolloCache } from '@apollo/client';
 import clsx from 'clsx';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import styles from './setting.module.scss';
 
@@ -53,6 +53,15 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
       setEditing(false);
     })();
   }, [onSave]);
+
+  const onKeyDown = useCallback((e: any) => {
+    if (e.key === 'Enter' && editing) handleSave();
+  }, [editing, handleSave]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
   
   return (
     <div {...props} className={clsx(styles.Setting, props.className || '', {[styles.loading]: loading})} ref={settingRef}>
