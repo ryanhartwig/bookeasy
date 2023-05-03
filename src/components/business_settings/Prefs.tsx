@@ -15,7 +15,6 @@ interface PrefsProps {
 export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
 
   const [businessName, setBusinessName] = useState<string>(business.name);
-  const [editingName, setEditingName] = useState<boolean>(false);
 
   const [updateBusinessName, { 
     data: updateBusinessNameData, 
@@ -28,14 +27,13 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
     }],
   });
 
-  const onUpdateName = useCallback(() => {
-    updateBusinessName({variables: { businessId: business.id, name: businessName }});
-  }, [business.id, businessName, updateBusinessName]);
+  const onSave = () => {
+    return updateBusinessName({variables: { businessId: business.id, name: businessName }})
+  }
 
   useEffect(() => {
     if (!updateBusinessNameData) return;
     if (updateBusinessNameLoading) return;
-    setEditingName(false);
     updateBusinessNameReset();
   }, [updateBusinessNameData, updateBusinessNameLoading, updateBusinessNameReset]);
 
@@ -49,7 +47,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
         <Setting label='Business Photo' onAction={() => {}}>
           <Avatar src={business.avatar} size={50} alt='Business logo' />
         </Setting>
-        <Setting label='Business Name' editing={editingName} setEditing={setEditingName} value={businessName} setValue={setBusinessName} onSave={onUpdateName}>
+        <Setting label='Business Name' value={businessName} setValue={setBusinessName} onSave={onSave}>
           <p>{business.name}</p>
         </Setting>
         <Setting label='Business Email'>

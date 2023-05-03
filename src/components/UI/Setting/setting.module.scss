@@ -87,3 +87,8 @@
 .toggle_circle.on {
   left: 15px;
 }
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
