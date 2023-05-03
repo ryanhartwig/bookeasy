@@ -1,7 +1,6 @@
-'use client';
-
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
+import { useState } from 'react';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
 
@@ -11,6 +10,9 @@ interface PrefsProps {
 
 export const Prefs: React.FC<PrefsProps> = ({business}) => {
 
+  const [businessName, setBusinessName] = useState<string>('');
+
+
   return (
     <div className={styles.Prefs}>
       <div className={styles.header}>
@@ -18,10 +20,10 @@ export const Prefs: React.FC<PrefsProps> = ({business}) => {
       </div>
 
       <div className={styles.settings}>
-        <Setting label='Business Photo'>
+        <Setting label='Business Photo' onAction={() => {}}>
           <Avatar src={business.avatar} size={50} alt='Business logo' />
         </Setting>
-        <Setting label='Business Name'>
+        <Setting label='Business Name' >
           <p>{business.name}</p>
         </Setting>
         <Setting label='Business Email'>
