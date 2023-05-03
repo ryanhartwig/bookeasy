@@ -25,7 +25,7 @@ export const Setting = ({label, children, toggleState, onAction, ...props}: Sett
 
   const onEdit = useCallback(() => {
     if (onAction) return onAction();
-
+    setValue('');
     setEditing(true);
   }, [onAction]);
 

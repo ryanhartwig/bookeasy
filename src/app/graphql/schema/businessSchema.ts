@@ -111,7 +111,30 @@ export const businessResolvers = {
       
       return businessUsers;
     }
+  },
+  Mutation: {
+    updateBusinessName: async (_: any, args: any) => {
+      const { name, business_id } = args;
+      const response = await db.query('update business set name = $1 where id = $2 returning name', [name, business_id]);
+      return response.rows[0].name;
+    },
+    updateBusinessEmail: async (_: any, args: any) => {
+      const { email, business_id } = args;
+      const response = await db.query('update business set email = $1 where id = $2 returning email', [email, business_id]);
+      return response.rows[0].email;
+    },
+    updateBusinessPhone: async (_: any, args: any) => {
+      const { phone, business_id } = args;
+      const response = await db.query('update business set phone = $1 where id = $2 returning phone', [phone, business_id]);
+      return response.rows[0].phone;
+    },
+    updateBusinessAvatar: async (_: any, args: any) => {
+      const { avatar, business_id } = args;
+      const response = await db.query('update business set avatar = $1 where id = $2 returning avatar', [avatar, business_id]);
+      return response.rows[0].avatar;
+    },
   }
+
 }
 
 export const businessTypeDefs = `#graphql
@@ -120,5 +143,12 @@ export const businessTypeDefs = `#graphql
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
     getBusinessServices(business_id: ID!): [Service!]!,
     getBusinessAppointmentMetrics(business_id: ID!, start_date: String, end_date: String): [AppointmentMetric!]!,
+  }
+
+  type Mutation {
+    updateBusinessName(business_id: ID!, name: String!): String!,
+    updateBusinessEmail(business_id: ID!, email: String!): String!,
+    updateBusinessPhone(business_id: ID!, phone: String!): String!,
+    updateBusinessAvatar(business_id: ID!, avatar: String!): String!,
   }
 `;
