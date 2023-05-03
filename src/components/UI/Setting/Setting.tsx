@@ -1,5 +1,6 @@
 'use client';
 
+import { MutationFunctionOptions, OperationVariables, DefaultContext, ApolloCache } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
@@ -16,36 +17,35 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
    * If provided, will override local editing functionality (useful for showing modal instead, etc)
    */
   onAction?: (...args: any) => any,
+  editing?: boolean,
+  setEditing?: React.Dispatch<React.SetStateAction<boolean>>,
+  value?: string,
+  setValue?: React.Dispatch<React.SetStateAction<any>>,
+  onSave?: (...args: any) => any,
 }
 
-export const Setting = ({label, children, toggleState, onAction, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onAction, editing, setEditing, value, setValue, onSave, ...props}: SettingProps) => {
 
-  const [editing, setEditing] = useState<boolean>(false);
-  const [value, setValue] = useState<string>('');
 
   const onEdit = useCallback(() => {
     if (onAction) return onAction();
-    setValue('');
+    if (!setEditing) return;
     setEditing(true);
-  }, [onAction]);
-
-  const onSave = useCallback(() => {
-
-  }, []);
+  }, [onAction, setEditing]);
   
   return (
     <div {...props} className={clsx(styles.Setting, props.className || '')}>
       <p className={styles.label}>{label}</p>
       <div className={styles.value}>
         {!editing ? children
-        : <input autoFocus value={value} onChange={(e) => setValue(e.target.value)} />}
+        : <input autoFocus onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
       </div>
       
       {toggleState === undefined 
         ? <div className={clsx(styles.action, 'noselect')} >
             {!editing ? <p onClick={onEdit}>Edit</p>
             : <>
-              <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => setEditing(false)}>Cancel</p>
+              <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => setEditing && setEditing(false)}>Cancel</p>
               <p onClick={onSave}>Save</p>
             </>
             }
