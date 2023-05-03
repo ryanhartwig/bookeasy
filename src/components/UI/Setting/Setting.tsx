@@ -2,11 +2,12 @@
 
 import { MutationFunctionOptions, OperationVariables, DefaultContext, ApolloCache } from '@apollo/client';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import styles from './setting.module.scss';
 
 import { MoonLoader } from 'react-spinners';
+import { useClickout } from '@/utility/hooks/useClickout';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
@@ -29,6 +30,12 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const settingRef = useRef<HTMLDivElement>(undefined!);
+
+  console.log(settingRef);
+
+  const onClose = useClickout(() => !onAction && setEditing(false), editing, false, settingRef)
+
   const onEdit = useCallback(() => {
     if (onAction) return onAction();
     if (!setEditing) return;
@@ -45,25 +52,25 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
       setLoading(false);
       setEditing(false);
     })();
-
   }, [onSave]);
   
   return (
-    <div {...props} className={clsx(styles.Setting, props.className || '', {[styles.loading]: loading})}>
+    <div {...props} className={clsx(styles.Setting, props.className || '', {[styles.loading]: loading})} ref={settingRef}>
       <p className={styles.label}>{label}</p>
       <div className={styles.value}>
         {!editing ? children
         : <input autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
       </div>
-
-      
       
       {toggleState === undefined 
         ? <div className={clsx(styles.action, 'noselect')} >
             {!editing ? <p onClick={onEdit}>Edit</p>
             : <>
               {loading && <MoonLoader color='#000000' size={15} cssOverride={{marginRight: 10}} />}
-              <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => setEditing && setEditing(false)}>Cancel</p>
+              <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => {
+                setEditing && setEditing(false);
+                onClose(undefined);
+              }}>Cancel</p>
               <p onClick={handleSave}>Save</p>
             </>
             }
