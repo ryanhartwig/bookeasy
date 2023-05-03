@@ -199,3 +199,20 @@
     background-color: #216fdb19;
   }
 }
+
+.periodSelect {
+  width: 381px;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > p {
+    margin-bottom: 3px;
+  }
+
+  .periodInput {
+    width: 60px;
+  }
+}
