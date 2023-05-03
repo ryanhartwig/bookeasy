@@ -15,13 +15,15 @@ interface PrefsProps {
 export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
 
   const [businessName, setBusinessName] = useState<string>('');
+  const [businessEmail, setBusinessEmail] = useState<string>('');
+  const [businessPhone, setBusinessPhone] = useState<string>('');
+  const [businessAvatar, setBusinessAvatar] = useState<string>('');
 
-  console.log(businessName);
   
-  const [updateBusinessName, { 
-    data: updateBusinessNameData, 
-    loading: updateBusinessNameLoading,
-    reset: updateBusinessNameReset,
+  const [updateBusinessPrefs, { 
+    data: updateBusinessPrefsData, 
+    loading: updateBusinessPrefsLoading,
+    reset: updateBusinessPrefsReset,
   }] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: [{
       query: GET_USER_OWN_BUSINESS,
@@ -30,16 +32,19 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
   });
 
   const onSave = () => {
-    return updateBusinessName({variables: { businessId: business.id, patch: {
+    return updateBusinessPrefs({variables: { businessId: business.id, patch: {
       name: businessName,
+      email: businessEmail,
+      phone: businessPhone,
+      avatar: businessAvatar,
     }}})
   } 
 
   useEffect(() => {
-    if (!updateBusinessNameData) return;
-    if (updateBusinessNameLoading) return;
-    updateBusinessNameReset();
-  }, [updateBusinessNameData, updateBusinessNameLoading, updateBusinessNameReset]);
+    if (!updateBusinessPrefsData) return;
+    if (updateBusinessPrefsLoading) return;
+    updateBusinessPrefsReset();
+  }, [updateBusinessPrefsData, updateBusinessPrefsLoading, updateBusinessPrefsReset]);
 
   return (
     <div className={styles.Prefs}>
@@ -48,16 +53,16 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
       </div>
 
       <div className={styles.settings}>
-        <Setting label='Business Photo' onAction={() => {}}>
+        <Setting label='Business Photo' placeholder='Enter valid url' value={businessAvatar} setValue={setBusinessAvatar} onSave={onSave}>
           <Avatar src={business.avatar} size={50} alt='Business logo' />
         </Setting>
-        <Setting label='Business Name' value={businessName} setValue={setBusinessName} onSave={onSave}>
+        <Setting label='Business Name' placeholder='Name' value={businessName} setValue={setBusinessName} onSave={onSave}>
           <p>{business.name}</p>
         </Setting>
-        <Setting label='Business Email'>
+        <Setting label='Business Email' placeholder='Email' value={businessEmail} setValue={setBusinessEmail} onSave={onSave}>
           <p>{business.email ?? 'None'}</p>
         </Setting>
-        <Setting label='Business Phone'>
+        <Setting label='Business Phone' placeholder='Phone' value={businessPhone} setValue={setBusinessPhone} onSave={onSave}>
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>
