@@ -34,7 +34,11 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   console.log(settingRef);
 
-  const onClose = useClickout(() => !onAction && setEditing(false), editing, false, settingRef)
+  const onClose = useClickout(() => {
+    if (onAction) return;
+    setEditing(false);
+    setValue && setValue('');
+  }, editing, false, settingRef)
 
   const onEdit = useCallback(() => {
     if (onAction) return onAction();
@@ -49,10 +53,11 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
     ;(async () => {
       await onSave();
+      setValue && setValue('');
       setLoading(false);
       setEditing(false);
     })();
-  }, [onSave]);
+  }, [onSave, setValue]);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();
@@ -78,6 +83,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
               {loading && <MoonLoader color='#000000' size={15} cssOverride={{marginRight: 10}} />}
               <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => {
                 setEditing && setEditing(false);
+                setValue && setValue('');
                 onClose(undefined);
               }}>Cancel</p>
               <p onClick={handleSave}>Save</p>

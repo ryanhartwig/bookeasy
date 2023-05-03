@@ -1,6 +1,6 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
-import { GET_BUSINESS, UPDATE_BUSINESS_NAME } from '@/utility/queries/businessQueries';
+import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 import { useMutation } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
@@ -14,13 +14,13 @@ interface PrefsProps {
 
 export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
 
-  const [businessName, setBusinessName] = useState<string>(business.name);
+  const [businessName, setBusinessName] = useState<string>('');
 
   const [updateBusinessName, { 
     data: updateBusinessNameData, 
     loading: updateBusinessNameLoading,
     reset: updateBusinessNameReset,
-  }] = useMutation(UPDATE_BUSINESS_NAME, {
+  }] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: [{
       query: GET_USER_OWN_BUSINESS,
       variables: { userId }
@@ -28,8 +28,10 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
   });
 
   const onSave = () => {
-    return updateBusinessName({variables: { businessId: business.id, name: businessName }})
-  }
+    return updateBusinessName({variables: { businessId: business.id, patch: {
+      name: businessName,
+    }}})
+  } 
 
   useEffect(() => {
     if (!updateBusinessNameData) return;

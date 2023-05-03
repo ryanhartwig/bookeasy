@@ -79,26 +79,8 @@ export const GET_BUSINESS_APPOINTMENT_METRICS = gql`
   }
 `;
 
-export const UPDATE_BUSINESS_NAME = gql`
-  mutation($businessId: ID!, $name: String!) {
-    updateBusinessName(business_id: $businessId, name: $name)
-  }
-`;
-
-export const UPDATE_BUSINESS_EMAIL = gql`
-  mutation($businessId: ID!, $email: String!) {
-    updateBusinessEmail(business_id: $businessId, email: $email)
-  }
-`;
-
-export const UPDATE_BUSINESS_PHONE = gql`
-  mutation($businessId: ID!, $phone: String!) {
-    updateBusinessPhone(business_id: $businessId, phone: $phone)
-  }
-`;
-
-export const UPDATE_BUSINESS_AVATAR = gql`
-  mutation($businessId: ID!, $avatar: String!) {
-    updateBusinessAvatar(business_id: $businessId, avatar: $avatar)
+export const UPDATE_BUSINESS_PREFS = gql`
+  mutation($businessId: ID!, $patch: BusinessPrefsInput) {
+    updateBusinessPrefs(business_id: $businessId, patch: $patch)
   }
 `;
