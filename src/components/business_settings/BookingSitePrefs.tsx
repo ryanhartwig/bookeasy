@@ -4,8 +4,9 @@ import styles from './tabs.module.scss';
 import { NewBusiness } from '@/types/Business';
 import { formatTimePeriod } from '@/utility/functions/formatting/formatTimePeriod';
 import { Modal } from '../UI/Modal/Modal';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Input } from '../UI/Input/Input';
+import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
@@ -44,16 +45,32 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) =>
         <Modal.Header>Select Time Period</Modal.Header>
         <div className={styles.periodSelect}>
           <p>Months</p>
-          <Input className={styles.periodInput} type='number' value={months} title='months' onChange={(e) => Number(e.target.value) > 0 && setMonths(Number(e.target.value))} />
+          <div className={styles.durationSelect}>
+            <AiOutlineMinusCircle onClick={() => setMonths(p => p === 0 ? p : p - 1)} />
+            <p>{months}</p>
+            <AiOutlinePlusCircle onClick={() => setMonths(p => p + 1)} />
+          </div>
 
           <p>Weeks</p>
-          <Input className={styles.periodInput} type='number' value={weeks} onChange={(e) => Number(e.target.value) > 0 && setWeeks(Number(e.target.value))} />
+          <div className={styles.durationSelect}>
+            <AiOutlineMinusCircle onClick={() => setWeeks(p => p === 0 ? p : p - 1)} />
+            <p>{weeks}</p>
+            <AiOutlinePlusCircle onClick={() => setWeeks(p => p + 1)} />
+          </div>
 
           <p>Days</p>
-          <Input className={styles.periodInput} type='number' value={days} onChange={(e) => Number(e.target.value) > 0 && setDays(Number(e.target.value))} />
+          <div className={styles.durationSelect}>
+            <AiOutlineMinusCircle onClick={() => setDays(p => p === 0 ? p : p - 1)} />
+            <p>{days}</p>
+            <AiOutlinePlusCircle onClick={() => setDays(p => p + 1)} />
+          </div>
 
           <p>Hours</p>
-          <Input className={styles.periodInput} type='number' value={hours} onChange={(e) => Number(e.target.value) > 0 && setHours(Number(e.target.value))} />
+          <div className={styles.durationSelect}>
+            <AiOutlineMinusCircle onClick={() => setHours(p => p === 0 ? p : p - 1)} />
+            <p>{hours}</p>
+            <AiOutlinePlusCircle onClick={() => setHours(p => p + 1)} />
+          </div>
         </div>
       </Modal>
     </div>

@@ -216,3 +216,29 @@
     width: 60px;
   }
 }
+
+.durationSelect {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 10px 0; 
+
+  padding: 0 40px;
+
+  font-weight: 300;
+  font-size: 20px;
+
+  > *:not(p) {
+    cursor: pointer;
+    color: grey;
+    font-size: 20px;
+
+    margin: 0 10px;
+    
+    transition: color 200ms;
+    &:hover {
+      color: black;
+    }
+  }
+}
