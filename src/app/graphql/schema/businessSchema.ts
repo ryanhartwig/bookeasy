@@ -113,31 +113,48 @@ export const businessResolvers = {
     }
   },
   Mutation: {
-    updateBusinessName: async (_: any, args: any) => {
-      const { name, business_id } = args;
-      const response = await db.query('update business set name = $1 where id = $2 returning name', [name, business_id]);
-      return response.rows[0].name;
-    },
-    updateBusinessEmail: async (_: any, args: any) => {
-      const { email, business_id } = args;
-      const response = await db.query('update business set email = $1 where id = $2 returning email', [email, business_id]);
-      return response.rows[0].email;
-    },
-    updateBusinessPhone: async (_: any, args: any) => {
-      const { phone, business_id } = args;
-      const response = await db.query('update business set phone = $1 where id = $2 returning phone', [phone, business_id]);
-      return response.rows[0].phone;
-    },
-    updateBusinessAvatar: async (_: any, args: any) => {
-      const { avatar, business_id } = args;
-      const response = await db.query('update business set avatar = $1 where id = $2 returning avatar', [avatar, business_id]);
-      return response.rows[0].avatar;
+    updateBusinessPrefs: async (_: any, args: any) => {
+      const { name, email, phone, avatar } = args.patch;
+      if (!name && !email && !phone && !avatar) throwGQLError('Must provide at least one argument to update');
+
+      const { business_id } = args;
+
+      let query = 'update business set';
+      const params = [business_id];
+
+      // Only one of the following properties will be provided
+      if (name) {
+        query += ' name = $2 where id = $1 returning id';
+        params.push(name);
+      }
+      if (email) {
+        query += ' email = $2 where id = $1 returning id';
+        params.push(email);
+      }
+      if (phone) {
+        query += ' phone = $2 where id = $1 returning id';
+        params.push(phone);
+      }
+      if (avatar) {
+        query += ' avatar = $2 where id = $1 returning id';
+        params.push(avatar);
+      }
+
+      const response = await db.query(query, params);
+      return response.rows[0].id;
     },
   }
 
 }
 
 export const businessTypeDefs = `#graphql
+  input BusinessPrefsInput {
+    name: String,
+    email: String,
+    phone: String,
+    avatar: String,
+  }
+
   type Query {
     getBusiness(business_id: ID!): Business!,
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
@@ -146,9 +163,6 @@ export const businessTypeDefs = `#graphql
   }
 
   type Mutation {
-    updateBusinessName(business_id: ID!, name: String!): String!,
-    updateBusinessEmail(business_id: ID!, email: String!): String!,
-    updateBusinessPhone(business_id: ID!, phone: String!): String!,
-    updateBusinessAvatar(business_id: ID!, avatar: String!): String!,
+    updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): String!,
   }
 `;
