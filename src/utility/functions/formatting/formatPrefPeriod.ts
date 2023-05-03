@@ -10,15 +10,29 @@ export const formatPrefPeriod = (ms: number) => {
   let months = 0, weeks = 0, days = 0, hours = 0;
   let result = '';
 
-  while (total >= month) months++ && (total -= month);
-  while (total >= week) weeks++ && (total -= week);
-  while (total >= day) days++ && (total -= day);
-  while (total >= hour) hours++ && (total -= hour);
+  console.log(total);
+
+  while (total >= month) {
+    total -= month;
+    months++;
+  };
+  while (total >= week) {
+    total -= week;
+    weeks++; 
+  }
+  while (total >= day) {
+    total -= day;
+    days++; 
+  }
+  while (total >= hour) {
+    total -= hour;
+    hours++; 
+  }
 
   if (months) result += `${months} ${pluralize('month', months)}, `;
-  if (weeks) result += `${weeks} ${pluralize('month', weeks)}, `;
-  if (days) result += `${days} ${pluralize('month', days)}, `;
-  if (hours) result += `${hours} ${pluralize('month', hours)}, `;
+  if (weeks) result += `${weeks} ${pluralize('week', weeks)}, `;
+  if (days) result += `${days} ${pluralize('day', days)}, `;
+  if (hours) result += `${hours} ${pluralize('hour', hours)}, `;
 
   return result.slice(0, -2);
 }

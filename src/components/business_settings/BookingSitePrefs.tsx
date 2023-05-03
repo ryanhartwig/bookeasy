@@ -7,6 +7,7 @@ import { Modal } from '../UI/Modal/Modal';
 import { useState } from 'react';
 import { Input } from '../UI/Input/Input';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
+import { formatPrefPeriod } from '@/utility/functions/formatting/formatPrefPeriod';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
@@ -28,16 +29,16 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) =>
       </div>
       <div className={styles.settings}>
         <Setting label="Minimum Book Ahead" onAction={() => setFormOpen(true)}>
-          <p>{business.min_booking_notice ? formatTimePeriod(Number(business.min_booking_notice)) : 'None'}</p>
+          <p>{business.min_booking_notice ? formatPrefPeriod(Number(business.min_booking_notice)) : 'None'}</p>
         </Setting>
         <Setting label="Maximum Book Ahead" onAction={() => setFormOpen(true)}>
-          <p>{business.max_book_ahead ? formatTimePeriod(Number(business.max_book_ahead)) : 'None'}</p>
+          <p>{business.max_book_ahead ? formatPrefPeriod(Number(business.max_book_ahead)) : 'None'}</p>
         </Setting>
         <Setting label="Minimum Cancellation Notice" onAction={() => setFormOpen(true)}>
-          <p>{business.min_cancel_notice ? formatTimePeriod(Number(business.min_cancel_notice)) : 'None'}</p>
+          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)) : 'None'}</p>
         </Setting>
         <Setting label="Booking Site Url" onAction={() => setFormOpen(true)}>
-          <p>{business.min_cancel_notice ? formatTimePeriod(Number(business.min_cancel_notice)) : 'None'}</p>
+          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)) : 'None'}</p>
         </Setting>
       </div>
 
