@@ -15,11 +15,6 @@ interface BookingSitePrefsProps {
 
 export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) => {
 
-  const [months, setMonths] = useState<number>(0);
-  const [weeks, setWeeks] = useState<number>(0);
-  const [days, setDays] = useState<number>(0);
-  const [hours, setHours] = useState<number>(0);
-  
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
   return (
@@ -29,51 +24,18 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) =>
       </div>
       <div className={styles.settings}>
         <Setting label="Minimum Book Ahead" onAction={() => setFormOpen(true)}>
-          <p>{business.min_booking_notice ? formatPrefPeriod(Number(business.min_booking_notice)) : 'None'}</p>
+          <p>{business.min_booking_notice ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
         </Setting>
         <Setting label="Maximum Book Ahead" onAction={() => setFormOpen(true)}>
-          <p>{business.max_book_ahead ? formatPrefPeriod(Number(business.max_book_ahead)) : 'None'}</p>
+          <p>{business.max_book_ahead ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
         </Setting>
         <Setting label="Minimum Cancellation Notice" onAction={() => setFormOpen(true)}>
-          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)) : 'None'}</p>
+          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting>
         <Setting label="Booking Site Url" onAction={() => setFormOpen(true)}>
-          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)) : 'None'}</p>
+          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting>
       </div>
-
-      <Modal open={formOpen} onClose={() => setFormOpen(false)} >
-        <Modal.Header>Select Time Period</Modal.Header>
-        <div className={styles.periodSelect}>
-          <p>Months</p>
-          <div className={styles.durationSelect}>
-            <AiOutlineMinusCircle onClick={() => setMonths(p => p === 0 ? p : p - 1)} />
-            <p>{months}</p>
-            <AiOutlinePlusCircle onClick={() => setMonths(p => p + 1)} />
-          </div>
-
-          <p>Weeks</p>
-          <div className={styles.durationSelect}>
-            <AiOutlineMinusCircle onClick={() => setWeeks(p => p === 0 ? p : p - 1)} />
-            <p>{weeks}</p>
-            <AiOutlinePlusCircle onClick={() => setWeeks(p => p + 1)} />
-          </div>
-
-          <p>Days</p>
-          <div className={styles.durationSelect}>
-            <AiOutlineMinusCircle onClick={() => setDays(p => p === 0 ? p : p - 1)} />
-            <p>{days}</p>
-            <AiOutlinePlusCircle onClick={() => setDays(p => p + 1)} />
-          </div>
-
-          <p>Hours</p>
-          <div className={styles.durationSelect}>
-            <AiOutlineMinusCircle onClick={() => setHours(p => p === 0 ? p : p - 1)} />
-            <p>{hours}</p>
-            <AiOutlinePlusCircle onClick={() => setHours(p => p + 1)} />
-          </div>
-        </div>
-      </Modal>
     </div>
   )
 }
