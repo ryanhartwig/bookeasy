@@ -4,6 +4,7 @@ import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitar
 import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
 import React, { useMemo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+import { BsTrash3 } from "react-icons/bs";
 import { HoursList } from "../SelectLists/Hours";
 import { MinutesList } from "../SelectLists/Minutes";
 import { PeriodList } from "../SelectLists/Period";
@@ -20,14 +21,14 @@ interface AvailabilityFormProps {
 
 export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, day}) => {
 
-  const [addSlices, setAddSlices] = useState<AvailabilitySlice[]>([]);
+  const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
-  const [startHrs, setStartHrs] = useState<number>(9);
-  const [startMin, setStartMin] = useState<number>(0);
+  const [startHrs, setStartHrs] = useState<number>();
+  const [startMin, setStartMin] = useState<number>();
   const [startPeriod, setStartPeriod] = useState<'am' | 'pm'>('am');
 
-  const [endHrs, setEndHrs] = useState<number>(8);
-  const [endMin, setEndMin] = useState<number>(0);
+  const [endHrs, setEndHrs] = useState<number>();
+  const [endMin, setEndMin] = useState<number>();
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
 
   const startString = useMemo(() => {
@@ -51,24 +52,21 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const overlapping = useMemo(() => {
     if (startValue === undefined || endValue === undefined) return;
 
-    return [...slices, ...addSlices].some(({start_time, end_time}) => {
+    return newSlices.some(({start_time, end_time}) => {
       const sliceStart = Number(start_time.split(':').join(''));
       const sliceEnd = Number(end_time.split(':').join(''));
 
-      return inRange([startValue, endValue], sliceStart, false) || inRange([startValue, endValue], sliceEnd, false)
-        || inRange([sliceStart, sliceEnd], startValue, false) || inRange([sliceStart, sliceEnd], endValue, false);
+      return (inRange([startValue, endValue], sliceStart, false) || inRange([startValue, endValue], sliceEnd, false)
+        || inRange([sliceStart, sliceEnd], startValue, false) || inRange([sliceStart, sliceEnd], endValue, false))
+      || (sliceStart === startValue && sliceEnd === endValue);
     })
-  }, [addSlices, endValue, slices, startValue]);
+  }, [endValue, newSlices, startValue]);
 
   const sortedSlices = useMemo(() => 
-    [...slices, ...addSlices]
+    newSlices
     .sort((a, b) => 
       Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join('')))
-  , [addSlices, slices]);
-
-  console.log(startValue);
-  console.log(endValue);
-  console.log(overlapping);
+  , [newSlices]);
 
   return (
     <Modal
@@ -79,11 +77,12 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       <Modal.Header>Set Availability</Modal.Header>
         <div className={styles.availabilityForm}>
           <p>Booking Hours for {day}</p>
-          {sortedSlices.map(slice => (
+          {sortedSlices.length ? sortedSlices.map(slice => (
             <div key={slice.start_time} className={styles.formSlice}>
               <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
+              <BsTrash3 className={styles.removeSlice} onClick={() => setNewSlices(p => p.filter(sl => sl.start_time !== slice.start_time))} />
             </div>
-          ))}
+          )) : <p style={{fontWeight: 300, fontSize: 14}}>None</p>}
           <div className={styles.periodSelect}>
             <p>Period Start:</p>
             <div className={styles.timeSelect}>

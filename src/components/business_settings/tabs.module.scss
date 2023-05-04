@@ -272,9 +272,42 @@
 }
 
 .formSlice {
+  text-align: center;
+  position: relative;
+
+  margin: 4px 0;
+  padding: 12px;
+
+  border: 1px solid rgba(128, 128, 128, 0.193);
+  border-radius: 8px;
+
+  width: 100%;
+
   font-size: 14px;
   font-weight: 300;
-  margin: 8px 0;
+}
+
+.removeSlice {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  height: 100%;
+  width: 15px;
+
+  color: red;
+  
+  cursor: pointer;
+  opacity: 0.6;
+  scale: 0.9;
+
+  
+  transition: opacity 200ms, scale 200ms, rotate 200ms;
+
+  &:hover {
+    opacity: 1;
+    scale: 1.2;
+    rotate: 5deg;
+  }
 }
 
 .addSlice {
