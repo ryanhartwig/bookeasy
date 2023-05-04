@@ -9,9 +9,10 @@ interface PeriodSelectFormProps {
   onClose: (...args: any) => any,
   initialValue: number,
   setTotal: React.Dispatch<React.SetStateAction<number | undefined>>,
+  loading: boolean,
 }
 
-export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose, initialValue, setTotal}) => {
+export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose, initialValue, setTotal, loading}) => {
 
   const [months, setMonths] = useState<number>(0);
   const [weeks, setWeeks] = useState<number>(0);
@@ -36,6 +37,7 @@ export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose
       onClose={onClose} 
       onAction={onSubmit}
       actionButtonText="Confirm"
+      loading={loading}
     >
       <Modal.Header>Select Time Period</Modal.Header>
       <div className={styles.periodSelect}>

@@ -9,26 +9,50 @@ import { Input } from '../UI/Input/Input';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { formatPrefPeriod } from '@/utility/functions/formatting/formatPrefPeriod';
 import { PeriodSelectForm } from './PeriodSelectForm';
+import { useMutation } from '@apollo/client';
+import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
+import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
+  userId: string,
 }
 
-export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) => {
+export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, userId}) => {
 
   const [initialValue, setInitialValue] = useState<number>();
   const [total, setTotal] = useState<number>();
-  const [updateProperty, setUpdateProperty] = useState<string>();
+  const [updateProperty, setUpdateProperty] = useState<string>('');
 
   console.log('init: ', initialValue);
   console.log('total: ', total);
 
+  const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
+    refetchQueries: [{
+      query: GET_USER_OWN_BUSINESS,
+      variables: {
+        userId
+      }
+    }]
+  });
+
   // If total is truthy, form has been submitted
   useEffect(() => {
     if (!total) return;
+    updateBusinessPrefs({variables: { 
+      patch: {
+        [updateProperty]: total.toString()
+      }, 
+      businessId: business.id 
+    }});
+  }, [business.id, total, updateBusinessPrefs, updateProperty]);
 
-    
-  }, [total]);
+  // On mutation complete
+  useEffect(() => {
+    if (loading || !data) return;
+    setInitialValue(undefined);
+    setTotal(undefined);
+  }, [data, loading]);
 
   const onEdit = useCallback((init: string, property: string) => {
     setInitialValue(Number(init));
@@ -60,6 +84,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business}) =>
           onClose={() => { setInitialValue(undefined); setTotal(undefined); }} 
           initialValue={initialValue} 
           setTotal={setTotal} 
+          loading={loading}
         />
       }
     </div>
