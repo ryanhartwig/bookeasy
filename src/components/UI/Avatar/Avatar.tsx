@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
