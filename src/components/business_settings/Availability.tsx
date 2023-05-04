@@ -2,6 +2,7 @@
 
 import { Setting } from '@/components/UI/Setting/Setting';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
+import { weekDays } from '@/utility/data/days';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
 import { useMemo, useState } from 'react';
 import { AvailabilityForm } from './AvailabilityForm';
@@ -30,9 +31,8 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
   }, [availabilitySlices]);
 
   const slices = useMemo(() => {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     
-    return days.map((d, i) => (
+    return weekDays.map((d, i) => (
       <Setting label={d} key={d} onAction={() => setFormSlices(availability.get(i) ?? [])}>
         {availability.get(i) ? (availability.get(i) ?? []).map((slice) => {
           return <div key={slice.start_time}>
@@ -49,7 +49,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
         <p>Bookable Hours</p>
       </div>
       {slices}
-      <AvailabilityForm open={true} onClose={() =>{}} slices={[]} />
+      {availability.get(0) && <AvailabilityForm day={weekDays[0]} open={true} onClose={() =>{}} slices={availability.get(0)!} />}
     </div>
   )
 }
