@@ -53,6 +53,7 @@ export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose
       onClose={onClose} 
       onAction={onSubmit}
       actionButtonText="Confirm"
+      actionCloses
       loading={loading}
     >
       <Modal.Header>Select Time Period</Modal.Header>

@@ -27,15 +27,13 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: [{
       query: GET_USER_OWN_BUSINESS,
-      variables: {
-        userId
-      }
+      variables: { userId }
     }]
   });
 
   // If total is truthy, form has been submitted
   useEffect(() => {
-    if (!total) return;
+    if (total === undefined) return;
     updateBusinessPrefs({variables: { 
       patch: { [updateProperty]: total.toString() }, 
       businessId: business.id ,
@@ -61,21 +59,25 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
       </div>
       <div className={styles.settings}>
         <Setting label="Minimum Book Ahead" onAction={() => onEdit(business.min_booking_notice, 'min_booking_notice')} >
-          <p>{business.min_booking_notice ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
+          <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
         </Setting>
         <Setting label="Maximum Book Ahead" onAction={() => onEdit(business.max_book_ahead, 'max_book_ahead')} >
-          <p>{business.max_book_ahead ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
+          <p>{Number(business.max_book_ahead) ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
         </Setting>
         <Setting label="Minimum Cancellation Notice" onAction={() => onEdit(business.min_cancel_notice, 'min_cancel_notice')} >
-          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
+          <p>{Number(business.min_cancel_notice) ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting>
         {/* <Setting label="Booking Site Url" onAction={() => setInitialValue(Number(business.min_cancel_notice))}>
           <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting> */}
+
+        {Number(business.min_booking_notice) >= Number(business.max_book_ahead) && 
+          <p className={styles.bookingWarning}>* minimum book ahead is greater than or equal to maximum book ahead, preventing client bookings</p>
+        }
       </div>
-      {initialValue && 
+      {initialValue !== undefined && 
         <PeriodSelectForm 
-          open={!!initialValue} 
+          open={initialValue !== undefined} 
           onClose={() => { setInitialValue(undefined); setTotal(undefined); }} 
           initialValue={initialValue} 
           setTotal={setTotal} 
