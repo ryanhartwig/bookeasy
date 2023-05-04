@@ -311,28 +311,45 @@
 }
 
 .addSlice {
-  width: fit-content;
-  border: 1px solid rgb(93, 96, 106);
-  border-radius: 1000px;
-  padding: 6px 19px;
-  font-size: 11px;
+  width: 50%;
+  border: 1px solid rgba(93, 96, 106, 0.343);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 300;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
-  margin-bottom:9px;
+  margin-top: 25px;
+  margin-bottom: 9px;
 
-
-  cursor: pointer;
+  position: relative;
 
   opacity: 0.6;
-  transition: opacity 200ms;
+  transition: opacity 200ms, scale 200ms;
+ 
 
-  &:hover {
-    opacity: 1;
+  > *:first-child {
+    position: absolute;
+    left: 15px; 
+    width: 17px;
+    height: 100%;
+    top: 0;
   }
 
   @include globalutil.light_shadow;
+}
+
+.addSlice.valid {
+  opacity: 0.8;
+  cursor: pointer;
+  color: rgba(2, 45, 2);
+  border-color: rgba(2, 45, 2, 0.2);
+
+  &:hover {
+    opacity: 1;
+    scale: 1.02;
+  }
 }
 
 .periodSelect {

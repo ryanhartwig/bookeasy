@@ -12,6 +12,12 @@ import { Modal } from "../UI/Modal/Modal";
 import { Select } from "../UI/Select/Select";
 import styles from './tabs.module.scss';
 
+import { IoAddCircle } from 'react-icons/io5';
+import { IoMdCheckmark } from 'react-icons/io';
+import { RxCross2 } from 'react-icons/rx';
+import clsx from "clsx";
+
+
 interface AvailabilityFormProps {
   open: boolean,
   onClose: (...args: any) => any,
@@ -23,12 +29,16 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
 
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
-  const [startHrs, setStartHrs] = useState<number>();
-  const [startMin, setStartMin] = useState<number>();
+  // const totalTime = useMemo(() => newSlices.reduce((a, b) => a + (Number(b.end_time.split(':').join('')) - Number(b.start_time.split(':').join(''))), 0), [newSlices]);
+  // const [hr, x, y] = totalTime.toString().split('');
+  // const min = Number(x + y) / 60;
+
+  const [startHrs, setStartHrs] = useState<number>(5);
+  const [startMin, setStartMin] = useState<number>(0);
   const [startPeriod, setStartPeriod] = useState<'am' | 'pm'>('am');
 
-  const [endHrs, setEndHrs] = useState<number>();
-  const [endMin, setEndMin] = useState<number>();
+  const [endHrs, setEndHrs] = useState<number>(6);
+  const [endMin, setEndMin] = useState<number>(0);
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
 
   const startString = useMemo(() => {
@@ -61,6 +71,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       || (sliceStart === startValue && sliceEnd === endValue);
     })
   }, [endValue, newSlices, startValue]);
+  const invalidValues = useMemo(() => startValue !== undefined && endValue !== undefined && startValue >= endValue, [endValue, startValue]);
+  const canSubmit = useMemo(() => startValue && endValue && !invalidValues && !overlapping, [endValue, invalidValues, overlapping, startValue]);
 
   const sortedSlices = useMemo(() => 
     newSlices
@@ -98,12 +110,16 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <Select list={MinutesList(setEndMin)} selected={<p>{endMin === 0 ? '00' : endMin}</p>} placeholder="min" hasSelected={endMin !== undefined} />
               <Select list={PeriodList(setEndPeriod)} selected={<p>{endPeriod}</p>} hasSelected />
             </div>
-            <div className={styles.addSlice}>
-              <AiOutlinePlus fontSize={11} style={{marginRight: 12}} />
+            <div className={clsx(styles.addSlice, {[styles.valid]: canSubmit})}>
+              {/* <AiOutlinePlus fontSize={11} style={{marginRight: 12}} /> */}
+              {canSubmit
+                ? <IoMdCheckmark />
+                : <RxCross2 />
+              }
               <p>Add period</p>
             </div>
             {overlapping && <p className={styles.warning}>* booking periods can not overlap</p>}
-            {startValue !== undefined && endValue !== undefined && startValue >= endValue && <p className={styles.warning}>* starting period must be less then ending period</p>}
+            {invalidValues && <p className={styles.warning}>* starting period must be less then ending period</p>}
           </div>
           
         </div>
