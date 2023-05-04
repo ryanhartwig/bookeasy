@@ -3,7 +3,7 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './tabs.module.scss';
 
 interface AvailabilityProps {
@@ -11,15 +11,16 @@ interface AvailabilityProps {
 }
 
 export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) => {
+  const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
+  
   const availability = useMemo(() => {
-    const map = new Map<number, {start: string, end: string}[]>();
+    const map = new Map<number, AvailabilitySlice[]>();
 
     availabilitySlices.forEach(slice => {
       map.set(slice.day, 
-        (map.get(slice.day) ?? [])
-          .concat([{ start: slice.start_time, end: slice.end_time }])
+        [...(map.get(slice.day) ?? []), slice]
           .sort((a, b) => 
-            Number(a.start.split(':').join('')) - Number(b.start.split(':').join(''))
+            Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join(''))
           )
       );
     });
@@ -31,11 +32,10 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     
     return days.map((d, i) => (
-      <Setting label={d} key={d}>
-        
-        {availability.get(i) ? (availability.get(i) ?? []).map(({start, end}: {start: string, end: string}) => {
-          return <div key={start}>
-            <p>{formatMilitaryTime(start)} - {formatMilitaryTime(end)}</p>
+      <Setting label={d} key={d} onAction={() => setFormSlices(availability.get(i) ?? [])}>
+        {availability.get(i) ? (availability.get(i) ?? []).map((slice) => {
+          return <div key={slice.start_time}>
+            <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
           </div>
         }) : <p>None</p>}
       </Setting>
