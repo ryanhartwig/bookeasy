@@ -55,10 +55,13 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       const sliceStart = Number(start_time.split(':').join(''));
       const sliceEnd = Number(end_time.split(':').join(''));
 
-      return inRange([startValue, endValue], sliceStart) || inRange([startValue, endValue], sliceEnd);
+      return inRange([startValue, endValue], sliceStart) || inRange([startValue, endValue], sliceEnd)
+        || inRange([sliceStart, sliceEnd], startValue) || inRange([sliceStart, sliceEnd], endValue);
     })
   }, [addSlices, endValue, slices, startValue]);
 
+
+  console.log('overlpas: ', overlapping);
 
   const sortedSlices = useMemo(() => 
     [...slices, ...addSlices]
