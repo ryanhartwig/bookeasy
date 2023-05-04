@@ -1,4 +1,5 @@
 import { AvailabilitySlice } from "@/types/BaseAvailability";
+import { inRange } from "@/utility/functions/dateRanges/inRange";
 import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitaryTime";
 import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
 import React, { useMemo, useState } from "react";
@@ -33,13 +34,31 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     if (!startHrs || startMin === undefined) return;
     return formatPeriodToMilitary(startHrs, startMin, startPeriod);
   }, [startHrs, startMin, startPeriod]);
+  const startValue = useMemo(() => {
+    if (!startString) return;
+    return Number(startString.split(':').join(''));
+  },[startString]);
   
   const endString = useMemo(() => {
     if (!endHrs || endMin === undefined) return;
     return formatPeriodToMilitary(endHrs, endMin, endPeriod);
   }, [endHrs, endMin, endPeriod]);
+  const endValue = useMemo(() => {
+    if (!endString) return;
+    return Number(endString.split(':').join(''));
+  },[endString]);
 
-  console.log(startString, endString);
+  const overlapping = useMemo(() => {
+    if (!startValue || !endValue) return;
+
+    return [...slices, ...addSlices].some(({start_time, end_time}) => {
+      const sliceStart = Number(start_time.split(':').join(''));
+      const sliceEnd = Number(end_time.split(':').join(''));
+
+      return inRange([startValue, endValue], sliceStart) || inRange([startValue, endValue], sliceEnd);
+    })
+  }, [addSlices, endValue, slices, startValue]);
+
 
   const sortedSlices = useMemo(() => 
     [...slices, ...addSlices]

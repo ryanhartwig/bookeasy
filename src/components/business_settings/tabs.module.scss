@@ -303,9 +303,12 @@
 }
 
 .periodSelect {
+  border-top: 2px solid grey;
+  border-bottom: 1px solid rgba(188, 182, 182, 0.338);
+
   margin-top: 20px;
   padding: 15px 0;
-  background: rgba(21, 37, 68, 0.255);
+  background: rgba(21, 37, 68, 0.158);
 
   > p {
     margin: 10px 0;
