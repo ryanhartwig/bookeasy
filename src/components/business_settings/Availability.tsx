@@ -4,6 +4,7 @@ import { Setting } from '@/components/UI/Setting/Setting';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
 import { useMemo, useState } from 'react';
+import { AvailabilityForm } from './AvailabilityForm';
 import styles from './tabs.module.scss';
 
 interface AvailabilityProps {
@@ -48,6 +49,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
         <p>Bookable Hours</p>
       </div>
       {slices}
+      <AvailabilityForm open={true} onClose={() =>{}} slices={[]} />
     </div>
   )
 }
