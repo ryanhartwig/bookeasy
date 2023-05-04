@@ -44,3 +44,5 @@ export const GET_USER_OWN_BUSINESS = gql`
     }
   }
 `;
+
+export const SET_USER_AVAILABILITY = gql``;

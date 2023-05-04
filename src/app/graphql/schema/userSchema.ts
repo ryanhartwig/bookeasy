@@ -56,6 +56,21 @@ export const userResolvers = {
       }
     },
   },
+  Mutation: {
+    setUserAvailability: async (_: any, args: any) => {
+      const { user_id, business_id, day, slices} = args;
+
+      // Remove existing slices for current day
+      await db.query('delete from availability_slice where user_id = $1 and business_id = $2 and day = $3', [user_id, business_id, day]);
+
+      for (const slice of slices) {
+        const { start_time, end_time } = slice;
+        const response = await db.query('insert into availability_slice values ($1, $2, $3, $4, $5)', [user_id, business_id, day, start_time, end_time]);
+      }
+
+      return user_id;
+    },
+  }
 }
 
 export const userTypeDefs = `#graphql
@@ -64,5 +79,17 @@ export const userTypeDefs = `#graphql
     getUserBusinesses(user_id: ID!): [Business!]!,
     getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
     getUserOwnBusiness(user_id: ID!): Business!,
+  }
+
+  input AvailabilitySliceInput {
+    user_id: String!,
+    business_id: String!,
+    day: Int!,
+    start_time: String!,
+    end_time: String!,
+  }
+
+  type Mutation {
+    setUserAvailability(user_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
   }
 `;
