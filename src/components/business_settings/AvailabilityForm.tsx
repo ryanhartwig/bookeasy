@@ -2,7 +2,7 @@ import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { inRange } from "@/utility/functions/dateRanges/inRange";
 import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitaryTime";
 import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import { HoursList } from "../SelectLists/Hours";
 import { MinutesList } from "../SelectLists/Minutes";
@@ -15,6 +15,9 @@ import { IoMdCheckmark } from 'react-icons/io';
 import { RxCross2 } from 'react-icons/rx';
 import clsx from "clsx";
 import { weekDays } from "@/utility/data/days";
+import { useMutation } from "@apollo/client";
+import { SET_USER_AVAILABILITY } from "@/utility/queries/userQueries";
+import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 
 
 interface AvailabilityFormProps {
@@ -52,6 +55,15 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const [endHrs, setEndHrs] = useState<number>();
   const [endMin, setEndMin] = useState<number>();
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
+
+  const [setUserAvailability, { data, loading }] = useMutation(SET_USER_AVAILABILITY, {
+    refetchQueries: [{
+      query: GET_USER_AVAILABILITY,
+      variables: {
+        userId,
+      }
+    }]
+  });
 
 
 
@@ -101,7 +113,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       business_id: businessId,
       day,
       start_time: startString,
-      end_time: endString
+      end_time: endString,
     }
 
     setStartHrs(undefined);
@@ -114,11 +126,23 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     setNewSlices(p => [...p, slice]);
   }, [businessId, canSubmit, day, endString, startString]);
 
+  const onSubmit = useCallback(() => {
+    setUserAvailability({variables: { userId, businessId, day, slices: newSlices.map(s => ({...s, user_id: userId, __typename: undefined})) }})
+  }, [businessId, day, newSlices, setUserAvailability, userId]);
+
+  useEffect(() => {
+    if (!data || loading) return;
+    onClose();
+  }, [data, loading, onClose]);
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       actionButtonText="Save"
+      actionCloses
+      onAction={onSubmit}
+      loading={loading}
     >
       <Modal.Header>Set Availability</Modal.Header>
         <div className={styles.availabilityForm}>
@@ -146,7 +170,6 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <Select list={PeriodList(setEndPeriod)} selected={<p>{endPeriod}</p>} hasSelected />
             </div>
             <div className={clsx(styles.addSlice, {[styles.valid]: canSubmit})} onClick={onAddSlice}>
-              {/* <AiOutlinePlus fontSize={11} style={{marginRight: 12}} /> */}
               {canSubmit
                 ? <IoMdCheckmark />
                 : <RxCross2 />

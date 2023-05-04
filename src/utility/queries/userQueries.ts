@@ -45,4 +45,8 @@ export const GET_USER_OWN_BUSINESS = gql`
   }
 `;
 
-export const SET_USER_AVAILABILITY = gql``;
+export const SET_USER_AVAILABILITY = gql`
+  mutation($userId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
+    setUserAvailability(user_id: $userId, business_id: $businessId, day: $day, slices: $slices)
+  }
+`;
