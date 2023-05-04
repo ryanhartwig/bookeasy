@@ -2,7 +2,7 @@ import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { inRange } from "@/utility/functions/dateRanges/inRange";
 import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitaryTime";
 import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import { HoursList } from "../SelectLists/Hours";
 import { MinutesList } from "../SelectLists/Minutes";
@@ -65,6 +65,9 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     }]
   });
 
+
+  
+  useEffect(() => {}, []);
 
 
   const startString = useMemo(() => {
@@ -145,14 +148,16 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       loading={loading}
     >
       <Modal.Header>Set Availability</Modal.Header>
-        <div className={styles.availabilityForm}>
+        <div className={styles.availabilityForm} >
           <p>Booking hours for {weekDays[day]}</p>
+          {/* Must wrap to prevent clickout */}
           {sortedSlices.length ? sortedSlices.map(slice => (
             <div key={slice.start_time} className={styles.formSlice}>
               <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
-              <BsTrash3 className={styles.removeSlice} onClick={() => setNewSlices(p => p.filter(sl => sl.start_time !== slice.start_time))} />
+              <BsTrash3 className={styles.removeSlice} onClick={() => setTimeout(() => setNewSlices(p => p.filter(sl => sl.start_time !== slice.start_time)), 1)} /> {/* Timeout prevents useClickout race */}
             </div>
           )) : <p style={{fontWeight: 300, fontSize: 14}}>None</p>}
+          
           <p style={{fontWeight: 300, fontSize: 14, marginTop: 15}}>Total: {hr ? `${hr}h`:''} {min ? `${min}m`:''}</p>
           <div className={styles.periodSelect}>
             <p>Period Start:</p>
