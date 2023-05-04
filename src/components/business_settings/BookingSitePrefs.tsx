@@ -24,9 +24,6 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const [total, setTotal] = useState<number>();
   const [updateProperty, setUpdateProperty] = useState<string>('');
 
-  console.log('init: ', initialValue);
-  console.log('total: ', total);
-
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: [{
       query: GET_USER_OWN_BUSINESS,
@@ -40,10 +37,8 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   useEffect(() => {
     if (!total) return;
     updateBusinessPrefs({variables: { 
-      patch: {
-        [updateProperty]: total.toString()
-      }, 
-      businessId: business.id 
+      patch: { [updateProperty]: total.toString() }, 
+      businessId: business.id ,
     }});
   }, [business.id, total, updateBusinessPrefs, updateProperty]);
 

@@ -28,6 +28,22 @@ export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose
     setHours(hours);    
   }, [initialValue]);
 
+  // Cycle period values
+  useEffect(() => {
+    if (hours === 24) {
+      setHours(0);
+      setDays(p => p + 1);
+    }
+    if (days === 7) {
+      setDays(0);
+      setWeeks(p => p + 1);
+    }
+    if (weeks === 4) {
+      setWeeks(0);
+      setMonths(p => p + 1);
+    }
+  }, [days, hours, weeks]);
+
   const onSubmit = useCallback(() => {
     setTotal(months * month + weeks * week + days * day + hours * hour);
   }, [days, hours, months, setTotal, weeks]);
