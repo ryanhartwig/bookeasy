@@ -272,19 +272,22 @@
 
 .formSlice {
   font-size: 14px;
+  font-weight: 300;
   margin: 8px 0;
 }
 
 .addSlice {
-  width: 31px;
-  height: 31px;
-  border: 1px solid rgb(21, 52, 190);
-  color: rgb(21, 52, 190);
-  border-radius: 50%;
+  width: fit-content;
+  border: 1px solid rgb(93, 96, 106);
+  border-radius: 1000px;
+  padding: 6px 19px;
+  font-size: 11px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 7px;
+  margin-top: 15px;
+  margin-bottom:9px;
+
 
   cursor: pointer;
 
@@ -295,7 +298,5 @@
     opacity: 1;
   }
 
-  
-  
   @include globalutil.light_shadow;
 }

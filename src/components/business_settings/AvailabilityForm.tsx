@@ -38,7 +38,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
             </div>
           ))}
           <div className={styles.addSlice}>
-            <AiOutlinePlus fontSize={13}/>
+            <AiOutlinePlus fontSize={11} style={{marginRight: 12}} />
+            <p>Add period</p>
           </div>
         </div>
     </Modal>
