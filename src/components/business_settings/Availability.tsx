@@ -10,9 +10,10 @@ import styles from './tabs.module.scss';
 
 interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
+  businessId: string,
 }
 
-export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) => {
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, businessId}) => {
   const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
   
   const availability = useMemo(() => {
@@ -49,7 +50,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices}) 
         <p>Bookable Hours</p>
       </div>
       {slices}
-      {availability.get(0) && <AvailabilityForm day={weekDays[0]} open={true} onClose={() =>{}} slices={availability.get(0)!} />}
+      {availability.get(0) && <AvailabilityForm businessId={businessId} day={0} open={true} onClose={() =>{}} slices={availability.get(0)!} />}
     </div>
   )
 }

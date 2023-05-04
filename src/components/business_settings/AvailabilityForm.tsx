@@ -2,8 +2,7 @@ import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { inRange } from "@/utility/functions/dateRanges/inRange";
 import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitaryTime";
 import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
-import React, { useMemo, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import React, { useCallback, useMemo, useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import { HoursList } from "../SelectLists/Hours";
 import { MinutesList } from "../SelectLists/Minutes";
@@ -12,20 +11,21 @@ import { Modal } from "../UI/Modal/Modal";
 import { Select } from "../UI/Select/Select";
 import styles from './tabs.module.scss';
 
-import { IoAddCircle } from 'react-icons/io5';
 import { IoMdCheckmark } from 'react-icons/io';
 import { RxCross2 } from 'react-icons/rx';
 import clsx from "clsx";
+import { weekDays } from "@/utility/data/days";
 
 
 interface AvailabilityFormProps {
   open: boolean,
   onClose: (...args: any) => any,
   slices: AvailabilitySlice[],
-  day: string,
+  businessId: string,
+  day: number,
 }
 
-export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, day}) => {
+export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, businessId, day}) => {
 
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
@@ -33,12 +33,12 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   // const [hr, x, y] = totalTime.toString().split('');
   // const min = Number(x + y) / 60;
 
-  const [startHrs, setStartHrs] = useState<number>(5);
-  const [startMin, setStartMin] = useState<number>(0);
+  const [startHrs, setStartHrs] = useState<number>();
+  const [startMin, setStartMin] = useState<number>();
   const [startPeriod, setStartPeriod] = useState<'am' | 'pm'>('am');
 
-  const [endHrs, setEndHrs] = useState<number>(6);
-  const [endMin, setEndMin] = useState<number>(0);
+  const [endHrs, setEndHrs] = useState<number>();
+  const [endMin, setEndMin] = useState<number>();
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
 
   const startString = useMemo(() => {
@@ -80,6 +80,26 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join('')))
   , [newSlices]);
 
+  const onAddSlice = useCallback(() => {
+    if (!canSubmit || !startString || !endString) return;
+
+    const slice: AvailabilitySlice = {
+      business_id: businessId,
+      day,
+      start_time: startString,
+      end_time: endString
+    }
+
+    setStartHrs(undefined);
+    setStartMin(undefined);
+    setStartPeriod('am');
+    setEndHrs(undefined);
+    setEndMin(undefined);
+    setEndPeriod('am');
+
+    setNewSlices(p => [...p, slice]);
+  }, [businessId, canSubmit, day, endString, startString]);
+
   return (
     <Modal
       open={open}
@@ -88,7 +108,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     >
       <Modal.Header>Set Availability</Modal.Header>
         <div className={styles.availabilityForm}>
-          <p>Booking Hours for {day}</p>
+          <p>Booking Hours for {weekDays[day]}</p>
           {sortedSlices.length ? sortedSlices.map(slice => (
             <div key={slice.start_time} className={styles.formSlice}>
               <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
@@ -110,7 +130,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <Select list={MinutesList(setEndMin)} selected={<p>{endMin === 0 ? '00' : endMin}</p>} placeholder="min" hasSelected={endMin !== undefined} />
               <Select list={PeriodList(setEndPeriod)} selected={<p>{endPeriod}</p>} hasSelected />
             </div>
-            <div className={clsx(styles.addSlice, {[styles.valid]: canSubmit})}>
+            <div className={clsx(styles.addSlice, {[styles.valid]: canSubmit})} onClick={onAddSlice}>
               {/* <AiOutlinePlus fontSize={11} style={{marginRight: 12}} /> */}
               {canSubmit
                 ? <IoMdCheckmark />
