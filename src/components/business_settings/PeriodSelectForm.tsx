@@ -1,5 +1,5 @@
-import { formatPrefPeriod } from "@/utility/functions/formatting/formatPrefPeriod";
-import { useEffect, useState } from "react";
+import { day, formatPrefPeriod, hour, month, week } from "@/utility/functions/formatting/formatPrefPeriod";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { Modal } from "../UI/Modal/Modal";
 import styles from './tabs.module.scss';
@@ -8,9 +8,10 @@ interface PeriodSelectFormProps {
   open: boolean,
   onClose: (...args: any) => any,
   initialValue: number,
+  setTotal: React.Dispatch<React.SetStateAction<number | undefined>>,
 }
 
-export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose, initialValue}) => {
+export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose, initialValue, setTotal}) => {
 
   const [months, setMonths] = useState<number>(0);
   const [weeks, setWeeks] = useState<number>(0);
@@ -26,8 +27,16 @@ export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose
     setHours(hours);    
   }, [initialValue]);
 
+  const onSubmit = useCallback(() => {
+    setTotal(months * month + weeks * week + days * day + hours * hour);
+  }, [days, hours, months, setTotal, weeks]);
+
   return (
-    <Modal open={open} onClose={onClose} >
+    <Modal open={open} 
+      onClose={onClose} 
+      onAction={onSubmit}
+      actionButtonText="Confirm"
+    >
       <Modal.Header>Select Time Period</Modal.Header>
       <div className={styles.periodSelect}>
         <p>Months</p>

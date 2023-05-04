@@ -19,7 +19,6 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
   const [businessPhone, setBusinessPhone] = useState<string>('');
   const [businessAvatar, setBusinessAvatar] = useState<string>('');
 
-  
   const [updateBusinessPrefs, { 
     data: updateBusinessPrefsData, 
     loading: updateBusinessPrefsLoading,
@@ -66,7 +65,6 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>
-      
     </div>
   )
 } 

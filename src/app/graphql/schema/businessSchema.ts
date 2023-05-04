@@ -114,30 +114,44 @@ export const businessResolvers = {
   },
   Mutation: {
     updateBusinessPrefs: async (_: any, args: any) => {
-      const { name, email, phone, avatar } = args.patch;
-      if (!name && !email && !phone && !avatar) throwGQLError('Must provide at least one argument to update');
+      const { name, email, phone, avatar, min_booking_notice, max_book_ahead, min_cancel_notice } = args.patch;
+      if (!name && !email && !phone && !avatar && !min_booking_notice && !max_book_ahead && !min_cancel_notice) {
+        throwGQLError('Must provide at least one argument to update');
+      }
 
       const { business_id } = args;
 
       let query = 'update business set';
       const params = [business_id];
 
-      // Only one of the following properties will be provided
+      // Only one of the following properties will be provided & patched
       if (name) {
         query += ' name = $2 where id = $1 returning id';
         params.push(name);
       }
-      if (email) {
+      else if (email) {
         query += ' email = $2 where id = $1 returning id';
         params.push(email);
       }
-      if (phone) {
+      else if (phone) {
         query += ' phone = $2 where id = $1 returning id';
         params.push(phone);
       }
-      if (avatar) {
+      else if (avatar) {
         query += ' avatar = $2 where id = $1 returning id';
         params.push(avatar);
+      }
+      else if (min_booking_notice) {
+        query += ' min_booking_notice = $2 where id = $1 returning id';
+        params.push(min_booking_notice);
+      }
+      else if (max_book_ahead) {
+        query += ' max_book_ahead = $2 where id = $1 returning id';
+        params.push(max_book_ahead);
+      }
+      else if (min_cancel_notice) {
+        query += ' min_cancel_notice = $2 where id = $1 returning id';
+        params.push(min_cancel_notice);
       }
 
       const response = await db.query(query, params);
@@ -153,6 +167,9 @@ export const businessTypeDefs = `#graphql
     email: String,
     phone: String,
     avatar: String,
+    min_booking_notice: String,
+    max_book_ahead: String,
+    min_cancel_notice: String,
   }
 
   type Query {
