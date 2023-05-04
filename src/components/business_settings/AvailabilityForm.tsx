@@ -25,13 +25,24 @@ interface AvailabilityFormProps {
   day: number,
 }
 
+const convertTotalTime = (total: number) => {
+  let [hr, x, y, z] = total.toString().split('');
+  if (z) {
+    hr = `${hr}${x}`;
+    [x, y] = [y, z];
+  }
+  const min = Number(x + y);
+
+  return [hr, min];
+}
+
 export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, businessId, day}) => {
 
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
-  // const totalTime = useMemo(() => newSlices.reduce((a, b) => a + (Number(b.end_time.split(':').join('')) - Number(b.start_time.split(':').join(''))), 0), [newSlices]);
-  // const [hr, x, y] = totalTime.toString().split('');
-  // const min = Number(x + y) / 60;
+  const totalTime = useMemo(() => newSlices.reduce((a, b) => a + (Number(b.end_time.split(':').join('')) - Number(b.start_time.split(':').join(''))), 0), [newSlices]);
+  // Used for total accumulative booking hours metric
+  const [hr, min] = useMemo(() => convertTotalTime(totalTime), [totalTime]);
 
   const [startHrs, setStartHrs] = useState<number>();
   const [startMin, setStartMin] = useState<number>();
@@ -115,6 +126,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <BsTrash3 className={styles.removeSlice} onClick={() => setNewSlices(p => p.filter(sl => sl.start_time !== slice.start_time))} />
             </div>
           )) : <p style={{fontWeight: 300, fontSize: 14}}>None</p>}
+          <p style={{fontWeight: 300, fontSize: 14, marginTop: 15}}>Total: {hr ? `${hr}h`:''} {min ? `${min}m`:''}</p>
           <div className={styles.periodSelect}>
             <p>Period Start:</p>
             <div className={styles.timeSelect}>
