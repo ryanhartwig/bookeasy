@@ -262,6 +262,7 @@
   align-items: center;
 
   padding: 15px;
+  padding-bottom: 0;
 
   // Weekday Name
   > p:first-child {
@@ -299,4 +300,44 @@
   }
 
   @include globalutil.light_shadow;
+}
+
+.periodSelect {
+  margin-top: 20px;
+  padding: 15px 0;
+  background: rgba(21, 37, 68, 0.255);
+
+  > p {
+    margin: 10px 0;
+    font-size: 12px;
+    font-weight: 300;
+
+    &:first-child { margin-top: 0 }
+  }
+}
+
+.timeSelect {
+  display: flex;
+  align-items: center;
+
+  width: 65%;
+
+  > * {
+    margin: 0 2px;
+
+    flex-shrink: 1;
+    flex-grow: 1;
+    
+    &:first-child { 
+      margin-left: 0;
+      flex-basis: 340px;
+    }
+    &:nth-child(3) {
+      flex-basis: 400px;
+    }
+    &:last-child { 
+      margin-right: 0;
+      flex-basis: 400px;
+    }
+  }
 }

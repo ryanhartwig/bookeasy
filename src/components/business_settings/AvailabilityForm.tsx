@@ -1,8 +1,13 @@
 import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { formatMilitaryTime } from "@/utility/functions/formatting/formatMilitaryTime";
+import { formatPeriodToMilitary } from "@/utility/functions/formatting/formatPeriodToMilitary";
 import React, { useMemo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+import { HoursList } from "../SelectLists/Hours";
+import { MinutesList } from "../SelectLists/Minutes";
+import { PeriodList } from "../SelectLists/Period";
 import { Modal } from "../UI/Modal/Modal";
+import { Select } from "../UI/Select/Select";
 import styles from './tabs.module.scss';
 
 interface AvailabilityFormProps {
@@ -15,6 +20,26 @@ interface AvailabilityFormProps {
 export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, day}) => {
 
   const [addSlices, setAddSlices] = useState<AvailabilitySlice[]>([]);
+
+  const [startHrs, setStartHrs] = useState<number>();
+  const [startMin, setStartMin] = useState<number>();
+  const [startPeriod, setStartPeriod] = useState<'am' | 'pm'>('am');
+
+  const [endHrs, setEndHrs] = useState<number>();
+  const [endMin, setEndMin] = useState<number>();
+  const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
+
+  const startString = useMemo(() => {
+    if (!startHrs || startMin === undefined) return;
+    return formatPeriodToMilitary(startHrs, startMin, startPeriod);
+  }, [startHrs, startMin, startPeriod]);
+  
+  const endString = useMemo(() => {
+    if (!endHrs || endMin === undefined) return;
+    return formatPeriodToMilitary(endHrs, endMin, endPeriod);
+  }, [endHrs, endMin, endPeriod]);
+
+  console.log(startString, endString);
 
   const sortedSlices = useMemo(() => 
     [...slices, ...addSlices]
@@ -37,10 +62,27 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
             </div>
           ))}
-          <div className={styles.addSlice}>
-            <AiOutlinePlus fontSize={11} style={{marginRight: 12}} />
-            <p>Add period</p>
+          <div className={styles.periodSelect}>
+            <p>Period Start:</p>
+            <div className={styles.timeSelect}>
+              <Select list={HoursList(setStartHrs)} selected={<p>{startHrs}</p> } placeholder="hr" hasSelected={!!startHrs} />
+              <p>:</p>
+              <Select list={MinutesList(setStartMin)} selected={<p>{startMin === 0 ? '00' : startMin}</p>} placeholder="min" hasSelected={startMin !== undefined} />
+              <Select list={PeriodList(setStartPeriod)} selected={<p>{startPeriod}</p>} hasSelected />
+            </div>
+            <p>Period End:</p>
+            <div className={styles.timeSelect}>
+              <Select list={HoursList(setEndHrs)} selected={<p>{endHrs}</p> } placeholder="hr" hasSelected={!!endHrs} />
+              <p>:</p>
+              <Select list={MinutesList(setEndMin)} selected={<p>{endMin === 0 ? '00' : endMin}</p>} placeholder="min" hasSelected={endMin !== undefined} />
+              <Select list={PeriodList(setEndPeriod)} selected={<p>{endPeriod}</p>} hasSelected />
+            </div>
+            <div className={styles.addSlice}>
+              <AiOutlinePlus fontSize={11} style={{marginRight: 12}} />
+              <p>Add period</p>
+            </div>
           </div>
+          
         </div>
     </Modal>
   )
