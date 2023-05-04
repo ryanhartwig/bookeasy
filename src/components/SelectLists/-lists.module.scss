@@ -1,0 +1,16 @@
+.option {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+
+  > * {
+    margin-right: 15px;
+  }
+  
+  transition: background-color 200ms;
+  
+  &:hover {
+    background: rgb(227, 227, 227);
+  }
+}

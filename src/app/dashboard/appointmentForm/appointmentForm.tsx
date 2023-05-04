@@ -24,6 +24,9 @@ import { FormService } from '@/types/Service';
 import { gql } from '@apollo/client';
 import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 import { Input } from '@/components/UI/Input/Input';
+import { HoursList } from '@/components/SelectLists/Hours';
+import { MinutesList } from '@/components/SelectLists/Minutes';
+import { PeriodList } from '@/components/SelectLists/Period';
 
 interface ClientBusiness {
   client: Client,
@@ -294,22 +297,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     : []
   , [servicesData]);
 
-  const hoursList = new Array(12).fill(0).map((_, i) => (
-    <div key={i} className={styles.option} onClick={() => setHours(i + 1)}>
-      <p>{i + 1}</p>
-    </div>
-  ));
-  const minList = new Array(4).fill(0).map((_, i) => (
-    <div key={i} className={styles.option} onClick={() => setMin(i * 15)}>
-      <p>{i * 15}</p>
-    </div>
-  ));
-  const periodList = new Array(2).fill(0).map((_, i) => (
-    <div key={i} className={styles.option} onClick={() => setPeriod(!i ? 'am' : 'pm')}>
-      <p>{!i ? 'am' : 'pm'}</p>
-    </div>
-  ));
-
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
@@ -348,10 +335,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>
-          <Select list={hoursList} selected={<p>{hours}</p> } placeholder="hr" hasSelected={!!hours} />
+          <Select list={HoursList(setHours)} selected={<p>{hours}</p> } placeholder="hr" hasSelected={!!hours} />
           <p>:</p>
-          <Select list={minList} selected={<p>{min === 0 ? '00' : min}</p>} placeholder="min" hasSelected={min !== undefined} />
-          <Select list={periodList} selected={<p>{period}</p>} hasSelected />
+          <Select list={MinutesList(setMin)} selected={<p>{min === 0 ? '00' : min}</p>} placeholder="min" hasSelected={min !== undefined} />
+          <Select list={PeriodList(setPeriod)} selected={<p>{period}</p>} hasSelected />
         </div>
         <div className={styles.ispaid}>
           <label htmlFor='ispaid'>Mark as paid</label>
