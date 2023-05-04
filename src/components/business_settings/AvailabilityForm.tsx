@@ -22,16 +22,16 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
 
   const [addSlices, setAddSlices] = useState<AvailabilitySlice[]>([]);
 
-  const [startHrs, setStartHrs] = useState<number>();
-  const [startMin, setStartMin] = useState<number>();
+  const [startHrs, setStartHrs] = useState<number>(9);
+  const [startMin, setStartMin] = useState<number>(0);
   const [startPeriod, setStartPeriod] = useState<'am' | 'pm'>('am');
 
-  const [endHrs, setEndHrs] = useState<number>();
-  const [endMin, setEndMin] = useState<number>();
+  const [endHrs, setEndHrs] = useState<number>(8);
+  const [endMin, setEndMin] = useState<number>(0);
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
 
   const startString = useMemo(() => {
-    if (!startHrs || startMin === undefined) return;
+    if (startHrs === undefined || startMin === undefined) return;
     return formatPeriodToMilitary(startHrs, startMin, startPeriod);
   }, [startHrs, startMin, startPeriod]);
   const startValue = useMemo(() => {
@@ -40,7 +40,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   },[startString]);
   
   const endString = useMemo(() => {
-    if (!endHrs || endMin === undefined) return;
+    if (endHrs === undefined || endMin === undefined) return;
     return formatPeriodToMilitary(endHrs, endMin, endPeriod);
   }, [endHrs, endMin, endPeriod]);
   const endValue = useMemo(() => {
@@ -49,19 +49,16 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   },[endString]);
 
   const overlapping = useMemo(() => {
-    if (!startValue || !endValue) return;
+    if (startValue === undefined || endValue === undefined) return;
 
     return [...slices, ...addSlices].some(({start_time, end_time}) => {
       const sliceStart = Number(start_time.split(':').join(''));
       const sliceEnd = Number(end_time.split(':').join(''));
 
-      return inRange([startValue, endValue], sliceStart) || inRange([startValue, endValue], sliceEnd)
-        || inRange([sliceStart, sliceEnd], startValue) || inRange([sliceStart, sliceEnd], endValue);
+      return inRange([startValue, endValue], sliceStart, false) || inRange([startValue, endValue], sliceEnd, false)
+        || inRange([sliceStart, sliceEnd], startValue, false) || inRange([sliceStart, sliceEnd], endValue, false);
     })
   }, [addSlices, endValue, slices, startValue]);
-
-
-  console.log('overlpas: ', overlapping);
 
   const sortedSlices = useMemo(() => 
     [...slices, ...addSlices]
@@ -69,6 +66,9 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join('')))
   , [addSlices, slices]);
 
+  console.log(startValue);
+  console.log(endValue);
+  console.log(overlapping);
 
   return (
     <Modal
@@ -103,6 +103,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
               <AiOutlinePlus fontSize={11} style={{marginRight: 12}} />
               <p>Add period</p>
             </div>
+            {overlapping && <p className={styles.warning}>* booking periods can not overlap</p>}
+            {startValue !== undefined && endValue !== undefined && startValue >= endValue && <p className={styles.warning}>* starting period must be less then ending period</p>}
           </div>
           
         </div>

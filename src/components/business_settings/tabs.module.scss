@@ -308,7 +308,7 @@
 
   margin-top: 20px;
   padding: 15px 0;
-  background: rgba(21, 37, 68, 0.158);
+  background: rgba(152, 99, 8, 0.086);
 
   > p {
     margin: 10px 0;
@@ -343,4 +343,11 @@
       flex-basis: 400px;
     }
   }
+}
+
+p.warning {
+  margin: 4px;
+  color: rgb(255, 0, 0);
+
+  font-weight: 300;
 }
