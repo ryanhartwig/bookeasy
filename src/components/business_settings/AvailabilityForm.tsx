@@ -23,6 +23,7 @@ interface AvailabilityFormProps {
   slices: AvailabilitySlice[],
   businessId: string,
   day: number,
+  userId: string,
 }
 
 const convertTotalTime = (total: number) => {
@@ -36,7 +37,7 @@ const convertTotalTime = (total: number) => {
   return [hr, min];
 }
 
-export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, slices, businessId, day}) => {
+export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, userId, slices, businessId, day}) => {
 
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
@@ -51,6 +52,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const [endHrs, setEndHrs] = useState<number>();
   const [endMin, setEndMin] = useState<number>();
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
+
+
 
   const startString = useMemo(() => {
     if (startHrs === undefined || startMin === undefined) return;
@@ -119,7 +122,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     >
       <Modal.Header>Set Availability</Modal.Header>
         <div className={styles.availabilityForm}>
-          <p>Booking Hours for {weekDays[day]}</p>
+          <p>Booking hours for {weekDays[day]}</p>
           {sortedSlices.length ? sortedSlices.map(slice => (
             <div key={slice.start_time} className={styles.formSlice}>
               <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>

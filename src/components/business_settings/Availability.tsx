@@ -11,10 +11,12 @@ import styles from './tabs.module.scss';
 interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
   businessId: string,
+  userId: string,
 }
 
-export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, businessId}) => {
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, businessId}) => {
   const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
+  const [day, setDay] = useState<number>();
   
   const availability = useMemo(() => {
     const map = new Map<number, AvailabilitySlice[]>();
@@ -34,7 +36,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, b
   const slices = useMemo(() => {
     
     return weekDays.map((d, i) => (
-      <Setting label={d} key={d} onAction={() => setFormSlices(availability.get(i) ?? [])}>
+      <Setting label={d} key={d} onAction={() => {setFormSlices(availability.get(i) ?? []); setDay(i)}}>
         {availability.get(i) ? (availability.get(i) ?? []).map((slice) => {
           return <div key={slice.start_time}>
             <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
@@ -50,7 +52,16 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, b
         <p>Bookable Hours</p>
       </div>
       {slices}
-      {availability.get(0) && <AvailabilityForm businessId={businessId} day={0} open={true} onClose={() =>{}} slices={availability.get(0)!} />}
+      {formSlices && day && 
+        <AvailabilityForm 
+          businessId={businessId} 
+          day={day} 
+          userId={userId}
+          open={!!formSlices} 
+          onClose={() => {setDay(undefined); setFormSlices(undefined)}} 
+          slices={formSlices} 
+        />
+      }
     </div>
   )
 }
