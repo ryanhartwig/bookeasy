@@ -43,7 +43,7 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, ...prop
 
   return (
     <div {...props} className={clsx(styles.Services, props.className || '')}>
-      {services.map(s => (
+      {services.filter(s => !s.deleted).map(s => (
         <div key={s.id}>
           <ServiceCard key={s.id} service={s} onClick={() => setSelectedService(s)} />
         </div>

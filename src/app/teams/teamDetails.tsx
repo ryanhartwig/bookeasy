@@ -8,7 +8,7 @@ import { Business, NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { BusinessUser } from '@/types/User';
-import { GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
+import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -32,13 +32,16 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
     setUsers([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
   , [businessUsersData]);
 
+  const { data: businessServicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
+  useEffect(() => businessServicesData && setServices(businessServicesData.getBusinessServices), [businessServicesData]);
+
   const tabs = useMemo(() => {
     return [
-    // <Services key='services' services={services} />,
+    <Services key='services' services={services} businessId={business.id} />,
     // <ClientList key='clients' clients={clients} />,
     // <BookingSitePrefs key='bookingsite' business={business} />,
     // <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
-  ]}, []);
+  ]}, [business.id, services]);
 
   return (
     <div className={styles.team_overview}>
