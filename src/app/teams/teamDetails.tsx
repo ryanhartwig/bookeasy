@@ -8,7 +8,7 @@ import { Business, NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { BusinessUser } from '@/types/User';
-import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
+import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -26,6 +26,8 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
   const [users, setUsers] = useState<BusinessUser[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  
+  console.log(business);
 
   const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
   useEffect(() => businessUsersData && 
@@ -35,13 +37,16 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
   const { data: businessServicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
   useEffect(() => businessServicesData && setServices(businessServicesData.getBusinessServices), [businessServicesData]);
 
+  const { data: businessClientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
+  useEffect(() => businessClientsData && setClients(businessClientsData.getBusinessClients), [businessClientsData]);
+
   const tabs = useMemo(() => {
     return [
     <Services key='services' services={services} businessId={business.id} />,
-    // <ClientList key='clients' clients={clients} />,
-    // <BookingSitePrefs key='bookingsite' business={business} />,
+    <ClientList key='clients' clients={clients} business={business} />,
+    <BookingSitePrefs key='bookingsite' business={business} isTeams />,
     // <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
-  ]}, [business.id, services]);
+  ]}, [business, clients, services]);
 
   return (
     <div className={styles.team_overview}>

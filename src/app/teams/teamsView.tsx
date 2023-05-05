@@ -1,7 +1,7 @@
 'use client';
 
 import { NewBusiness } from '@/types/Business';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { useQuery } from '@apollo/client';
@@ -17,7 +17,22 @@ export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
   const [teams, setTeams] = useState<NewBusiness[]>([]);
 
   const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
-  useEffect(() => teamsData && setTeams(teamsData.getUserBusinesses), [teamsData]);
+  useEffect(() => {
+    if (teamsDataLoading || !teamsData) return;
+    setTeams(teamsData.getUserBusinesses);
+  }, [teamsData, teamsDataLoading]);
+
+  // Update selected when data changes (due to cache update)
+  const selectedId = useRef<string>('');
+  useEffect(() => {
+    if (!selected) return;
+    if (selected.id === selectedId.current) {
+      setSelected(teams.find(t => t.id === selectedId.current));
+      return;
+    }
+    
+    selectedId.current = selected.id;
+  }, [selected, teams, teamsData]);
 
   return (
     <>

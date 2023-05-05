@@ -9,26 +9,46 @@ import { Input } from '../UI/Input/Input';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { formatPrefPeriod } from '@/utility/functions/formatting/formatPrefPeriod';
 import { PeriodSelectForm } from './PeriodSelectForm';
-import { useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
+import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
+import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
-  userId: string,
+  userId?: string,
+  isTeams?: boolean,
 }
 
-export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, userId}) => {
+export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, userId, isTeams}) => {
 
   const [initialValue, setInitialValue] = useState<number>();
   const [total, setTotal] = useState<number>();
   const [updateProperty, setUpdateProperty] = useState<string>('');
 
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
-    refetchQueries: [{
+    refetchQueries: !userId ? [] : [{
       query: GET_USER_OWN_BUSINESS,
       variables: { userId }
-    }]
+    }],
+    update(cache, { data: { updateBusinessPrefs }}) {
+      if (!isTeams) return;
+      cache.modify({
+        fields: {
+          getUserBusinesses(existingBusinesses = [], { readField }) {
+            const newBusinessRef = cache.writeFragment({
+              data: updateBusinessPrefs,
+              fragment: gql`
+                ${GET_USER_BUSINESSES_FRAGMENT}
+              `
+            }); 
+
+            return existingBusinesses.map((ref: any) => readField('id', ref) === business.id ? newBusinessRef : ref)
+          }
+        }
+      })
+    }
   });
 
   // If total is truthy, form has been submitted

@@ -125,36 +125,38 @@ export const businessResolvers = {
 
       // Only one of the following properties will be provided & patched
       if (name) {
-        query += ' name = $2 where id = $1 returning id';
+        query += ' name = $2 where id = $1';
         params.push(name);
       }
       else if (email) {
-        query += ' email = $2 where id = $1 returning id';
+        query += ' email = $2 where id = $1';
         params.push(email);
       }
       else if (phone) {
-        query += ' phone = $2 where id = $1 returning id';
+        query += ' phone = $2 where id = $1';
         params.push(phone);
       }
       else if (avatar) {
-        query += ' avatar = $2 where id = $1 returning id';
+        query += ' avatar = $2 where id = $1';
         params.push(avatar);
       }
       else if (min_booking_notice) {
-        query += ' min_booking_notice = $2 where id = $1 returning id';
+        query += ' min_booking_notice = $2 where id = $1';
         params.push(min_booking_notice);
       }
       else if (max_book_ahead) {
-        query += ' max_book_ahead = $2 where id = $1 returning id';
+        query += ' max_book_ahead = $2 where id = $1';
         params.push(max_book_ahead);
       }
       else if (min_cancel_notice) {
-        query += ' min_cancel_notice = $2 where id = $1 returning id';
+        query += ' min_cancel_notice = $2 where id = $1';
         params.push(min_cancel_notice);
       }
 
+      query += ' returning *';
+
       const response = await db.query(query, params);
-      return response.rows[0].id;
+      return response.rows[0];
     },
   }
 
@@ -179,6 +181,6 @@ export const businessTypeDefs = `#graphql
   }
 
   type Mutation {
-    updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): String!,
+    updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
   }
 `;
