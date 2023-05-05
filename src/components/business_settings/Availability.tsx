@@ -11,7 +11,7 @@ import styles from './tabs.module.scss';
 interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
   businessId: string,
-  userId: string,
+  userId?: string,
 }
 
 export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, businessId}) => {

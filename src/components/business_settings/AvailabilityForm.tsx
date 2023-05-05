@@ -26,7 +26,7 @@ interface AvailabilityFormProps {
   slices: AvailabilitySlice[],
   businessId: string,
   day: number,
-  userId: string,
+  userId?: string,
 }
 
 const convertTotalTime = (total: number) => {

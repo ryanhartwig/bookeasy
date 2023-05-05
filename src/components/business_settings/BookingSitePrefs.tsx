@@ -43,7 +43,6 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
                 ${GET_USER_BUSINESSES_FRAGMENT}
               `
             }); 
-
             return existingBusinesses.map((ref: any) => readField('id', ref) === business.id ? newBusinessRef : ref)
           }
         }

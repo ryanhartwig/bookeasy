@@ -28,8 +28,6 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   
-  console.log(business);
-
   const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
   useEffect(() => businessUsersData && 
     setUsers([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
@@ -47,8 +45,8 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
     <Services key='services' services={services} businessId={business.id} />,
     <ClientList key='clients' clients={clients} business={business} />,
     <BookingSitePrefs key='bookingsite' business={business} isTeams />,
-    // <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
-  ]}, [business, clients, services]);
+    <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
+  ]}, [business, clients, services, users]);
 
   return (
     <div className={styles.team_overview}>
@@ -62,7 +60,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
       </div>
       <div className={styles.right}>
         <Card className={styles.card}>
-          <Tabs tabs={['Preferences', 'Services', 'Client List', 'Booking Site']} tab={tab} setTab={setTab} />
+          <Tabs tabs={['Preferences', 'Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
           <div className={styles.settings_wrapper}>
             {tabs[tab]}
           </div>
