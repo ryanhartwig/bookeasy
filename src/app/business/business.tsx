@@ -27,7 +27,7 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
   
   const { data: servicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
   const { data: clientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
-  const { data: availabilityData } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: user.id }});
+  const { data: availabilityData } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: user.id, businessId: business.id }});
 
   useEffect(() => {
     if (!servicesData) return;

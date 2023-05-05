@@ -87,6 +87,7 @@ export const types = `#graphql
     max_book_ahead: String!,
     user_id: String,
     avatar: String,
+    created: String!,
     users: [BusinessUser!]!,
   }
 

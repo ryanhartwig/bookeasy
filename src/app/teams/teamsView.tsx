@@ -1,68 +1,48 @@
 'use client';
 
-import { Business } from '@/types/Business';
-import { useEffect, useState } from 'react';
+import { NewBusiness } from '@/types/Business';
+import { useEffect, useRef, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
-import { User } from '@/types/User';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { useQuery } from '@apollo/client';
+import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { TeamDetails } from './teamDetails';
 
 interface TeamsViewProps {
-  teams: Business[],
-  currentUser: User,
+  userId: string,
 }
 
-export const TeamsView: React.FC<TeamsViewProps> = ({teams, currentUser}) => {
-  return <></>
-  const [selected, setSelected] = useState<Business>();
+export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
+  const [selected, setSelected] = useState<NewBusiness>();
+  const [teams, setTeams] = useState<NewBusiness[]>([]);
 
-  const [clients, setClients] = useState<Client[]>([]);
-  const [services, setServices] = useState<Service[]>([]);
-  const [members, setMembers] = useState<User[]>([]);
-  const [meta, setMeta] = useState<UserMeta[]>([]);
+  const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
+  useEffect(() => {
+    if (teamsDataLoading || !teamsData) return;
+    setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => !b.user_id)); // Remove user's own business
+  }, [teamsData, teamsDataLoading]);
 
+  // Update selected when data changes (due to cache update)
+  const selectedId = useRef<string>('');
   useEffect(() => {
     if (!selected) return;
-    ;(async () => {
-      const clientsPromise = getBusinessClients(selected.id);
-      const servicesPromise = getBusinessServices(selected.id);
-      const membersPromise = getBusinessMembers(selected.id);
-      const metaPromise = getBusinessUserMeta(selected.id);
-      
-      try {
-        const results = await Promise.all([
-          clientsPromise, 
-          servicesPromise,
-          membersPromise, 
-          metaPromise
-        ]);
-        const [clients, services, members, meta] = results;
-        setClients(clients.data);
-        setServices(services.data);
-        setMembers(members.data);
-        setMeta(meta.data)
-
-      } catch(e) {
-        console.log(e);
-      }
-    })()
-
+    if (selected.id === selectedId.current) {
+      setSelected(teams.find(t => t.id === selectedId.current));
+      return;
+    }
     
-  }, [selected]);
-  
-  
+    selectedId.current = selected.id;
+  }, [selected, teams, teamsData]);
+
   return (
     <>
       <div className={styles.Teams}>
         <div className={styles.teams_section}>
           <p>My teams</p>
-          <TeamSelect currentUser={currentUser} teams={teams} selected={selected} setSelected={setSelected} />
+          <TeamSelect teams={teams} selected={selected} setSelected={setSelected} />
         </div>
         
-        {selected && <TeamDetails business={selected} clients={clients} services={services} users={members} meta={meta}/>}
-        
+        {selected && <TeamDetails business={selected}/>}
       </div>
     </>
   )

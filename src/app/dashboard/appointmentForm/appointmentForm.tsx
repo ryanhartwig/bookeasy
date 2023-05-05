@@ -205,7 +205,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
               fragment: gql`
                 ${NEW_APPOINTMENT_FRAGMENT}
               `
-            }); 
+            });
             return initialAppointment 
               ? existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref)
               : [...existingAppointments, newAppointmentRef];
@@ -304,7 +304,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       open={open} 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
-      loading={prepopulating || loadingClients || loadingServices || appMutationLoading || deleteAppointmentLoading}
+      loading={loadingClients || loadingServices || appMutationLoading || deleteAppointmentLoading}
     >
       <Modal.Header>{initialAppointment ? "Edit" : "Create an"} Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>

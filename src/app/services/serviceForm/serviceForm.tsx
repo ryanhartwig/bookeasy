@@ -7,7 +7,7 @@ import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_USERS } from "@/utility/queries/businessQueries"
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
 import { AssignedUser } from '@/types/User';
@@ -55,7 +55,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
   
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
-  const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_FORM_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
   useEffect(() => {
     if (!businessUsersData || loadingBusinessUsers) return;

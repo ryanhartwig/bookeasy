@@ -1,16 +1,14 @@
 'use client';
 
 import { Avatar } from "@/components/UI/Avatar/Avatar";
-import { User } from "@/types/User";
-import { UserMeta } from "@/utility/functions/fetch_old/business/getBusinessUserMeta";
+import { BusinessUser } from "@/types/User";
 import styles from './teams.module.scss';
 
 interface MembersProps {
-  members: User[],
-  meta: UserMeta[],
+  members: BusinessUser[],
 }
 
-export const Members: React.FC<MembersProps> = ({members, meta}) => {
+export const Members: React.FC<MembersProps> = ({members}) => {
 
   return (
     <>
@@ -18,10 +16,10 @@ export const Members: React.FC<MembersProps> = ({members, meta}) => {
       <hr />
       <div className={styles.members}>
         {members.map(m => (
-          <div key={m.id}>
-            <Avatar src={m.avatar} size={30} />
-            <p>{m.name}</p>
-            <p>{meta.find(meta => meta.userId === m.id)!.elevated ? 'Admin' : 'Member'}</p>
+          <div key={m.user.id}>
+            <Avatar src={m.user.avatar} size={30} />
+            <p>{m.user.name}</p>
+            <p>{m.elevated ? 'Admin' : 'Member'}</p>
           </div>
         ))}
       </div>

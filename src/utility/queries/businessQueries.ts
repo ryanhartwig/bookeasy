@@ -12,6 +12,7 @@ export const GET_BUSINESS = gql`
       max_book_ahead
       user_id
       avatar
+      created
     }
   }
 `;
@@ -60,6 +61,25 @@ export const GET_BUSINESS_USERS = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
       users {
+        date_added
+        elevated
+        user {
+          id
+          name
+          email
+          phone
+          created
+          avatar
+        }
+      }
+    }
+  }
+`;
+
+export const GET_BUSINESS_FORM_USERS = gql`
+  query($businessId: ID!) {
+    getBusiness(business_id: $businessId) {
+      users {
         user {
           id
           name
@@ -81,6 +101,17 @@ export const GET_BUSINESS_APPOINTMENT_METRICS = gql`
 
 export const UPDATE_BUSINESS_PREFS = gql`
   mutation($businessId: ID!, $patch: BusinessPrefsInput) {
-    updateBusinessPrefs(business_id: $businessId, patch: $patch)
+    updateBusinessPrefs(business_id: $businessId, patch: $patch) {
+      id
+      name
+      email
+      phone
+      min_booking_notice
+      min_cancel_notice
+      max_book_ahead
+      user_id
+      avatar
+      created
+    }
   }
 `;

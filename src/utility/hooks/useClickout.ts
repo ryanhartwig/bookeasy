@@ -7,26 +7,46 @@ export const useClickout = (
   ...refs: React.MutableRefObject<any>[]
 ) => {
   const listenerRef = useRef<boolean>(false);
+  const initialClickRef = useRef<boolean>(false);
 
   const onClick = useCallback((e:any) => {
+    if (!initialClickRef.current) {
+      initialClickRef.current = true;
+      return;
+    }
+
     if (pause) return;
     if (e && [...refs].some(r => r?.current?.contains(e.target))) return;
 
-    onClickout();
     listenerRef.current = false;
     window.removeEventListener('click', onClick);
+
+    onClickout();
   }, [onClickout, pause, refs]);
+
+  const removeListener = useCallback(() => {
+    if (pause) return;
+    
+    listenerRef.current = false;
+    window.removeEventListener('click', onClick);
+
+    onClickout();
+  }, [onClick, onClickout, pause]);
 
   useEffect(() => {  
     if (!open) return;
     if (listenerRef.current) return;
-    
-    setTimeout(() => {
-      window.addEventListener('click', onClick);
-      listenerRef.current = true;
-    }, 100);
 
+    window.addEventListener('click', onClick);
+    listenerRef.current = true;
+
+    // Keep! Need to reset the refs when unmounting
+    return () => {
+      window.removeEventListener('click', onClick);
+      listenerRef.current = false;
+      initialClickRef.current = false;
+    }
   }, [onClick, open]);
 
-  return onClick;
+  return removeListener;
 }

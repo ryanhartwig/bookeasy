@@ -35,7 +35,17 @@ export const userResolvers = {
     },
     getUserAvailability: async (parent: any, args: any) => {
       try {
-        const response = await db.query('select * from availability_slice where user_id = $1', [args.user_id]);
+        let query = 'select * from availability_slice where user_id = $1';
+        const params = [args.user_id];
+
+        if (args.business_id) {
+          query += ' and business_id = $2';
+          params.push(args.business_id);
+        }
+
+        query += ' order by start_time asc';
+        
+        const response = await db.query(query, params);
         return response.rows;
       } catch(e: any) {
         throwGQLError(e.message)
@@ -77,7 +87,7 @@ export const userTypeDefs = `#graphql
   type Query {
     getUser(id: ID!): User,
     getUserBusinesses(user_id: ID!): [Business!]!,
-    getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
+    getUserAvailability(user_id: ID!, business_id: ID): [AvailabilitySlice!]!,
     getUserOwnBusiness(user_id: ID!): Business!,
   }
 
