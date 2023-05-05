@@ -87,11 +87,10 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
       query: GET_USER_AVAILABILITY,
       variables: {
         userId,
+        businessId,
       }
     }]
   });
-
-  
 
   const startString = useMemo(() => {
     if (startHrs === undefined || startMin === undefined) return;
