@@ -149,10 +149,10 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     setUserAvailability({variables: { userId, businessId, day, slices: newSlices.map(s => ({...s, user_id: userId, __typename: undefined})) }})
   }, [businessId, day, newSlices, setUserAvailability, userId]);
 
-  // useEffect(() => {
-  //   if (!data || loading) return;
-  //   onClose();
-  // }, [data, loading, onClose]);
+  useEffect(() => {
+    if (!data || loading) return;
+    onClose();
+  }, [data, loading, onClose]);
 
   return (
     <Modal

@@ -21,10 +21,8 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
 
   useEffect(() => {
     if (!setFormIsOpen) return;
-    if (!formSlices) {
-      // setTimeout(() => setFormIsOpen(false), 100)
-    }
-    // setFormIsOpen(true);
+    if (formSlices) setFormIsOpen(true);
+    if (!formSlices) setFormIsOpen(false);
   }, [formSlices, setFormIsOpen]);
 
   const availability = useMemo(() => {
