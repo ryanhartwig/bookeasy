@@ -52,7 +52,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
         <p>Bookable Hours</p>
       </div>
       {slices}
-      {formSlices && day && 
+      {formSlices && day!==undefined && 
         <AvailabilityForm 
           businessId={businessId} 
           day={day} 

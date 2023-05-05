@@ -41,8 +41,34 @@ const convertTotalTime = (total: number) => {
 }
 
 export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, userId, slices, businessId, day}) => {
-
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
+
+  const sortedSlices = useMemo(() => 
+    newSlices
+    .sort((a, b) => 
+      Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join('')))
+  , [newSlices]);
+
+  useEffect(() => {
+    const merged = sortedSlices.reduce((acc: AvailabilitySlice[], current: AvailabilitySlice, index: number) => {
+      const prev = acc[acc.length - 1];
+
+      if (prev && prev.end_time === current.start_time) {
+        const merged = {
+          ...prev,
+          end_time: current.end_time,
+        }
+        acc[acc.length - 1] = merged;
+      } 
+      else acc.push(current);
+      
+      return acc;
+    }, [])
+    
+    if (merged.length !== sortedSlices.length) {
+      setNewSlices(merged);
+    }
+  }, [sortedSlices]);
 
   const totalTime = useMemo(() => newSlices.reduce((a, b) => a + (Number(b.end_time.split(':').join('')) - Number(b.start_time.split(':').join(''))), 0), [newSlices]);
   // Used for total accumulative booking hours metric
@@ -65,10 +91,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     }]
   });
 
-
   
-  useEffect(() => {}, []);
-
 
   const startString = useMemo(() => {
     if (startHrs === undefined || startMin === undefined) return;
@@ -103,11 +126,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const invalidValues = useMemo(() => startValue !== undefined && endValue !== undefined && startValue >= endValue, [endValue, startValue]);
   const canSubmit = useMemo(() => startValue && endValue && !invalidValues && !overlapping, [endValue, invalidValues, overlapping, startValue]);
 
-  const sortedSlices = useMemo(() => 
-    newSlices
-    .sort((a, b) => 
-      Number(a.start_time.split(':').join('')) - Number(b.start_time.split(':').join('')))
-  , [newSlices]);
+  
 
   const onAddSlice = useCallback(() => {
     if (!canSubmit || !startString || !endString) return;
