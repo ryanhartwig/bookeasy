@@ -1,18 +1,20 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
 import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
+import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
-import { useMutation } from '@apollo/client';
-import { useCallback, useEffect, useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
+import { useEffect, useState } from 'react';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
 
 interface PrefsProps {
   business: NewBusiness,
   userId?: string,
+  isTeams?: boolean,
 }
 
-export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
+export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
 
   const [value, setValue] = useState<string>('');
 
@@ -25,6 +27,22 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
       query: GET_USER_OWN_BUSINESS,
       variables: { userId }
     }],
+    update(cache, { data: { updateBusinessPrefs }}) {
+      if (!isTeams) return;
+      cache.modify({
+        fields: {
+          getUserBusinesses(existingBusinesses = [], { readField }) {
+            const newBusinessRef = cache.writeFragment({
+              data: updateBusinessPrefs,
+              fragment: gql`
+                ${GET_USER_BUSINESSES_FRAGMENT}
+              `
+            }); 
+            return existingBusinesses.map((ref: any) => readField('id', ref) === business.id ? newBusinessRef : ref)
+          }
+        }
+      })
+    }
   });
 
   const onSave = (key: string) => {

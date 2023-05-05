@@ -43,10 +43,10 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
 
   const tabs = useMemo(() => {
     return [
+    <Prefs key='prefs' business={business} />, 
     <Services key='services' services={services} businessId={business.id} />,
     <ClientList key='clients' clients={clients} business={business} />,
     <BookingSitePrefs key='bookingsite' business={business} isTeams />,
-    <Prefs key='prefs' business={business} />, 
     // <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
   ]}, [business, clients, services]);
 
@@ -62,7 +62,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
       </div>
       <div className={styles.right}>
         <Card className={styles.card}>
-          <Tabs tabs={['Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
+          <Tabs tabs={['Preferences', 'Services', 'Client List', 'Booking Site']} tab={tab} setTab={setTab} />
           <div className={styles.settings_wrapper}>
             {tabs[tab]}
           </div>
