@@ -1,6 +1,4 @@
-const pluralize = (str: string, data: number) => {
-  return `${str}${data !== 1 ? 's' : ''}`;
-}
+import { pluralize } from "./pluralize";
 
 export const formatTimePeriod = (ms: number) => {
   const seconds = Number((ms / 1000).toFixed(0));

@@ -1,3 +1,5 @@
+@use '/src/app/globalutil';
+
 .Prefs {
   width: 100%;
   height: 100%;
@@ -80,8 +82,10 @@
   > div:last-child {
     display: flex;
     width: 100%;
+    height: 100%;
 
     justify-content: space-around;
+    align-items: center;
 
     padding-left: 30px;
     text-align: center;
@@ -173,4 +177,254 @@
 
     > * { margin: 3px 10px 3px 0}
   }
+}
+
+.edit {
+  color: var(--font-utility);
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  > p {
+    opacity: 0.8;
+    transition: opacity 200ms, background-color 200ms;
+    padding: 5px 12px;
+    border-radius: 3px;
+  }
+
+  &:hover > p {
+    opacity: 1;
+    background-color: #216fdb19;
+  }
+}
+
+.periodSelect {
+  width: 381px;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > p {
+    margin-bottom: 3px;
+  }
+
+  .periodInput {
+    width: 60px;
+  }
+}
+
+.durationSelect {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 10px 0; 
+
+  padding: 0 40px;
+
+  font-weight: 300;
+  font-size: 20px;
+
+  > *:not(p) {
+    cursor: pointer;
+    color: grey;
+    font-size: 20px;
+
+    margin: 0 10px;
+    
+    transition: color 200ms;
+    &:hover {
+      color: black;
+    }
+  }
+}
+
+.bookingWarning {
+  margin-top: 15px; 
+  margin-left: 30px;
+  color: rgb(231, 67, 26);
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.availabilityForm {
+  width: 381px;
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 15px;
+  padding-bottom: 0;
+
+  // Weekday Name
+  > p:first-child {
+    margin-bottom: 15px;
+  }
+  
+}
+
+.formSlice {
+  text-align: center;
+  position: relative;
+
+  margin: 4px 0;
+  padding: 12px;
+
+  border: 1px solid rgba(128, 128, 128, 0.193);
+  border-radius: 8px;
+
+  width: 100%;
+
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.removeSlice {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  height: 100%;
+  width: 15px;
+
+  color: red;
+  
+  cursor: pointer;
+  opacity: 0.6;
+  scale: 0.9;
+
+  
+  transition: opacity 200ms, scale 200ms, rotate 200ms;
+
+  &:hover {
+    opacity: 1;
+    scale: 1.2;
+    rotate: 5deg;
+  }
+}
+
+.addSlice {
+  width: 50%;
+  border: 1px solid rgba(93, 96, 106, 0.343);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 9px;
+
+  position: relative;
+
+  opacity: 0.6;
+  transition: opacity 200ms, scale 200ms;
+ 
+
+  > *:first-child {
+    position: absolute;
+    left: 15px; 
+    width: 17px;
+    height: 100%;
+    top: 0;
+  }
+
+  @include globalutil.light_shadow;
+}
+
+.addSlice.valid {
+  opacity: 0.8;
+  cursor: pointer;
+  color: rgba(2, 45, 2);
+  border-color: rgba(2, 45, 2, 0.2);
+
+  &:hover {
+    opacity: 1;
+    scale: 1.02;
+  }
+}
+
+.periodSelect {
+  border-top: 2px solid grey;
+  border-bottom: 1px solid rgba(188, 182, 182, 0.338);
+
+  margin-top: 20px;
+  padding: 15px 0;
+  background: rgba(152, 99, 8, 0.086);
+
+  > p {
+    margin: 10px 0;
+    font-size: 12px;
+    font-weight: 300;
+
+    &:first-child { margin-top: 0 }
+  }
+}
+
+.timeSelect {
+  display: flex;
+  align-items: center;
+
+  width: 65%;
+
+  > * {
+    margin: 0 2px;
+
+    flex-shrink: 1;
+    flex-grow: 1;
+    
+    &:first-child { 
+      margin-left: 0;
+      flex-basis: 340px;
+    }
+    &:nth-child(3) {
+      flex-basis: 400px;
+    }
+    &:last-child { 
+      margin-right: 0;
+      flex-basis: 400px;
+    }
+  }
+}
+
+p.warning {
+  margin: 4px;
+  color: rgb(255, 0, 0);
+
+  font-weight: 300;
+}
+
+.addService {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  
+  cursor: pointer;
+  scale: 1;
+  opacity: 0.8;
+
+  transition: box-shadow 200ms, opacity 200ms, scale 200ms;
+  &:hover {
+    box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
+    opacity: 1.0;
+    scale: 1.05;
+  }
+
+  margin: 20px auto;
+
+  flex-wrap: wrap;
+  border: 1px solid rgb(101, 101, 101);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+
+  @include globalutil.light_shadow;
 }

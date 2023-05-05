@@ -8,30 +8,30 @@ import { BookingSitePrefs } from "@/components/business_settings/BookingSitePref
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
-import { Business } from "@/types/Business";
+import { NewBusiness } from "@/types/Business";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";
 import { Service } from "@/types/Service";
-import { BaseAvailability } from "@/types/BaseAvailability";
+import { AvailabilitySlice } from "@/types/BaseAvailability";
 
 interface SettingsProps {
-  businesses: Business[],
+  business: NewBusiness,
   clients: Client[],
   user: User,
   services: Service[],
-  availability: BaseAvailability,
+  availability: AvailabilitySlice[],
 }
 
-export const Settings: React.FC<SettingsProps> = ({businesses, clients, user, services, availability}) => {
+export const Settings: React.FC<SettingsProps> = ({business, clients, user, services, availability}) => {
 
   const [tab, setTab] = useState<number>(0);
   const tabs = ['Preferences', 'Client List', 'Booking Site', 'Services', 'Availability'];
   const tabComponents = [
-    <Prefs key={Prefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
-    <ClientList clients={clients.filter(c => c.businessId === user.ownBusinessId)} key={ClientList.name} />, 
-    <BookingSitePrefs key={BookingSitePrefs.name} business={businesses.find(b => b.id === user.ownBusinessId)!} />, 
-    <Services key={Services.name} services={services.filter(s => s.businessId === user.ownBusinessId)} />, 
-    <Availability key={Availability.name} availabilitySlices={availability.slices} />,
+    <Prefs key={Prefs.name} userId={user.id} business={business} />, 
+    <ClientList clients={clients} key={ClientList.name} business={business} />, 
+    <BookingSitePrefs key={BookingSitePrefs.name} business={business} userId={user.id} />, 
+    <Services businessId={business.id} key={Services.name} services={services} />, 
+    <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} />,
   ];
 
   return (

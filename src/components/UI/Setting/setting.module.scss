@@ -46,12 +46,14 @@
     transition: opacity 200ms, background-color 200ms;
     padding: 5px 12px;
     border-radius: 3px;
+
+    &:hover {
+      opacity: 1;
+      background-color: #216fdb19;
+    }
   }
 
-  &:hover > p {
-    opacity: 1;
-    background-color: #216fdb19;
-  }
+  
 }
 
 .toggle {
@@ -84,4 +86,22 @@
 }
 .toggle_circle.on {
   left: 15px;
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.editInput {
+  background: rgba(255, 255, 255, 0.482);
+  border-radius: 5px;
+  padding: 4px 20px 4px 10px;
+  font-weight: 300;
+
+  border: 1px solid rgba(128, 128, 128, 0.216);
+  
+  &:focus {
+    border-color: rgba(39, 135, 209, 0.611)
+  }
 }

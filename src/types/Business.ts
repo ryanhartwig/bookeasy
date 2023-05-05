@@ -19,6 +19,7 @@ export interface NewBusiness {
   min_booking_notice: string,
   min_cancel_notice: string,
   max_book_ahead: string,
+  avatar?: string,
   user_id?: string,
 }
 

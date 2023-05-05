@@ -17,11 +17,12 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 
 interface AppointmentFormProps {
   open: boolean,
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>,  
   setSelected?: React.Dispatch<React.SetStateAction<Client | undefined>>,
-  userId: string,
+  userId?: string,
   initialClient?: Client,
   onSubmit?: (...args: any) => any,
+  initialBusiness?: FormBusiness
 }
 
 interface RawClient {
@@ -33,7 +34,7 @@ interface RawClient {
   avatar: string
 }
 
-export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, userId, initialClient, onSubmit}) => {
+export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, initialBusiness, userId, initialClient, onSubmit}) => {
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>(uuid());
   const [name, setName] = useState<string>('');
@@ -48,7 +49,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const [placeholderClient, setPlaceholderClient] = useState<RawClient>();
 
-  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient }); 
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient || !!initialBusiness }); 
   const { data: multiClientData, loading: loadingMultiClientData, refetch } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache' });
 
   useEffect(() => {
@@ -59,6 +60,9 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   // Initialize fields when editing existing client
   useEffect(() => {
+    if (initialBusiness) {
+      setSelectedBusiness(initialBusiness);
+    }
     if (!initialClient || (initialClient && !multiClientData)) return;
 
     const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
@@ -72,7 +76,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     setPhone(phone || '');
     setAddress(address || '');
     setNotes(notes || '');
-  }, [initialClient, multiClientData, refetch]);
+  }, [initialBusiness, initialClient, multiClientData, refetch]);
 
   const client = useMemo<ClientInput | null>(() => {
     if (!name || !email || !selectedBusiness) return null;
@@ -152,7 +156,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const complete = useCallback(() => {
     setError(undefined);
-    setOpen(false);
+    setOpen && setOpen(false);
     onSubmit && onSubmit();
   }, [onSubmit, setOpen]);
   
@@ -209,15 +213,16 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
       actionButtonDisabled={initialClient ? !editClient : !client} 
-      open={open} 
-      onClose={() => setOpen(false)} 
+      open={open}
+      actionCloses
+      onClose={() => setOpen && setOpen(false)} 
       className={styles.appointmentForm}
       loading={loadingUserBusinesses || clientMutationLoading || (initialClient && loadingMultiClientData)}
     >
       <Modal.Header>{initialClient ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
-        {/* Cannot change provider when editing a client */}
-        {!initialClient && (
+        {/* Cannot change provider when editing a client or adding from business/teams view */}
+        {!initialClient && !initialBusiness && (
           <>
             <p>Select a provider</p>
             <Select list={businessesList} selected={(
@@ -251,7 +256,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
         <BsTrash3 />
         <p>Remove Client</p>
       </div>}
-      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" onAction={() => {setConfirmDelete(false); onDeleteClient()}} >
+      <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} actionButtonText="Confirm" actionCloses onAction={() => {setConfirmDelete(false); onDeleteClient()}} >
         <Modal.Header>Confirm Delete</Modal.Header>
         <div className={styles.confirmDelete}>
           <p>Are you sure you want to remove this client?</p>

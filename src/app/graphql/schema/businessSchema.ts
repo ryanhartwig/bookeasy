@@ -3,12 +3,12 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const businessResolvers = {
   Query: {
-    getBusiness: async (parent: any, args: any) => {
+    getBusiness: async (_: any, args: any) => {
       const response = await db.query('select * from business where id = $1', [args.business_id]);
       if (!response.rows[0]) throwGQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
     },
-    getBusinessClients: async (parent: any, args: any) => {
+    getBusinessClients: async (_: any, args: any) => {
       try {
         const clientIds = await db.query('select * from clients_businesses where business_id = $1', [args.business_id]);
 
@@ -33,13 +33,27 @@ export const businessResolvers = {
         throwGQLError(e.message);
       }
     },
-    getBusinessServices: async (parent: any, args: any) => {
+    getBusinessServices: async (_: any, args: any) => {
       try {
         const response = await db.query('select * from service where business_id = $1', [args.business_id]);
         return response.rows;
       } catch(e: any) {
         throwGQLError(e.message);
       }
+    },
+    getBusinessAppointmentMetrics: async (_: any, args: any) => {
+      const { business_id, start_date, end_date } = args;
+      
+      let query = 'select is_paid, service_cost from appointment where business_id = $1';
+      const params = [business_id];
+
+      if (start_date && end_date) {
+        query += ' and start_date > $2 and start_date < $3';
+        params.push(start_date, end_date);
+      }
+      
+      const response = await db.query(query, params);
+      return response.rows;
     }
   },
   Service: {
@@ -97,13 +111,75 @@ export const businessResolvers = {
       
       return businessUsers;
     }
+  },
+  Mutation: {
+    updateBusinessPrefs: async (_: any, args: any) => {
+      const { name, email, phone, avatar, min_booking_notice, max_book_ahead, min_cancel_notice } = args.patch;
+      if (!name && !email && !phone && !avatar && !min_booking_notice && !max_book_ahead && !min_cancel_notice) {
+        throwGQLError('Must provide at least one argument to update');
+      }
+
+      const { business_id } = args;
+
+      let query = 'update business set';
+      const params = [business_id];
+
+      // Only one of the following properties will be provided & patched
+      if (name) {
+        query += ' name = $2 where id = $1 returning id';
+        params.push(name);
+      }
+      else if (email) {
+        query += ' email = $2 where id = $1 returning id';
+        params.push(email);
+      }
+      else if (phone) {
+        query += ' phone = $2 where id = $1 returning id';
+        params.push(phone);
+      }
+      else if (avatar) {
+        query += ' avatar = $2 where id = $1 returning id';
+        params.push(avatar);
+      }
+      else if (min_booking_notice) {
+        query += ' min_booking_notice = $2 where id = $1 returning id';
+        params.push(min_booking_notice);
+      }
+      else if (max_book_ahead) {
+        query += ' max_book_ahead = $2 where id = $1 returning id';
+        params.push(max_book_ahead);
+      }
+      else if (min_cancel_notice) {
+        query += ' min_cancel_notice = $2 where id = $1 returning id';
+        params.push(min_cancel_notice);
+      }
+
+      const response = await db.query(query, params);
+      return response.rows[0].id;
+    },
   }
+
 }
 
 export const businessTypeDefs = `#graphql
+  input BusinessPrefsInput {
+    name: String,
+    email: String,
+    phone: String,
+    avatar: String,
+    min_booking_notice: String,
+    max_book_ahead: String,
+    min_cancel_notice: String,
+  }
+
   type Query {
     getBusiness(business_id: ID!): Business!,
     getBusinessClients(business_id: ID!): [BusinessClient!]!,
     getBusinessServices(business_id: ID!): [Service!]!,
+    getBusinessAppointmentMetrics(business_id: ID!, start_date: String, end_date: String): [AppointmentMetric!]!,
+  }
+
+  type Mutation {
+    updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): String!,
   }
 `;

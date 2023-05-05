@@ -28,9 +28,10 @@ interface ServiceFormProps {
   userId: string,
   onSubmit?: (...args: any) => any,
   initialService?: Service,
+  useAddMutation?: boolean,
 }
 
-export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, initialService}) => {
+export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, initialService, useAddMutation = false}) => {
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
   const [name, setName] = useState<string>('');
@@ -51,7 +52,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
   const [durationUpdateDate, setDurationUpdateDate] = useState<string>(minimumDateInput);
   
-
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
   
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
@@ -166,12 +166,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   const onSubmitForm = useCallback(() => {
     if (!service) return;
-    if (initialService) {
+    if (initialService && !useAddMutation) {
       editService({variables: { service }});
     } else {
       addService({variables: { service }});
     }
-  }, [addService, editService, initialService, service]);
+  }, [addService, editService, initialService, service, useAddMutation]);
 
   const onDeleteService = useCallback(() => {
     deleteService({variables: { serviceId: initialService?.id }});

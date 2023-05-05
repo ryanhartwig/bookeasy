@@ -46,3 +46,9 @@ export const DELETE_CLIENT = gql`
     deleteClient(client_id: $clientId)
   }
 `;
+
+export const GET_CLIENT_APPOINTMENT_COUNT = gql`
+  query($clientId: String!) {
+    getClientAppointmentCount(client_id: $clientId)
+  }
+`;

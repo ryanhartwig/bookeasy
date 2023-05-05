@@ -11,6 +11,7 @@ export const GET_BUSINESS = gql`
       min_cancel_notice
       max_book_ahead
       user_id
+      avatar
     }
   }
 `;
@@ -66,5 +67,20 @@ export const GET_BUSINESS_USERS = gql`
         }
       }
     }
+  }
+`;
+
+export const GET_BUSINESS_APPOINTMENT_METRICS = gql`
+  query($businessId: ID!, $startDate: String, $endDate: String, ) {
+    getBusinessAppointmentMetrics(business_id: $businessId, start_date: $startDate, end_date: $endDate) {
+      is_paid
+      service_cost
+    }
+  }
+`;
+
+export const UPDATE_BUSINESS_PREFS = gql`
+  mutation($businessId: ID!, $patch: BusinessPrefsInput) {
+    updateBusinessPrefs(business_id: $businessId, patch: $patch)
   }
 `;

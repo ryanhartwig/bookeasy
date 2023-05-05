@@ -52,3 +52,8 @@ export interface AppointmentInput {
   is_video: boolean,
   is_paid: boolean,
 };
+
+export interface AppointmentMetrics {
+  is_paid: boolean,
+  service_cost: number,
+}
