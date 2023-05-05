@@ -5,7 +5,6 @@ import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import uuid from 'react-uuid';
 import styles from './tabs.module.scss';
 
 interface ServicesProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {

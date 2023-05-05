@@ -1,16 +1,19 @@
 'use client';
 
 import { ClientForm } from '@/app/clients/clientForm/clientForm';
+import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { useEffect, useState } from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { ClientDetails } from './ClientDetails';
 import styles from './tabs.module.scss';
 
 interface ClientListProps {
   clients: Client[],
+  business: NewBusiness,
 }
 
-export const ClientList: React.FC<ClientListProps> = ({clients}) => {
+export const ClientList: React.FC<ClientListProps> = ({clients, business}) => {
 
   const [selectedClient, setSelectedClient] = useState<Client>();
   const [open, setOpen] = useState<boolean>(false);
@@ -33,7 +36,10 @@ export const ClientList: React.FC<ClientListProps> = ({clients}) => {
       {clients.map(c => (
         <ClientDetails key={c.id} client={c} setSelectedClient={setSelectedClient} />
       ))}
-      {selectedClient && <ClientForm open={open} setOpen={setOpen} initialClient={selectedClient} onSubmit={() => setSelectedClient(undefined)} />}
+      {open && <ClientForm initialBusiness={{id: business.id, name: business.name}} open={open} setOpen={setOpen} initialClient={selectedClient} onSubmit={() => setSelectedClient(undefined)} />}
+      <div className={styles.addService} onClick={() => setOpen(true)}>
+        <AiOutlinePlus fontSize={18} />
+      </div>
     </div>
   )
 }

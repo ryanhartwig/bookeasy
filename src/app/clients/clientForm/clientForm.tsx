@@ -22,6 +22,7 @@ interface AppointmentFormProps {
   userId?: string,
   initialClient?: Client,
   onSubmit?: (...args: any) => any,
+  initialBusiness?: FormBusiness
 }
 
 interface RawClient {
@@ -33,7 +34,7 @@ interface RawClient {
   avatar: string
 }
 
-export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, userId, initialClient, onSubmit}) => {
+export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, initialBusiness, userId, initialClient, onSubmit}) => {
   const [error, setError] = useState<string>();
   const [id, setId] = useState<string>(uuid());
   const [name, setName] = useState<string>('');
@@ -48,7 +49,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const [placeholderClient, setPlaceholderClient] = useState<RawClient>();
 
-  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient }); 
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient || !!initialBusiness }); 
   const { data: multiClientData, loading: loadingMultiClientData, refetch } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache' });
 
   useEffect(() => {
@@ -59,6 +60,9 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   // Initialize fields when editing existing client
   useEffect(() => {
+    if (initialBusiness) {
+      setSelectedBusiness(initialBusiness);
+    }
     if (!initialClient || (initialClient && !multiClientData)) return;
 
     const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
@@ -72,7 +76,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     setPhone(phone || '');
     setAddress(address || '');
     setNotes(notes || '');
-  }, [initialClient, multiClientData, refetch]);
+  }, [initialBusiness, initialClient, multiClientData, refetch]);
 
   const client = useMemo<ClientInput | null>(() => {
     if (!name || !email || !selectedBusiness) return null;
@@ -217,8 +221,8 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     >
       <Modal.Header>{initialClient ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
-        {/* Cannot change provider when editing a client */}
-        {!initialClient && (
+        {/* Cannot change provider when editing a client or adding from business/teams view */}
+        {!initialClient && !initialBusiness && (
           <>
             <p>Select a provider</p>
             <Select list={businessesList} selected={(
