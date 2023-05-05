@@ -30,7 +30,6 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
 
   useEffect(() => {
     if (!selectedService) return;
-    
     setServiceFormOpen(true);
   }, [selectedService]);
 
@@ -39,15 +38,13 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
     setSelectedService(undefined);
   }, [serviceFormOpen]);
 
-
-
   return (
     <>
       {businesses.map(b => (  
         <ServicesList key={b.id} business={b} setSelectedService={setSelectedService} />
       ))}
       {serviceFormOpen && <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService} onSubmit={() => setSelectedService(undefined)} />}
-      <div className={styles.add_service} onClick={() => setServiceFormOpen(true)}>
+      <div className={styles.addService} onClick={() => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
       </div>
     </>
