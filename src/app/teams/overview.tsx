@@ -6,17 +6,16 @@ import Image from 'next/image';
 import teamDefault from '../../../public/assets/team_default.png';
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
-import { User } from "@/types/User";
+import { BusinessUser, User } from "@/types/User";
 
 interface OverviewProps {
   selected: Business,
-  members: User[],
+  members: BusinessUser[],
   clients: Client[],
   services: Service[],
 }
 
 export const Overview: React.FC<OverviewProps> = ({selected, members, clients, services}) => {
-
 
   return (
     <>

@@ -23,3 +23,9 @@ export interface AssignedUser {
   name: string,
   avatar?: string,
 }
+
+export interface BusinessUser {
+  user: User,
+  elevated: boolean,
+  date_added: string,
+}
