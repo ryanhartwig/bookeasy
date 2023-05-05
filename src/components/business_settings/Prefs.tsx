@@ -9,33 +9,27 @@ import styles from './tabs.module.scss';
 
 interface PrefsProps {
   business: NewBusiness,
-  userId: string,
+  userId?: string,
 }
 
 export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
 
-  const [businessName, setBusinessName] = useState<string>('');
-  const [businessEmail, setBusinessEmail] = useState<string>('');
-  const [businessPhone, setBusinessPhone] = useState<string>('');
-  const [businessAvatar, setBusinessAvatar] = useState<string>('');
+  const [value, setValue] = useState<string>('');
 
   const [updateBusinessPrefs, { 
     data: updateBusinessPrefsData, 
     loading: updateBusinessPrefsLoading,
     reset: updateBusinessPrefsReset,
   }] = useMutation(UPDATE_BUSINESS_PREFS, {
-    refetchQueries: [{
+    refetchQueries: !userId ? [] : [{
       query: GET_USER_OWN_BUSINESS,
       variables: { userId }
     }],
   });
 
-  const onSave = () => {
+  const onSave = (key: string) => {
     return updateBusinessPrefs({variables: { businessId: business.id, patch: {
-      name: businessName,
-      email: businessEmail,
-      phone: businessPhone,
-      avatar: businessAvatar,
+      [key]: value,
     }}})
   } 
 
@@ -52,16 +46,16 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId}) => {
       </div>
 
       <div className={styles.settings}>
-        <Setting label='Business Photo' placeholder='Enter valid url' value={businessAvatar} setValue={setBusinessAvatar} onSave={onSave}>
+        <Setting label='Business Photo' placeholder='Enter valid url' value={value} setValue={setValue} onSave={() => onSave('avatar')}>
           <Avatar src={business.avatar} size={50} alt='Business logo' />
         </Setting>
-        <Setting label='Business Name' placeholder='Name' value={businessName} setValue={setBusinessName} onSave={onSave}>
+        <Setting label='Business Name' placeholder='Name' value={value} setValue={setValue} onSave={() => onSave('name')}>
           <p>{business.name}</p>
         </Setting>
-        <Setting label='Business Email' placeholder='Email' value={businessEmail} setValue={setBusinessEmail} onSave={onSave}>
+        <Setting label='Business Email' placeholder='Email' value={value} setValue={setValue} onSave={() => onSave('email')}>
           <p>{business.email ?? 'None'}</p>
         </Setting>
-        <Setting label='Business Phone' placeholder='Phone' value={businessPhone} setValue={setBusinessPhone} onSave={onSave}>
+        <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')}>
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>

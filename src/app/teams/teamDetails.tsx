@@ -1,5 +1,6 @@
 import { BookingSitePrefs } from '@/components/business_settings/BookingSitePrefs';
 import { ClientList } from '@/components/business_settings/ClientList';
+import { Prefs } from '@/components/business_settings/Prefs';
 import { Services } from '@/components/business_settings/Services';
 import { Staff } from '@/components/business_settings/Staff';
 import { Card } from '@/components/UI/Card/Card';
@@ -45,6 +46,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
     <Services key='services' services={services} businessId={business.id} />,
     <ClientList key='clients' clients={clients} business={business} />,
     <BookingSitePrefs key='bookingsite' business={business} isTeams />,
+    <Prefs key='prefs' business={business} />, 
     // <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
   ]}, [business, clients, services]);
 
