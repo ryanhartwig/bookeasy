@@ -5,8 +5,7 @@ import addTeam from '../../../public/assets/team_add.svg';
 import teamDefault from '../../../public/assets/team_default.svg';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
-import { Business, NewBusiness } from '@/types/Business';
-import { User } from '@/types/User';
+import { NewBusiness } from '@/types/Business';
 
 interface TeamsProps {
   selected?: NewBusiness,

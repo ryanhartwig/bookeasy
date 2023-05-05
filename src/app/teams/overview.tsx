@@ -6,7 +6,7 @@ import Image from 'next/image';
 import teamDefault from '../../../public/assets/team_default.png';
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
-import { BusinessUser, User } from "@/types/User";
+import { BusinessUser } from "@/types/User";
 
 interface OverviewProps {
   selected: Business,

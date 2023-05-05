@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar } from "@/components/UI/Avatar/Avatar";
-import { BusinessUser, User } from "@/types/User";
+import { BusinessUser } from "@/types/User";
 import styles from './teams.module.scss';
 
 interface MembersProps {

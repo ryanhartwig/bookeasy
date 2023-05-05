@@ -1,11 +1,10 @@
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
-import { User } from "@/types/User";
+import { BusinessUser, User } from "@/types/User";
 
 import styles from './tabs.module.scss';
 import { useEffect, useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
-import { UserMeta } from "@/utility/functions/fetch_old/business/getBusinessUserMeta";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
@@ -14,19 +13,17 @@ import { Services } from "./Services";
 import { ClientList } from "./ClientList";
 import { Availability } from "./Availability";
 import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability";
-import { getUserAvailability } from "@/utility/functions/fetch_old/getUserAvailability";
 import { Business } from "@/types/Business";
 
 
 interface StaffProps {
-  members: User[],
+  members: BusinessUser[],
   services: Service[],
   clients: Client[],
-  meta: UserMeta[],
   business: Business,
 }
 
-export const Staff: React.FC<StaffProps> = ({members, services, clients, meta, business}) => {
+export const Staff: React.FC<StaffProps> = ({members, services, clients, business}) => {
 
   const [selected, setSelected] = useState<User>();
   const [tab, setTab] = useState<number>(0);
