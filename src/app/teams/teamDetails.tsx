@@ -45,7 +45,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
     <Services key='services' services={services} businessId={business.id} />,
     <ClientList key='clients' clients={clients} business={business} />,
     <BookingSitePrefs key='bookingsite' business={business} isTeams />,
-    <Staff key='staff' business={business} clients={clients} members={users} services={services} />,
+    <Staff key='staff' business={business} members={users} services={services} />,
   ]}, [business, clients, services, users]);
 
   return (

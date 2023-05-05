@@ -3,27 +3,21 @@ import { Service } from "@/types/Service";
 import { BusinessUser, User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
-import { Tabs } from "../UI/Tabs/Tabs";
-import { Services } from "./Services";
-import { ClientList } from "./ClientList";
 import { Availability } from "./Availability";
-import { AvailabilitySlice, BaseAvailability } from "@/types/BaseAvailability";
-import { Business, NewBusiness } from "@/types/Business";
-
+import { NewBusiness } from "@/types/Business";
 
 interface StaffProps {
   members: BusinessUser[],
   services: Service[],
-  clients: Client[],
   business: NewBusiness,
 }
 
-export const Staff: React.FC<StaffProps> = ({members, services, clients, business}) => {
+export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
 
   const [selected, setSelected] = useState<User>();
 
@@ -48,7 +42,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, clients, busines
   return (
     <div className={styles.ClientList}>
       <div className={styles.header}>
-        {['Name', 'Services', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
+        {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
       <Modal open={!!selected} escapeCloses onClose={() => setSelected(undefined)} className={styles.modal} >

@@ -48,7 +48,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
 
   return ( 
     <div className={styles.Availability}>
-      <div className={styles.header}>
+      <div className={styles.header} style={{paddingLeft: 0}}>
         <p>Bookable Hours</p>
       </div>
       {slices}
