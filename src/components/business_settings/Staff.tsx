@@ -3,13 +3,16 @@ import { Service } from "@/types/Service";
 import { BusinessUser, User } from "@/types/User";
 
 import styles from './tabs.module.scss';
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 import { Availability } from "./Availability";
 import { NewBusiness } from "@/types/Business";
+import { useQuery } from "@apollo/client";
+import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
+import { AvailabilitySlice } from "@/types/BaseAvailability";
 
 interface StaffProps {
   members: BusinessUser[],
@@ -20,6 +23,14 @@ interface StaffProps {
 export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
 
   const [selected, setSelected] = useState<User>();
+  const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
+
+  const { data: availabilityData, loading } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: selected?.id, businessId: business.id }, skip: !selected});
+  useEffect(() => {
+    if (!availabilityData || loading) return;
+    setSlices(availabilityData.getUserAvailability);
+  }, [availabilityData, loading]); 
+
 
   const staff = useMemo(() => 
     members.map(m => (
@@ -65,7 +76,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
                 </ul>
               </div>
             </div>
-            {selected && <Availability availabilitySlices={[]} key="availability" businessId={business.id} userId={selected?.id} />}
+            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected?.id} />}
           </div>
         }
       </Modal>

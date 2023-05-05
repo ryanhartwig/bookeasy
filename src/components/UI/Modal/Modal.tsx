@@ -65,7 +65,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             <div className='Modal-header'>
               <div className='Modal-heading'>
                 <h2>{header}</h2>
-                <div onClick={() => onClick(undefined)} className='Modal-close'>
+                <div onClick={() => setTimeout(() => onClick(undefined), 1)} className='Modal-close'>
                   <TfiClose fontSize={13} />
                 </div>
               </div>
@@ -75,7 +75,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             {content}
           </div>
           {actionButtonText && 
-            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={handleActionClick}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={() => setTimeout(handleActionClick, 1)}>
               <hr/>
               <p>{actionButtonText}</p>
             </div>

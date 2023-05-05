@@ -43,6 +43,8 @@ export const userResolvers = {
           params.push(args.business_id);
         }
 
+        query += ' order by start_time asc';
+        
         const response = await db.query(query, params);
         return response.rows;
       } catch(e: any) {
