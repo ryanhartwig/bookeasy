@@ -76,7 +76,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             {content}
           </div>
           {actionButtonText && 
-            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={handleActionClick}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={() => setTimeout(() => handleActionClick(), 1)}>
               <hr/>
               <p>{actionButtonText}</p>
             </div>

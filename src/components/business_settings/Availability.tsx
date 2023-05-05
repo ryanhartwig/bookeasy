@@ -12,18 +12,11 @@ interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
   businessId: string,
   userId?: string,
-  setFormIsOpen?: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, businessId, setFormIsOpen}) => {
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, businessId}) => {
   const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
   const [day, setDay] = useState<number>();
-
-  useEffect(() => {
-    if (!setFormIsOpen) return;
-    if (formSlices) setFormIsOpen(true);
-    if (!formSlices) setFormIsOpen(false);
-  }, [formSlices, setFormIsOpen]);
 
   const availability = useMemo(() => {
     const map = new Map<number, AvailabilitySlice[]>();
