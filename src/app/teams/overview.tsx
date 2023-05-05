@@ -1,7 +1,6 @@
 'use client';
 
-import { Business } from "@/types/Business"
-import styles from './teams.module.scss';
+import { NewBusiness } from "@/types/Business"
 import Image from 'next/image';
 import teamDefault from '../../../public/assets/team_default.png';
 import { Client } from "@/types/Client";
@@ -9,7 +8,7 @@ import { Service } from "@/types/Service";
 import { BusinessUser } from "@/types/User";
 
 interface OverviewProps {
-  selected: Business,
+  selected: NewBusiness,
   members: BusinessUser[],
   clients: Client[],
   services: Service[],

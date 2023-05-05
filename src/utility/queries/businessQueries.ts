@@ -60,6 +60,25 @@ export const GET_BUSINESS_USERS = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
       users {
+        date_added
+        elevated
+        user {
+          id
+          name
+          email
+          phone
+          created
+          avatar
+        }
+      }
+    }
+  }
+`;
+
+export const GET_BUSINESS_FORM_USERS = gql`
+  query($businessId: ID!) {
+    getBusiness(business_id: $businessId) {
+      users {
         user {
           id
           name

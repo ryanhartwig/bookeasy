@@ -4,18 +4,20 @@ import { Services } from '@/components/business_settings/Services';
 import { Staff } from '@/components/business_settings/Staff';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
-import { Business } from '@/types/Business';
+import { Business, NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { BusinessUser } from '@/types/User';
+import { GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
+import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Members } from './members';
 import { Overview } from './overview';
 import styles from './teams.module.scss';
 
 interface TeamDetailsProps {
-  business: Business,
+  business: NewBusiness,
 }
 
 export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
@@ -24,6 +26,11 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
   const [users, setUsers] = useState<BusinessUser[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+
+  const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
+  useEffect(() => businessUsersData && 
+    setUsers([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
+  , [businessUsersData]);
 
   const tabs = useMemo(() => {
     return [
