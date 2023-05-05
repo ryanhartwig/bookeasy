@@ -33,7 +33,7 @@ export const ClientList: React.FC<ClientListProps> = ({clients, business}) => {
       <div className={styles.header}>
         {['Name', 'Appointments', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
-      {clients.map(c => (
+      {[...clients].sort((a, b) => a.name < b.name ? -1 : 1).map(c => (
         <ClientDetails key={c.id} client={c} setSelectedClient={setSelectedClient} />
       ))}
       {open && <ClientForm initialBusiness={{id: business.id, name: business.name}} open={open} setOpen={setOpen} initialClient={selectedClient} onSubmit={() => setSelectedClient(undefined)} />}
