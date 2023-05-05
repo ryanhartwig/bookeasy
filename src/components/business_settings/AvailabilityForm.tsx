@@ -89,6 +89,11 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
         userId,
         businessId,
       }
+    }, {
+      query: GET_USER_AVAILABILITY,
+      variables: {
+        userId,
+      }
     }]
   });
 
