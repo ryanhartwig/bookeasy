@@ -6,6 +6,7 @@ import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
+import { TeamDetails } from './teamDetails';
 
 interface TeamsViewProps {
   userId: string,
@@ -26,8 +27,7 @@ export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
           <TeamSelect teams={teams} selected={selected} setSelected={setSelected} />
         </div>
         
-        {/* {selected && <TeamDetails business={selected} clients={clients} services={services} users={members} meta={meta}/>} */}
-        
+        {selected && <TeamDetails business={selected}/>}
       </div>
     </>
   )

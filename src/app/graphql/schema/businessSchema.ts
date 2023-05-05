@@ -98,12 +98,11 @@ export const businessResolvers = {
       // Fetch own business user when the property is present
       if (parent.user_id) {
         const ownUser = await db.query('select * from users where id = $1', [parent.user_id]);
-        const { elevated, date_added } = ownUser.rows[0];
 
         businessUsers.push({
           user: ownUser.rows[0],
-          date_added,
-          elevated,
+          date_added: parent.created,
+          elevated: true,
         });
       }
 
