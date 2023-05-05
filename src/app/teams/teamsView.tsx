@@ -1,13 +1,11 @@
 'use client';
 
-import { Business, NewBusiness } from '@/types/Business';
+import { NewBusiness } from '@/types/Business';
 import { useEffect, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
-import { User } from '@/types/User';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
-import { TeamDetails } from './teamDetails';
+import { useQuery } from '@apollo/client';
+import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 
 interface TeamsViewProps {
   userId: string,
@@ -16,6 +14,9 @@ interface TeamsViewProps {
 export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
   const [selected, setSelected] = useState<NewBusiness>();
   const [teams, setTeams] = useState<NewBusiness[]>([]);
+
+  const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
+  useEffect(() => teamsData && setTeams(teamsData.getUserBusinesses), [teamsData]);
 
   return (
     <>
