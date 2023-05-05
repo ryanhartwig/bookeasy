@@ -47,8 +47,9 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   const handleActionClick = useCallback(() => {
     if (actionButtonDisabled) return;
     if (actionCloses) {
-      onClick(undefined);
+      onClick();
     }
+
     onAction && onAction();
   }, [actionButtonDisabled, actionCloses, onAction, onClick]);
   
@@ -65,7 +66,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             <div className='Modal-header'>
               <div className='Modal-heading'>
                 <h2>{header}</h2>
-                <div onClick={() => setTimeout(() => onClick(undefined), 1)} className='Modal-close'>
+                <div onClick={() => setTimeout(() => onClick(), 1)} className='Modal-close'>
                   <TfiClose fontSize={13} />
                 </div>
               </div>
@@ -75,7 +76,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             {content}
           </div>
           {actionButtonText && 
-            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={() => setTimeout(handleActionClick, 1)}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={handleActionClick}>
               <hr/>
               <p>{actionButtonText}</p>
             </div>

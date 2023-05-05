@@ -125,8 +125,6 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const invalidValues = useMemo(() => startValue !== undefined && endValue !== undefined && startValue >= endValue, [endValue, startValue]);
   const canSubmit = useMemo(() => startValue && endValue && !invalidValues && !overlapping, [endValue, invalidValues, overlapping, startValue]);
 
-  
-
   const onAddSlice = useCallback(() => {
     if (!canSubmit || !startString || !endString) return;
 
@@ -151,10 +149,10 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     setUserAvailability({variables: { userId, businessId, day, slices: newSlices.map(s => ({...s, user_id: userId, __typename: undefined})) }})
   }, [businessId, day, newSlices, setUserAvailability, userId]);
 
-  useEffect(() => {
-    if (!data || loading) return;
-    onClose();
-  }, [data, loading, onClose]);
+  // useEffect(() => {
+  //   if (!data || loading) return;
+  //   onClose();
+  // }, [data, loading, onClose]);
 
   return (
     <Modal
@@ -202,7 +200,6 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
             {overlapping && <p className={styles.warning}>* booking periods can not overlap</p>}
             {invalidValues && <p className={styles.warning}>* starting period must be less then ending period</p>}
           </div>
-          
         </div>
     </Modal>
   )

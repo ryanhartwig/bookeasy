@@ -25,6 +25,10 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
   const [selected, setSelected] = useState<User>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
 
+  const [pause, setPause] = useState<boolean>(false);
+
+  console.log(pause);
+
   const { data: availabilityData, loading } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: selected?.id, businessId: business.id }, skip: !selected});
   useEffect(() => {
     if (!availabilityData || loading) return;
@@ -56,7 +60,13 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
         {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staff}
-      <Modal open={!!selected} escapeCloses onClose={() => setSelected(undefined)} className={styles.modal} >
+      <Modal 
+        open={!!selected} 
+        escapeCloses 
+        onClose={() => setSelected(undefined)} 
+        className={styles.modal} 
+        pauseListener={!!pause}
+      >
         <Modal.Header>Staff Details</Modal.Header>
         {selected &&
           <div className={styles.staff_content}>
@@ -76,7 +86,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
                 </ul>
               </div>
             </div>
-            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected?.id} />}
+            {selected && <Availability setFormIsOpen={setPause} availabilitySlices={slices} key="availability" businessId={business.id} userId={selected?.id} />}
           </div>
         }
       </Modal>
