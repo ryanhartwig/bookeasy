@@ -48,8 +48,8 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, ...prop
           <ServiceCard key={s.id} service={s} onClick={() => setSelectedService(s)} />
         </div>
       ))}
-      {serviceFormOpen && <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService || initialService} onSubmit={() => setSelectedService(undefined)} useAddMutation={!selectedService} />}
-      <div className={styles.addService} onClick={() => setServiceFormOpen(true)}>
+      <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService || initialService} onSubmit={() => setSelectedService(undefined)} useAddMutation={!selectedService} />
+      <div className={styles.addService} onClick={(e) => {e.stopPropagation(); setServiceFormOpen(true)}}>
         <AiOutlinePlus fontSize={18} />
       </div>
     </div>

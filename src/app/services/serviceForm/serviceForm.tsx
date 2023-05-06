@@ -206,9 +206,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
       actionCloses
-      loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
+      // loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
-      <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
+      <Modal.Header>{initialService && !useAddMutation ? 'Edit' : 'Add a'} Service</Modal.Header>
       <div className={styles.appointmentOptions}>
         {!initialService && <>
           <p>Select a provider</p>
