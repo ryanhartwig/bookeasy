@@ -4,7 +4,7 @@ import { Setting } from '@/components/UI/Setting/Setting';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { weekDays } from '@/utility/data/days';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AvailabilityForm } from './AvailabilityForm';
 import styles from './tabs.module.scss';
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { MutationFunctionOptions, OperationVariables, DefaultContext, ApolloCache } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
