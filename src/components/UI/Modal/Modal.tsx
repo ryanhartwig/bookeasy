@@ -1,7 +1,7 @@
 
 import { useClickout } from '@/utility/hooks/useClickout';
 import clsx from 'clsx';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { TfiClose } from 'react-icons/tfi';
 import './Modal.scss';
@@ -32,7 +32,12 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   const modalRef = useRef<HTMLDivElement>(undefined!)
   const contentRef = useRef<HTMLDivElement>(undefined!);
 
-  const forceClickout = useClickout(onClose, open, loading || pauseListener, modalRef, contentRef, ...refs);
+  const forceClickout = useClickout({
+    contentRefs: [contentRef, ...refs],
+    onClickout: onClose,
+    enabled: open,
+    pause: loading || pauseListener,
+  });
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Escape') onClose();

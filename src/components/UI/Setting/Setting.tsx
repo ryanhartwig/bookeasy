@@ -32,14 +32,23 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   const settingRef = useRef<HTMLDivElement>(undefined!);
 
-  const onClose = useClickout(() => {
-    if (onAction) return;
-    setEditing(false);
-    setValue && setValue('');
-  }, editing, false, settingRef)
+  // const onClose = useClickout(() => {
+  //   if (onAction) return;
+  //   setEditing(false);
+  //   setValue && setValue('');
+  // }, editing, false, settingRef)
+
+  const onClose = useClickout({
+    onClickout: () => {
+      if (onAction) return;
+      setEditing(false);
+      setValue && setValue('');
+    },
+    enabled: editing,
+    contentRefs: [settingRef],
+  })
 
   const onEdit = useCallback((e: any) => {
-    // e.stopPropagation();
     if (onAction) return onAction();
     if (!setEditing) return;
     setEditing(true);
@@ -84,7 +93,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
               <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => {
                 setEditing && setEditing(false);
                 setValue && setValue('');
-                onClose(undefined);
+                onClose();
               }}>Cancel</p>
               <p onClick={handleSave}>Save</p>
             </>
