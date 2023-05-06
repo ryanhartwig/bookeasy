@@ -43,7 +43,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
           <p>{services.filter(s => s.assigned_users.some(user => user.id === m.user.id)).length}</p>
           <p>{new Date(m.date_added)
             .toLocaleDateString()}</p>
-          <p className={styles.details} onClick={() => setSelected(m.user)}>Details</p>
+          <p className={styles.details} onClick={(e) => {setSelected(m.user)}}>Details</p>
         </div>
       </div> 
       )

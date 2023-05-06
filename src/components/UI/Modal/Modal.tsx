@@ -32,7 +32,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   const modalRef = useRef<HTMLDivElement>(undefined!)
   const contentRef = useRef<HTMLDivElement>(undefined!);
 
-  const onClick = useClickout(onClose, open, loading || pauseListener, contentRef, ...refs);
+  const forceClickout = useClickout(onClose, open, loading || pauseListener, modalRef, contentRef, ...refs);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Escape') onClose();
@@ -47,11 +47,11 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   const handleActionClick = useCallback(() => {
     if (actionButtonDisabled) return;
     if (actionCloses) {
-      onClick();
+      forceClickout();
     }
 
     onAction && onAction();
-  }, [actionButtonDisabled, actionCloses, onAction, onClick]);
+  }, [actionButtonDisabled, actionCloses, onAction, forceClickout]);
   
   return (
     <>
@@ -66,7 +66,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             <div className='Modal-header'>
               <div className='Modal-heading'>
                 <h2>{header}</h2>
-                <div onClick={() => setTimeout(() => onClick(), 1)} className='Modal-close'>
+                <div onClick={forceClickout} className='Modal-close'>
                   <TfiClose fontSize={13} />
                 </div>
               </div>

@@ -38,7 +38,8 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
     setValue && setValue('');
   }, editing, false, settingRef)
 
-  const onEdit = useCallback(() => {
+  const onEdit = useCallback((e: any) => {
+    // e.stopPropagation();
     if (onAction) return onAction();
     if (!setEditing) return;
     setEditing(true);

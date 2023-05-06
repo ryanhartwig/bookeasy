@@ -9,7 +9,7 @@ import { FiEdit2 } from 'react-icons/fi';
 export default function ServiceCard({service, onClick}: { service: Service, onClick?: (...args: any) => any}) {
    
   return (
-    <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={onClick && onClick}>
+    <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={(e) => onClick && onClick(e)}>
       {service.is_video && 
         <div className={styles.video}>
           <BsFillCameraVideoFill size={16} />

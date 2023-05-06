@@ -45,11 +45,11 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, ...prop
     <div {...props} className={clsx(styles.Services, props.className || '')}>
       {services.filter(s => !s.deleted).map(s => (
         <div key={s.id}>
-          <ServiceCard key={s.id} service={s} onClick={() => setSelectedService(s)} />
+          <ServiceCard key={s.id} service={s} onClick={(e) => {console.log(e); setSelectedService(s)}} />
         </div>
       ))}
       <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService || initialService} onSubmit={() => setSelectedService(undefined)} useAddMutation={!selectedService} />
-      <div className={styles.addService} onClick={(e) => {e.stopPropagation(); setServiceFormOpen(true)}}>
+      <div className={styles.addService} onClick={(e) => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
       </div>
     </div>
