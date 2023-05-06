@@ -49,10 +49,10 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [escapeCloses, onKeyDown]);
 
-  const handleActionClick = useCallback(() => {
+  const handleActionClick = useCallback((e: any) => {
     if (actionButtonDisabled) return;
     if (actionCloses) {
-      forceClickout();
+      forceClickout(e);
     }
 
     onAction && onAction();
