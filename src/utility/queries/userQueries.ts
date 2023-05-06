@@ -29,6 +29,28 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_USER_WITH_PREFS = gql`
+  query($userId: ID!) {
+    getUser(id: $userId) {
+      id
+      name
+      email
+      phone
+      created
+      prefs {
+        private_photo
+        private_email
+        private_phone
+        notification_booking
+        notification_reminder
+        notification_overview
+        notification_overview_time
+      }
+      avatar
+    }
+  }
+`;
+
 export const GET_USER_OWN_BUSINESS = gql`
   query($userId: ID!) {
     getUserOwnBusiness(user_id: $userId) {

@@ -1,15 +1,26 @@
+
+'use client';
+
 import { Header } from '@/components/Header';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Setting } from '@/components/UI/Setting/Setting';
+import { User } from '@/types/User';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
+import { GET_USER_WITH_PREFS } from '@/utility/queries/userQueries';
 import { userId } from '@/utility/sample_data/sample_userId';
+import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
 import styles from './settings.module.scss';
 
-export default async function Page() {
+export default function Page() {
 
-return <></>
+  const [user, setUser] = useState<User>();
+  
+  const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId }});
+  useEffect(() => data && setUser(data.getUser), [data])
+
   return (
     <>
       <Header text="Settings" />
