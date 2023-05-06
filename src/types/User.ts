@@ -6,13 +6,13 @@ export interface User {
   phone?: number,
   avatar?: string,
   prefs?: {
-    privatePhoto: boolean,
-    privateEmail: boolean,
-    privatePhone: boolean,
-    notificationBooking: boolean,
-    notificationReminder: boolean,
-    notificationOverview: boolean,
-    notificationOverviewTime: string | null,
+    private_photo: boolean,
+    private_email: boolean,
+    private_phone: boolean,
+    notification_booking: boolean,
+    notification_reminder: boolean,
+    notification_overview: boolean,
+    notification_overview_time: string | null,
   };
 };
 

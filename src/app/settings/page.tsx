@@ -44,17 +44,17 @@ export default function Page() {
 
           <SectionLabel label="Privacy Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Hide my profile picture on booking sites' toggleState={user.prefs.privatePhoto} />
-            <Setting label='Hide my email on booking sites' toggleState={user.prefs.privateEmail} />
-            <Setting label='Hide my phone number on booking sites' toggleState={user.prefs.privatePhone} />
+            <Setting label='Hide my profile picture on booking sites' toggleState={user.prefs.private_photo} />
+            <Setting label='Hide my email on booking sites' toggleState={user.prefs.private_email} />
+            <Setting label='Hide my phone number on booking sites' toggleState={user.prefs.private_phone} />
           </div>
           <SectionLabel label="Notification Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Receive email notification when an appointment is booked or cancelled' toggleState={user.prefs.notificationBooking} />
-            <Setting label='Receive email reminders for upcoming appointments' toggleState={user.prefs.notificationReminder} />
-            <Setting label='Receive appointments overview email on work days' toggleState={user.prefs.notificationOverview} />
-            <Setting label='Receive at:' style={{ paddingLeft: 50, opacity: user.prefs.notificationOverview ? 1 : 0.5, pointerEvents: user.prefs.notificationOverview ? 'all' : 'none' }}>
-              <p>{user.prefs.notificationOverviewTime ? formatMilitaryTime(user.prefs.notificationOverviewTime) : 'Unset'}</p>
+            <Setting label='Receive email notification when an appointment is booked or cancelled' toggleState={user.prefs.notification_booking} />
+            <Setting label='Receive email reminders for upcoming appointments' toggleState={user.prefs.notification_reminder} />
+            <Setting label='Receive appointments overview email on work days' toggleState={user.prefs.notification_overview} />
+            <Setting label='Receive at:' style={{ paddingLeft: 50, opacity: user.prefs.notification_overview ? 1 : 0.5, pointerEvents: user.prefs.notification_overview ? 'all' : 'none' }}>
+              <p>{user.prefs.notification_overview_time ? formatMilitaryTime(user.prefs.notification_overview_time) : 'Unset'}</p>
             </Setting>
           </div>
         </Card>
