@@ -57,7 +57,7 @@ export const PeriodSelectForm: React.FC<PeriodSelectFormProps> = ({open, onClose
       loading={loading}
     >
       <Modal.Header>Select Time Period</Modal.Header>
-      <div className={styles.periodSelect}>
+      <div className={styles.bookingSitePrefs}>
         <p>Months</p>
         <div className={styles.durationSelect}>
           <AiOutlineMinusCircle onClick={() => setMonths(p => p === 0 ? p : p - 1)} />
