@@ -32,12 +32,6 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   const settingRef = useRef<HTMLDivElement>(undefined!);
 
-  // const onClose = useClickout(() => {
-  //   if (onAction) return;
-  //   setEditing(false);
-  //   setValue && setValue('');
-  // }, editing, false, settingRef)
-
   const onClose = useClickout({
     onClickout: () => {
       if (onAction) return;
