@@ -20,11 +20,15 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
    */
   onEditClick?: (...args: any) => any,
   value?: string,
+  /**
+   * Will not prevent onSave() from being called if value is an empty string
+   */
+  allowEmptyValue?: boolean,
   setValue?: React.Dispatch<React.SetStateAction<any>>,
   onSave?: (...args: any) => Promise<any>,
 }
 
-export const Setting = ({label, children, toggleState, onEditClick, value, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditClick, value, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,7 +52,7 @@ export const Setting = ({label, children, toggleState, onEditClick, value, setVa
 
   const handleSave = useCallback(() => {
     if (!onSave) return;
-    if (!value) return;
+    if (!allowEmptyValue && !value) return;
 
     setLoading(true);
 
@@ -58,7 +62,7 @@ export const Setting = ({label, children, toggleState, onEditClick, value, setVa
       setEditing(false);
       setValue && setValue('');
     })();
-  }, [onSave, setValue, value]);
+  }, [allowEmptyValue, onSave, setValue, value]);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();

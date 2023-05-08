@@ -25,7 +25,7 @@ export default function Page() {
   const [patchUser, { loading: patchUserLoading }] = useMutation(PATCH_USER, { refetchQueries });
   const [patchUserPrefs, { loading: patchUserPrefsLoading }] = useMutation(PATCH_USER_PREFS, { refetchQueries });
 
-  const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value }}})
+  const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value || null }}})
   , [patchUser, value]);
   const onPatchPrefs = useCallback((key: string, value: boolean) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
   , [patchUserPrefs]);
@@ -37,7 +37,7 @@ export default function Page() {
         <Card className={styles.card}>
           <SectionLabel label="Profile Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Picture' value={value} setValue={setValue} onSave={() => onPatchUser('avatar')}>
+            <Setting label='Picture' value={value} setValue={setValue} onSave={() => onPatchUser('avatar')} allowEmptyValue >
               <Avatar src={user?.avatar} size={60} />
             </Setting>
             <Setting label='Name' value={value} setValue={setValue} onSave={() => onPatchUser('name')}>
