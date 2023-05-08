@@ -2,10 +2,14 @@
 'use client';
 
 import { Header } from '@/components/Header';
+import { HoursList } from '@/components/SelectLists/Hours';
+import { MinutesList } from '@/components/SelectLists/Minutes';
+import { PeriodList } from '@/components/SelectLists/Period';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { Modal } from '@/components/UI/Modal/Modal';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
+import { Select } from '@/components/UI/Select/Select';
 import { Setting } from '@/components/UI/Setting/Setting';
 import { User } from '@/types/User';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
@@ -20,7 +24,17 @@ export default function Page() {
   const [user, setUser] = useState<User>();
   const [value, setValue] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [hours, setHours] = useState<number>();
+  const [min, setMin] = useState<number>();
+  const [period, setPeriod] = useState<'am' | 'pm'>('am');
+
+  useEffect(() => {
+    if (!hours || min === undefined) return;
+    setValue(`${period === 'am' ? hours : hours + 12}:${min === 0 ? '00' : min}`)
+  }, [hours, min, period]);
+
   const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId }});
   useEffect(() => data && setUser(data.getUser), [data]);
 
@@ -30,8 +44,21 @@ export default function Page() {
 
   const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value || null }}})
   , [patchUser, value]);
-  const onPatchPrefs = useCallback((key: string, value: boolean) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
+  const onPatchPrefs = useCallback((key: string, value: boolean | string) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
   , [patchUserPrefs]);
+
+  const onModalSubmit = useCallback((key: string) => {
+    setLoading(true);
+    ;(async () => {
+      await onPatchPrefs('notification_overview_time', value);
+      setLoading(false);
+      setHours(undefined);
+      setMin(undefined);
+      setPeriod('am');
+      setValue('');
+      setModalOpen(false);
+    })();
+  }, [onPatchPrefs, value]);
 
   return (
     <>
@@ -95,9 +122,20 @@ export default function Page() {
           open={modalOpen} 
           onClose={() => setModalOpen(false)}
           actionButtonText="Confirm"
+          actionButtonDisabled={!value}
+          onAction={onModalSubmit}
+          loading={loading}
         >
           <Modal.Header>Select Time</Modal.Header>
-          
+          <div className={styles.modal}>
+            <p>Select a time to receive the overview:</p>
+            <div className={styles.timeSelect}>
+              <Select list={HoursList(setHours)} selected={<p>{hours}</p> } placeholder="hr" hasSelected={!!hours} />
+              <p>:</p>
+              <Select list={MinutesList(setMin)} selected={<p>{min === 0 ? '00' : min}</p>} placeholder="min" hasSelected={min !== undefined} />
+              <Select list={PeriodList(setPeriod)} selected={<p>{period}</p>} hasSelected />
+            </div>
+          </div>
         </Modal>
       </div>}
     </>
