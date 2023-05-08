@@ -92,6 +92,7 @@ export const userResolvers = {
         params.push(patch[key]);
       }
 
+      console.log(user_id, patch);
       if (paramsCount === 2) throwGQLError('No patch arguments provided.');
       
       query = query.slice(0, -2);

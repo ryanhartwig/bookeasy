@@ -75,16 +75,16 @@ export const SET_USER_AVAILABILITY = gql`
 
 
 export const PATCH_USER = gql`
-  mutation($userId: ID!) {
-    patchUser(user_id: $userId) {
+  mutation($userId: ID!, $patch: UserPatch) {
+    patchUser(user_id: $userId, patch: $patch) {
       id
     }
-  }
+  } 
 `;
 
 export const PATCH_USER_PREFS = gql`
-  mutation($patchUserPrefsUserId2: ID!) {
-    patchUserPrefs(user_id: $patchUserPrefsUserId2) {
+  mutation($userId: ID!, $patch: UserPrefsPatch) {
+    patchUserPrefs(user_id: $userId, patch: $patch) {
       user_id
     }
   }

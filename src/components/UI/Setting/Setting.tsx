@@ -18,13 +18,13 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   /**
    * If provided, will override local editing functionality (useful for showing modal instead, etc)
    */
-  onAction?: (...args: any) => any,
+  onEditClick?: (...args: any) => any,
   value?: string,
   setValue?: React.Dispatch<React.SetStateAction<any>>,
   onSave?: (...args: any) => Promise<any>,
 }
 
-export const Setting = ({label, children, toggleState, onAction, value, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditClick, value, setValue, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +33,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
 
   const onClose = useClickout({
     onClickout: () => {
-      if (onAction) return;
+      if (onEditClick) return;
       setEditing(false);
       setValue && setValue('');
     },
@@ -42,10 +42,9 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
   })
 
   const onEdit = useCallback((e: any) => {
-    if (onAction) return onAction();
-    if (!setEditing) return;
+    if (onEditClick) return onEditClick();
     setEditing(true);
-  }, [onAction, setEditing]);
+  }, [onEditClick, setEditing]);
 
   const handleSave = useCallback(() => {
     if (!onSave) return;
@@ -93,7 +92,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
             }
           </div>
           
-        : <div className={clsx(styles.action, 'noselect')} onClick={onAction}>
+        : <div className={clsx(styles.action, 'noselect')} onClick={onSave}>
             <div className={clsx(styles.toggle, {[styles.on]: toggleState})}>
               <div className={clsx(styles.toggle_circle, {[styles.on]: toggleState})} />
             </div>
