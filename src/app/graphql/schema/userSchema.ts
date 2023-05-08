@@ -82,8 +82,8 @@ export const userResolvers = {
     },
     updateUserField: async (_: any, args: any) => {
       const { user_id, patch } = args;
-      let query = 'update users set ';
       const params = [user_id];
+      let query = 'update users set ';
       let paramCount = 2; 
 
       for (const key in patch) {
@@ -95,12 +95,10 @@ export const userResolvers = {
       if (paramCount === 2) throwGQLError('No patch fields provided.');
       
       query = query.slice(0, -2);
-      query += ' where id = $1';
+      query += ' where id = $1 returning *';
 
-      console.log(query, params);
-
-
-      return { id: ''};
+      const response = await db.query(query, params);
+      return response.rows[0];
     },
   }
 }

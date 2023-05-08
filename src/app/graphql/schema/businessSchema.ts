@@ -113,47 +113,21 @@ export const businessResolvers = {
   },
   Mutation: {
     updateBusinessPrefs: async (_: any, args: any) => {
-      const { name, email, phone, avatar, min_booking_notice, max_book_ahead, min_cancel_notice } = args.patch;
-      if (!name && !email && !phone && !avatar && !min_booking_notice && !max_book_ahead && !min_cancel_notice) {
-        throwGQLError('Must provide at least one argument to update');
-      }
-
-      const { business_id } = args;
-
-      let query = 'update business set';
+      const { business_id, patch } = args;
       const params = [business_id];
+      let query = 'update business set ';
+      let paramsCount = 2;
 
-      // Only one of the following properties will be provided & patched
-      if (name) {
-        query += ' name = $2 where id = $1';
-        params.push(name);
-      }
-      else if (email) {
-        query += ' email = $2 where id = $1';
-        params.push(email);
-      }
-      else if (phone) {
-        query += ' phone = $2 where id = $1';
-        params.push(phone);
-      }
-      else if (avatar) {
-        query += ' avatar = $2 where id = $1';
-        params.push(avatar);
-      }
-      else if (min_booking_notice) {
-        query += ' min_booking_notice = $2 where id = $1';
-        params.push(min_booking_notice);
-      }
-      else if (max_book_ahead) {
-        query += ' max_book_ahead = $2 where id = $1';
-        params.push(max_book_ahead);
-      }
-      else if (min_cancel_notice) {
-        query += ' min_cancel_notice = $2 where id = $1';
-        params.push(min_cancel_notice);
+      for (const key in patch) {
+        query += `${key} = $${paramsCount}, `;
+        paramsCount++;
+        params.push(patch[key]);
       }
 
-      query += ' returning *';
+      if (paramsCount === 2) throwGQLError('No patch arguments provided.');
+      
+      query = query.slice(0, -2);
+      query += ' where id = $1 returning *';
 
       const response = await db.query(query, params);
       return response.rows[0];
