@@ -80,6 +80,28 @@ export const userResolvers = {
 
       return user_id;
     },
+    updateUserField: async (_: any, args: any) => {
+      const { user_id, patch } = args;
+      let query = 'update users set ';
+      const params = [user_id];
+      let paramCount = 2; 
+
+      for (const key in patch) {
+        query += `${key} = $${paramCount}, `;
+        paramCount++;
+        params.push(patch[key]);
+      }
+
+      if (paramCount === 2) throwGQLError('No patch fields provided.');
+      
+      query = query.slice(0, -2);
+      query += ' where id = $1';
+
+      console.log(query, params);
+
+
+      return { id: ''};
+    },
   }
 }
 
@@ -99,7 +121,15 @@ export const userTypeDefs = `#graphql
     end_time: String!,
   }
 
+  input UserPatch {
+    name: String,
+    avatar: String,
+    email: String,
+    phone: String,
+  }
+
   type Mutation {
     setUserAvailability(user_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
+    updateUserField(user_id: ID!, patch: UserPatch): User!,
   }
 `;
