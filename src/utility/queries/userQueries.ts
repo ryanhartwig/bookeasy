@@ -72,3 +72,20 @@ export const SET_USER_AVAILABILITY = gql`
     setUserAvailability(user_id: $userId, business_id: $businessId, day: $day, slices: $slices)
   }
 `;
+
+
+export const PATCH_USER = gql`
+  mutation($userId: ID!) {
+    patchUser(user_id: $userId) {
+      id
+    }
+  }
+`;
+
+export const PATCH_USER_PREFS = gql`
+  mutation($patchUserPrefsUserId2: ID!) {
+    patchUserPrefs(user_id: $patchUserPrefsUserId2) {
+      user_id
+    }
+  }
+`;

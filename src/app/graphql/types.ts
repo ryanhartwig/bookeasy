@@ -1,5 +1,6 @@
 export const types = `#graphql
   type UserPrefs {
+    user_id: String!,
     private_photo: Boolean!,
     private_email: Boolean!,
     private_phone: Boolean!,
