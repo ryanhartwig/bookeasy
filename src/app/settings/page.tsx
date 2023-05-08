@@ -27,8 +27,8 @@ export default function Page() {
 
   const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value }}})
   , [patchUser, value]);
-  const onPatchPrefs = useCallback((key: string) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
-  , [patchUserPrefs, value]);
+  const onPatchPrefs = useCallback((key: string, value: boolean) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
+  , [patchUserPrefs]);
   
   return (
     <>
@@ -53,15 +53,34 @@ export default function Page() {
 
           <SectionLabel label="Privacy Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Hide my profile picture on booking sites' toggleState={user.prefs.private_photo} />
-            <Setting label='Hide my email on booking sites' toggleState={user.prefs.private_email} />
-            <Setting label='Hide my phone number on booking sites' toggleState={user.prefs.private_phone} />
+            <Setting label='Hide my profile picture on booking sites' 
+              toggleState={user.prefs.private_photo} 
+              onSave={() => onPatchPrefs('private_photo', !user.prefs!.private_photo)}
+            />
+            <Setting label='Hide my email on booking sites' 
+              toggleState={user.prefs.private_email} 
+              onSave={() => onPatchPrefs('private_email', !user.prefs!.private_email)}
+            />
+            <Setting label='Hide my phone number on booking sites' 
+              toggleState={user.prefs.private_phone} 
+              onSave={() => onPatchPrefs('private_phone', !user.prefs!.private_phone)}
+            />
           </div>
+
           <SectionLabel label="Notification Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Receive email notification when an appointment is booked or cancelled' toggleState={user.prefs.notification_booking} />
-            <Setting label='Receive email reminders for upcoming appointments' toggleState={user.prefs.notification_reminder} />
-            <Setting label='Receive appointments overview email on work days' toggleState={user.prefs.notification_overview} />
+            <Setting label='Receive email notification when an appointment is booked or cancelled' 
+              toggleState={user.prefs.notification_booking} 
+              onSave={() => onPatchPrefs('notification_booking', !user.prefs!.notification_booking)}
+            />
+            <Setting label='Receive email reminders for upcoming appointments' 
+              toggleState={user.prefs.notification_reminder} 
+              onSave={() => onPatchPrefs('notification_reminder', !user.prefs!.notification_reminder)}
+            />
+            <Setting label='Receive appointments overview email on work days' 
+              toggleState={user.prefs.notification_overview} 
+              onSave={() => onPatchPrefs('notification_overview', !user.prefs!.notification_overview)}
+            />
             <Setting label='Receive at:' style={{ paddingLeft: 50, opacity: user.prefs.notification_overview ? 1 : 0.5, pointerEvents: user.prefs.notification_overview ? 'all' : 'none' }}>
               <p>{user.prefs.notification_overview_time ? formatMilitaryTime(user.prefs.notification_overview_time) : 'Unset'}</p>
             </Setting>
