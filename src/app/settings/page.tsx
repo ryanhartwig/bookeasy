@@ -4,6 +4,7 @@
 import { Header } from '@/components/Header';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
+import { Modal } from '@/components/UI/Modal/Modal';
 import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Setting } from '@/components/UI/Setting/Setting';
 import { User } from '@/types/User';
@@ -11,25 +12,27 @@ import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitar
 import { GET_USER_WITH_PREFS, PATCH_USER, PATCH_USER_PREFS } from '@/utility/queries/userQueries';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { useMutation, useQuery } from '@apollo/client';
+import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
 import styles from './settings.module.scss';
 
 export default function Page() {
   const [user, setUser] = useState<User>();
   const [value, setValue] = useState<string>('');
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   
   const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId }});
-  useEffect(() => data && setUser(data.getUser), [data])
+  useEffect(() => data && setUser(data.getUser), [data]);
 
   const refetchQueries = [{ query: GET_USER_WITH_PREFS, variables: { userId } }]
-  const [patchUser, { loading: patchUserLoading }] = useMutation(PATCH_USER, { refetchQueries });
-  const [patchUserPrefs, { loading: patchUserPrefsLoading }] = useMutation(PATCH_USER_PREFS, { refetchQueries });
+  const [patchUser] = useMutation(PATCH_USER, { refetchQueries });
+  const [patchUserPrefs] = useMutation(PATCH_USER_PREFS, { refetchQueries });
 
   const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value || null }}})
   , [patchUser, value]);
   const onPatchPrefs = useCallback((key: string, value: boolean) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
   , [patchUserPrefs]);
-  
+
   return (
     <>
       <Header text="Settings" />
@@ -81,11 +84,21 @@ export default function Page() {
               toggleState={user.prefs.notification_overview} 
               onSave={() => onPatchPrefs('notification_overview', !user.prefs!.notification_overview)}
             />
-            <Setting label='Receive at:' style={{ paddingLeft: 50, opacity: user.prefs.notification_overview ? 1 : 0.5, pointerEvents: user.prefs.notification_overview ? 'all' : 'none' }}>
-              <p>{user.prefs.notification_overview_time ? formatMilitaryTime(user.prefs.notification_overview_time) : 'Unset'}</p>
+            <Setting label='Receive at:' className={clsx(styles.receiveAt, {[styles.enabled]: !!user.prefs!.notification_overview})}
+              onEditOverride={() => setModalOpen(true)}
+            >
+              <p>{formatMilitaryTime(user.prefs!.notification_overview_time)}</p>
             </Setting>
           </div>
         </Card>
+        <Modal 
+          open={modalOpen} 
+          onClose={() => setModalOpen(false)}
+          actionButtonText="Confirm"
+        >
+          <Modal.Header>Select Time</Modal.Header>
+          
+        </Modal>
       </div>}
     </>
   )

@@ -12,7 +12,7 @@ export interface User {
     notification_booking: boolean,
     notification_reminder: boolean,
     notification_overview: boolean,
-    notification_overview_time: string | null,
+    notification_overview_time: string,
   };
 };
 

@@ -7,7 +7,7 @@ export const types = `#graphql
     notification_booking: Boolean!,
     notification_reminder: Boolean!,
     notification_overview: Boolean!,
-    notification_overview_time: String
+    notification_overview_time: String!,
   }
 
   type User {

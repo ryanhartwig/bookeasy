@@ -77,13 +77,13 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
         <p>Booking Site Preferences</p>
       </div>
       <div className={styles.settings}>
-        <Setting label="Minimum Book Ahead" onEditClick={() => onEdit(business.min_booking_notice, 'min_booking_notice')} >
+        <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice, 'min_booking_notice')} >
           <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
         </Setting>
-        <Setting label="Maximum Book Ahead" onEditClick={() => onEdit(business.max_book_ahead, 'max_book_ahead')} >
+        <Setting label="Maximum Book Ahead" onEditOverride={() => onEdit(business.max_book_ahead, 'max_book_ahead')} >
           <p>{Number(business.max_book_ahead) ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
         </Setting>
-        <Setting label="Minimum Cancellation Notice" onEditClick={() => onEdit(business.min_cancel_notice, 'min_cancel_notice')} >
+        <Setting label="Minimum Cancellation Notice" onEditOverride={() => onEdit(business.min_cancel_notice, 'min_cancel_notice')} >
           <p>{Number(business.min_cancel_notice) ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting>
         {/* <Setting label="Booking Site Url" onAction={() => setInitialValue(Number(business.min_cancel_notice))}>

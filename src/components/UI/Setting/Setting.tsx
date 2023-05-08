@@ -18,7 +18,7 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   /**
    * If provided, will override local editing functionality (useful for showing modal instead, etc)
    */
-  onEditClick?: (...args: any) => any,
+  onEditOverride?: (...args: any) => any,
   value?: string,
   /**
    * Will not prevent onSave() from being called if value is an empty string
@@ -28,7 +28,7 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   onSave?: (...args: any) => Promise<any>,
 }
 
-export const Setting = ({label, children, toggleState, onEditClick, value, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditOverride, value, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export const Setting = ({label, children, toggleState, onEditClick, value, allow
 
   const onClose = useClickout({
     onClickout: () => {
-      if (onEditClick) return;
+      if (onEditOverride) return;
       setEditing(false);
       setValue && setValue('');
     },
@@ -46,9 +46,9 @@ export const Setting = ({label, children, toggleState, onEditClick, value, allow
   })
 
   const onEdit = useCallback((e: any) => {
-    if (onEditClick) return onEditClick();
+    if (onEditOverride) return onEditOverride();
     setEditing(true);
-  }, [onEditClick, setEditing]);
+  }, [onEditOverride, setEditing]);
 
   const handleSave = useCallback(() => {
     if (!onSave) return;

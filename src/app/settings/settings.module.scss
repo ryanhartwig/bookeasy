@@ -39,3 +39,16 @@
   width: 85%;
   margin: 0 auto;
 }
+
+.receiveAt {
+  padding-left: 50px;
+  opacity: 0.5;
+  pointer-events: none;
+
+  transition: opacity 200ms;
+
+  &.enabled {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
