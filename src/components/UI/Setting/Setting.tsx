@@ -79,7 +79,8 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();
-  }, [editing, handleSave]);
+    if (e.key === 'Escape' && editing) onClose();
+  }, [editing, handleSave, onClose]);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
