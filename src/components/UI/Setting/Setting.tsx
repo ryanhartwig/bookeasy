@@ -7,6 +7,8 @@ import styles from './setting.module.scss';
 
 import { MoonLoader } from 'react-spinners';
 import { useClickout } from '@/utility/hooks/useClickout';
+import { testEmail } from '@/utility/functions/validation/testEmail';
+import { BiErrorCircle } from 'react-icons/bi';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
@@ -18,38 +20,51 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   /**
    * If provided, will override local editing functionality (useful for showing modal instead, etc)
    */
-  onAction?: (...args: any) => any,
+  onEditOverride?: (...args: any) => any,
   value?: string,
+  /**
+   * Will not prevent onSave() from being called if value is an empty string
+   */
+  allowEmptyValue?: boolean,
   setValue?: React.Dispatch<React.SetStateAction<any>>,
   onSave?: (...args: any) => Promise<any>,
+  email?: boolean,
 }
 
-export const Setting = ({label, children, toggleState, onAction, value, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const settingRef = useRef<HTMLDivElement>(undefined!);
 
   const onClose = useClickout({
     onClickout: () => {
-      if (onAction) return;
+      if (onEditOverride) return;
       setEditing(false);
+      setErrorMessage('');
       setValue && setValue('');
     },
     enabled: editing,
     contentRefs: [settingRef],
-  })
+  });
 
   const onEdit = useCallback((e: any) => {
-    if (onAction) return onAction();
-    if (!setEditing) return;
+    if (onEditOverride) return onEditOverride();
     setEditing(true);
-  }, [onAction, setEditing]);
+  }, [onEditOverride, setEditing]);
 
   const handleSave = useCallback(() => {
     if (!onSave) return;
-    if (!value) return;
+    if (!allowEmptyValue && !value) {
+      setErrorMessage('Please enter a value');
+      return;
+    };
+    if (email && value && !testEmail(value)) {
+      setErrorMessage('Please enter a valid email address');
+      return;
+    }
 
     setLoading(true);
 
@@ -58,12 +73,14 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
       setLoading(false);
       setEditing(false);
       setValue && setValue('');
+      setErrorMessage('');
     })();
-  }, [onSave, setValue, value]);
+  }, [allowEmptyValue, email, onSave, setValue, value]);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();
-  }, [editing, handleSave]);
+    if (e.key === 'Escape' && editing) onClose();
+  }, [editing, handleSave, onClose]);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
@@ -75,7 +92,13 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
       <p className={styles.label}>{label}</p>
       <div className={styles.value}>
         {!editing ? children
-        : <input placeholder={props.placeholder} autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
+        : <>
+          {errorMessage && <div className={styles.errorMessage}>
+            <BiErrorCircle fontSize={14} style={{marginRight: 8}} />
+            <p>{errorMessage}</p>
+          </div>}
+          <input placeholder={props.placeholder} autoFocus className={clsx(styles.editInput, {[styles.invalid]: !!errorMessage})} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />
+        </>}
       </div>
       
       {toggleState === undefined 
@@ -93,7 +116,7 @@ export const Setting = ({label, children, toggleState, onAction, value, setValue
             }
           </div>
           
-        : <div className={clsx(styles.action, 'noselect')} onClick={onAction}>
+        : <div className={clsx(styles.action, 'noselect')} onClick={onSave}>
             <div className={clsx(styles.toggle, {[styles.on]: toggleState})}>
               <div className={clsx(styles.toggle_circle, {[styles.on]: toggleState})} />
             </div>

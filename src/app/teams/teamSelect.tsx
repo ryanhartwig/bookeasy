@@ -6,15 +6,20 @@ import teamDefault from '../../../public/assets/team_default.svg';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
 import { NewBusiness } from '@/types/Business';
+import { useState } from 'react';
+import { AddTeamForm } from './teamForm/addTeamForm';
 
 interface TeamsProps {
   selected?: NewBusiness,
   setSelected: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
   teams: NewBusiness[],
+  userId: string,
 }
 
-export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams}) => {
+export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams, userId}) => {
 
+  const [teamsFormOpen, setTeamsFormOpen] = useState<boolean>(false);
+  
   return (
     <div className={styles.user_teams}>
       {/* Teams user belongs to */}
@@ -29,10 +34,12 @@ export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams})
       ))}
 
       {/* Create team */}
-      <div className={styles.create_team}>
+      <div className={styles.create_team} onClick={() => setTeamsFormOpen(true)}> 
         <p>Create Team</p>
         <Image src={addTeam} alt='Add team icon' className={styles.create_team_icon} />
       </div>
+
+      <AddTeamForm open={teamsFormOpen} onClose={() => setTeamsFormOpen(false)} setSelected={setSelected} userId={userId} />
     </div>
   )
 }

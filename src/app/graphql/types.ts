@@ -1,12 +1,13 @@
 export const types = `#graphql
   type UserPrefs {
+    user_id: String!,
     private_photo: Boolean!,
     private_email: Boolean!,
     private_phone: Boolean!,
     notification_booking: Boolean!,
     notification_reminder: Boolean!,
     notification_overview: Boolean!,
-    notification_overview_time: String
+    notification_overview_time: String!,
   }
 
   type User {
@@ -82,9 +83,9 @@ export const types = `#graphql
     name: String!,
     email: String,
     phone: String,
-    min_booking_notice: String!,
-    min_cancel_notice: String!,
-    max_book_ahead: String!,
+    min_booking_notice: String,
+    min_cancel_notice: String,
+    max_book_ahead: String,
     user_id: String,
     avatar: String,
     created: String!,

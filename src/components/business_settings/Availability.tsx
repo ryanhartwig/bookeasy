@@ -35,7 +35,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
 
   const slices = useMemo(() => {
     return weekDays.map((d, i) => (
-      <Setting label={d} key={d} onAction={() => {setFormSlices(availability.get(i) ?? []); setDay(i)}}>
+      <Setting label={d} key={d} onEditOverride={() => {setFormSlices(availability.get(i) ?? []); setDay(i)}}>
         {availability.get(i) ? (availability.get(i) ?? []).map((slice) => {
           return <div key={slice.start_time}>
             <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>

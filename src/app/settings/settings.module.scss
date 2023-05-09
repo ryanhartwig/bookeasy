@@ -2,8 +2,6 @@
   height: calc(100% - var(--header-height));
 
   padding: 15px;
-
-
 }
 
 .card {
@@ -40,4 +38,57 @@
 .setting_block {
   width: 85%;
   margin: 0 auto;
+}
+
+.receiveAt {
+  padding-left: 50px;
+  opacity: 0.5;
+  pointer-events: none;
+
+  transition: opacity 200ms;
+
+  &.enabled {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+  height: 150px;
+
+  > p {
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-size: 14px;
+  }
+}
+
+.timeSelect {
+  display: flex;
+  align-items: center;
+  width: 80%;
+
+  > * {
+    margin: 0 2px;
+
+    flex-shrink: 1;
+    flex-grow: 1;
+    
+    &:first-child { 
+      margin-left: 0;
+      flex-basis: 500px;
+    }
+    &:nth-child(3) {
+      flex-basis: 500px;
+    }
+    &:last-child { 
+      margin-right: 0;
+      flex-basis: 800px;
+    }
+  }
 }
