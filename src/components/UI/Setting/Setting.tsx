@@ -8,6 +8,7 @@ import styles from './setting.module.scss';
 import { MoonLoader } from 'react-spinners';
 import { useClickout } from '@/utility/hooks/useClickout';
 import { testEmail } from '@/utility/functions/validation/testEmail';
+import { BiErrorCircle } from 'react-icons/bi';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
@@ -42,6 +43,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
     onClickout: () => {
       if (onEditOverride) return;
       setEditing(false);
+      setErrorMessage('');
       setValue && setValue('');
     },
     enabled: editing,
@@ -60,7 +62,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
       return;
     };
     if (email && value && !testEmail(value)) {
-      setErrorMessage('Please enter a valid email address.');
+      setErrorMessage('Please enter a valid email address');
       return;
     }
 
@@ -71,6 +73,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
       setLoading(false);
       setEditing(false);
       setValue && setValue('');
+      setErrorMessage('');
     })();
   }, [allowEmptyValue, email, onSave, setValue, value]);
 
@@ -90,9 +93,10 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
         {!editing ? children
         : <>
           {errorMessage && <div className={styles.errorMessage}>
+            <BiErrorCircle fontSize={14} style={{marginRight: 8}} />
             <p>{errorMessage}</p>
           </div>}
-          <input placeholder={props.placeholder} autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />
+          <input placeholder={props.placeholder} autoFocus className={clsx(styles.editInput, {[styles.invalid]: !!errorMessage})} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />
         </>}
       </div>
       
