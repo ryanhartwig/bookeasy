@@ -14,7 +14,7 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Note: This project is in early development.
+Note: This project is in development.
 
 
 ## Screenshots
