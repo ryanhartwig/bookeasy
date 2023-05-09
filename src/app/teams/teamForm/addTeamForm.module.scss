@@ -1,0 +1,17 @@
+.addTeam {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  width: 80%;
+  margin: 10px auto;
+  padding-bottom: 10px;
+
+  > p {
+    font-size: 14px;
+    margin-bottom: 6px;
+    margin-top: 10px;
+
+    &:first-of-type { margin-top: 0; }
+  }
+}

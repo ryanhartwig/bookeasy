@@ -7,7 +7,7 @@ import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
 import { NewBusiness } from '@/types/Business';
 import { useState } from 'react';
-import { AddTeamForm } from './addTeamForm';
+import { AddTeamForm } from './teamForm/addTeamForm';
 
 interface TeamsProps {
   selected?: NewBusiness,
