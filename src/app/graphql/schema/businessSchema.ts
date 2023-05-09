@@ -1,5 +1,6 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
+import uuid from "react-uuid";
 
 export const businessResolvers = {
   Query: {
@@ -132,6 +133,29 @@ export const businessResolvers = {
       const response = await db.query(query, params);
       return response.rows[0];
     },
+    newBusiness: async (_: any, args: any) => {
+      const { name, user_id, is_own } = args;
+
+      const query = `
+        insert into business values (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+        ) returning *
+      `;
+      const params = [uuid(), name, null, null, null, null, null, is_own ? user_id : null, null, new Date().toISOString()];
+      const response = await db.query(query, params);
+
+      // If creating a business for a newly registered user return early
+      if (is_own) {
+        return response.rows[0];
+      }
+
+      // Add the current user to the users_businesses table with elevated permissions
+      const { id: business_id } = response.rows[0];
+      await db.query('insert into users_businesses values ($1, $2, $3, $4) returning *'
+      , [user_id, business_id, true, new Date().toISOString()]);
+
+      return response.rows[0];
+    },
   }
 
 }
@@ -156,5 +180,6 @@ export const businessTypeDefs = `#graphql
 
   type Mutation {
     updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
+    newBusiness(name: String!, user_id: String!, is_own: Boolean): Business!,
   }
 `;
