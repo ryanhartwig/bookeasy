@@ -13,9 +13,10 @@ interface TeamsProps {
   selected?: NewBusiness,
   setSelected: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
   teams: NewBusiness[],
+  userId: string,
 }
 
-export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams}) => {
+export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams, userId}) => {
 
   const [teamsFormOpen, setTeamsFormOpen] = useState<boolean>(false);
   
@@ -38,7 +39,7 @@ export const TeamSelect: React.FC<TeamsProps> = ({selected, setSelected, teams})
         <Image src={addTeam} alt='Add team icon' className={styles.create_team_icon} />
       </div>
 
-      <AddTeamForm open={teamsFormOpen} onClose={() => setTeamsFormOpen(false)} />
+      <AddTeamForm open={teamsFormOpen} onClose={() => setTeamsFormOpen(false)} setSelected={setSelected} userId={userId} />
     </div>
   )
 }

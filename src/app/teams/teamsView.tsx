@@ -39,7 +39,7 @@ export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
       <div className={styles.Teams}>
         <div className={styles.teams_section}>
           <p>My teams</p>
-          <TeamSelect teams={teams} selected={selected} setSelected={setSelected} />
+          <TeamSelect teams={teams} selected={selected} setSelected={setSelected} userId={userId} />
         </div>
         
         {selected && <TeamDetails business={selected}/>}

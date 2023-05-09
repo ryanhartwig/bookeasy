@@ -115,3 +115,20 @@ export const UPDATE_BUSINESS_PREFS = gql`
     }
   }
 `;
+
+export const NEW_BUSINESS = gql`
+  mutation($name: String!, $userId: String!) {
+    newBusiness(name: $name, user_id: $userId) {
+      id
+      name
+      email
+      phone
+      min_booking_notice
+      min_cancel_notice
+      max_book_ahead
+      user_id
+      avatar
+      created
+    }
+  }
+`;
