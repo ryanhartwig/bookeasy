@@ -45,6 +45,16 @@ export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose}) => {
     }
   } ,[email]);
 
+  // Reset state
+  useEffect(() => {
+    if (!open) {
+      setName('');
+      setEmail('');
+      setPhone('');
+      setAvatar(null);
+    }
+  }, [open]);
+
   return (
     <Modal open={open}
       onClose={onClose}
