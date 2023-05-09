@@ -73,7 +73,7 @@ export default function Page() {
             <Setting label='Name' value={value} setValue={setValue} onSave={() => onPatchUser('name')}>
               <p>{user.name}</p>
             </Setting>
-            <Setting label='Email' value={value} setValue={setValue} onSave={() => onPatchUser('email')}>
+            <Setting label='Email' value={value} setValue={setValue} onSave={() => onPatchUser('email')} email >
               <p>{user.email}</p>
             </Setting>
             <Setting label='Phone' value={value} setValue={setValue} onSave={() => onPatchUser('phone')}>

@@ -105,3 +105,12 @@
     border-color: rgba(39, 135, 209, 0.611)
   }
 }
+
+.error {
+  color: red;
+  margin-bottom: 8px;
+
+  &::before {
+    content: '* '
+  }
+}

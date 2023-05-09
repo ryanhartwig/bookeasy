@@ -7,6 +7,7 @@ import styles from './setting.module.scss';
 
 import { MoonLoader } from 'react-spinners';
 import { useClickout } from '@/utility/hooks/useClickout';
+import { testEmail } from '@/utility/functions/validation/testEmail';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
@@ -26,12 +27,14 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   allowEmptyValue?: boolean,
   setValue?: React.Dispatch<React.SetStateAction<any>>,
   onSave?: (...args: any) => Promise<any>,
+  email?: boolean,
 }
 
-export const Setting = ({label, children, toggleState, onEditOverride, value, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const settingRef = useRef<HTMLDivElement>(undefined!);
 
@@ -43,7 +46,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, al
     },
     enabled: editing,
     contentRefs: [settingRef],
-  })
+  });
 
   const onEdit = useCallback((e: any) => {
     if (onEditOverride) return onEditOverride();
@@ -53,6 +56,10 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, al
   const handleSave = useCallback(() => {
     if (!onSave) return;
     if (!allowEmptyValue && !value) return;
+    if (email && !testEmail(value!)) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
 
     setLoading(true);
 
@@ -62,7 +69,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, al
       setEditing(false);
       setValue && setValue('');
     })();
-  }, [allowEmptyValue, onSave, setValue, value]);
+  }, [allowEmptyValue, email, onSave, setValue, value]);
 
   const onKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && editing) handleSave();
@@ -78,7 +85,12 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, al
       <p className={styles.label}>{label}</p>
       <div className={styles.value}>
         {!editing ? children
-        : <input placeholder={props.placeholder} autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />}
+        : <>
+          {errorMessage && <div className={styles.errorMessage}>
+            <p>{errorMessage}</p>
+          </div>}
+          <input placeholder={props.placeholder} autoFocus className={styles.editInput} onFocus={(e) => e.target.select()} value={value} onChange={(e) => setValue && setValue(e.target.value)} />
+        </>}
       </div>
       
       {toggleState === undefined 
