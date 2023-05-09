@@ -64,15 +64,9 @@ export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose}) => {
     >
       <Modal.Header>Create a Team</Modal.Header>
       <div className={styles.addTeam}>
-        <p>Team name</p>
+        <p>What would you like to name your team?</p>
         <Input value={name} onChange={(e) => setName(e.target.value)} />
-
-        <p>Contact email</p>
-        <Input value={email} onChange={(e) => setEmail(e.target.value)} errorMessage={emailError} />
-
-        <p>Contact phone</p>
-        <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-
+        <p>{`Don't worry, you can change this later.`}</p>
       </div>
     </Modal>
   )
