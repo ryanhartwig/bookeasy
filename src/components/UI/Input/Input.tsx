@@ -15,6 +15,7 @@ export const Input: React.FC<InputProps> = ({errorMessage, ...props}) => {
         <BiErrorCircle fontSize={14} style={{marginRight: 8}} />
         <p>{errorMessage}</p>
       </div>}
+      {props.required && !props.value && <p className={styles.required}>*</p>}
       <input {...props} className={clsx(styles.input, props.className || '', {[styles.checkbox]: props.type === 'checkbox'}, {[styles.invalid]: !!errorMessage})} />
     </div>
   )

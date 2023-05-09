@@ -25,6 +25,21 @@
   }
 }
 
+.required {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  font-size: 17px;
+
+  color: rgb(200, 29, 29);
+  
+  top: 3px;
+  right: 14px;
+}
+
 .checkbox {
   height: 16px;
   width: 16px;
