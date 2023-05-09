@@ -55,8 +55,11 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
 
   const handleSave = useCallback(() => {
     if (!onSave) return;
-    if (!allowEmptyValue && !value) return;
-    if (email && !testEmail(value!)) {
+    if (!allowEmptyValue && !value) {
+      setErrorMessage('Please enter a value');
+      return;
+    };
+    if (email && value && !testEmail(value)) {
       setErrorMessage('Please enter a valid email address.');
       return;
     }
