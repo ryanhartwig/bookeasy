@@ -52,10 +52,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
   const [durationUpdateDate, setDurationUpdateDate] = useState<string>(minimumDateInput);
   
-  useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
   
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
   const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_FORM_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+
+
+  useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
 
   useEffect(() => {
     if (!businessUsersData || loadingBusinessUsers) return;
@@ -68,6 +70,17 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       setBusinesses(userBusinessesData.getUserBusinesses);
     }
   }, [userBusinessesData]);
+
+  // Clear fields on closing form
+  useEffect(() => {
+    if (open) return;
+    setSelectedBusiness(undefined);
+    setName('');
+    setCost('0');
+    setDuration(30);
+    setColor('#1934b8');
+    setIsVideo(false);
+  }, [open]);
 
   // Prepopulate business field if provided (from teams / business view)
   useEffect(() => {
