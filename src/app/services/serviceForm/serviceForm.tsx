@@ -28,10 +28,11 @@ interface ServiceFormProps {
   userId: string,
   onSubmit?: (...args: any) => any,
   initialService?: Service,
-  useAddMutation?: boolean,
+  businessId?: string,
 }
 
-export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, initialService, useAddMutation = false}) => {
+export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, businessId, initialService}) => {
+  const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
   const [name, setName] = useState<string>('');
@@ -39,7 +40,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [cost, setCost] = useState<string>('');
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
-  const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
   const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
@@ -68,6 +68,13 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       setBusinesses(userBusinessesData.getUserBusinesses);
     }
   }, [userBusinessesData]);
+
+  // Prepopulate business field if provided (from teams / business view)
+  useEffect(() => {
+    if (!businessId || !userBusinessesData || !businesses) return;
+
+    setSelectedBusiness(businesses.find(b => b.id === businessId))
+  }, [businessId, businesses, userBusinessesData]);
 
   // Prepopulate if editing
   useEffect(() => {
@@ -166,12 +173,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   const onSubmitForm = useCallback(() => {
     if (!service) return;
-    if (initialService && !useAddMutation) {
+    if (initialService) {
       editService({variables: { service }});
     } else {
       addService({variables: { service }});
     }
-  }, [addService, editService, initialService, service, useAddMutation]);
+  }, [addService, editService, initialService, service]);
 
   const onDeleteService = useCallback(() => {
     deleteService({variables: { serviceId: initialService?.id }});
@@ -208,9 +215,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       actionCloses
       // loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
-      <Modal.Header>{initialService && !useAddMutation ? 'Edit' : 'Add a'} Service</Modal.Header>
+      <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
       <div className={styles.appointmentOptions}>
-        {!initialService && <>
+        {!initialService && !businessId && <>
           <p>Select a provider</p>
           <Select list={businessesList} selected={(
             <div className={styles.selectedOption}>

@@ -48,7 +48,14 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, ...prop
           <ServiceCard key={s.id} service={s} onClick={(e) => {console.log(e); setSelectedService(s)}} />
         </div>
       ))}
-      <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService || initialService} onSubmit={() => setSelectedService(undefined)} useAddMutation={!selectedService} />
+      <ServiceForm 
+        open={serviceFormOpen} 
+        setOpen={setServiceFormOpen} 
+        userId={userId} 
+        initialService={selectedService} 
+        onSubmit={() => setSelectedService(undefined)} 
+        businessId={businessId}
+      />
       <div className={styles.addService} onClick={(e) => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
       </div>
