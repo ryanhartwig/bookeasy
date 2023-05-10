@@ -156,6 +156,10 @@ export const businessResolvers = {
 
       return response.rows[0];
     },
+    removeBusiness: async (_: any, args: any) => {
+      const response = await db.query('Delete from business where id = $1 returning id', [args.business_id]);
+      return response.rows[0].id;
+    },
   }
 
 }
@@ -181,5 +185,6 @@ export const businessTypeDefs = `#graphql
   type Mutation {
     updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
     newBusiness(name: String!, user_id: String!, is_own: Boolean): Business!,
+    removeBusiness(business_id: String!): String!,
   }
 `;

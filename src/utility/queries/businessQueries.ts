@@ -132,3 +132,9 @@ export const NEW_BUSINESS = gql`
     }
   }
 `;
+
+export const REMOVE_BUSINESS = gql`
+  mutation($businessId: String!) {
+    removeBusiness(business_id: $businessId)
+  }
+`;

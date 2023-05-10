@@ -1,6 +1,6 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
-import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
+import { REMOVE_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 import { gql, useMutation } from '@apollo/client';
@@ -72,9 +72,28 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
     setErrorMessage('');
   }, []);
 
-  const onRemoveTeam = useCallback(() => {
+  const [removeBusiness, { loading: removeBusinessLoading, data: removeBusinessData, reset: removeBusinessReset }] = useMutation(REMOVE_BUSINESS, {
+    update(cache) {
+      cache.modify({
+        fields: {
+          getUserBusinesses(existingBusinesses = [], { readField }) {
+            return existingBusinesses.filter((ref: any) => readField('id', ref) !== business.id)
+          }
+        }
+      })
+    }
+  });
 
-  }, []);
+  const onRemoveTeam = useCallback(() => {
+    removeBusiness({ variables: { businessId: business.id }});
+  }, [business.id, removeBusiness]);
+
+  useEffect(() => {
+    if (!removeBusinessData || removeBusinessLoading) return;
+    setConfirmDelete(false);
+    setConfirmValue('');
+    removeBusinessReset();
+  }, [removeBusinessData, removeBusinessLoading, removeBusinessReset]);
 
   return (
     <div className={styles.Prefs}>
@@ -119,6 +138,8 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
         className={styles.confirmDeleteModal}
         actionButtonDisabled={confirmValue !== business.name}
         actionButtonText="Confirm"
+        loading={removeBusinessLoading}
+        onAction={onRemoveTeam}
       >
         <Modal.Header>Remove Team</Modal.Header>
         <div className={styles.warning}>
