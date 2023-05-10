@@ -132,6 +132,7 @@
     max-height: 900px;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   > div.left {
