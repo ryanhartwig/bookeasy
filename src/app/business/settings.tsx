@@ -28,7 +28,7 @@ export const Settings: React.FC<SettingsProps> = ({business, clients, user, serv
   const tabs = ['Client List', 'Services', 'Availability', 'Preferences'];
   const tabComponents = [
     <ClientList clients={clients} key={ClientList.name} business={business} />, 
-    <Services businessId={business.id} key={Services.name} services={services} />, 
+    <Services businessId={business.id} key={Services.name} services={services} isOwnBusiness />, 
     <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} />,
     <Prefs key={Prefs.name} userId={user.id} business={business} />, 
   ];

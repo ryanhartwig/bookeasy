@@ -29,9 +29,10 @@ interface ServiceFormProps {
   onSubmit?: (...args: any) => any,
   initialService?: Service,
   businessId?: string,
+  isOwnBusiness?: boolean,
 }
 
-export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, businessId, initialService}) => {
+export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, onSubmit, businessId, initialService, isOwnBusiness}) => {
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [error, setError] = useState<string>();
@@ -88,6 +89,15 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
     setSelectedBusiness(businesses.find(b => b.id === businessId))
   }, [businessId, businesses, userBusinessesData]);
+
+  // Prepopulate assignee field if it's a user's own business
+  useEffect(() => {
+    if (!isOwnBusiness || !businessUsers.length) return;
+
+    const users = new Map()
+    users.set(businessUsers[0].id, businessUsers[0]);
+    setAssignedUsers(users)
+  }, [businessUsers, isOwnBusiness]);
 
   // Prepopulate if editing
   useEffect(() => {
@@ -239,17 +249,19 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           )} hasSelected={!!selectedBusiness}/> 
         </>}
 
-        <p>Select Assignee(s)</p>
-        <Select multiple list={clientList} selected={(
-          <div className={styles.assignees} style={{left: 0}}>
-            {Array.from(assignedUsers.values()).map(user => 
-              <div key={user.id}>
-                <Avatar src={user.avatar} size={26} />
-                <p>{user.name}</p>
-              </div>
-            )}
-          </div>
-        )} hasSelected={!!assignedUsers.size}/>
+        {!isOwnBusiness && <>
+          <p>Select Assignee(s)</p>
+          <Select multiple list={clientList} selected={(
+            <div className={styles.assignees} style={{left: 0}}>
+              {Array.from(assignedUsers.values()).map(user => 
+                <div key={user.id}>
+                  <Avatar src={user.avatar} size={26} />
+                  <p>{user.name}</p>
+                </div>
+              )}
+            </div>
+          )} hasSelected={!!assignedUsers.size}/>
+        </>}
 
         <p>Service Name</p>
         <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />

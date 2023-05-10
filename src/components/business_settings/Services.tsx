@@ -10,27 +10,14 @@ import styles from './tabs.module.scss';
 interface ServicesProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   services: Service[],
   businessId: string,
+  isOwnBusiness?: boolean,
 }
 
-export const Services: React.FC<ServicesProps> = ({services, businessId, ...props}) => {
+export const Services: React.FC<ServicesProps> = ({services, businessId, isOwnBusiness, ...props}) => {
 
   const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service>();
   
-  // Used when adding new service, prepopulates business field (and prevents selecting different team)
-  const initialService: Service = useMemo(() => ({
-    assigned_users: [],
-    business_id: businessId,
-    color: '#1934b8',
-    cost: 0,
-    deleted: false,
-    duration: 30,
-    id: '',
-    is_video: false,
-    name: '',
-    provider: '',
-  }), [businessId]);
-
   useEffect(() => {
     if (!selectedService) return;
     setServiceFormOpen(true);
@@ -55,6 +42,7 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, ...prop
         initialService={selectedService} 
         onSubmit={() => setSelectedService(undefined)} 
         businessId={businessId}
+        isOwnBusiness={isOwnBusiness}
       />
       <div className={styles.addService} onClick={(e) => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
