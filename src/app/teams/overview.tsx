@@ -6,6 +6,7 @@ import teamDefault from '../../../public/assets/team_default.png';
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
 import { BusinessUser } from "@/types/User";
+import { Avatar } from "@/components/UI/Avatar/Avatar";
 
 interface OverviewProps {
   selected: NewBusiness,
@@ -18,7 +19,7 @@ export const Overview: React.FC<OverviewProps> = ({selected, members, clients, s
 
   return (
     <>
-      <Image src={teamDefault} width={139} alt='Add team icon' />
+      <Avatar src={selected.avatar} size={120} style={{margin: '0 auto'}} useTeamIcon />
       <h2>{selected.name}</h2>
       <hr />
       <div>
