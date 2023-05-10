@@ -21,6 +21,7 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
    * If provided, will override local editing functionality (useful for showing modal instead, etc)
    */
   onEditOverride?: (...args: any) => any,
+  onRemove?: (...args: any) => any,
   value?: string,
   /**
    * Will not prevent onSave() from being called if value is an empty string
@@ -31,7 +32,7 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   email?: boolean,
 }
 
-export const Setting = ({label, children, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onRemove, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -103,14 +104,13 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
       
       {toggleState === undefined 
         ? <div className={clsx(styles.action, 'noselect')} >
-            {!editing ? <p onClick={onEdit}>Edit</p>
+            {!editing ? <>
+              {onRemove && <p style={{color: 'rgb(255, 70, 45)'}} onClick={onRemove}>Remove</p>}
+              <p onClick={onEdit}>Edit</p>
+            </>
             : <>
               {loading && <MoonLoader color='#000000' size={15} cssOverride={{marginRight: 10}} />}
-              <p style={{color: 'rgb(255, 104, 45)'}} onClick={() => {
-                setEditing && setEditing(false);
-                setValue && setValue('');
-                onClose();
-              }}>Cancel</p>
+              <p style={{color: 'rgb(255, 104, 45)'}} onClick={onClose}>Cancel</p>
               <p onClick={handleSave}>Save</p>
             </>
             }

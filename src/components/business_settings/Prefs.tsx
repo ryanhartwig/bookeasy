@@ -45,9 +45,9 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
     }
   });
 
-  const onSave = (key: string) => {
+  const onSave = (key: string, override?: string | null) => {
     return updateBusinessPrefs({variables: { businessId: business.id, patch: {
-      [key]: value,
+      [key]: override !== undefined ? override : value,
     }}})
   } 
 
@@ -64,7 +64,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
       </div>
 
       <div className={styles.settings}>
-        <Setting label='Business Photo' placeholder='Enter valid url' value={value} setValue={setValue} onSave={() => onSave('avatar')}>
+        <Setting label='Business Photo' placeholder='Enter valid url' value={value} setValue={setValue} onSave={() => onSave('avatar')} onRemove={business.avatar ? () => onSave('avatar', null) : undefined}>
           <Avatar src={business.avatar} size={50} alt='Business logo' useTeamIcon={isTeams} />
         </Setting>
         <Setting label='Business Name' placeholder='Name' value={value} setValue={setValue} onSave={() => onSave('name')}>

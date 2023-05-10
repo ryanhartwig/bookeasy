@@ -41,7 +41,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
 
   const tabs = useMemo(() => {
     return [
-    <Prefs key='prefs' business={business} />, 
+    <Prefs key='prefs' business={business} isTeams />, 
     <Services key='services' services={services} businessId={business.id} />,
     <ClientList key='clients' clients={clients} business={business} />,
     <BookingSitePrefs key='bookingsite' business={business} isTeams />,
