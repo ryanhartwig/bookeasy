@@ -1,10 +1,14 @@
+<p>test</p>
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
 import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 import { gql, useMutation } from '@apollo/client';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { BiTrash } from 'react-icons/bi';
+import { BsTrash } from 'react-icons/bs';
 import { Avatar } from '../UI/Avatar/Avatar';
 import styles from './tabs.module.scss';
 
@@ -82,12 +86,13 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
       {isTeams && elevated && (
         <>
         <div className={styles.header}>
-          <p>Admin Settings</p>
+          <p>Additional Settings</p>
         </div>
-        <div className={styles.settings}>
-          <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')}>
-            <p>{business.phone ?? 'None'}</p>
-          </Setting>
+        <div className={clsx(styles.settings, styles.adminOptions)}>
+          <div className={clsx(styles.iconButton, styles.removeTeam)}>
+            <BsTrash />
+            <p>Remove this Business</p>
+          </div>
         </div>
         </>
       )}

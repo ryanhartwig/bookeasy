@@ -20,7 +20,35 @@
 .settings {
   width: 100%;
   padding: 5px 15px;
-  margin-bottom: 5px;
+  margin-bottom: 25px;
+}
+
+.adminOptions {
+  padding: 20px;
+  
+  p { 
+    font-size: 14px;
+  }
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+
+  > *:not(:first-child) {
+    margin-left: 10px;
+  }
+}
+
+.removeTeam {
+  color: rgb(126, 5, 5);
+  cursor: pointer;
+
+  opacity: 0.8;
+  transition: opacity 200ms;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .ClientList {
@@ -48,9 +76,10 @@
   padding: 12px 10px;
   background: white;
   border-bottom: 1px solid var(--dividers);
+
+  // Subsequent headers if using multiple
   &:not(:first-of-type) {
     border-top: 1px solid var(--dividers);
-    
   }
 
   font-size: 12px;
