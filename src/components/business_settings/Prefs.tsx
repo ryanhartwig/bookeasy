@@ -65,7 +65,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
 
       <div className={styles.settings}>
         <Setting label='Business Photo' placeholder='Enter valid url' value={value} setValue={setValue} onSave={() => onSave('avatar')}>
-          <Avatar src={business.avatar} size={50} alt='Business logo' />
+          <Avatar src={business.avatar} size={50} alt='Business logo' useTeamIcon={isTeams} />
         </Setting>
         <Setting label='Business Name' placeholder='Name' value={value} setValue={setValue} onSave={() => onSave('name')}>
           <p>{business.name}</p>

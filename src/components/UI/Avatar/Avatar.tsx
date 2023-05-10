@@ -3,9 +3,10 @@
 import Image from 'next/image';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
+import teamDefault from '../../../../public/assets/team_default.png';
 
 interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  src?: string,
+  src?: string | null,
   /**
    * Width and height of the avatar or default
    */
@@ -15,14 +16,13 @@ interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
    */
   defaultColor?: string,
   alt?: string,
+  useTeamIcon?: boolean,
 }
 
 /**
  * Displays avatar if provided, or uses default icon
  */
-export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size = 30, defaultColor = 'rgb(210, 210, 210)', ...props}) => {
-
-  const [source, setSource] = useState<string>();
+export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size = 30, defaultColor = 'rgb(210, 210, 210)', useTeamIcon, ...props}) => {
 
   const isValidUrl = (str: string) => {
     try { 
@@ -33,17 +33,13 @@ export const Avatar: React.FC<AvatarProps> = ({src, alt = 'Person avatar', size 
     }
   }
 
-  useEffect(() => {
-    if (!src) return;
-    if (!isValidUrl(src)) return;
-    setSource(src);
-  }, [src]);
-
   return (
     <div {...props} style={{...props.style, width: size, height: size}}>
-      {source
-        ? <Image alt={alt} src={source} width={size} height={size} style={{borderRadius: '50%'}} />
-        : <BsPersonCircle fontSize={size} color={defaultColor} />
+      {src && isValidUrl(src)
+        ? <Image alt={alt} src={src} width={size} height={size} style={{borderRadius: '50%'}} />
+        : useTeamIcon 
+          ? <Image alt="Team logo" src={teamDefault} width={size * 1.14} height={size} style={{borderRadius: '50%'}} />
+          : <BsPersonCircle fontSize={size} color={defaultColor} style={{borderRadius: '50%'}} />
       }
     </div>
   )
