@@ -195,6 +195,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   useEffect(() => {
     if (deleteClientData && !deleteClientLoading && !deleteClientError) {
       setSelected && setSelected(undefined);
+      setOpen && setOpen(false);
     };
     if (deleteClientError) setError(deleteClientError.message);
   }, [deleteClientData, deleteClientError, deleteClientLoading, setOpen, setSelected]);
