@@ -108,10 +108,10 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
         <Setting label='Business Name' placeholder='Name' value={value} setValue={setValue} onSave={() => onSave('name')}>
           <p>{business.name}</p>
         </Setting>
-        <Setting label='Business Email' placeholder='Email' value={value} setValue={setValue} onSave={() => onSave('email')}>
+        <Setting label='Business Email' placeholder='Email' email value={value} setValue={setValue} onSave={() => onSave('email')} onRemove={business.email ? () => onSave('email', null) : undefined}>
           <p>{business.email ?? 'None'}</p>
         </Setting>
-        <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')}>
+        <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')} onRemove={business.phone ? () => onSave('phone', null) : undefined}>
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>

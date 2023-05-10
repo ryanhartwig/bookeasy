@@ -1,4 +1,3 @@
-import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
 import { BusinessUser, User } from "@/types/User";
 
@@ -51,7 +50,7 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
   , [members, services]);
 
   return (
-    <div className={styles.ClientList}>
+    <div className={styles.StaffList}>
       <div className={styles.header}>
         {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
