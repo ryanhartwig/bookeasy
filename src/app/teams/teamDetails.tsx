@@ -5,7 +5,7 @@ import { Services } from '@/components/business_settings/Services';
 import { Staff } from '@/components/business_settings/Staff';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
-import { Business, NewBusiness } from '@/types/Business';
+import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { BusinessUser } from '@/types/User';

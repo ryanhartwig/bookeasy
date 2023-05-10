@@ -1,8 +1,4 @@
-'use client';
-
 import { NewBusiness } from "@/types/Business"
-import Image from 'next/image';
-import teamDefault from '../../../public/assets/team_default.png';
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
 import { BusinessUser } from "@/types/User";
