@@ -10,6 +10,7 @@ import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { BusinessUser } from '@/types/User';
 import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
+import { GET_USER } from '@/utility/queries/userQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -19,10 +20,11 @@ import styles from './teams.module.scss';
 
 interface TeamDetailsProps {
   business: NewBusiness,
+  userId: string,
 }
 
-export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
-  const [tab, setTab] = useState<number>(0);
+export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
+  const [tab, setTab] = useState<number>(4);
 
   const [users, setUsers] = useState<BusinessUser[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
@@ -41,12 +43,12 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
 
   const tabs = useMemo(() => {
     return [
-    <Prefs key='prefs' business={business} isTeams />, 
-    <Services key='services' services={services} businessId={business.id} />,
-    <ClientList key='clients' clients={clients} business={business} />,
-    <BookingSitePrefs key='bookingsite' business={business} isTeams />,
     <Staff key='staff' business={business} members={users} services={services} />,
-  ]}, [business, clients, services, users]);
+    <ClientList key='clients' clients={clients} business={business} />,
+    <Services key='services' services={services} businessId={business.id} />,
+    <BookingSitePrefs key='bookingsite' business={business} isTeams />,
+    <Prefs key='prefs' business={business} isTeams elevated={users.find(u => u.user.id === userId)?.elevated || false} />, 
+  ]}, [business, clients, services, userId, users]);
 
   return (
     <div className={styles.team_overview}>
@@ -60,7 +62,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business}) => {
       </div>
       <div className={styles.right}>
         <Card className={styles.card}>
-          <Tabs tabs={['Preferences', 'Services', 'Client List', 'Booking Site', 'Staff']} tab={tab} setTab={setTab} />
+          <Tabs tabs={['Staff', 'Client List', 'Services', 'Booking Site', 'Preferences']} tab={tab} setTab={setTab} />
           <div className={styles.settings_wrapper}>
             {tabs[tab]}
           </div>

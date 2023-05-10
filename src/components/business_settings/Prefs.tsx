@@ -10,11 +10,12 @@ import styles from './tabs.module.scss';
 
 interface PrefsProps {
   business: NewBusiness,
+  elevated?: boolean,
   userId?: string,
   isTeams?: boolean,
 }
 
-export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
+export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated}) => {
 
   const [value, setValue] = useState<string>('');
 
@@ -77,6 +78,19 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams}) => {
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>
+
+      {isTeams && elevated && (
+        <>
+        <div className={styles.header}>
+          <p>Admin Settings</p>
+        </div>
+        <div className={styles.settings}>
+          <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')}>
+            <p>{business.phone ?? 'None'}</p>
+          </Setting>
+        </div>
+        </>
+      )}
     </div>
   )
 } 
