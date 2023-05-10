@@ -24,11 +24,18 @@ interface TeamDetailsProps {
 }
 
 export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
-  const [tab, setTab] = useState<number>(4);
+  const [tab, setTab] = useState<number>(0);
 
   const [users, setUsers] = useState<BusinessUser[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+
+  const elevated = useMemo(() => users.find(u => u.user.id === userId)?.elevated || false, [userId, users]);
+  const tabNames = useMemo(() => {
+    const tabs = ['Staff', 'Client List', 'Services'];
+    if (elevated) tabs.push('Admin');
+    return tabs;
+  }, [elevated]);
   
   const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
   useEffect(() => businessUsersData && 
@@ -42,13 +49,14 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   useEffect(() => businessClientsData && setClients(businessClientsData.getBusinessClients), [businessClientsData]);
 
   const tabs = useMemo(() => {
-    return [
-    <Staff key='staff' business={business} members={users} services={services} />,
-    <ClientList key='clients' clients={clients} business={business} />,
-    <Services key='services' services={services} businessId={business.id} />,
-    <BookingSitePrefs key='bookingsite' business={business} isTeams />,
-    <Prefs key='prefs' business={business} isTeams elevated={users.find(u => u.user.id === userId)?.elevated || false} />, 
-  ]}, [business, clients, services, userId, users]);
+    const tabs = [
+      <Staff key='staff' business={business} members={users} services={services} />,
+      <ClientList key='clients' clients={clients} business={business} />,
+      <Services key='services' services={services} businessId={business.id} />,
+    ];
+    if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={users.find(u => u.user.id === userId)?.elevated || false} />);
+    return tabs;
+  }, [business, clients, elevated, services, userId, users]);
 
   return (
     <div className={styles.team_overview}>
@@ -62,7 +70,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
       </div>
       <div className={styles.right}>
         <Card className={styles.card}>
-          <Tabs tabs={['Staff', 'Client List', 'Services', 'Booking Site', 'Preferences']} tab={tab} setTab={setTab} />
+          <Tabs tabs={tabNames} tab={tab} setTab={setTab} />
           <div className={styles.settings_wrapper}>
             {tabs[tab]}
           </div>

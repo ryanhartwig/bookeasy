@@ -7,8 +7,6 @@
   display: flex;
   flex-direction: column;
 
-  background: #F8F8F8;
-
   > p:first-child {
     margin: 12px;
     padding-left: 10px;
@@ -72,17 +70,11 @@
 
 .header {
   display: flex;
-  justify-content: space-around;
-  padding: 12px 10px;
-  background: white;
+  justify-content: flex-start;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--dividers);
 
-  // Subsequent headers if using multiple
-  &:not(:first-of-type) {
-    border-top: 1px solid var(--dividers);
-  }
-
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 300;
 }
 
@@ -134,9 +126,6 @@
 }
 
 .BookingSitePrefs {
-  height: 100%;
-  width: 100%;
-
   display: flex;
   flex-direction: column;
 }

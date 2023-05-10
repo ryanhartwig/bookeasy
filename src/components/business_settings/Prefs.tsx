@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import { BsTrash } from 'react-icons/bs';
 import { Avatar } from '../UI/Avatar/Avatar';
+import { BookingSitePrefs } from './BookingSitePrefs';
 import styles from './tabs.module.scss';
 
 interface PrefsProps {
@@ -82,6 +83,8 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
           <p>{business.phone ?? 'None'}</p>
         </Setting>
       </div>
+
+      <BookingSitePrefs business={business} isTeams />
 
       {isTeams && elevated && (
         <>
