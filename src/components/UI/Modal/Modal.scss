@@ -33,6 +33,8 @@
   max-width: 95%;
 
   border-radius: 10px;
+
+  animation: fadeUp 300ms forwards;
 }
 
 .Modal-content {
@@ -120,3 +122,14 @@
   }
 }
 
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    top: 20px;
+  }
+
+  to {
+    opacity: 1;
+    top: 0;
+  }
+}
