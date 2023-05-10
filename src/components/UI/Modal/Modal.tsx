@@ -61,7 +61,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   return (
     <>
       {open && 
-      <div className='Modal noselect' style={{zIndex}} ref={modalRef}>
+      <div className='Modal' style={{zIndex}} ref={modalRef}>
         <div className={clsx('Modal-box', {'Modal-box-disabled': loading})} ref={contentRef} >
           {loading && <div className='Loading-cover'>
             <ClipLoader loading={loading} color="white" size={40} />
@@ -81,9 +81,9 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
             {content}
           </div>
           {actionButtonText && 
-            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} onClick={handleActionClick}>
+            <div className={clsx('Modal-actions', {"disabled": actionButtonDisabled})} >
               <hr/>
-              <p>{actionButtonText}</p>
+              <p onClick={handleActionClick}>{actionButtonText}</p>
             </div>
           }
         </div>

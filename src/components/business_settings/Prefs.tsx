@@ -1,4 +1,3 @@
-<p>test</p>
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
 import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
@@ -6,12 +5,14 @@ import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFr
 import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 import { gql, useMutation } from '@apollo/client';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import { BiTrash } from 'react-icons/bi';
+import { useCallback, useEffect, useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import { Avatar } from '../UI/Avatar/Avatar';
+import { Modal } from '../UI/Modal/Modal';
 import { BookingSitePrefs } from './BookingSitePrefs';
 import styles from './tabs.module.scss';
+import { CiWarning } from 'react-icons/ci';
+import { Input } from '../UI/Input/Input';
 
 interface PrefsProps {
   business: NewBusiness,
@@ -23,6 +24,9 @@ interface PrefsProps {
 export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated}) => {
 
   const [value, setValue] = useState<string>('');
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [confirmValue, setConfirmValue] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [updateBusinessPrefs, { 
     data: updateBusinessPrefsData, 
@@ -63,6 +67,15 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
     updateBusinessPrefsReset();
   }, [updateBusinessPrefsData, updateBusinessPrefsLoading, updateBusinessPrefsReset]);
 
+  const onChangeInput = useCallback((e: any) => {
+    setConfirmValue(e.target.value);
+    setErrorMessage('');
+  }, []);
+
+  const onRemoveTeam = useCallback(() => {
+
+  }, []);
+
   return (
     <div className={styles.Prefs}>
       <div className={styles.header}>
@@ -92,13 +105,32 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
           <p>Additional Settings</p>
         </div>
         <div className={clsx(styles.settings, styles.adminOptions)}>
-          <div className={clsx(styles.iconButton, styles.removeTeam)}>
+          <div className={clsx(styles.iconButton, styles.removeTeam)} onClick={() => setConfirmDelete(true)}>
             <BsTrash />
             <p>Remove this Business</p>
           </div>
         </div>
         </>
       )}
+
+      <Modal 
+        open={confirmDelete} 
+        onClose={() => {setConfirmDelete(false); setConfirmValue('')}}
+        className={styles.confirmDeleteModal}
+        actionButtonDisabled={confirmValue !== business.name}
+        actionButtonText="Confirm"
+      >
+        <Modal.Header>Remove Team</Modal.Header>
+        <div className={styles.warning}>
+          <CiWarning />
+          <p>This action cannot be undone.</p>
+        </div>
+        <p>All clients, services, staff and appointment data will be permanently lost- for everyone.</p>
+        <br />
+        <p className='noselect'>To confirm, type: {`"${business.name}"`}.</p>
+        <Input value={confirmValue} onChange={onChangeInput} onBlur={() => confirmValue && confirmValue !== business.name && setErrorMessage('Input does not match.')} required errorMessage={errorMessage} />
+        <br />
+      </Modal>
     </div>
   )
 } 
