@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const GET_USER_APPOINTMENTS = gql`
   query($userId: ID!, $rangeStart: String, $rangeEnd: String) {
-    getUserAppointments(user_id: $userId, range_start: $rangeStart, range_end: $rangeEnd) {
+    getUserAppointments(registered_user_id: $userId, range_start: $rangeStart, range_end: $rangeEnd) {
       ...AppointmentDataFragment
     }
   }
