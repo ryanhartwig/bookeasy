@@ -27,20 +27,21 @@ export const appointmentsResolvers = {
     getUserAppointments: async (_: any, args: any) => {
       const { registered_user_id, range_start, range_end } = args;
 
-      const staffIdsResponse = await db.query('select id from staff where registered_user_id = $1', [registered_user_id]);
-      console.log(staffIdsResponse.rows);
-      if (!staffIdsResponse.rowCount) return [];
+      let query = `
+        with staff_ids as (
+          select id from staff
+          where registered_user_id = $1
+        )
+        select * from appointment
+        where staff_id in (
+          select * from staff_ids
+        )
+      `;
+      const params = [registered_user_id]
 
-      let query = 'select * from appointment where (';
-      const params: string[] = [...staffIdsResponse.rows.map(r => r.id)];
-      let paramCount = 1;
-
-      staffIdsResponse.rows.forEach(() => query += `staff_id = $${paramCount++} or `);
-      query = query.slice(0, -4) + ')'; // remove trailing ' or ' and add close parenthesis
-      
       if (range_start && range_end) {
         params.push(range_start, range_end);
-        query += ` and (start_date >= $${paramCount++} and start_date <= $${paramCount++})`;
+        query += ' and start_date between $2 and $3';
       }
 
       const response = await db.query(query, params);
