@@ -47,17 +47,9 @@ export const appointmentsResolvers = {
       const response = await db.query(query, params);
       return response.rows;
     },
-    getClientAppointments: async (parent: any, args: any) => {
-      try {
-        const response = await db.query('select * from appointment where client_id = $1', [args.client_id]);
-
-        if (!response.rowCount) {
-          return [];
-        }
-        return response.rows;
-      } catch(e: any) {
-        throwGQLError(e.message)
-      }
+    getClientAppointments: async (_: any, args: any) => {
+      const response = await db.query('select * from appointment where client_id = $1', [args.client_id]);
+      return response.rows;
     },
   },
   
@@ -73,6 +65,10 @@ export const appointmentsResolvers = {
     },
     client: async (parent: any) => {
       const response = await db.query('select * from client where id = $1', [parent.client_id]);
+      return response.rows[0];
+    },
+    staff: async (parent: any) => {
+      const response = await db.query('select * from staff where id = $1', [parent.staff_id]);
       return response.rows[0];
     },
   }
