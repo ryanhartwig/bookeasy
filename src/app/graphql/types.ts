@@ -11,7 +11,7 @@ export const types = `#graphql
   }
 
   type RegisteredUser {
-  id: ID!,
+    id: ID!,
     name: String!,
     email: String!,
     phone: String!,
@@ -30,6 +30,7 @@ export const types = `#graphql
     name: String!,
     contact_email: String,
     contact_phone: String,
+    avatar: String, # added from regUser if exists
   } 
 
   type Service {
@@ -85,7 +86,7 @@ export const types = `#graphql
     is_own: Boolean!,
     avatar: String,
     created: String!,
-    members: [Staff!]!,
+    staff: [Staff!]!,
   }
 
   type AvailabilitySlice {

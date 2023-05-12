@@ -1,6 +1,9 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
 
+
+// Check queries
+
 export const userResolvers = {
   Query: {
     getUser: async (_: any, args: any) => {
@@ -9,26 +12,20 @@ export const userResolvers = {
     },
     getUserBusinesses: async (_: any, args: any) => {
       const response = await db.query(`
-        with business_ids as (
-          select business_id from staff
-          where registered_user_id = $1
-        )
         select * from business
         where id in (
-          select * from business_ids
+          select business_id from staff
+          where registered_user_id = $1
         )
       `, [args.user_id]);
       return response.rows;
     },
     getUserAvailability: async (_: any, args: any) => {
       const response = await db.query(`
-        with staff_ids as (
-          select id from staff
-          where registered_user_id = $1
-        )
         select * from availability_slice
         where staff_id in (
-          select * from staff_ids
+          select id from staff
+          where registered_user_id = $1
         )
       `, [args.user_id]);
       return response.rows;

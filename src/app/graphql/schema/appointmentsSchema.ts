@@ -28,13 +28,8 @@ export const appointmentsResolvers = {
       const { registered_user_id, range_start, range_end } = args;
 
       let query = `
-        with staff_ids as (
-          select id from staff
-          where registered_user_id = $1
-        )
-        select * from appointment
-        where staff_id in (
-          select * from staff_ids
+        select * from appointment where staff_id in (
+          select id from staff where registered_user_id = $1
         )
       `;
       const params = [registered_user_id]
