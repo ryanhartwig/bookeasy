@@ -63,7 +63,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   useEffect(() => {
     if (!businessUsersData || loadingBusinessUsers) return;
 
-    setBusinessUsers(businessUsersData.getBusiness.users.map((data: any) => data.user));
+    setBusinessUsers(businessUsersData.getBusiness.staff);
   }, [businessUsersData, loadingBusinessUsers]);
 
   useEffect(() => {
