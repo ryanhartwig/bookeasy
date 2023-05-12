@@ -17,6 +17,26 @@ export const GET_BUSINESS = gql`
   }
 `;
 
+export const GET_BUSINESS_WITH_STAFF_ID = gql`
+  query($businessId: ID!) {
+    getBusiness(business_id: $businessId) {
+      id
+      name
+      email
+      phone
+      min_booking_notice
+      min_cancel_notice
+      max_book_ahead
+      user_id
+      avatar
+      created
+      staff {
+        id
+      }
+    }
+  }
+`;
+
 export const GET_BUSINESS_CLIENTS = gql`
   query($businessId: ID!) {
     getBusinessClients(business_id: $businessId) {

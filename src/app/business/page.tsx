@@ -1,7 +1,8 @@
 'use client';
 
 import { Header } from '@/components/Header';
-import { GET_USER, GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
+import { GET_BUSINESS_WITH_STAFF_ID } from '@/utility/queries/businessQueries';
+import { GET_USER } from '@/utility/queries/userQueries';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { useQuery } from '@apollo/client';
 import { Business } from './business';
@@ -9,12 +10,12 @@ import { Business } from './business';
 export default function Page() {
 
   const { data: userData } = useQuery(GET_USER, { variables: { userId } });
-  const { data: userBusinessData } = useQuery(GET_USER_OWN_BUSINESS, { variables: { userId }});
+  const { data: businessData } = useQuery(GET_BUSINESS_WITH_STAFF_ID, { variables: { businessId: userData?.getUser?.own_business_id }, skip: !!userData?.getUser});
   
   return (
     <>
       <Header text='My Business' />
-      {userData && userBusinessData && <Business business={userBusinessData.getUserOwnBusiness} user={userData.getUser} />}
+      {userData && businessData && <Business business={businessData.getBusiness} user={userData.getUser} staffId={businessData.getBusiness.staff.id} />}
     </>
   )
 }

@@ -51,22 +51,6 @@ export const GET_USER_WITH_PREFS = gql`
   }
 `;
 
-export const GET_USER_OWN_BUSINESS = gql`
-  query($userId: ID!) {
-    getUserOwnBusiness(user_id: $userId) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      user_id
-      avatar
-    }
-  }
-`;
-
 export const SET_USER_AVAILABILITY = gql`
   mutation($userId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
     setUserAvailability(user_id: $userId, business_id: $businessId, day: $day, slices: $slices)
