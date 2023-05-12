@@ -5,21 +5,21 @@ import { Staff } from "@/types/User";
 import styles from './teams.module.scss';
 
 interface MembersProps {
-  members: Staff[],
+  staff: Staff[],
 }
 
-export const Members: React.FC<MembersProps> = ({members}) => {
+export const Members: React.FC<MembersProps> = ({staff}) => {
 
   return (
     <>
       <h2>Team Members</h2>
       <hr />
       <div className={styles.members}>
-        {members.map(m => (
-          <div key={m.user.id}>
-            <Avatar src={m.user.avatar} size={30} />
-            <p>{m.user.name}</p>
-            <p>{m.elevated ? 'Admin' : 'Member'}</p>
+        {staff.map(s => (
+          <div key={s.id}>
+            <Avatar src={s.avatar} size={30} />
+            <p>{s.name}</p>
+            <p>{s.elevated ? 'Admin' : 'Member'}</p>
           </div>
         ))}
       </div>

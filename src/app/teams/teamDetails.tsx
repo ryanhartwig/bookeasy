@@ -64,7 +64,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
           <Overview selected={business} members={staff} clients={clients} services={services} />
         </Card>
         <Card className={clsx(styles.card, styles.members_overview)}>
-          <Members members={staff} />
+          <Members staff={staff} />
         </Card>
       </div>
       <div className={styles.right}>
