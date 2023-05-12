@@ -10,8 +10,8 @@ export const GET_USER_BUSINESSES = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
+      is_own
     }
   }
 `;
@@ -25,6 +25,7 @@ export const GET_USER = gql`
       phone
       created
       avatar
+      own_business_id
     }
   }
 `;
@@ -47,6 +48,7 @@ export const GET_USER_WITH_PREFS = gql`
         notification_overview_time
       }
       avatar
+      own_business_id
     }
   }
 `;

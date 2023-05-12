@@ -4,7 +4,6 @@ import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { useState } from "react";
 import styles from './business.module.scss';
 import { Availability } from "../../components/business_settings/Availability";
-import { BookingSitePrefs } from "@/components/business_settings/BookingSitePrefs";
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
@@ -30,7 +29,7 @@ export const Settings: React.FC<SettingsProps> = ({business, clients, user, serv
     <ClientList clients={clients} key={ClientList.name} business={business} />, 
     <Services businessId={business.id} key={Services.name} services={services} isOwnBusiness />, 
     <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} />,
-    <Prefs key={Prefs.name} userId={user.id} business={business} />, 
+    <Prefs key={Prefs.name} userBusinessId={user.own_business_id} business={business} />, 
   ];
 
   return (

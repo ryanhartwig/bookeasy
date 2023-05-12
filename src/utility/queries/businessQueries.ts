@@ -10,7 +10,6 @@ export const GET_BUSINESS = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
       created
     }
@@ -27,7 +26,6 @@ export const GET_BUSINESS_WITH_STAFF_ID = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
       created
       staff {
@@ -80,17 +78,14 @@ export const GET_BUSINESS_SERVICES = gql`
 export const GET_BUSINESS_USERS = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
-      users {
+      staff {
         date_added
         elevated
-        user {
-          id
-          name
-          email
-          phone
-          created
-          avatar
-        }
+        id
+        name
+        contact_email
+        contact_phone
+        avatar
       }
     }
   }
@@ -99,12 +94,10 @@ export const GET_BUSINESS_USERS = gql`
 export const GET_BUSINESS_FORM_USERS = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
-      users {
-        user {
-          id
-          name
-          avatar
-        }
+      staff {
+        id
+        name
+        avatar
       }
     }
   }
@@ -129,9 +122,9 @@ export const UPDATE_BUSINESS_PREFS = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
       created
+      is_own
     }
   }
 `;
@@ -146,9 +139,9 @@ export const NEW_BUSINESS = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
       created
+      is_own
     }
   }
 `;

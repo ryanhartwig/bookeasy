@@ -5,7 +5,7 @@ import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
-import { GET_STAFF_AVAILABILITY, GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
+import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';

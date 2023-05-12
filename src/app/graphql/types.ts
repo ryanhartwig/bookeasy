@@ -16,8 +16,9 @@ export const types = `#graphql
     email: String!,
     phone: String!,
     created: String,
-    prefs: UserPrefs!,
+    prefs: UserPrefs!, 
     avatar: String,
+    own_business_id: String,
   }
 
   # Staff member of a team or own business. 

@@ -6,26 +6,25 @@ import { useCallback, useEffect, useState } from 'react';
 import { formatPrefPeriod } from '@/utility/functions/formatting/formatPrefPeriod';
 import { PeriodSelectForm } from './PeriodSelectForm';
 import { gql, useMutation } from '@apollo/client';
-import { UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
-import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
+import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
-  userId?: string,
+  userBusinessId?: string,
   isTeams?: boolean,
 }
 
-export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, userId, isTeams}) => {
+export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, userBusinessId, isTeams}) => {
 
   const [initialValue, setInitialValue] = useState<number>();
   const [total, setTotal] = useState<number>();
   const [updateProperty, setUpdateProperty] = useState<string>('');
 
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
-    refetchQueries: !userId ? [] : [{
-      query: GET_USER_OWN_BUSINESS,
-      variables: { userId }
+    refetchQueries: !userBusinessId ? [] : [{
+      query: GET_BUSINESS,
+      variables: { businessId: userBusinessId }
     }],
     update(cache, { data: { updateBusinessPrefs }}) {
       if (!isTeams) return;
