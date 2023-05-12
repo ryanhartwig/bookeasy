@@ -11,7 +11,7 @@ export const typeDefs = mergeTypeDefs([
   appointmentsTypeDefs, 
   businessTypeDefs,
   // clientTypeDefs,
-  // serviceTypeDefs,
+  serviceTypeDefs,
   types,
 ]);
 
@@ -20,5 +20,5 @@ export const resolvers = mergeResolvers([
   appointmentsResolvers,
   businessResolvers,
   // clientResolvers,
-  // serviceResolvers,
+  serviceResolvers,
 ]);

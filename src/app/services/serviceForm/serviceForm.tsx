@@ -49,14 +49,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   
   const [costUpdate, setCostUpdate] = useState<boolean>(false);
   const [costUpdateDate, setCostUpdateDate] = useState<string>(minimumDateInput);
-
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
   const [durationUpdateDate, setDurationUpdateDate] = useState<string>(minimumDateInput);
   
-  
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
   const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_FORM_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
-
 
   useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
 
