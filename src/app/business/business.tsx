@@ -25,9 +25,11 @@ export const Business: React.FC<BusinessProps> = ({user, business, staffId}) => 
   const [services, setServices] = useState<Service[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
+
+  console.log(staffId);
   
   const { data: servicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
-  const { data: clientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
+  // const { data: clientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
   const { data: availabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId }});
 
   useEffect(() => {
@@ -35,14 +37,15 @@ export const Business: React.FC<BusinessProps> = ({user, business, staffId}) => 
     setServices(servicesData.getBusinessServices);
   }, [servicesData]);
 
-  useEffect(() => {
-    if (!clientsData) return;
-    setClients(clientsData.getBusinessClients);
-  }, [clientsData]);
+  // useEffect(() => {
+  //   if (!clientsData) return;
+  //   setClients(clientsData.getBusinessClients);
+  // }, [clientsData]);
 
   useEffect(() => {
     if (!availabilityData) return;
-    setAvailability(availabilityData.getUserAvailability.filter((a: AvailabilitySlice) => a.business_id === business.id));
+    console.log(availabilityData)
+    setAvailability(availabilityData.getStaffAvailability);
   }, [availabilityData, business.id]);
   
   return (
@@ -73,7 +76,7 @@ export const Business: React.FC<BusinessProps> = ({user, business, staffId}) => 
       {/* Right panel */}
       <div>
         <Card className={clsx(styles.card, styles.prefs)}>
-          <Settings business={business} clients={clients} services={services} user={user} availability={availability} />
+          <Settings business={business} clients={clients} services={services} user={user} availability={availability} staffId={staffId} />
         </Card>
       </div>
     </div>

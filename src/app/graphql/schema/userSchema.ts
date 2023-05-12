@@ -42,7 +42,7 @@ export const userResolvers = {
     },
   },
   Mutation: {
-    setUserAvailability: async (_: any, args: any) => {
+    setStaffAvailability: async (_: any, args: any) => {
       const { staff_id, business_id, day, slices} = args;
 
       // Remove existing slices for current day
@@ -122,7 +122,7 @@ export const userTypeDefs = `#graphql
   }
 
   type Mutation {
-    setUserAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
+    setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
     patchUser(user_id: ID!, patch: UserPatch!): RegisteredUser!,
     patchUserPrefs(user_id: ID!, patch: UserPrefsPatch!): UserPrefs!,
   }

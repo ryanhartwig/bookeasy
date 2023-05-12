@@ -80,7 +80,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                 </ul>
               </div>
             </div>
-            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected?.id} />}
+            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
           </div>
         }
       </Modal>
