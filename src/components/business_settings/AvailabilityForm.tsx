@@ -151,8 +151,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   }, [businessId, canSubmit, day, endString, startString]);
 
   const onSubmit = useCallback(() => {
-    setStaffAvailability({variables: { userId, businessId, day, slices: newSlices.map(s => ({...s, user_id: userId, __typename: undefined})) }})
-  }, [businessId, day, newSlices, setStaffAvailability, userId]);
+    setStaffAvailability({variables: { staffId, businessId, day, slices: newSlices.map(s => ({...s, staff_id: staffId, __typename: undefined})) }})
+  }, [businessId, day, newSlices, setStaffAvailability, staffId]);
 
   useEffect(() => {
     if (!data || loading) return;

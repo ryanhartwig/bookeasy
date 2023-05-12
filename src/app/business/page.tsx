@@ -11,11 +11,11 @@ export default function Page() {
 
   const { data: userData } = useQuery(GET_USER, { variables: { userId } });
   const { data: businessData } = useQuery(GET_BUSINESS_WITH_STAFF_ID, { variables: { businessId: userData?.getUser?.own_business_id }, skip: !userData?.getUser});
-  console.log(businessData);
+
   return (
     <>
       <Header text='My Business' />
       {userData && businessData && <Business business={businessData.getBusiness} user={userData.getUser} staffId={businessData.getBusiness.staff[0].id} />}
     </>
-  )
+  );
 }
