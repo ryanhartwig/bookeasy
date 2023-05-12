@@ -1,5 +1,5 @@
 import { Service } from "@/types/Service";
-import { Staff, User } from "@/types/User";
+import { Staff } from "@/types/User";
 
 import styles from './tabs.module.scss';
 import { useEffect, useMemo, useState } from "react";
@@ -10,8 +10,8 @@ import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 import { Availability } from "./Availability";
 import { NewBusiness } from "@/types/Business";
 import { useQuery } from "@apollo/client";
-import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
+import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 
 interface StaffProps {
   staffMembers: Staff[],
@@ -24,10 +24,10 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
 
-  const { data: availabilityData, loading } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: selected?.id, businessId: business.id }, skip: !selected});
+  const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selected?.id }, skip: !selected});
   useEffect(() => {
     if (!availabilityData || loading) return;
-    setSlices(availabilityData.getUserAvailability);
+    setSlices(availabilityData.getStaffAvailability);
   }, [availabilityData, loading]); 
 
 
