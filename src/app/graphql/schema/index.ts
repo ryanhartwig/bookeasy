@@ -10,7 +10,7 @@ export const typeDefs = mergeTypeDefs([
   userTypeDefs, 
   appointmentsTypeDefs, 
   businessTypeDefs,
-  // clientTypeDefs,
+  clientTypeDefs,
   serviceTypeDefs,
   types,
 ]);
@@ -19,6 +19,6 @@ export const resolvers = mergeResolvers([
   userResolvers, 
   appointmentsResolvers,
   businessResolvers,
-  // clientResolvers,
+  clientResolvers,
   serviceResolvers,
 ]);

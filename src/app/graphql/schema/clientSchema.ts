@@ -3,75 +3,40 @@ import { throwGQLError } from "@/utility/gql/throwGQLError";
 
 export const clientResolvers = {
   Query: {
-    getMultiClientData: async (parent: any, args: any) => {
-      // This is the client, as in the client relation
-      const clientResponse = await db.query('select * from client where id = $1', [args.client_id]);
-
-      // This is the client as in the clients_businesses relation (thus, business detail overrides)
-      const clientPatchResponse = await db.query('select * from clients_businesses where client_id = $1', [args.client_id]);
-
-      if (!clientResponse.rows[0] || !clientPatchResponse.rows[0]) throwGQLError('Could not find client');
-
-      return {
-        client: clientResponse.rows[0],
-        business_patch: { ...clientPatchResponse.rows[0], id: clientPatchResponse.rows[0].client_id },
-      }
-    },
     getClientAppointmentCount: async (_: any, args: any) => {
       const response = await db.query('select count(*) from appointment where client_id = $1', [args.client_id]);
       return response.rows[0].count;
     },
   },
   Mutation: {
-    userAddClient: async (parent: any, args: any) => {
+    userAddClient: async (_: any, args: any) => {
       const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
       if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
 
-      const clientResponse = await db.query(`insert into client values (
-        $1, $2, $3, $4, $5, $6
-      ) returning *`, [id, name, email, null, null, null]);
-
-      if (!clientResponse.rows[0]) throwGQLError('Could not add client to client relation');
-
-      const clientBusinessResponse = await db.query(`insert into clients_businesses values (
+      const response = await db.query(`
+      insert into client (id, business_id, notes, name, email, address, phone, joined_date, active)
+      values (
         $1, $2, $3, $4, $5, $6, $7, $8, $9
       ) returning *`, [id, business_id, notes, name, email, address, phone, joined_date, active]);
-
-      if (!clientBusinessResponse.rows[0]) throwGQLError('Could not create relationship between client and business');
-
-      const overWrites = Object.fromEntries(Object.entries(clientBusinessResponse.rows[0]).filter(([_, value]) => !!value));
-
-      return {
-        ...clientResponse.rows[0],
-        ...overWrites,
-      }
+      return response.rows[0];
     },
-    userEditClient: async (parent: any, args: any) => {
+    userEditClient: async (_: any, args: any) => {
       const { id, notes, name, email, address, phone, active } = args.client;
 
-      const response = await db.query(`update clients_businesses set
+      const response = await db.query(`
+        update client set
         notes = $1,
         name = $2,
         email = $3,
         address = $4,
         phone = $5,
         active = $6
-        where client_id = $7
+        where id = $7
         returning *
       `, [notes, name, email, address, phone, active, id]);
-
-      if (!response.rowCount) throwGQLError('Could not update client');
-
-      // Need to return patched client!
-      const clientResponse = await db.query('select * from client where id = $1', [id]);
-
-      return {
-        ...clientResponse.rows[0],
-        ...Object.fromEntries(Object.entries(response.rows[0]).filter(([_, v]) => !!v)),
-        client_id: undefined,
-      };
+      return response.rows[0];
     },
-    deleteClient: async (parent: any, args: any) => {
+    deleteClient: async (_: any, args: any) => {
       const response = await db.query('delete from client where id = $1 returning id', [args.client_id]);
       return response.rows[0].id;
     },
@@ -103,13 +68,12 @@ export const clientTypeDefs = `#graphql
   }
 
   type Query {
-    getMultiClientData(client_id: String!): MultiClient!,
     getClientAppointmentCount(client_id: String!): Int!,
   }
 
   type Mutation {
-    userAddClient(client: UserAddClientInput!): BusinessClient!,
-    userEditClient(client: UserEditClientInput!): BusinessClient!,
+    userAddClient(client: UserAddClientInput!): Client!,
+    userEditClient(client: UserEditClientInput!): Client!,
     deleteClient(client_id: String!): String!,
   }
 `;
