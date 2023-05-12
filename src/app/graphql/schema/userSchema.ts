@@ -27,6 +27,13 @@ export const userResolvers = {
       `, [args.user_id]);
       return response.rows;
     },
+    getStaffAvailability: async (_: any, args: any) => {
+      const response = await db.query(`
+        select * from availability_slice 
+        where staff_id = $1
+      `, [args.staff_id]);
+      return response.rows;
+    },
   },
   RegisteredUser: {
     prefs: async (parent:any, args: any) => {
@@ -82,12 +89,6 @@ export const userResolvers = {
 }
 
 export const userTypeDefs = `#graphql
-  type Query {
-    getUser(id: ID!): RegisteredUser,
-    getUserBusinesses(user_id: ID!): [Business!]!,
-    getUserAvailability(user_id: ID!, business_id: ID): [AvailabilitySlice!]!,
-  }
-
   input AvailabilitySliceInput {
     staff_id: String!,
     business_id: String!,
@@ -111,6 +112,13 @@ export const userTypeDefs = `#graphql
     notification_reminder: Boolean,
     notification_overview: Boolean,
     notification_overview_time: String
+  }
+
+  type Query {
+    getUser(id: ID!): RegisteredUser,
+    getUserBusinesses(user_id: ID!): [Business!]!,
+    getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
+    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
   }
 
   type Mutation {
