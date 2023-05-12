@@ -1,11 +1,11 @@
 'use client';
 
 import { Avatar } from "@/components/UI/Avatar/Avatar";
-import { BusinessUser } from "@/types/User";
+import { Staff } from "@/types/User";
 import styles from './teams.module.scss';
 
 interface MembersProps {
-  members: BusinessUser[],
+  members: Staff[],
 }
 
 export const Members: React.FC<MembersProps> = ({members}) => {

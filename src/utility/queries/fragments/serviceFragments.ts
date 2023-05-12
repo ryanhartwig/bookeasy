@@ -11,7 +11,7 @@ export const SERVICE_FRAGMENT = gql`
     color
     deleted
     business_id
-    assigned_users {
+    assigned_staff {
       id
       name
       avatar

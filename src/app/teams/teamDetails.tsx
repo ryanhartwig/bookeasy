@@ -2,13 +2,13 @@ import { BookingSitePrefs } from '@/components/business_settings/BookingSitePref
 import { ClientList } from '@/components/business_settings/ClientList';
 import { Prefs } from '@/components/business_settings/Prefs';
 import { Services } from '@/components/business_settings/Services';
-import { Staff } from '@/components/business_settings/Staff';
+import { StaffList } from '@/components/business_settings/Staff';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { BusinessUser } from '@/types/User';
+import { Staff } from '@/types/User';
 import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
 import { GET_USER } from '@/utility/queries/userQueries';
 import { useQuery } from '@apollo/client';
@@ -26,7 +26,7 @@ interface TeamDetailsProps {
 export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   const [tab, setTab] = useState<number>(0);
 
-  const [users, setUsers] = useState<BusinessUser[]>([]);
+  const [users, setUsers] = useState<Staff[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
 
@@ -50,7 +50,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
 
   const tabs = useMemo(() => {
     const tabs = [
-      <Staff key='staff' business={business} members={users} services={services} />,
+      <StaffList key='staff' business={business} staffMembers={users} services={services} />,
       <ClientList key='clients' clients={clients} business={business} />,
       <Services key='services' services={services} businessId={business.id} />,
     ];

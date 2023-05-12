@@ -1,5 +1,5 @@
 import { Service } from "@/types/Service";
-import { BusinessUser, User } from "@/types/User";
+import { Staff, User } from "@/types/User";
 
 import styles from './tabs.module.scss';
 import { useEffect, useMemo, useState } from "react";
@@ -14,14 +14,14 @@ import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
 
 interface StaffProps {
-  members: BusinessUser[],
+  staffMembers: Staff[],
   services: Service[],
   business: NewBusiness,
 }
 
-export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
+export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business}) => {
 
-  const [selected, setSelected] = useState<User>();
+  const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
 
   const { data: availabilityData, loading } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: selected?.id, businessId: business.id }, skip: !selected});
@@ -31,30 +31,30 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
   }, [availabilityData, loading]); 
 
 
-  const staff = useMemo(() => 
-    members.map(m => (
-      <div className={styles.client} key={m.user.id}>
+  const staffList = useMemo(() => 
+    staffMembers.map(staff => (
+      <div className={styles.client} key={staff.id}>
         <div>
-          <Avatar src={m.user.avatar} size={28} />
+          <Avatar src={staff.avatar} size={28} />
         </div>
         <div>
-          <p>{m.user.name}</p>
-          <p>{services.filter(s => s.assigned_users.some(user => user.id === m.user.id)).length}</p>
-          <p>{new Date(m.date_added)
+          <p>{staff.name}</p>
+          <p>{services.filter(s => s.assigned_staff.some(s => s.id === staff.id)).length}</p>
+          <p>{new Date(staff.date_added)
             .toLocaleDateString()}</p>
-          <p className={styles.details} onClick={() => {setSelected(m.user)}}>Availability</p>
+          <p className={styles.details} onClick={() => {setSelected(staff)}}>Availability</p>
         </div>
       </div> 
       )
     )
-  , [members, services]);
+  , [staffMembers, services]);
 
   return (
     <div className={styles.StaffList}>
       <div className={styles.header}>
         {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
-      {staff}
+      {staffList}
       <Modal 
         open={!!selected} 
         escapeCloses 
@@ -71,11 +71,11 @@ export const Staff: React.FC<StaffProps> = ({members, services, business}) => {
                 <ul>
                   <li>
                     <HiOutlinePhone />
-                    {selected.phone ?? 'None'}
+                    {selected.contact_phone ?? 'None'}
                   </li>
                   <li>
                     <HiOutlineMail />
-                    {selected.email}
+                    {selected.contact_email}
                   </li>
                 </ul>
               </div>

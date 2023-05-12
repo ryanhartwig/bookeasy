@@ -1,4 +1,4 @@
-import { AssignedUser } from "./User";
+import { AssignedStaff } from "./User";
 
 export interface Service {
   id: string,
@@ -10,7 +10,7 @@ export interface Service {
   color: string,
   deleted: boolean,
   business_id: string,
-  assigned_users: AssignedUser[],
+  assigned_staff: AssignedStaff[],
 };
 
 export interface FormService {

@@ -19,10 +19,10 @@ export default function ServiceCard({service, onClick}: { service: Service, onCl
       <p>{service.duration} min</p>
       <p>{service.provider}</p>
       <div className={styles.assignees}>
-        {service.assigned_users.map(user => 
-          <div key={user.id}>
-            <Avatar src={user.avatar} size={26} />
-            <p>{user.name}</p>
+        {service.assigned_staff.map(staff => 
+          <div key={staff.id}>
+            <Avatar src={staff.avatar} size={26} />
+            <p>{staff.name}</p>
           </div>
         )}
       </div>

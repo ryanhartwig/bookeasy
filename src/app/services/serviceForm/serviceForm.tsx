@@ -10,7 +10,7 @@ import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_USERS } from "@/utility/queries/businessQueries"
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
-import { AssignedUser } from '@/types/User';
+import { AssignedStaff } from '@/types/User';
 import { AiOutlineCheck, AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
@@ -42,8 +42,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
-  const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
+  const [businessUsers, setBusinessUsers] = useState<AssignedStaff[]>([]);
+  const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedStaff>>(new Map());
 
   const minimumDateInput = useMemo(() => dateToDateInput(), []);
   
@@ -108,7 +108,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     setIsVideo(initialService.is_video);
     setColor(initialService.color);
 
-    const assignedUsersMap = new Map<string, AssignedUser>();
+    const assignedUsersMap = new Map<string, AssignedStaff>();
     initialService.assigned_users.forEach(u => assignedUsersMap.set(u.id, u));
 
     setAssignedUsers(assignedUsersMap);
@@ -213,7 +213,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   const clientList = useMemo(() => 
     businessUsers
-      .map((u: AssignedUser) => (
+      .map((u: AssignedStaff) => (
         <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedUsers.has(u.id)})} onClick={() => setAssignedUsers(p => {
           const map = new Map(p);
           return map.delete(u.id) ? map : map.set(u.id, u);

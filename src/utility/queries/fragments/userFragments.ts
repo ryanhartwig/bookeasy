@@ -9,8 +9,8 @@ export const GET_USER_BUSINESSES_FRAGMENT = gql`
     min_booking_notice
     min_cancel_notice
     max_book_ahead
-    user_id
     avatar
     created
+    is_own
   }
 `;

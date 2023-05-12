@@ -17,14 +17,18 @@ export interface User {
   };
 };
 
-export interface AssignedUser {
+export interface AssignedStaff {
   id: string,
   name: string,
   avatar?: string,
 }
 
-export interface BusinessUser {
-  user: User,
+export interface Staff {
+  id: string,
   elevated: boolean,
   date_added: string,
+  name: string,
+  contact_email: string,
+  contact_phone: string,
+  avatar?: string
 }
