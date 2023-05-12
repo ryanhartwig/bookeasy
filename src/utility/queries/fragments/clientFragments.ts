@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const BUSINESS_CLIENT_FRAGMENT = gql`
-  fragment BusinessClientFragment on BusinessClient {
+  fragment BusinessClientFragment on Client {
     id
     notes
     name
@@ -15,7 +15,7 @@ export const BUSINESS_CLIENT_FRAGMENT = gql`
 `;
 
 export const NEW_CLIENT_FRAGMENT = gql`
-  fragment NewClient on BusinessClient {
+  fragment NewClient on Client {
     ...BusinessClientFragment
   }
 `;
