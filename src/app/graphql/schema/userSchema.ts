@@ -1,9 +1,6 @@
 import db from "@/utility/db";
 import { throwGQLError } from "@/utility/gql/throwGQLError";
 
-
-// Check queries
-
 export const userResolvers = {
   Query: {
     getUser: async (_: any, args: any) => {
@@ -56,16 +53,13 @@ export const userResolvers = {
       const params = [user_id];
       let query = 'update registered_user set ';
 
-      for (const key in patch) {
+      const columns = Object.keys(patch).map((key, i) => {
         params.push(patch[key]);
-        query += `${key} = $${params.length}, `;
-      }
+        return `${key} = $${i + 2}`;
+      });
+      if (!columns.length) throwGQLError('No patch arguments provided.');
 
-      if (params.length === 1) throwGQLError('No patch arguments provided.');
-      
-      query = query.slice(0, -2);
-      query += ' where id = $1 returning *';
-
+      query += columns.join(', ') + ' where id = $1 returning *';
       const response = await db.query(query, params);
       return response.rows[0];
     },
@@ -74,15 +68,13 @@ export const userResolvers = {
       const params = [user_id];
       let query = 'update user_prefs set ';
 
-      for (const key in patch) {
+      const columns = Object.keys(patch).map((key, i) => {
         params.push(patch[key]);
-        query += `${key} = $${params.length}, `;
-      }
-      if (params.length === 1) throwGQLError('No patch arguments provided.');
-      
-      query = query.slice(0, -2);
-      query += ' where registered_user_id = $1 returning *';
+        return `${key} = $${i + 2}`;
+      });
+      if (!columns.length) throwGQLError('No patch arguments provided.');
 
+      query += columns.join(', ') + ' where registered_user_id = $1 returning *';
       const response = await db.query(query, params);
       return response.rows[0];
     },
@@ -123,7 +115,7 @@ export const userTypeDefs = `#graphql
 
   type Mutation {
     setUserAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
-    patchUser(user_id: ID!, patch: UserPatch): RegisteredUser!,
-    patchUserPrefs(user_id: ID!, patch: UserPrefsPatch): UserPrefs!,
+    patchUser(user_id: ID!, patch: UserPatch!): RegisteredUser!,
+    patchUserPrefs(user_id: ID!, patch: UserPrefsPatch!): UserPrefs!,
   }
 `;
