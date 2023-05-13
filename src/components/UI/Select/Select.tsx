@@ -44,7 +44,7 @@ export const Select: React.FC<SelectProps> = ({list, errorMessage, placeholder =
   }, []);
   
   return (
-    <div className={clsx(styles.input, {[styles.disabled]: disabled})} ref={selectRef} onClick={showOptions} >
+    <div className={clsx(styles.input, {[styles.disabled]: disabled}, {[styles.invalid]: !!errorMessage})} ref={selectRef} onClick={showOptions} >
       {errorMessage && <div className={styles.errorMessage}>
         <BiErrorCircle fontSize={14} style={{marginRight: 8}} />
         <p>{errorMessage}</p>
