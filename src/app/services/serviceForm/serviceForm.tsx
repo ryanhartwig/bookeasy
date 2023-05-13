@@ -221,6 +221,15 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       ))
   , [assignedStaff, staff]);
 
+  const [providerError, setProviderError] = useState<string>('');
+  const [assigneeError, setAssigneeError] = useState<string>('');
+  const [nameError, setNameError] = useState<string>('');
+  const giveInputFeedback = useCallback(() => {
+    !selectedBusiness && setProviderError('Please select a provider.');
+    !assignedStaff.size && setAssigneeError('Please select at least one staff.');
+    !name && setNameError('Please add a name for the service.');
+  }, [assignedStaff.size, name, selectedBusiness]);
+
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
@@ -229,7 +238,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
       actionCloses
-      onClickDisabledAction={() => console.log('nope!')}
+      onClickDisabledAction={giveInputFeedback}
       // loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
       <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
@@ -240,7 +249,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
             <div className={styles.selectedOption}>
               <p>{selectedBusiness?.name}</p>
             </div>
-          )} hasSelected={!!selectedBusiness}/> 
+          )} hasSelected={!!selectedBusiness} errorMessage={providerError} /> 
         </>}
 
         {!isOwnBusiness && <>
@@ -254,11 +263,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
                 </div>
               )}
             </div>
-          )} hasSelected={!!assignedStaff.size}/>
+          )} hasSelected={!!assignedStaff.size} errorMessage={assigneeError} />
         </>}
 
         <p>Service Name</p>
-        <Input required type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
+        <Input required type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} errorMessage={nameError} />
 
         <p>Cost</p>
         <div className={styles.cost}>

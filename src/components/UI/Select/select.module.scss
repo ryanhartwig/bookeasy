@@ -1,3 +1,5 @@
+@use '/src/app/globalutil.scss';
+
 .input {
   cursor: pointer;
 
@@ -53,4 +55,45 @@
   padding: 6px;
   font-size: 12px;
   opacity: 0.8;
+}
+
+.errorMessage {
+  @include globalutil.light_shadow;
+  
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 8px;
+  white-space: nowrap;
+  width:fit-content;
+  padding: 6px 12px;
+
+  border: 1px solid rgba(125, 125, 125, 0.222);
+  border-radius: 3px;
+
+  top: calc(100% + 4px);
+  color: rgba(232, 47, 37, 0.892);
+
+  transition: opacity 200ms, left 200ms;
+  animation: inLeft 200ms ease-in-out 0s 1 forwards;
+
+  p {
+    font-size: 12px;
+    font-weight: 300;
+  }
+}
+
+@keyframes inLeft {
+  from {
+    top: calc(100% + 20px);
+    opacity: 0;
+  }
+  to {
+    top: calc(100% + 4px);
+    opacity: 1;
+  }
 }
