@@ -229,6 +229,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
       actionCloses
+      onClickDisabledAction={() => console.log('nope!')}
       // loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
       <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
@@ -257,7 +258,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         </>}
 
         <p>Service Name</p>
-        <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
+        <Input required type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
 
         <p>Cost</p>
         <div className={styles.cost}>
