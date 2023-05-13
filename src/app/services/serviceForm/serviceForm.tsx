@@ -230,6 +230,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     !name && setNameError('Please add a name for the service.');
   }, [assignedStaff.size, name, selectedBusiness]);
 
+  useEffect(() => setProviderError(''), [selectedBusiness]);
+  useEffect(() => setAssigneeError(''), [assignedStaff]);
+  useEffect(() => setNameError(''), [name]);
+
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
