@@ -32,7 +32,7 @@ export interface ServiceInput {
   is_video: boolean,
   color: string,
   deleted: boolean,
-  assigned_users: string[],
+  assigned_staff: string[],
   business_id: string,
   cost_start?: string,
   duration_start?: string,

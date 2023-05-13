@@ -85,11 +85,13 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
 
   const [setStaffAvailability, { data, loading }] = useMutation(SET_STAFF_AVAILABILITY, {
     refetchQueries: [{
+      // Refetch for dashboard view
       query: GET_USER_AVAILABILITY,
       variables: {
         userId,
       }
     }, {
+      // Refetch current view
       query: GET_STAFF_AVAILABILITY,
       variables: {
         staffId,

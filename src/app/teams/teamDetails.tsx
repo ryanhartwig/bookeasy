@@ -9,7 +9,7 @@ import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { Staff } from '@/types/User';
-import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
+import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -36,7 +36,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
     return tabs;
   }, [elevated]);
   
-  const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
+  const { data: businessUsersData } = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business.id }});
   useEffect(() => businessUsersData && 
     setStaff([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
   , [businessUsersData]);

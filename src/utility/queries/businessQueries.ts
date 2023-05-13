@@ -75,7 +75,7 @@ export const GET_BUSINESS_SERVICES = gql`
   }
 `;
 
-export const GET_BUSINESS_USERS = gql`
+export const GET_BUSINESS_STAFF = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
       staff {
@@ -91,7 +91,7 @@ export const GET_BUSINESS_USERS = gql`
   }
 `;
 
-export const GET_BUSINESS_FORM_USERS = gql`
+export const GET_BUSINESS_FORM_STAFF = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
       staff {
