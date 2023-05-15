@@ -130,7 +130,7 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
         </Card>
 
         {/* EDIT CLIENT FORM */}
-        {selected && <ClientForm initialClient={selected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} setSelected={setSelected} />}
+        {selected && <ClientForm initialBusiness={selectedBusiness} initialClient={selected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} setSelected={setSelected} />}
 
       </div>
       <div>
