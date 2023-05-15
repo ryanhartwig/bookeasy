@@ -19,7 +19,7 @@ export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
   const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
   useEffect(() => {
     if (teamsDataLoading || !teamsData) return;
-    setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => !b.user_id)); // Remove user's own business
+    setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => !b.is_own)); // Remove user's own business
   }, [teamsData, teamsDataLoading]);
 
   // Update selected when data changes (due to cache update)
@@ -30,7 +30,6 @@ export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
       setSelected(teams.find(t => t.id === selectedId.current));
       return;
     }
-    
     selectedId.current = selected.id;
   }, [selected, teams, teamsData]);
 

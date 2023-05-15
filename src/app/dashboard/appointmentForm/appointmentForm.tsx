@@ -350,6 +350,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             </div>
           )}/>
         </>}
+
         <p>Select a service</p>
         <Select disabled={!selectedBusiness} list={servicesList} hasSelected={!!selectedService} selected={(
           <div className={styles.selectedOption}>
@@ -357,6 +358,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             <p>{selectedService?.name}</p>
           </div>
         )}/>
+        
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />
         <div className={styles.timeSelect}>

@@ -207,7 +207,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     </div>
   )), [businesses]);
 
-  const clientList = useMemo(() => 
+  const staffList = useMemo(() => 
     staff
       .map((u: AssignedStaff) => (
         <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedStaff.has(u.id)})} onClick={() => setAssignedStaff(p => {
@@ -258,7 +258,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
         {!isOwnBusiness && <>
           <p>Select Assignee(s)</p>
-          <Select multiple list={clientList} selected={(
+          <Select multiple list={staffList} selected={(
             <div className={styles.assignees} style={{left: 0}}>
               {Array.from(assignedStaff.values()).map(user => 
                 <div key={user.id}>
