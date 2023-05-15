@@ -294,11 +294,10 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         <div key={s.id} className={styles.option} onClick={() => setSelectedStaff(s)}>
           <Avatar src={s.avatar} size={28} />
           <p>{s.name}</p>
-          <AiOutlineCheck className={styles.checked} />
         </div>
       )) 
     : []
-  , [staffData.getBusiness]);
+  , [staffData]);
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
@@ -331,6 +330,17 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             </div>
           )} hasSelected={!!selectedBusiness}/>
         </>}
+
+        {/* {!userId && <> */}
+          <p>Select Staff Member</p>
+          <Select list={staffList} selected={(
+            <div className={styles.selectedOption} style={{left: 0}}>
+              <Avatar src={selectedStaff?.avatar} size={26} />
+              <p>{selectedStaff?.name}</p>
+            </div>
+          )} hasSelected={!!selectedStaff} />
+        {/* </>} */}
+        
         {!fromClientForm && <>
           <p>Select a client</p>
           <Select disabled={!selectedBusiness} list={clientsList} hasSelected={!!selectedClient} selected={(
