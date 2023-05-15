@@ -57,13 +57,13 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   }, [initialBusiness, initialClient]);
 
   const client = useMemo<ClientInput | null>(() => {
-    if (!name || !email || (!initialClient && !selectedBusiness)) return null;
+    if (!name || (!initialClient && !selectedBusiness)) return null;
     
     return {
       id,
       business_id: initialClient ? undefined : selectedBusiness?.id,
       name,
-      email,
+      email: email || undefined,
       notes: notes || undefined,
       address: address || undefined,
       phone: phone || undefined,

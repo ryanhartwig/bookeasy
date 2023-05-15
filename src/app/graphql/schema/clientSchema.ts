@@ -55,7 +55,7 @@ export const clientTypeDefs = `#graphql
     business_id: String!,
     notes: String,
     name: String!,
-    email: String!,
+    email: String,
     address: String,
     phone: String,
     joined_date: String!,
