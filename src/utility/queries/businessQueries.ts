@@ -132,8 +132,8 @@ export const UPDATE_BUSINESS_PREFS = gql`
 `;
 
 export const NEW_BUSINESS = gql`
-  mutation($name: String!, $userId: String!) {
-    newBusiness(name: $name, user_id: $userId) {
+  mutation($name: String!, $userId: String!, $is_own: Boolean!) {
+    newBusiness(name: $name, user_id: $userId, is_own: $is_own) {
       id
       name
       email
