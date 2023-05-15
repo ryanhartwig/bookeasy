@@ -25,6 +25,7 @@ export interface AssignedStaff {
 
 export interface Staff {
   id: string,
+  registered_user_id: string,
   elevated: boolean,
   date_added: string,
   name: string,

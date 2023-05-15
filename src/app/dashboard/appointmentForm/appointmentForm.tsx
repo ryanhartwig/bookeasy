@@ -17,7 +17,7 @@ import { inRange } from "@/utility/functions/dateRanges/inRange"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS_CLIENTS_FORM, GET_BUSINESS_FORM_STAFF, GET_BUSINESS_SERVICES_FORM } from "@/utility/queries/businessQueries"
 import { ADD_EDIT_APPOINTMENT, DELETE_APPOINTMENT, GET_CLIENT_APPOINTMENTS } from "@/utility/queries/appointmentQueries"
 import { Client, FormClient } from '@/types/Client';
 import { FormService } from '@/types/Service';
@@ -27,6 +27,7 @@ import { Input } from '@/components/UI/Input/Input';
 import { HoursList } from '@/components/SelectLists/Hours';
 import { MinutesList } from '@/components/SelectLists/Minutes';
 import { PeriodList } from '@/components/SelectLists/Period';
+import { Staff } from '@/types/User';
 
 interface ClientBusiness {
   client: Client,
@@ -35,7 +36,7 @@ interface ClientBusiness {
 interface AppointmentFormProps {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,  
-  userId: string,
+  userId?: string,
   initialAppointment?: AppointmentData,
   initialClientBusiness?: ClientBusiness,
   onSubmit?: (...args: any) => any,
@@ -46,6 +47,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
+  const [selectedStaff, setSelectedStaff] = useState<Staff>();
   const [date, setDate] = useState<string>();
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
@@ -61,26 +63,26 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService], [selectedStaff, setSelectedStaff]], // second chunk, resets when first updates
   ], undefined, !!initialClientBusiness);
 
   // Not returning userData
-  const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }}); 
-  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+  const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }, skip: !userId}); 
+  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !userId}); 
 
   // Depends on selectedBusiness state
   const { data: clientsData, loading: loadingClients } = useQuery(GET_BUSINESS_CLIENTS_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
   const { data: servicesData, loading: loadingServices } = useQuery(GET_BUSINESS_SERVICES_FORM, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: staffData, loading: loadingStaffData } = useQuery(GET_BUSINESS_FORM_STAFF, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
-  useEffect(() => {
-    if (availabilityData) setAvailability(availabilityData.getUserAvailability)
-  }, [availabilityData, loadingAvailability]);
+  useEffect(() => availabilityData && setAvailability(availabilityData.getUserAvailability), [availabilityData, loadingAvailability]);
+  useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
 
-  useEffect(() => {
-    if (userBusinessesData) {
-      setBusinesses(userBusinessesData.getUserBusinesses);
-    }
-  }, [userBusinessesData]);
+  // Preselect staff if userId is provided
+  useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
+
+  console.log(staffData);
+  console.log(selectedStaff);
 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
@@ -168,12 +170,12 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   }, [availabilityMap, selectedBusiness, startEndDates]);
   
   const appointment = useMemo<AppointmentInput | null>(() => {
-    if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates) return null;
+    if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates || !selectedStaff) return null;
 
 
     return {
       id: id ?? uuid(),
-      user_id: userId,
+      staff_id: selectedStaff.id,
       service_id: selectedService.id,
       business_id: selectedBusiness.id,
       client_id: selectedClient.id,
@@ -184,7 +186,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
       is_video: selectedService.is_video,
       is_paid: isPaid,
     }
-  }, [id, isPaid, selectedBusiness, selectedClient, selectedService, startEndDates, userId]);
+  }, [id, isPaid, selectedBusiness, selectedClient, selectedService, selectedStaff, startEndDates]);
 
   const [addEditAppointment, { 
     data: appMutationData, 

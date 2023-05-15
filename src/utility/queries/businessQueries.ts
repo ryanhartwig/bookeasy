@@ -82,6 +82,7 @@ export const GET_BUSINESS_STAFF = gql`
         date_added
         elevated
         id
+        registered_user_id
         name
         contact_email
         contact_phone
@@ -96,6 +97,7 @@ export const GET_BUSINESS_FORM_STAFF = gql`
     getBusiness(business_id: $businessId) {
       staff {
         id
+        registered_user_id
         name
         avatar
       }

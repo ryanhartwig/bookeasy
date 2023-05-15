@@ -17,6 +17,9 @@ import { Settings } from './settings';
 interface BusinessProps {
   user: User,
   business: NewBusiness,
+  /**
+   * The staff id is still used in a user's own business, to map to services and appointments.
+   */
   staffId: string,
 }
 
@@ -50,7 +53,6 @@ export const Business: React.FC<BusinessProps> = ({user, business, staffId}) => 
       {/* Left panels */}
       <div>    
         <Card className={clsx(styles.card, styles.overview)}>
-          
           <Avatar src={business.avatar} size={100} style={{margin: 15}} />
           <p className={styles.name}>{business.name}</p>
           <hr />
