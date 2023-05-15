@@ -24,15 +24,21 @@ export const clientResolvers = {
       const { id, notes, name, email, address, phone, active } = args.client;
 
       const response = await db.query(`
-        update client set
-        notes = $1,
-        name = $2,
-        email = $3,
-        address = $4,
-        phone = $5,
-        active = $6
-        where id = $7
-        returning *
+        with updated_client as (
+          update client
+          set notes = $1,
+              name = $2,
+              email = $3,
+              address = $4,
+              phone = $5,
+              active = $6
+          where id = $7
+          returning *
+        )
+        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, rc.avatar
+        from updated_client c
+        left join registered_client rc
+        on rc.id = c.registered_client_id
       `, [notes, name, email, address, phone, active, id]);
       return response.rows[0];
     },

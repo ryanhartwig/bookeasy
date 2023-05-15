@@ -90,10 +90,21 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     error: clientEditError,
     reset: clientEditReset,
   }] = useMutation(USER_EDIT_CLIENT, {
-    refetchQueries: [
-      {query: GET_BUSINESS_CLIENTS, variables: { businessId: selectedBusiness?.id }}, 
-      'getBusinessClients',
-    ]
+    update(cache, { data: { userEditClient }}) {
+      cache.modify({
+        fields: {
+          getBusinessClients(existingClients = [], { readField }) {
+            const editClientRef = cache.writeFragment({
+              data: userEditClient,
+              fragment: gql`
+                ${NEW_CLIENT_FRAGMENT}
+              `
+            }); 
+            return existingClients.map((ref: any) => readField('id', ref) === initialClient?.id ? editClientRef : ref)
+          }
+        }
+      })
+    }
   });
 
   const onSubmitForm = useCallback(() => {
