@@ -322,7 +322,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     >
       <Modal.Header>{initialAppointment ? "Edit" : "Schedule an"} Appointment</Modal.Header>
       <div className={styles.appointmentOptions}>
-        {!fromClientForm && <>
+        {!fromClientForm && !initialAppointment && <>
           <p>Select a provider</p>
           <Select list={businessesList} selected={(
             <div className={styles.selectedOption}>
@@ -341,7 +341,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
           )} hasSelected={!!selectedStaff} />
         </>}
         
-        {!fromClientForm && <>
+        {!fromClientForm && !initialAppointment && <>
           <p>Select a client</p>
           <Select disabled={!selectedBusiness} list={clientsList} hasSelected={!!selectedClient} selected={(
             <div className={styles.selectedOption}>
