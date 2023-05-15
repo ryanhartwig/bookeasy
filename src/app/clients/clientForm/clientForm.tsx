@@ -41,8 +41,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient || !!initialBusiness }); 
 
   useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
-  console.log(selectedBusiness);
-  console.log('initial business', initialBusiness);
   
   // Initialize fields when editing existing client
   useEffect(() => {
@@ -50,10 +48,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     
     if (!initialClient) return;
 
-
-    // have to set the selected business on edit
-    
-    
     setName(initialClient.name || '');
     setEmail(initialClient.email || '');
     setPhone(initialClient.phone || '');
@@ -63,11 +57,11 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   }, [initialBusiness, initialClient]);
 
   const client = useMemo<ClientInput | null>(() => {
-    if (!name || !email || !selectedBusiness) return null;
+    if (!name || !email || (!initialClient && !selectedBusiness)) return null;
     
     return {
       id,
-      business_id: selectedBusiness.id,
+      business_id: initialClient ? undefined : selectedBusiness?.id,
       name,
       email,
       notes: notes || undefined,
@@ -76,7 +70,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [address, email, id, name, notes, phone, selectedBusiness]);
+  }, [address, email, id, initialClient, name, notes, phone, selectedBusiness]);
 
   const [userAddClient, { 
     data: clientMutationData, 
@@ -96,21 +90,10 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     error: clientEditError,
     reset: clientEditReset,
   }] = useMutation(USER_EDIT_CLIENT, {
-    update(cache, { data: { userEditClient }}) {
-      cache.modify({
-        fields: {
-          getBusinessClients(existingClients = [], { readField }) {
-            const editClientRef = cache.writeFragment({
-              data: userEditClient,
-              fragment: gql`
-                ${NEW_CLIENT_FRAGMENT}
-              `
-            }); 
-            return existingClients.map((ref: any) => readField('id', ref) === initialClient?.id ? editClientRef : ref)
-          }
-        }
-      })
-    }
+    refetchQueries: [
+      {query: GET_BUSINESS_CLIENTS, variables: { businessId: selectedBusiness?.id }}, 
+      'getBusinessClients',
+    ]
   });
 
   const onSubmitForm = useCallback(() => {
