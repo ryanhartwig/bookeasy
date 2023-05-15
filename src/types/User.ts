@@ -19,6 +19,7 @@ export interface User {
 
 export interface AssignedStaff {
   id: string,
+  registered_user_id: string,
   name: string,
   avatar?: string,
 }

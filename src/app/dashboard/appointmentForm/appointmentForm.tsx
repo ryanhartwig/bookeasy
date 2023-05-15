@@ -27,7 +27,8 @@ import { Input } from '@/components/UI/Input/Input';
 import { HoursList } from '@/components/SelectLists/Hours';
 import { MinutesList } from '@/components/SelectLists/Minutes';
 import { PeriodList } from '@/components/SelectLists/Period';
-import { Staff } from '@/types/User';
+import { AssignedStaff, Staff } from '@/types/User';
+import { AiOutlineCheck } from 'react-icons/ai';
 
 interface ClientBusiness {
   client: Client,
@@ -47,7 +48,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [selectedClient, setSelectedClient] = useState<FormClient>();
   const [selectedService, setSelectedService] = useState<FormService>();
-  const [selectedStaff, setSelectedStaff] = useState<Staff>();
+  const [selectedStaff, setSelectedStaff] = useState<AssignedStaff>();
   const [date, setDate] = useState<string>();
   const [hours, setHours] = useState<number>();
   const [min, setMin] = useState<number>();
@@ -286,6 +287,18 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         ))
     : []
   , [clientsData]);
+
+  const staffList = useMemo(() => 
+    staffData?.getBusiness ? staffData.getBusiness.staff
+      .map((s: AssignedStaff) => (
+        <div key={s.id} className={styles.option} onClick={() => setSelectedStaff(s)}>
+          <Avatar src={s.avatar} size={28} />
+          <p>{s.name}</p>
+          <AiOutlineCheck className={styles.checked} />
+        </div>
+      )) 
+    : []
+  , [staffData.getBusiness]);
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
