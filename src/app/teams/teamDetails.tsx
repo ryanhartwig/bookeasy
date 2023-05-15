@@ -29,7 +29,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
 
-  const elevated = useMemo(() => staff.find(s => s.id === userId)?.elevated || false, [userId, staff]);
+  const elevated = useMemo(() => staff.find(s => s.registered_user_id === userId)?.elevated || false, [userId, staff]);
   const tabNames = useMemo(() => {
     const tabs = ['Staff', 'Client List', 'Services'];
     if (elevated) tabs.push('Admin');
@@ -37,8 +37,10 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   }, [elevated]);
   
   const { data: businessUsersData } = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business.id }});
+  console.log(businessUsersData);
+  
   useEffect(() => businessUsersData && 
-    setStaff([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
+    setStaff([...businessUsersData.getBusiness.staff].sort((a, b) => a.name < b.name ? -1 : 1))
   , [businessUsersData]);
 
   const { data: businessServicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
