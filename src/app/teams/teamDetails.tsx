@@ -37,7 +37,6 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   }, [elevated]);
   
   const { data: businessUsersData } = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business.id }});
-  console.log(businessUsersData);
   
   useEffect(() => businessUsersData && 
     setStaff([...businessUsersData.getBusiness.staff].sort((a, b) => a.name < b.name ? -1 : 1))
@@ -55,7 +54,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
       <ClientList key='clients' clients={clients} business={business} />,
       <Services key='services' services={services} businessId={business.id} />,
     ];
-    if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={staff.find(s => s.id === userId)?.elevated || false} />);
+    if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={staff.find(s => s.registered_user_id === userId)?.elevated || false} />);
     return tabs;
   }, [business, clients, elevated, services, userId, staff]);
 
