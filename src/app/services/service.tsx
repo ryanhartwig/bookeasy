@@ -6,7 +6,13 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
 import { FiEdit2 } from 'react-icons/fi';
 
-export default function ServiceCard({service, onClick}: { service: Service, onClick?: (...args: any) => any}) {
+interface ServiceCardProps {
+  service: Service,
+  onClick: (...args:any) => any,
+  hideProvider?: boolean,
+}
+
+export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideProvider = false}) => {
    
   return (
     <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={(e) => onClick && onClick(e)}>
@@ -17,7 +23,7 @@ export default function ServiceCard({service, onClick}: { service: Service, onCl
       }
       <p>{service.name}</p>
       <p>{service.duration} min</p>
-      <p>{service.provider}</p>
+      {!hideProvider && <p>{service.provider}</p>}
       <div className={styles.assignees}>
         {service.assigned_staff.map(staff => 
           <div key={staff.id}>
