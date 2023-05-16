@@ -1,4 +1,4 @@
-import { Staff } from "@/types/User"
+import { Staff, StaffInput } from "@/types/User"
 import { testEmail } from "@/utility/functions/validation/testEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
 import { ADD_STAFF } from "@/utility/queries/staffQueries";
@@ -17,7 +17,6 @@ interface StaffFormProps {
 }
 
 export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff, businessId}) => {
-
   const [id, setId] = useState(uuid());
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -27,19 +26,16 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const [nameError, setNameError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   
-  const staff = useMemo<Staff | undefined>(() => {
+  const staff = useMemo<StaffInput | undefined>(() => {
     if (!name) return;
-
     return {
       id,
       name,
+      business_id: businessId,
       contact_email: contactEmail || null,
       contact_phone: contactPhone || null, 
-      date_added: new Date().toISOString(),
-      elevated: false,
-      registered_user_id: null,
     }
-  }, [contactEmail, contactPhone, id, name]);
+  }, [businessId, contactEmail, contactPhone, id, name]);
 
   const checkInputs = useCallback(() => {
     let valid = true;
@@ -54,27 +50,20 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     return valid;
   }, [contactEmail, name]);
 
-  const [addStaff, { data, loading, reset }] = useMutation(ADD_STAFF, {
+  const [addStaff] = useMutation(ADD_STAFF, {
     refetchQueries: [GET_BUSINESS_STAFF]
   });
-
-  useEffect(() => {
-    if (!data || loading) return;
-    reset();
-    onClose();
-  }, [data, loading, onClose, reset]);
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
     if (!valid || !staff) return;
 
-    addStaff({variables: { 
-      name: staff.name,
-      businessId,
-      contactEmail: staff.contact_email,
-      contactPhone: staff.contact_phone,
-    }});
-  }, [addStaff, businessId, checkInputs, staff]);
+    ;(async () => {
+      await addStaff({variables: { staff }});
+      onClose();
+    })()
+    
+  }, [addStaff, checkInputs, onClose, staff]);
 
   return (
     <Modal open={open}

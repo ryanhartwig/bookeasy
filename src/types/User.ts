@@ -34,3 +34,11 @@ export interface Staff {
   contact_phone: string | null,
   avatar?: string
 }
+
+export interface StaffInput {
+  id?: string,
+  name: string,
+  business_id: string,
+  contact_phone: string | null,
+  contact_email: string | null,
+}
