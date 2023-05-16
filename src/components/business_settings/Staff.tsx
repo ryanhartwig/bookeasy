@@ -42,7 +42,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
           <p>{services.filter(s => s.assigned_staff.some(s => s.id === staff.id)).length}</p>
           <p>{new Date(staff.date_added)
             .toLocaleDateString()}</p>
-          <p className={styles.details} onClick={() => {setSelected(staff)}}>Availability</p>
+          <p className={styles.details} onClick={() => {setSelected(staff)}}>Details</p>
         </div>
       </div> 
       )
@@ -80,7 +80,9 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                 </ul>
               </div>
             </div>
-            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
+            <div className={styles.bookable}>
+              {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
+            </div>
           </div>
         }
       </Modal>
