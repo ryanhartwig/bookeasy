@@ -50,6 +50,33 @@ export const staffResolvers = {
 
       return response.rows[0];
     },
+    deleteStaff: async (_: any, args: any) => {
+      const { staff_id } = args;
+
+      await db.query(`
+      delete from staff_services 
+      where staff_id = $1
+
+      do $$
+      begin
+        if exists (
+          select 1 from appointment
+          where staff_id = $1
+        ) then
+          update staff
+          set deleted = true,
+              registered_user_id = null
+          where staff_id = $1;
+        else 
+          delete from staff
+          where staff_id = $1;
+        end if;
+      end;
+      $$;
+      `, [staff_id]);
+
+      return staff_id;
+    },
   }
 }
 
@@ -76,7 +103,8 @@ export const staffTypeDefs = `#graphql
 
   type Mutation {
     setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
-    addStaff(staff: StaffInput!): Staff,
-    editStaff(staff: StaffInput!): Staff,
+    addStaff(staff: StaffInput!): Staff!,
+    editStaff(staff: StaffInput!): Staff!,
+    deleteStaff(staff_id: String!): String!,
   }
 `;
