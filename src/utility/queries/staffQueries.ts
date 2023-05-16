@@ -35,3 +35,16 @@ export const SET_STAFF_AVAILABILITY = gql`
     setStaffAvailability(staff_id: $staffId, business_id: $businessId, day: $day, slices: $slices)
   }
 `;
+
+export const STAFF_FRAGMENT = gql`
+  fragment StaffFragment on Staff {
+    id
+    date_added
+    elevated
+    registered_user_id
+    name
+    contact_email
+    contact_phone
+    avatar
+  }
+`;

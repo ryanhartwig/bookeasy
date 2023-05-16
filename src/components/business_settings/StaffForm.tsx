@@ -1,8 +1,8 @@
 import { Staff, StaffInput } from "@/types/User"
 import { testEmail } from "@/utility/functions/validation/testEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_STAFF } from "@/utility/queries/staffQueries";
-import { useMutation } from "@apollo/client";
+import { ADD_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
+import { gql, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import uuid from "react-uuid";
 import { Input } from "../UI/Input/Input";
@@ -54,16 +54,37 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     refetchQueries: [GET_BUSINESS_STAFF]
   });
 
+  const [editStaff] = useMutation(EDIT_STAFF, {
+    update(cache, { data: editStaff }) {
+      cache.modify({
+        fields: {
+          getBusinessStaff: (existingStaff = [], { readField }) => {
+            const newStaffRef = cache.writeFragment({
+              data: editStaff,
+              fragment: gql`
+                ${STAFF_FRAGMENT}
+              `
+            });
+
+            return existingStaff.map((ref: any) => readField('id', ref) === readField('id', newStaffRef) ? newStaffRef : ref);
+          }
+        }
+      }) 
+    }
+  })
+
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
     if (!valid || !staff) return;
 
     ;(async () => {
-      await addStaff({variables: { staff }});
+      initialStaff
+        ? await addStaff({variables: { staff }})
+        : await editStaff({variables: { staff }});
       onClose();
     })()
     
-  }, [addStaff, checkInputs, onClose, staff]);
+  }, [addStaff, checkInputs, editStaff, initialStaff, onClose, staff]);
 
   return (
     <Modal open={open}
