@@ -14,6 +14,7 @@ import { useQuery } from "@apollo/client";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 import clsx from "clsx";
+import { AiOutlinePlus } from "react-icons/ai";
 
 interface StaffProps {
   staffMembers: Staff[],
@@ -25,6 +26,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
 
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
+  const [staffFormOpen, setStaffFormOpen] = useState<boolean>(false);
 
   const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selected?.id }, skip: !selected});
   useEffect(() => {
@@ -57,6 +59,10 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
         {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staffList}
+      <div className={styles.addService} onClick={() => setStaffFormOpen(true)}>
+        <AiOutlinePlus fontSize={18} />
+      </div>
+      {/* Staff Details Modal */}
       <Modal 
         open={!!selected} 
         escapeCloses 
@@ -97,6 +103,9 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
           </div>
         }
       </Modal>
+
+      {/* Add / Edit Staff Form */}
+
     </div>
   )
 }
