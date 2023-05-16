@@ -247,11 +247,9 @@
 
     margin-left: 9px;
     margin-top: 1px;
-    
-    > p {
-      margin-left: 4px;
-    }
 
+    @include globalutil.tooltip;
+    
     &.registered {
       color: rgb(95, 181, 251);
     }

@@ -97,7 +97,15 @@
   display: flex;
   align-items: center;
 
-  @include globalutil.tooltip;
+  > div {
+    @include globalutil.tooltip;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    margin-left: 2px;
+  }
 }
 
 

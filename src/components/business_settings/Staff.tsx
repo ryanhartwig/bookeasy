@@ -73,6 +73,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                   <p>{selected.name}</p>
                   <div className={clsx({[styles.registered]: selected.registered_user_id})}>
                     {selected.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+                    <p className={styles.tooltip}>{selected.registered_user_id ? 'Registered User' : 'Unregistered'}</p>
                   </div>
                 </div>
                 <ul>
