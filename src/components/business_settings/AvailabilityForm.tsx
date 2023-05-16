@@ -16,7 +16,7 @@ import { RxCross2 } from 'react-icons/rx';
 import clsx from "clsx";
 import { weekDays } from "@/utility/data/days";
 import { useMutation } from "@apollo/client";
-import { SET_STAFF_AVAILABILITY } from "@/utility/queries/userQueries";
+import { SET_STAFF_AVAILABILITY } from "@/utility/queries/staffQueries";
 import { GET_STAFF_AVAILABILITY, GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 
 

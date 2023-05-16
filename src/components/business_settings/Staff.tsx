@@ -106,7 +106,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
       </Modal>
 
       {/* Add / Edit Staff Form */}
-      <StaffForm open={staffFormOpen} onClose={() => setStaffFormOpen(false)} />
+      {staffFormOpen && <StaffForm open={staffFormOpen} onClose={() => setStaffFormOpen(false)} businessId={business.id} />}
     </div>
   )
 }
