@@ -12,6 +12,7 @@
 
 @mixin tooltip {
   position: relative;
+  color: rgba(128, 128, 128, 0.68);
   
   > .tooltip {
     opacity: 0;

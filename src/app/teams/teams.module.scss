@@ -1,3 +1,5 @@
+@use '/src/app/globalutil';
+
 .Teams {
   height: calc(100% - var(--header-height));
   display: flex;
@@ -219,17 +221,17 @@
 
     margin: 4px 0;
 
-    p {
+    > p {
       font-size: 12px;
 
-      &:first-of-type {
+      &.name {
         width:fit-content;
         text-align: left;
         width: 100%;
         padding-left: 12px;
       }
 
-      &:last-child {
+      &.elevated {
         font-weight: 300;
         color: rgb(147, 147, 147);
       }
@@ -243,4 +245,22 @@
   height: calc(100% - 46px);
 
   background: #F8F8F8;
+}
+
+.staff {
+  position: relative;
+}
+
+.status {
+  @include globalutil.tooltip;
+
+  position: absolute;
+  left: -25px;
+  top: 7px;
+
+  z-index: 5;
+    
+  &.registered {
+    color: rgb(95, 181, 251);
+  }
 }
