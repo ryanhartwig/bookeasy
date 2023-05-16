@@ -26,7 +26,7 @@ export const staffResolvers = {
       return staff_id;
     },
     addStaff: async(_: any, args: any) => {
-      const { name, contact_email, contact_phone, business_id } = args;
+      const { name, contact_email, contact_phone, business_id } = args.staff;
       const response = await db.query(`
         insert into staff (name, contact_email, contact_phone, business_id, elevated, date_added, id)
         values ($1, $2, $3, $4, false, $5, $6)
@@ -49,12 +49,20 @@ export const staffTypeDefs = `#graphql
     end_time: String!,
   }
 
+  input StaffInput {
+    id: String,
+    business_id: String!,
+    name: String!,
+    contact_email: String,
+    contact_phone: String,
+  }
+
   type Query {
     getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
   }
 
   type Mutation {
     setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
-    addStaff(name: String!, contact_email: String, contact_phone: String, business_id: String!): Staff,
+    addStaff(staff: StaffInput!): Staff,
   }
 `;
