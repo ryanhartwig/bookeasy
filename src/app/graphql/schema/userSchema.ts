@@ -27,13 +27,6 @@ export const userResolvers = {
       `, [args.user_id]);
       return response.rows;
     },
-    getStaffAvailability: async (_: any, args: any) => {
-      const response = await db.query(`
-        select * from availability_slice 
-        where staff_id = $1
-      `, [args.staff_id]);
-      return response.rows;
-    },
   },
   RegisteredUser: {
     prefs: async (parent:any, args: any) => {
@@ -42,19 +35,6 @@ export const userResolvers = {
     },
   },
   Mutation: {
-    setStaffAvailability: async (_: any, args: any) => {
-      const { staff_id, business_id, day, slices} = args;
-
-      // Remove existing slices for current day
-      await db.query('delete from availability_slice where staff_id = $1 and business_id = $2 and day = $3', [staff_id, business_id, day]);
-
-      for (const slice of slices) {
-        const { start_time, end_time } = slice;
-        await db.query('insert into availability_slice values ($1, $2, $3, $4, $5)', [staff_id, business_id, day, start_time, end_time]);
-      }
-
-      return staff_id;
-    },
     patchUser: async (_: any, args: any) => {
       const { user_id, patch } = args;
       const params = [user_id];
@@ -89,14 +69,6 @@ export const userResolvers = {
 }
 
 export const userTypeDefs = `#graphql
-  input AvailabilitySliceInput {
-    staff_id: String!,
-    business_id: String!,
-    day: Int!,
-    start_time: String!,
-    end_time: String!,
-  }
-
   input UserPatch {
     name: String,
     avatar: String,
@@ -118,11 +90,9 @@ export const userTypeDefs = `#graphql
     getUser(id: ID!): RegisteredUser,
     getUserBusinesses(user_id: ID!): [Business!]!,
     getUserAvailability(user_id: ID!): [AvailabilitySlice!]!,
-    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
   }
 
   type Mutation {
-    setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
     patchUser(user_id: ID!, patch: UserPatch!): RegisteredUser!,
     patchUserPrefs(user_id: ID!, patch: UserPrefsPatch!): UserPrefs!,
   }
