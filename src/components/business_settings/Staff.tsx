@@ -7,11 +7,13 @@ import { Avatar } from "../UI/Avatar/Avatar";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
+import { VscUnverified, VscVerifiedFilled } from 'react-icons/vsc';
 import { Availability } from "./Availability";
 import { NewBusiness } from "@/types/Business";
 import { useQuery } from "@apollo/client";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
+import clsx from "clsx";
 
 interface StaffProps {
   staffMembers: Staff[],
@@ -67,7 +69,12 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
             <div className={styles.staff_details}>
               <Avatar src={selected.avatar} size={86} />
               <div>
-                <p>{selected.name}</p>
+                <div className={styles.staff_name}>
+                  <p>{selected.name}</p>
+                  <div className={clsx({[styles.registered]: selected.registered_user_id})}>
+                    {selected.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+                  </div>
+                </div>
                 <ul>
                   <li>
                     <HiOutlinePhone />
@@ -78,6 +85,9 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                     {selected.contact_email}
                   </li>
                 </ul>
+              </div>
+              <div className={styles.edit_staff}>
+                <p>Edit</p>
               </div>
             </div>
             <div className={styles.bookable}>
