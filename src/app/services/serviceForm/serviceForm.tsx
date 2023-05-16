@@ -5,7 +5,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useMutation, useQuery } from "@apollo/client"
+import { gql, Reference, useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_STAFF } from "@/utility/queries/businessQueries"
 import { Service, ServiceInput } from '@/types/Service';
@@ -21,6 +21,8 @@ import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/ser
 import { BsTrash3 } from 'react-icons/bs';
 import { dateToDateInput } from '@/utility/functions/conversions/dateToDateInput';
 import { dateInputToDate } from '@/utility/functions/conversions/dateInputToDate';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 
 interface ServiceFormProps {
   open: boolean,
@@ -151,7 +153,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     refetchQueries: [{
       query: GET_BUSINESS_SERVICES,
       variables: { businessId: selectedBusiness?.id }
-    }],
+    }], 
+    update(cache) {
+      if (!costUpdate && !durationUpdate) return;
+      cache.evict({ fieldName: 'getUserAppointments'});
+      cache.evict({ fieldName: 'getClientAppointments'});
+    }
   });
 
   const [deleteService, { 
