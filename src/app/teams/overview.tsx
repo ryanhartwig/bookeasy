@@ -28,7 +28,7 @@ export const Overview: React.FC<OverviewProps> = ({selected, members, clients, s
           <p>client(s)</p>
         </div>
         <div>
-          <p>{services.length}</p>
+          <p>{services.filter(s => !s.deleted).length}</p>
           <p>service(s)</p>
         </div>
       </div>
