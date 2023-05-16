@@ -102,9 +102,9 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
               </div>
             </div>
             <div className={styles.bookable}>
-              {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
+              {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id}  />}
             </div>
-            {initialStaff && <StaffForm open={!!initialStaff} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} />}
+            {initialStaff && <StaffForm open={!!initialStaff} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} setSelectedStaff={setSelected} />}
           </div>
         }
       </Modal>

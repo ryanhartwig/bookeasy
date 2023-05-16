@@ -14,9 +14,10 @@ interface StaffFormProps {
   onClose: (...args: any) => any,
   initialStaff?: Staff,
   businessId: string,
+  setSelectedStaff?: React.Dispatch<React.SetStateAction<Staff | undefined>>,
 }
 
-export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff, businessId}) => {
+export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff, businessId, setSelectedStaff}) => {
   const [id, setId] = useState(uuid());
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -64,7 +65,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     refetchQueries: [GET_BUSINESS_STAFF]
   });
 
-  const [editStaff] = useMutation(EDIT_STAFF, {
+  const [editStaff, {data: updatedStaffData}] = useMutation(EDIT_STAFF, {
     update(cache, { data: editStaff }) {
       cache.modify({
         fields: {
@@ -88,13 +89,15 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     if (!valid || !staff) return;
 
     ;(async () => {
-      initialStaff
+      const response = initialStaff
         ? await editStaff({variables: { staff }})
         : await addStaff({variables: { staff }});
+
+      initialStaff && setSelectedStaff && setSelectedStaff(response.data.editStaff);
       onClose();
     })();
     
-  }, [addStaff, checkInputs, editStaff, initialStaff, onClose, staff]);
+  }, [addStaff, checkInputs, editStaff, initialStaff, onClose, setSelectedStaff, staff]);
 
   return (
     <Modal open={open}
