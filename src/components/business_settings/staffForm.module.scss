@@ -1,0 +1,19 @@
+.staffForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 10px 0;
+}
+
+.input {
+  margin: 8px;
+  width: 80%; 
+  text-align: center;
+
+  > label { 
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}

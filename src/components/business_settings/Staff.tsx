@@ -15,6 +15,7 @@ import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 import clsx from "clsx";
 import { AiOutlinePlus } from "react-icons/ai";
+import { StaffForm } from "./StaffForm";
 
 interface StaffProps {
   staffMembers: Staff[],
@@ -105,7 +106,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
       </Modal>
 
       {/* Add / Edit Staff Form */}
-
+      <StaffForm open={staffFormOpen} onClose={() => setStaffFormOpen(false)} />
     </div>
   )
 }
