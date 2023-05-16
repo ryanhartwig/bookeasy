@@ -12,9 +12,10 @@ interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
   businessId: string,
   userId?: string,
+  staffId: string,
 }
 
-export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, businessId}) => {
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, staffId, businessId}) => {
   const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
   const [day, setDay] = useState<number>();
 
@@ -59,6 +60,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
           open={!!formSlices} 
           onClose={() => {setDay(undefined); setFormSlices(undefined)}} 
           slices={formSlices} 
+          staffId={staffId}
         />
       }
     </div>

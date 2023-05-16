@@ -1,12 +1,12 @@
 import { NewBusiness } from "@/types/Business"
 import { Client } from "@/types/Client";
 import { Service } from "@/types/Service";
-import { BusinessUser } from "@/types/User";
+import { Staff } from "@/types/User";
 import { Avatar } from "@/components/UI/Avatar/Avatar";
 
 interface OverviewProps {
   selected: NewBusiness,
-  members: BusinessUser[],
+  members: Staff[],
   clients: Client[],
   services: Service[],
 }

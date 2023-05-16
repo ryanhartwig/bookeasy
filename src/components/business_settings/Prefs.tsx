@@ -1,8 +1,7 @@
 import { Setting } from '@/components/UI/Setting/Setting';
 import { NewBusiness } from '@/types/Business';
-import { REMOVE_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
+import { GET_BUSINESS, REMOVE_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
-import { GET_USER_OWN_BUSINESS } from '@/utility/queries/userQueries';
 import { gql, useMutation } from '@apollo/client';
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,11 +16,11 @@ import { Input } from '../UI/Input/Input';
 interface PrefsProps {
   business: NewBusiness,
   elevated?: boolean,
-  userId?: string,
+  userBusinessId?: string,
   isTeams?: boolean,
 }
 
-export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated}) => {
+export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, elevated}) => {
 
   const [value, setValue] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -33,9 +32,9 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
     loading: updateBusinessPrefsLoading,
     reset: updateBusinessPrefsReset,
   }] = useMutation(UPDATE_BUSINESS_PREFS, {
-    refetchQueries: !userId ? [] : [{
-      query: GET_USER_OWN_BUSINESS,
-      variables: { userId }
+    refetchQueries: !userBusinessId ? [] : [{
+      query: GET_BUSINESS,
+      variables: { businessId: userBusinessId }
     }],
     update(cache, { data: { updateBusinessPrefs }}) {
       if (!isTeams) return;
@@ -116,7 +115,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userId, isTeams, elevated
         </Setting>
       </div>
 
-      <BookingSitePrefs business={business} isTeams />
+      <BookingSitePrefs business={business} isTeams userBusinessId={userBusinessId} />
 
       {isTeams && elevated && (
         <>

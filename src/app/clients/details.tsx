@@ -6,12 +6,13 @@ import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { GET_CLIENT_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { useQuery } from '@apollo/client';
-import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import { AppointmentForm } from '../dashboard/appointmentForm/appointmentForm';
 import { AppointmentCard } from './appointment';
 import { ClientForm } from './clientForm/clientForm';
+
 import styles from './clients.module.scss';
+import clsx from 'clsx';
 
 interface DetailsProps {
   selected: Client,
@@ -39,7 +40,6 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
     setSelectedAppointment(undefined);
   }, [appointmentFormOpen]);
   
-
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
   useEffect(() => {

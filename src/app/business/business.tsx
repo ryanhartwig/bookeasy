@@ -5,7 +5,7 @@ import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
 import { User } from '@/types/User';
-import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
+import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
@@ -17,17 +17,21 @@ import { Settings } from './settings';
 interface BusinessProps {
   user: User,
   business: NewBusiness,
+  /**
+   * The staff id is still used in a user's own business, to map to services and appointments.
+   */
+  staffId: string,
 }
 
-export const Business: React.FC<BusinessProps> = ({user, business}) => {
+export const Business: React.FC<BusinessProps> = ({user, business, staffId}) => {
 
   const [services, setServices] = useState<Service[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [availability, setAvailability] = useState<AvailabilitySlice[]>([]);
-  
+
   const { data: servicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
   const { data: clientsData } = useQuery(GET_BUSINESS_CLIENTS, { variables: { businessId: business.id }});
-  const { data: availabilityData } = useQuery(GET_USER_AVAILABILITY, { variables: { userId: user.id, businessId: business.id }});
+  const { data: availabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId }});
 
   useEffect(() => {
     if (!servicesData) return;
@@ -41,7 +45,7 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
 
   useEffect(() => {
     if (!availabilityData) return;
-    setAvailability(availabilityData.getUserAvailability.filter((a: AvailabilitySlice) => a.business_id === business.id));
+    setAvailability(availabilityData.getStaffAvailability);
   }, [availabilityData, business.id]);
   
   return (
@@ -49,7 +53,6 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
       {/* Left panels */}
       <div>    
         <Card className={clsx(styles.card, styles.overview)}>
-          
           <Avatar src={business.avatar} size={100} style={{margin: 15}} />
           <p className={styles.name}>{business.name}</p>
           <hr />
@@ -72,7 +75,7 @@ export const Business: React.FC<BusinessProps> = ({user, business}) => {
       {/* Right panel */}
       <div>
         <Card className={clsx(styles.card, styles.prefs)}>
-          <Settings business={business} clients={clients} services={services} user={user} availability={availability} />
+          <Settings business={business} clients={clients} services={services} user={user} availability={availability} staffId={staffId} />
         </Card>
       </div>
     </div>

@@ -1,7 +1,7 @@
 export interface Client {
   id: string,
   name: string,
-  email: string,
+  email?: string,
   notes?: string,
   avatar?: any,
   address?: string,
@@ -17,7 +17,7 @@ export interface FormClient {
 }
 
 export interface ClientInput extends Client {
-  business_id: string,
+  business_id?: string,
 }
 
 export interface EditClientInput {

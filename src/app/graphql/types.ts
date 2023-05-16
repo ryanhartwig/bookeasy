@@ -1,6 +1,6 @@
 export const types = `#graphql
   type UserPrefs {
-    user_id: String!,
+    registered_user_id: String!,
     private_photo: Boolean!,
     private_email: Boolean!,
     private_phone: Boolean!,
@@ -10,15 +10,29 @@ export const types = `#graphql
     notification_overview_time: String!,
   }
 
-  type User {
+  type RegisteredUser {
     id: ID!,
     name: String!,
     email: String!,
     phone: String!,
     created: String,
-    prefs: UserPrefs!,
+    prefs: UserPrefs!, 
     avatar: String,
+    own_business_id: String,
   }
+
+  # Staff member of a team or own business. 
+  # All clients, appointments, services use THIS id as their foreign key (not the RegisteredUser's id)
+  type Staff {
+    id: ID!,
+    registered_user_id: String,
+    elevated: Boolean!,
+    date_added: String!,
+    name: String!,
+    contact_email: String,
+    contact_phone: String,
+    avatar: String, # added from regUser if exists
+  } 
 
   type Service {
     id: ID!,
@@ -30,53 +44,37 @@ export const types = `#graphql
     color: String!,
     deleted: Boolean!,
     business_id: String!,
-    assigned_users: [User!]!
+    assigned_staff: [Staff!]!
   }
 
   type Notification {
-    user: User!,
+    registered_user_id: String!,
     notification: String!,
     link: String,
     seen: Boolean!,
     created: String!
   }
 
-  
-
-  type BusinessClient {
-    # users: [BusinessUser!]!,
+  type Client {
     id: String!,
+    registered_client_id: String,
     notes: String,
-    name: String, 
+    name: String!, 
     email: String,
     address: String,
     phone: String,
     joined_date: String!,
-    avatar: String,
-    active: Boolean!
+    avatar: String, # combined / merged from registered client
+    active: Boolean! 
   }
 
-  type Client {
+  type RegisteredClient {
     id: ID!,
     name: String!,
     email: String!,
-    address: String,
     phone: String,
     avatar: String
   }
-
-  type MultiClient {
-    client: Client!,
-    business_patch: BusinessClient!,
-  }
-
-  # This represents the role a user plays within a business and the date they were added.
-  # It is only used when fetching a Businesses user list
-  type BusinessUser {
-    user: User!,
-    elevated: Boolean!,
-    date_added: String!
-  } 
 
   type Business {
     id: ID!,
@@ -86,10 +84,10 @@ export const types = `#graphql
     min_booking_notice: String,
     min_cancel_notice: String,
     max_book_ahead: String,
-    user_id: String,
+    is_own: Boolean!,
     avatar: String,
     created: String!,
-    users: [BusinessUser!]!,
+    staff: [Staff!]!,
   }
 
   type AvailabilitySlice {
@@ -101,7 +99,7 @@ export const types = `#graphql
 
   type Appointment {
     id: ID!,
-    user: User!,
+    staff: Staff!,
     service: Service!,
     business: Business!,
     client: Client!,

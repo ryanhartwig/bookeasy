@@ -10,29 +10,14 @@ export const businessResolvers = {
       return response.rows[0];
     },
     getBusinessClients: async (_: any, args: any) => {
-      try {
-        const clientIds = await db.query('select * from clients_businesses where business_id = $1', [args.business_id]);
-
-        if (!clientIds.rowCount) {
-          return [];
-        }
-
-        const clients: any[] = [];
-
-        for (const businessClient of clientIds.rows) {
-          const response = await db.query('select * from client where id = $1', [businessClient.client_id]);
-          const overWrites = Object.fromEntries(Object.entries(businessClient).filter(([_, value]) => !!value));
-
-          clients.push({
-            ...response.rows[0],
-            ...overWrites,
-          });
-        }
-
-        return clients;
-      } catch(e: any) {
-        throwGQLError(e.message);
-      }
+      const response = await db.query(`
+        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, rc.avatar
+        from client c
+        left join registered_client rc
+        on rc.id = c.registered_client_id
+        where business_id = $1
+      `, [args.business_id]);
+      return response.rows;
     },
     getBusinessServices: async (_: any, args: any) => {
       try {
@@ -49,8 +34,8 @@ export const businessResolvers = {
       const params = [business_id];
 
       if (start_date && end_date) {
-        query += ' and start_date > $2 and start_date < $3';
         params.push(start_date, end_date);
+        query += ' and start_date between $2 and $3';
       }
       
       const response = await db.query(query, params);
@@ -58,58 +43,30 @@ export const businessResolvers = {
     }
   },
   Service: {
-    assigned_users: async (parent: any) => {
-      try {
-        const userIdsResponse = await db.query('select user_id from users_services where service_id = $1', [parent.id]);
-
-        if (!userIdsResponse.rows[0]) throwGQLError('Could not find assigned users for service with id: ' + parent.id);
-
-        const assigned_users: any[] = [];
-
-        for (const { user_id } of userIdsResponse.rows) {
-          const response = await db.query('select * from users where id = $1', [user_id]);
-          assigned_users.push(response.rows[0]);
-        }
-
-        return assigned_users;
-      } catch(e: any) {
-        throwGQLError(e.message);
-      }
+    assigned_staff: async (parent: any) => {
+      const response = await db.query(`
+        select s.*, u.avatar 
+        from staff s
+        left join registered_user u
+        on s.registered_user_id = u.id
+        where s.id in (
+          select staff_id from staff_services
+          where service_id = $1
+        )
+      `, [parent.id]);
+      return response.rows;
     },
   },
   Business: {
-    users: async (parent: any) => {
-      const businessUsers: any[] = [];
-
-      // Fetch business/user relations
-      const businessUsersResponse = await db.query('select * from users_businesses where business_id = $1', [parent.id]);
-      for (const businessUser of businessUsersResponse.rows) {
-        const { user_id, elevated, date_added } = businessUser;
-        const userResponse = await db.query('select * from users where id = $1', [user_id]);
-
-        if (!userResponse.rowCount) throwGQLError('Error fetching user with id: ' + user_id);
-        
-        businessUsers.push({
-          user: userResponse.rows[0],
-          date_added,
-          elevated,
-        });
-      }
-
-      // Fetch own business user when the property is present
-      if (parent.user_id) {
-        const ownUser = await db.query('select * from users where id = $1', [parent.user_id]);
-
-        businessUsers.push({
-          user: ownUser.rows[0],
-          date_added: parent.created,
-          elevated: true,
-        });
-      }
-
-      if (!businessUsers.length) throwGQLError('Could not fetch users for business with id: ' + parent.id);
-      
-      return businessUsers;
+    staff: async (parent: any) => {
+      const response = await db.query(`
+        select s.*, u.avatar 
+        from staff s
+        left join registered_user u
+        on s.registered_user_id = u.id
+        where business_id = $1
+      `, [parent.id]);
+      return response.rows;
     }
   },
   Mutation: {
@@ -117,51 +74,45 @@ export const businessResolvers = {
       const { business_id, patch } = args;
       const params = [business_id];
       let query = 'update business set ';
-      let paramsCount = 2;
 
-      for (const key in patch) {
-        query += `${key} = $${paramsCount}, `;
-        paramsCount++;
+      const columns = Object.keys(patch).map((key, i) => {
         params.push(patch[key]);
-      }
+        return `${key} = $${i + 2}`;
+      });
+      if (!columns.length) throwGQLError('No patch arguments provided.');
 
-      if (paramsCount === 2) throwGQLError('No patch arguments provided.');
-      
-      query = query.slice(0, -2);
-      query += ' where id = $1 returning *';
+      query += columns.join(', ') + ' where id = $1 returning *';
 
       const response = await db.query(query, params);
       return response.rows[0];
     },
     newBusiness: async (_: any, args: any) => {
       const { name, user_id, is_own } = args;
-
-      const query = `
-        insert into business values (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+      const created = new Date().toISOString();
+      const response = await db.query(`
+        insert into business (id, name, created, is_own)
+        values (
+          $1, $2, $3, $4
         ) returning *
-      `;
-      const params = [uuid(), name, null, null, null, null, null, is_own ? user_id : null, null, new Date().toISOString()];
-      const response = await db.query(query, params);
+      `, [uuid(), name, created, is_own]);
 
-      // If creating a business for a newly registered user return early
-      if (is_own) {
-        return response.rows[0];
-      }
-
-      // Add the current user to the users_businesses table with elevated permissions
-      const { id: business_id } = response.rows[0];
-      await db.query('insert into users_businesses values ($1, $2, $3, $4) returning *'
-      , [user_id, business_id, true, new Date().toISOString()]);
-
+      // Add entry to staff mapping table
+      await db.query(`
+        with ru as (
+          select name from registered_user
+          where id = $1
+        )
+        insert into staff (registered_user_id, business_id, elevated, date_added, name, id)
+        select $1, $2, $3, $4, ru.name, $5
+        from ru
+      `, [user_id, response.rows[0].id, true, created, uuid()]);
       return response.rows[0];
     },
     removeBusiness: async (_: any, args: any) => {
-      const response = await db.query('Delete from business where id = $1 returning id', [args.business_id]);
+      const response = await db.query('delete from business where id = $1 returning id', [args.business_id]);
       return response.rows[0].id;
     },
   }
-
 }
 
 export const businessTypeDefs = `#graphql
@@ -177,7 +128,7 @@ export const businessTypeDefs = `#graphql
 
   type Query {
     getBusiness(business_id: ID!): Business!,
-    getBusinessClients(business_id: ID!): [BusinessClient!]!,
+    getBusinessClients(business_id: ID!): [Client!]!,
     getBusinessServices(business_id: ID!): [Service!]!,
     getBusinessAppointmentMetrics(business_id: ID!, start_date: String, end_date: String): [AppointmentMetric!]!,
   }

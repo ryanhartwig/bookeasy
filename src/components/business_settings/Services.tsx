@@ -1,4 +1,4 @@
-import ServiceCard from '@/app/services/service';
+import { ServiceCard } from '@/app/services/service';
 import { ServiceForm } from '@/app/services/serviceForm/serviceForm';
 import { Service } from '@/types/Service';
 import { userId } from '@/utility/sample_data/sample_userId';
@@ -32,7 +32,7 @@ export const Services: React.FC<ServicesProps> = ({services, businessId, isOwnBu
     <div {...props} className={clsx(styles.Services, props.className || '')}>
       {services.filter(s => !s.deleted).map(s => (
         <div key={s.id}>
-          <ServiceCard key={s.id} service={s} onClick={(e) => {console.log(e); setSelectedService(s)}} />
+          <ServiceCard key={s.id} service={s} onClick={() => {setSelectedService(s)}} hideProvider />
         </div>
       ))}
       <ServiceForm 

@@ -1,4 +1,4 @@
-import { AssignedUser } from "./User";
+import { AssignedStaff } from "./User";
 
 export interface Service {
   id: string,
@@ -10,7 +10,7 @@ export interface Service {
   color: string,
   deleted: boolean,
   business_id: string,
-  assigned_users: AssignedUser[],
+  assigned_staff: AssignedStaff[],
 };
 
 export interface FormService {
@@ -32,7 +32,7 @@ export interface ServiceInput {
   is_video: boolean,
   color: string,
   deleted: boolean,
-  assigned_users: string[],
+  assigned_staff: string[],
   business_id: string,
   cost_start?: string,
   duration_start?: string,

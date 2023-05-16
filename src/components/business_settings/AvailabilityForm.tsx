@@ -16,8 +16,8 @@ import { RxCross2 } from 'react-icons/rx';
 import clsx from "clsx";
 import { weekDays } from "@/utility/data/days";
 import { useMutation } from "@apollo/client";
-import { SET_USER_AVAILABILITY } from "@/utility/queries/userQueries";
-import { GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
+import { SET_STAFF_AVAILABILITY } from "@/utility/queries/userQueries";
+import { GET_STAFF_AVAILABILITY, GET_USER_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 
 
 interface AvailabilityFormProps {
@@ -27,6 +27,7 @@ interface AvailabilityFormProps {
   businessId: string,
   day: number,
   userId?: string,
+  staffId: string,
 }
 
 const convertTotalTime = (total: number) => {
@@ -40,7 +41,7 @@ const convertTotalTime = (total: number) => {
   return [hr, min];
 }
 
-export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, userId, slices, businessId, day}) => {
+export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose, userId, staffId, slices, businessId, day}) => {
   const [newSlices, setNewSlices] = useState<AvailabilitySlice[]>(slices);
 
   const sortedSlices = useMemo(() => 
@@ -82,17 +83,18 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   const [endMin, setEndMin] = useState<number>();
   const [endPeriod, setEndPeriod] = useState<'am' | 'pm'>('am');
 
-  const [setUserAvailability, { data, loading }] = useMutation(SET_USER_AVAILABILITY, {
+  const [setStaffAvailability, { data, loading }] = useMutation(SET_STAFF_AVAILABILITY, {
     refetchQueries: [{
+      // Refetch for dashboard view
       query: GET_USER_AVAILABILITY,
       variables: {
         userId,
-        businessId,
       }
     }, {
-      query: GET_USER_AVAILABILITY,
+      // Refetch current view
+      query: GET_STAFF_AVAILABILITY,
       variables: {
-        userId,
+        staffId,
       }
     }]
   });
@@ -151,8 +153,8 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
   }, [businessId, canSubmit, day, endString, startString]);
 
   const onSubmit = useCallback(() => {
-    setUserAvailability({variables: { userId, businessId, day, slices: newSlices.map(s => ({...s, user_id: userId, __typename: undefined})) }})
-  }, [businessId, day, newSlices, setUserAvailability, userId]);
+    setStaffAvailability({variables: { staffId, businessId, day, slices: newSlices.map(s => ({...s, staff_id: staffId, __typename: undefined})) }})
+  }, [businessId, day, newSlices, setStaffAvailability, staffId]);
 
   useEffect(() => {
     if (!data || loading) return;

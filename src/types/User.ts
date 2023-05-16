@@ -5,6 +5,7 @@ export interface User {
   created: string,
   phone?: number,
   avatar?: string,
+  own_business_id: string,
   prefs?: {
     private_photo: boolean,
     private_email: boolean,
@@ -16,14 +17,20 @@ export interface User {
   };
 };
 
-export interface AssignedUser {
+export interface AssignedStaff {
   id: string,
+  registered_user_id: string,
   name: string,
   avatar?: string,
 }
 
-export interface BusinessUser {
-  user: User,
+export interface Staff {
+  id: string,
+  registered_user_id: string,
   elevated: boolean,
   date_added: string,
+  name: string,
+  contact_email: string,
+  contact_phone: string,
+  avatar?: string
 }

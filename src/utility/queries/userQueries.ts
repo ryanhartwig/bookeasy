@@ -10,8 +10,8 @@ export const GET_USER_BUSINESSES = gql`
       min_booking_notice
       min_cancel_notice
       max_book_ahead
-      user_id
       avatar
+      is_own
     }
   }
 `;
@@ -25,6 +25,7 @@ export const GET_USER = gql`
       phone
       created
       avatar
+      own_business_id
     }
   }
 `;
@@ -47,35 +48,20 @@ export const GET_USER_WITH_PREFS = gql`
         notification_overview_time
       }
       avatar
+      own_business_id
     }
   }
 `;
 
-export const GET_USER_OWN_BUSINESS = gql`
-  query($userId: ID!) {
-    getUserOwnBusiness(user_id: $userId) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      user_id
-      avatar
-    }
-  }
-`;
-
-export const SET_USER_AVAILABILITY = gql`
-  mutation($userId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
-    setUserAvailability(user_id: $userId, business_id: $businessId, day: $day, slices: $slices)
+export const SET_STAFF_AVAILABILITY = gql`
+  mutation($staffId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
+    setStaffAvailability(staff_id: $staffId, business_id: $businessId, day: $day, slices: $slices)
   }
 `;
 
 
 export const PATCH_USER = gql`
-  mutation($userId: ID!, $patch: UserPatch) {
+  mutation($userId: ID!, $patch: UserPatch!) {
     patchUser(user_id: $userId, patch: $patch) {
       id
     }
@@ -83,9 +69,9 @@ export const PATCH_USER = gql`
 `;
 
 export const PATCH_USER_PREFS = gql`
-  mutation($userId: ID!, $patch: UserPrefsPatch) {
+  mutation($userId: ID!, $patch: UserPrefsPatch!) {
     patchUserPrefs(user_id: $userId, patch: $patch) {
-      user_id
+      registered_user_id
     }
   }
 `;

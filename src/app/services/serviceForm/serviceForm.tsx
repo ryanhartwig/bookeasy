@@ -5,12 +5,12 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useMutation, useQuery } from "@apollo/client"
+import { gql, Reference, useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
-import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_USERS } from "@/utility/queries/businessQueries"
+import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_STAFF } from "@/utility/queries/businessQueries"
 import { Service, ServiceInput } from '@/types/Service';
 import { Input } from '@/components/UI/Input/Input';
-import { AssignedUser } from '@/types/User';
+import { AssignedStaff } from '@/types/User';
 import { AiOutlineCheck, AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import clsx from 'clsx';
@@ -21,6 +21,8 @@ import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/ser
 import { BsTrash3 } from 'react-icons/bs';
 import { dateToDateInput } from '@/utility/functions/conversions/dateToDateInput';
 import { dateInputToDate } from '@/utility/functions/conversions/dateInputToDate';
+import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 
 interface ServiceFormProps {
   open: boolean,
@@ -42,35 +44,30 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  const [businessUsers, setBusinessUsers] = useState<AssignedUser[]>([]);
-  const [assignedUsers, setAssignedUsers] = useState<Map<string, AssignedUser>>(new Map());
+  const [staff, setStaff] = useState<AssignedStaff[]>([]);
+  const [assignedStaff, setAssignedStaff] = useState<Map<string, AssignedStaff>>(new Map());
 
   const minimumDateInput = useMemo(() => dateToDateInput(), []);
   
   const [costUpdate, setCostUpdate] = useState<boolean>(false);
   const [costUpdateDate, setCostUpdateDate] = useState<string>(minimumDateInput);
-
   const [durationUpdate, setDurationUpdate] = useState<boolean>(false);
   const [durationUpdateDate, setDurationUpdateDate] = useState<string>(minimumDateInput);
   
-  
-  const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
-  const { data: businessUsersData, loading: loadingBusinessUsers } = useQuery(GET_BUSINESS_FORM_USERS, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
+  const { data: userBusinessesData, loading: loadingUserBusinessesData } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
+  const { data: staffData, loading: loadingStaffData } = useQuery(GET_BUSINESS_FORM_STAFF, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
-
-  useEffect(() => setAssignedUsers(new Map()), [selectedBusiness]);
+  useEffect(() => setAssignedStaff(new Map()), [selectedBusiness]);
 
   useEffect(() => {
-    if (!businessUsersData || loadingBusinessUsers) return;
-
-    setBusinessUsers(businessUsersData.getBusiness.users.map((data: any) => data.user));
-  }, [businessUsersData, loadingBusinessUsers]);
+    if (!staffData || loadingStaffData) return;
+    setStaff(staffData.getBusiness.staff);
+  }, [staffData, loadingStaffData]);
 
   useEffect(() => {
-    if (userBusinessesData) {
-      setBusinesses(userBusinessesData.getUserBusinesses);
-    }
-  }, [userBusinessesData]);
+    if (!userBusinessesData || loadingUserBusinessesData) return;
+    setBusinesses(userBusinessesData.getUserBusinesses);
+  }, [loadingUserBusinessesData, userBusinessesData]);
 
   // Clear fields on closing form
   useEffect(() => {
@@ -86,18 +83,17 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   // Prepopulate business field if provided (from teams / business view)
   useEffect(() => {
     if (!businessId || !userBusinessesData || !businesses) return;
-
     setSelectedBusiness(businesses.find(b => b.id === businessId))
   }, [businessId, businesses, userBusinessesData]);
 
   // Prepopulate assignee field if it's a user's own business
   useEffect(() => {
-    if (!isOwnBusiness || !businessUsers.length) return;
+    if (!isOwnBusiness || !staff.length) return;
 
-    const users = new Map()
-    users.set(businessUsers[0].id, businessUsers[0]);
-    setAssignedUsers(users)
-  }, [businessUsers, isOwnBusiness]);
+    const staffMap = new Map()
+    staffMap.set(staff[0].id, staff[0]);
+    setAssignedStaff(staffMap)
+  }, [staff, isOwnBusiness]);
 
   // Prepopulate if editing
   useEffect(() => {
@@ -111,15 +107,14 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     setIsVideo(initialService.is_video);
     setColor(initialService.color);
 
-    const assignedUsersMap = new Map<string, AssignedUser>();
-    initialService.assigned_users.forEach(u => assignedUsersMap.set(u.id, u));
+    const assignedStaffMap = new Map<string, AssignedStaff>();
+    initialService.assigned_staff.forEach(s => assignedStaffMap.set(s.id, s));
 
-    setAssignedUsers(assignedUsersMap);
-        
-  }, [businessUsers.length, businesses, initialService, userBusinessesData]);
+    setAssignedStaff(assignedStaffMap);
+  }, [staff.length, businesses, initialService, userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
-    if (!selectedBusiness || !name || !duration || !cost || !color || !assignedUsers.size) return null;
+    if (!selectedBusiness || !name || !duration || !cost || !color || !assignedStaff.size) return null;
 
     return {
       id: initialService?.id || uuid(),
@@ -131,11 +126,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       is_video: isVideo,
       color,
       deleted: false,
-      assigned_users: Array.from(assignedUsers.keys()),
+      assigned_staff: Array.from(assignedStaff.keys()),
       cost_start: costUpdate ? dateInputToDate(costUpdateDate).toISOString() : undefined,
       duration_start: durationUpdate ? dateInputToDate(durationUpdateDate).toISOString() : undefined,
     }
-  }, [assignedUsers, color, cost, costUpdate, costUpdateDate, duration, durationUpdate, durationUpdateDate, initialService?.id, isVideo, name, selectedBusiness]);
+  }, [assignedStaff, color, cost, costUpdate, costUpdateDate, duration, durationUpdate, durationUpdateDate, initialService?.id, isVideo, name, selectedBusiness]);
 
   const [addService, { 
     data: addServiceData, 
@@ -158,7 +153,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     refetchQueries: [{
       query: GET_BUSINESS_SERVICES,
       variables: { businessId: selectedBusiness?.id }
-    }],
+    }], 
+    update(cache) {
+      if (!costUpdate && !durationUpdate) return;
+      cache.evict({ fieldName: 'getUserAppointments'});
+      cache.evict({ fieldName: 'getClientAppointments'});
+    }
   });
 
   const [deleteService, { 
@@ -214,10 +214,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
     </div>
   )), [businesses]);
 
-  const clientList = useMemo(() => 
-    businessUsers
-      .map((u: AssignedUser) => (
-        <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedUsers.has(u.id)})} onClick={() => setAssignedUsers(p => {
+  const staffList = useMemo(() => 
+    staff
+      .map((u: AssignedStaff) => (
+        <div key={u.id} className={clsx(styles.option, styles.multipleOption, {[styles.multipleSelected]: assignedStaff.has(u.id)})} onClick={() => setAssignedStaff(p => {
           const map = new Map(p);
           return map.delete(u.id) ? map : map.set(u.id, u);
         })}>
@@ -226,7 +226,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <AiOutlineCheck className={styles.checked} />
         </div>
       ))
-  , [assignedUsers, businessUsers]);
+  , [assignedStaff, staff]);
+
+  const [providerError, setProviderError] = useState<string>('');
+  const [assigneeError, setAssigneeError] = useState<string>('');
+  const [nameError, setNameError] = useState<string>('');
+  const giveInputFeedback = useCallback(() => {
+    !selectedBusiness && setProviderError('Please select a provider.');
+    !assignedStaff.size && setAssigneeError('Please select at least one staff.');
+    !name && setNameError('Please add a name for the service.');
+  }, [assignedStaff.size, name, selectedBusiness]);
+
+  useEffect(() => setProviderError(''), [selectedBusiness]);
+  useEffect(() => setAssigneeError(''), [assignedStaff]);
+  useEffect(() => setNameError(''), [name]);
 
   return (
     <Modal actionButtonText='Confirm' 
@@ -236,6 +249,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       onClose={() => setOpen(false)} 
       className={styles.appointmentForm}
       actionCloses
+      onClickDisabledAction={giveInputFeedback}
       // loading={addServiceLoading || loadingUserBusinesses || loadingBusinessUsers || editServiceLoading || deleteServiceLoading}
     >
       <Modal.Header>{initialService ? 'Edit' : 'Add a'} Service</Modal.Header>
@@ -246,25 +260,25 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
             <div className={styles.selectedOption}>
               <p>{selectedBusiness?.name}</p>
             </div>
-          )} hasSelected={!!selectedBusiness}/> 
+          )} hasSelected={!!selectedBusiness} errorMessage={providerError} /> 
         </>}
 
         {!isOwnBusiness && <>
           <p>Select Assignee(s)</p>
-          <Select multiple list={clientList} selected={(
+          <Select multiple list={staffList} selected={(
             <div className={styles.assignees} style={{left: 0}}>
-              {Array.from(assignedUsers.values()).map(user => 
+              {Array.from(assignedStaff.values()).map(user => 
                 <div key={user.id}>
                   <Avatar src={user.avatar} size={26} />
                   <p>{user.name}</p>
                 </div>
               )}
             </div>
-          )} hasSelected={!!assignedUsers.size}/>
+          )} hasSelected={!!assignedStaff.size} errorMessage={assigneeError} />
         </>}
 
         <p>Service Name</p>
-        <Input type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} />
+        <Input required type='text' autoFocus placeholder='Initial Consult' value={name} onChange={(e) => setName(e.target.value)} errorMessage={nameError} />
 
         <p>Cost</p>
         <div className={styles.cost}>

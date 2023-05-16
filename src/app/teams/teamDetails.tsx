@@ -2,15 +2,14 @@ import { BookingSitePrefs } from '@/components/business_settings/BookingSitePref
 import { ClientList } from '@/components/business_settings/ClientList';
 import { Prefs } from '@/components/business_settings/Prefs';
 import { Services } from '@/components/business_settings/Services';
-import { Staff } from '@/components/business_settings/Staff';
+import { StaffList } from '@/components/business_settings/Staff';
 import { Card } from '@/components/UI/Card/Card';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { Service } from '@/types/Service';
-import { BusinessUser } from '@/types/User';
-import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_USERS } from '@/utility/queries/businessQueries';
-import { GET_USER } from '@/utility/queries/userQueries';
+import { Staff } from '@/types/User';
+import { GET_BUSINESS_CLIENTS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -26,20 +25,21 @@ interface TeamDetailsProps {
 export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
   const [tab, setTab] = useState<number>(0);
 
-  const [users, setUsers] = useState<BusinessUser[]>([]);
+  const [staff, setStaff] = useState<Staff[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [services, setServices] = useState<Service[]>([]);
 
-  const elevated = useMemo(() => users.find(u => u.user.id === userId)?.elevated || false, [userId, users]);
+  const elevated = useMemo(() => staff.find(s => s.registered_user_id === userId)?.elevated || false, [userId, staff]);
   const tabNames = useMemo(() => {
     const tabs = ['Staff', 'Client List', 'Services'];
     if (elevated) tabs.push('Admin');
     return tabs;
   }, [elevated]);
   
-  const { data: businessUsersData } = useQuery(GET_BUSINESS_USERS, { variables: { businessId: business.id }});
+  const { data: businessUsersData } = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business.id }});
+  
   useEffect(() => businessUsersData && 
-    setUsers([...businessUsersData.getBusiness.users].sort((a, b) => a.user.name < b.user.name ? -1 : 1))
+    setStaff([...businessUsersData.getBusiness.staff].sort((a, b) => a.name < b.name ? -1 : 1))
   , [businessUsersData]);
 
   const { data: businessServicesData } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
@@ -50,22 +50,22 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
 
   const tabs = useMemo(() => {
     const tabs = [
-      <Staff key='staff' business={business} members={users} services={services} />,
+      <StaffList key='staff' business={business} staffMembers={staff} services={services} />,
       <ClientList key='clients' clients={clients} business={business} />,
       <Services key='services' services={services} businessId={business.id} />,
     ];
-    if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={users.find(u => u.user.id === userId)?.elevated || false} />);
+    if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={staff.find(s => s.registered_user_id === userId)?.elevated || false} />);
     return tabs;
-  }, [business, clients, elevated, services, userId, users]);
+  }, [business, clients, elevated, services, userId, staff]);
 
   return (
     <div className={styles.team_overview}>
       <div className={styles.left}>
         <Card className={clsx(styles.card, styles.overview)}>
-          <Overview selected={business} members={users} clients={clients} services={services} />
+          <Overview selected={business} members={staff} clients={clients} services={services} />
         </Card>
         <Card className={clsx(styles.card, styles.members_overview)}>
-          <Members members={users} />
+          <Members staff={staff} />
         </Card>
       </div>
       <div className={styles.right}>

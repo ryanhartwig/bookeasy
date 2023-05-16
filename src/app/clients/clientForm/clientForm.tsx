@@ -10,7 +10,7 @@ import { Input } from '@/components/UI/Input/Input';
 import { FormBusiness, NewBusiness } from '@/types/Business';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { Select } from '@/components/UI/Select/Select';
-import { DELETE_CLIENT, GET_MULTI_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
+import { DELETE_CLIENT, USER_ADD_CLIENT, USER_EDIT_CLIENT } from '@/utility/queries/clientQueries';
 import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 import { NEW_CLIENT_FRAGMENT } from '@/utility/queries/fragments/clientFragments';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
@@ -23,15 +23,6 @@ interface AppointmentFormProps {
   initialClient?: Client,
   onSubmit?: (...args: any) => any,
   initialBusiness?: FormBusiness
-}
-
-interface RawClient {
-  id: string,
-  name: string,
-  email: string,
-  address?: string,
-  phone?: string,
-  avatar: string
 }
 
 export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSelected, initialBusiness, userId, initialClient, onSubmit}) => {
@@ -47,69 +38,39 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
 
-  const [placeholderClient, setPlaceholderClient] = useState<RawClient>();
-
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient || !!initialBusiness }); 
-  const { data: multiClientData, loading: loadingMultiClientData, refetch } = useQuery(GET_MULTI_CLIENT, { variables: { clientId: initialClient?.id }, skip: !initialClient, fetchPolicy: 'no-cache' });
 
-  useEffect(() => {
-    if (userBusinessesData) {
-      setBusinesses(userBusinessesData.getUserBusinesses);
-    }
-  }, [userBusinessesData]);
-
+  useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
+  
   // Initialize fields when editing existing client
   useEffect(() => {
-    if (initialBusiness) {
-      setSelectedBusiness(initialBusiness);
-    }
-    if (!initialClient || (initialClient && !multiClientData)) return;
+    initialBusiness && setSelectedBusiness(initialBusiness);
+    
+    if (!initialClient) return;
 
-    const { business_patch: { name, email, phone, address, notes }, client } = multiClientData.getMultiClientData;
-
-    refetch({ clientId: initialClient?.id });
-
-    setPlaceholderClient(client);
-
-    setName(name || '');
-    setEmail(email || '');
-    setPhone(phone || '');
-    setAddress(address || '');
-    setNotes(notes || '');
-  }, [initialBusiness, initialClient, multiClientData, refetch]);
+    setName(initialClient.name || '');
+    setEmail(initialClient.email || '');
+    setPhone(initialClient.phone || '');
+    setAddress(initialClient.address || '');
+    setNotes(initialClient.notes || '');
+    setId(initialClient.id);
+  }, [initialBusiness, initialClient]);
 
   const client = useMemo<ClientInput | null>(() => {
-    if (!name || !email || !selectedBusiness) return null;
+    if (!name || (!initialClient && !selectedBusiness)) return null;
     
     return {
       id,
-      business_id: selectedBusiness.id,
+      business_id: initialClient ? undefined : selectedBusiness?.id,
       name,
-      email,
+      email: email || undefined,
       notes: notes || undefined,
       address: address || undefined,
       phone: phone || undefined,
       joined_date: new Date().toISOString(),
       active: true,
     }
-  }, [address, email, id, name, notes, phone, selectedBusiness]);
-
-  const editClient = useMemo<EditClientInput | null>(() => {
-    if (!initialClient || (initialClient && !multiClientData)) return null;
-
-    // Raw client data from client table 
-    const raw = multiClientData.getMultiClientData.client;
-    
-    return {
-      id: raw.id,
-      name: name || null,
-      email: email || null,
-      notes: notes || null,
-      address: address || null,
-      phone: phone || null,
-      active: true,
-    }
-  }, [address, email, initialClient, multiClientData, name, notes, phone]);
+  }, [address, email, id, initialClient, name, notes, phone, selectedBusiness]);
 
   const [userAddClient, { 
     data: clientMutationData, 
@@ -147,12 +108,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   });
 
   const onSubmitForm = useCallback(() => {
-    if (initialClient ? !editClient : !client) return;
+    if (!client) return;
     
     initialClient
-      ? userEditClient({ variables: { client: editClient } })
+      ? userEditClient({ variables: { client } })
       : userAddClient({ variables: { client } })
-  }, [client, editClient, initialClient, userAddClient, userEditClient]);
+  }, [client, initialClient, userAddClient, userEditClient]);
 
   const complete = useCallback(() => {
     setError(undefined);
@@ -185,7 +146,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
       cache.modify({
         fields: {
           getBusinessClients(existingClients = [], { readField }) {
-            return existingClients.filter((ref: any) => editClient!.id !== readField('id', ref));
+            return existingClients.filter((ref: any) => client!.id !== readField('id', ref));
           }
         }
       })
@@ -201,8 +162,8 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   }, [deleteClientData, deleteClientError, deleteClientLoading, setOpen, setSelected]);
 
   const onDeleteClient = useCallback(() => {
-    deleteClient({variables: { clientId: editClient!.id }});
-  }, [deleteClient, editClient]);
+    deleteClient({variables: { clientId: client!.id }});
+  }, [client, deleteClient]);
 
   const businessesList = useMemo(() => businesses.map(b => (
     <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
@@ -213,12 +174,12 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
   return (
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
-      actionButtonDisabled={initialClient ? !editClient : !client} 
+      actionButtonDisabled={!client} 
       open={open}
       actionCloses
       onClose={() => setOpen && setOpen(false)} 
       className={styles.appointmentForm}
-      loading={loadingUserBusinesses || clientMutationLoading || (initialClient && loadingMultiClientData)}
+      loading={loadingUserBusinesses || clientMutationLoading}
     >
       <Modal.Header>{initialClient ? "Edit" : "New"} Client</Modal.Header>
       <div className={styles.appointmentOptions}>
@@ -235,23 +196,22 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
         )}
         
         <p>Name</p>
-        <Input type='text' autoFocus placeholder={initialClient ? placeholderClient?.name || '' : 'John Doe'} value={name} onChange={(e) => setName(e.target.value)} />
+        <Input type='text' autoFocus value={name} onChange={(e) => setName(e.target.value)} />
 
         <p>Email</p>
-        <Input type='text' placeholder={initialClient ? placeholderClient?.email || '' : 'johndoe@gmail.com'} value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input type='text' value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <p>Address</p>
-        <Input type='text' placeholder={initialClient ? placeholderClient?.address || '' : '1234 John Doe St.'} value={address} onChange={(e) => setAddress(e.target.value)} />
+        <Input type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
 
         <p>Phone</p>
-        <Input type='text' placeholder={initialClient ? placeholderClient?.phone || '' : '123-456-7890'} value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Input type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
 
         <p>Notes</p>
         <textarea placeholder={!initialClient ? 'Modified rate to 90%.' : ''} value={notes} onChange={(e) => setNotes(e.target.value)} />
 
       </div>
       <hr />
-      <p className={styles.warning}>{initialClient ? !editClient : !client && 'missing fields'}</p>
       {error && <p className={styles.warning}>{error}</p>}
       {!!initialClient && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />

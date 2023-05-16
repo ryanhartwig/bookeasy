@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import uuid from "react-uuid";
 import styles from './addTeamForm.module.scss';
 import { RiTeamLine } from 'react-icons/ri';
-import { MutationFunctionOptions, OperationVariables, DefaultContext, ApolloCache, gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { NEW_BUSINESS } from "@/utility/queries/businessQueries";
 import { GET_USER_BUSINESSES_FRAGMENT } from "@/utility/queries/fragments/userFragments";
 interface AddTeamFormProps {
@@ -16,27 +16,7 @@ interface AddTeamFormProps {
 }
 
 export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose, setSelected, userId}) => {
-
   const [name, setName] = useState<string>('');
-
-  const business = useMemo<NewBusiness | null>(() => {
-    if (!name) return null;
-    
-    return {
-      id: uuid(),
-      name,
-      email: '',
-      phone: '',
-      avatar: '',
-      max_book_ahead: null,
-      min_booking_notice: null,
-      min_cancel_notice: null,
-      user_id: null,
-      created: new Date().toISOString(),
-    }
-  }, [name]);
-
-  
 
   const [newBusiness, { data, loading, reset }] = useMutation(NEW_BUSINESS, {
     update(cache, { data: { newBusiness }}) {
@@ -68,6 +48,7 @@ export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose, setSelec
     newBusiness({ variables: {
       userId,
       name,
+      is_own: false,
     }});
     setSelected(undefined);
   }, [newBusiness, userId, name, setSelected]);
@@ -82,7 +63,7 @@ export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose, setSelec
     <Modal open={open}
       onClose={onClose}
       actionButtonText="Confirm"
-      actionButtonDisabled={!business}
+      actionButtonDisabled={!name}
       onAction={onSubmit}
       loading={loading}
     >

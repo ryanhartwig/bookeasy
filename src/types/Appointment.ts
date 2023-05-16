@@ -41,7 +41,7 @@ export interface AppointmentData {
 
 export interface AppointmentInput {
   id: string,
-  user_id: string,
+  staff_id: string,
   business_id: string,
   client_id: string,
   service_id: string,

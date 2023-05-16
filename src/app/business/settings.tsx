@@ -4,7 +4,6 @@ import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { useState } from "react";
 import styles from './business.module.scss';
 import { Availability } from "../../components/business_settings/Availability";
-import { BookingSitePrefs } from "@/components/business_settings/BookingSitePrefs";
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
@@ -20,17 +19,18 @@ interface SettingsProps {
   user: User,
   services: Service[],
   availability: AvailabilitySlice[],
+  staffId: string,
 }
 
-export const Settings: React.FC<SettingsProps> = ({business, clients, user, services, availability}) => {
+export const Settings: React.FC<SettingsProps> = ({business, clients, user, services, availability, staffId}) => {
 
   const [tab, setTab] = useState<number>(0);
   const tabs = ['Client List', 'Services', 'Availability', 'Preferences'];
   const tabComponents = [
     <ClientList clients={clients} key={ClientList.name} business={business} />, 
     <Services businessId={business.id} key={Services.name} services={services} isOwnBusiness />, 
-    <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} />,
-    <Prefs key={Prefs.name} userId={user.id} business={business} />, 
+    <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} staffId={staffId} />,
+    <Prefs key={Prefs.name} userBusinessId={user.own_business_id} business={business} />, 
   ];
 
   return (
