@@ -25,6 +25,16 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   // Error states
   const [nameError, setNameError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
+
+  // Prepopulate initialStaff fields when provided
+  useEffect(() => {
+    if (!initialStaff) return;
+
+    setId(initialStaff.id);
+    setName(initialStaff.name);
+    setContactEmail(initialStaff.contact_email || '');
+    setContactPhone(initialStaff.contact_phone || '');
+  }, [initialStaff]);
   
   const staff = useMemo<StaffInput | undefined>(() => {
     if (!name) return;
@@ -79,10 +89,10 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
 
     ;(async () => {
       initialStaff
-        ? await addStaff({variables: { staff }})
-        : await editStaff({variables: { staff }});
+        ? await editStaff({variables: { staff }})
+        : await addStaff({variables: { staff }});
       onClose();
-    })()
+    })();
     
   }, [addStaff, checkInputs, editStaff, initialStaff, onClose, staff]);
 

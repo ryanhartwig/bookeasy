@@ -28,6 +28,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
   const [staffFormOpen, setStaffFormOpen] = useState<boolean>(false);
+  const [initialStaff, setInitialStaff] = useState<Staff>();
 
   const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selected?.id }, skip: !selected});
   useEffect(() => {
@@ -95,12 +96,15 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                 </ul>
               </div>
               <div className={styles.edit_staff}>
-                <p>Edit</p>
+                <p onClick={() => {
+                  setInitialStaff(selected);
+                }}>Edit</p>
               </div>
             </div>
             <div className={styles.bookable}>
               {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
             </div>
+            {initialStaff && <StaffForm open={!!initialStaff} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} />}
           </div>
         }
       </Modal>
