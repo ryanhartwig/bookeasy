@@ -25,7 +25,7 @@ export const staffResolvers = {
 
       return staff_id;
     },
-    addStaff: async(_: any, args: any) => {
+    addStaff: async (_: any, args: any) => {
       const { name, contact_email, contact_phone, business_id } = args.staff;
       const response = await db.query(`
         insert into staff (name, contact_email, contact_phone, business_id, elevated, date_added, id)
@@ -36,6 +36,19 @@ export const staffResolvers = {
         ...response.rows[0],
         avatar: null,
       };
+    },
+    editStaff: async (_: any, args: any) => {
+      const { id, name, contact_email, contact_phone } = args.staff;
+      const response = await db.query(`
+      update staff set
+        name = $2,
+        contact_email = $3,
+        contact_phone = $4
+      where id = $1
+      returning *`
+      , [id, name, contact_email, contact_phone]);
+
+      return response.rows[0];
     },
   }
 }
@@ -64,5 +77,6 @@ export const staffTypeDefs = `#graphql
   type Mutation {
     setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
     addStaff(staff: StaffInput!): Staff,
+    editStaff(staff: StaffInput!): Staff,
   }
 `;
