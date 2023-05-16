@@ -4,7 +4,9 @@ import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
 import { ADD_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
 import { gql, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { CiWarning } from "react-icons/ci";
 import uuid from "react-uuid";
+import { Avatar } from "../UI/Avatar/Avatar";
 import { Input } from "../UI/Input/Input";
 import { Modal } from "../UI/Modal/Modal";
 import styles from './staffForm.module.scss';
@@ -22,10 +24,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
   // Error states
   const [nameError, setNameError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
+
 
   // Prepopulate initialStaff fields when provided
   useEffect(() => {
@@ -126,6 +130,37 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       <div className={styles.input}>
         <label htmlFor="staffphone">Client Contact Phone</label>
         <Input id='staffphone' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(123) 456-7890" />
+      </div>
+
+      {initialStaff && <>
+        <Modal 
+          actionCloses 
+          open={confirmDelete} 
+          onClose={() => setConfirmDelete(false)} 
+          actionButtonText="Delete" 
+          onAction={() => {setConfirmDelete(false);}} 
+        >
+          <Modal.Header>Remove Staff Member</Modal.Header>
+          <div className={styles.confirmDelete}>
+            <div className={styles.warning}>
+              <CiWarning />
+              <p>This action cannot be undone.</p>
+            </div>
+            <div className={styles.staff}>
+              <div>
+                <Avatar src={initialStaff.avatar} size={28} />
+              </div>
+              <div>
+                <p>{initialStaff.name}</p>
+                <p>{new Date(initialStaff.date_added).toLocaleDateString()}</p>
+              </div>
+            </div> 
+            <p className={styles.staffDeleteMessage}>Any scheduled appointments with this staff member will be deleted.</p>
+          </div>
+        </Modal>
+      </>}
+      <div className={styles.input}>
+        <label htmlFor="staffphone" onClick={() => setConfirmDelete(true)}>Remove</label>
       </div>
     </Modal>
   )
