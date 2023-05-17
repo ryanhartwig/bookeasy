@@ -12,6 +12,7 @@
     transition: opacity 200ms, background-color 200ms;
     padding: 5px 12px;
     border-radius: 3px;
+    font-weight: 400;
 
     &:not(:hover) {
       background-color: transparent !important;

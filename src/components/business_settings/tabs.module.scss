@@ -259,29 +259,6 @@
   }
 }
 
-.edit {
-  color: var(--font-utility);
-  cursor: pointer;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-
-  > p {
-    opacity: 0.8;
-    transition: opacity 200ms, background-color 200ms;
-    padding: 5px 12px;
-    border-radius: 3px;
-  }
-
-  &:hover > p {
-    opacity: 1;
-    background-color: #216fdb19;
-  }
-}
-
 .bookingSitePrefs {
   width: 381px;
   padding: 10px;
