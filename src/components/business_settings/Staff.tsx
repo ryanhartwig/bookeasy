@@ -58,7 +58,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
   return (
     <div className={styles.StaffList}>
       <div className={styles.header}>
-        {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
+        {['Name', 'Services', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staffList}
       <div className={styles.addService} onClick={() => setStaffFormOpen(true)}>
