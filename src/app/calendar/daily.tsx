@@ -51,6 +51,5 @@ export const Daily: React.FC<DailyProps> = ({day, appointments, userId}) => {
         }
       </div>
     </div>
-    
   )
 }
