@@ -106,12 +106,11 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   }, [addStaff, checkInputs, editStaff, initialStaff, onClose, setSelectedStaff, staff]);
 
   const [deleteStaff, { reset: deleteStaffReset }] = useMutation(DELETE_STAFF, {
-    update(cache, { data: deleteStaff }) {
+    update(cache) {
       cache.modify({
         fields: {
           getBusinessStaff: (existingStaff = [], { readField }) => {
-            console.log(deleteStaff);
-            return existingStaff.filter((ref: any) => readField('id', ref) !== deleteStaff.deleteStaff);
+            return existingStaff.filter((ref: any) => readField('id', ref) !== initialStaff!.id);
           }
         }
       }) 
@@ -121,7 +120,6 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const onDeleteStaff = useCallback(() => {
     ;(async () => {
       const res = await deleteStaff({ variables: { staffId: initialStaff!.id } });
-      console.log(res);
       deleteStaffReset();
       setSelectedStaff && setSelectedStaff(undefined);
       setConfirmDelete(false);
