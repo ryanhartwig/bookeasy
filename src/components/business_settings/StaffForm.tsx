@@ -70,25 +70,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   });
 
   const [editStaff] = useMutation(EDIT_STAFF, {
-    update(cache, { data: editStaff }) {
-      cache.modify({
-        fields: {
-          getBusinessStaff: (existingStaff = [], { readField }) => {
-            const newStaffRef = cache.writeFragment({
-              data: editStaff,
-              fragment: gql`
-                ${STAFF_FRAGMENT}
-              `
-            });
-
-            return existingStaff.map((ref: any) => readField('id', ref) === readField('id', newStaffRef) ? newStaffRef : ref);
-          }
-        }
-      }) 
-    }
+    refetchQueries: [GET_BUSINESS_STAFF]
   });
 
-  
+  const [deleteStaff, { loading: deleteStaffLoading, data: deleteStaffData, reset: deleteStaffReset }] = useMutation(DELETE_STAFF, {
+    refetchQueries: [GET_BUSINESS_STAFF]
+  });
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
@@ -105,24 +92,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     
   }, [addStaff, checkInputs, editStaff, initialStaff, onClose, setSelectedStaff, staff]);
 
-  const [deleteStaff, { reset: deleteStaffReset }] = useMutation(DELETE_STAFF, {
-    update(cache) {
-      cache.modify({
-        fields: {
-          getBusinessStaff: (existingStaff = [], { readField }) => {
-            return existingStaff.filter((ref: any) => readField('id', ref) !== initialStaff!.id);
-          }
-        }
-      }) 
-    }
-  });
-
   const onDeleteStaff = useCallback(() => {
     ;(async () => {
-      const res = await deleteStaff({ variables: { staffId: initialStaff!.id } });
-      deleteStaffReset();
+      await deleteStaff({ variables: { staffId: initialStaff!.id } });
       setSelectedStaff && setSelectedStaff(undefined);
-      setConfirmDelete(false);
+      deleteStaffReset();
+      setConfirmDelete(false);''
       onClose();
     })();
   }, [deleteStaff, deleteStaffReset, initialStaff, onClose, setSelectedStaff]);
@@ -135,6 +110,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       className={styles.staffForm}
       onClickDisabledAction={checkInputs}
       onAction={onSubmit}
+      loading={deleteStaffLoading}
     >
       <Modal.Header>{initialStaff ? "Edit" : "Add"} Staff Member</Modal.Header>
       <div className={styles.input}>
