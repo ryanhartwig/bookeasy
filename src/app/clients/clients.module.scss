@@ -101,10 +101,18 @@
     width: 85%
   }
 }
-.client_name {
-  font-size: 18px;
+
+.details_name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   margin-top: 15px;
 }
+.client_name {
+  font-size: 18px;
+}
+
 .client_contact {
   padding: 5px;
   width: 85%;
@@ -296,3 +304,4 @@
     color: rgb(95, 181, 251);
   }
 }
+

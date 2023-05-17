@@ -13,6 +13,7 @@ import { ClientForm } from './clientForm/clientForm';
 
 import styles from './clients.module.scss';
 import clsx from 'clsx';
+import { VscUnverified, VscVerifiedFilled } from 'react-icons/vsc';
 
 interface DetailsProps {
   selected: Client,
@@ -83,7 +84,14 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
         {/* Client photo, name, contact info, notes */}
         <Card className={clsx(styles.card, styles.client_details)} style={{height: 444}}>
           <Avatar src={selected.avatar} size={115} />
-          <p className={styles.client_name}>{selected.name}</p>
+          <div className={styles.details_name}>
+            <p className={styles.client_name}>{selected.name}</p>
+            <div className={clsx(styles.registeredIcon, {[styles.registered]: selected.registered_client_id})}>
+              {selected.registered_client_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+              <p className={styles.tooltip}>{selected.registered_client_id ? 'Registered Client' : 'Unregistered'}</p>
+            </div>
+          </div>
+          
           <hr />
           <div className={styles.client_contact}>
             <div>
