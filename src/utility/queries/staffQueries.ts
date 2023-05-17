@@ -30,6 +30,12 @@ export const EDIT_STAFF = gql`
   }
 `;
 
+export const DELETE_STAFF = gql`
+  mutation($staffId: String!) {
+    deleteStaff(staff_id: $staffId)
+  }
+`;
+
 export const SET_STAFF_AVAILABILITY = gql`
   mutation($staffId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
     setStaffAvailability(staff_id: $staffId, business_id: $businessId, day: $day, slices: $slices)

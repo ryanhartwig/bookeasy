@@ -53,29 +53,32 @@ export const staffResolvers = {
     deleteStaff: async (_: any, args: any) => {
       const { staff_id } = args;
 
+      // Unassign staff from services
       await db.query(`
-      delete from staff_services 
-      where staff_id = $1
-
-      do $$
-      begin
-        if exists (
-          select 1 from appointment
-          where staff_id = $1
-        ) then
-          update staff
-          set deleted = true,
-              registered_user_id = null
-          where staff_id = $1;
-        else 
-          delete from staff
-          where staff_id = $1;
-        end if;
-      end;
-      $$;
+        delete from staff_services 
+        where staff_id = $1
       `, [staff_id]);
 
-      return staff_id;
+      // Remove scheduled appointments
+      await db.query(`
+        delete from appointment
+        where staff_id = $1
+        and start_date > $2
+      `, [staff_id, new Date().toISOString()]);
+
+      // Attempt to delete the staff
+      try {
+        const response = await db.query('delete from staff where id = $1 returning id', [staff_id]);
+        return response.rows[0].id;
+      } catch(e: any) {
+        console.log(e.constraint)
+        if(e?.constraint && e.constraint === 'appointment_staff_id_fkey') {
+          // Appointment exists for service and won't allow full deletion
+          // - therefore we set deleted property to true, to allow appointments to ref service
+          const updateResponse = await db.query('update staff set deleted = true where id = $1 returning id', [staff_id]);
+          return updateResponse.rows[0].id;
+        }
+      }
     },
   }
 }
