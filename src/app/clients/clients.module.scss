@@ -1,3 +1,5 @@
+@use '/src/app/globalutil';
+
 .wrapper {
   width: 100%;
   height: calc(100% - var(--header-height));
@@ -26,6 +28,8 @@
   padding: 5px;
 
   cursor: pointer;
+
+  position: relative;
   
   display: flex;
   align-items: center;
@@ -269,5 +273,26 @@
     border: 1px solid #243666;
     border-radius: 10px;
     padding: 4px 12px;
+  }
+}
+
+.registeredIcon {
+  font-size: 12px;
+  color: var(--font-alt);
+  font-weight: 300;
+
+  display: flex;
+  align-items: center;
+
+  margin-left: 9px;
+  margin-top: 1px;
+
+  
+  @include globalutil.tooltip;
+  left: 5px;
+
+  
+  &.registered {
+    color: rgb(95, 181, 251);
   }
 }
