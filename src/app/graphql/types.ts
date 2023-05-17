@@ -66,7 +66,7 @@ export const types = `#graphql
     phone: String,
     joined_date: String!,
     avatar: String, # combined / merged from registered client
-    active: Boolean! 
+    active: Boolean!,
   }
 
   type RegisteredClient {

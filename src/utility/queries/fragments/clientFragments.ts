@@ -11,6 +11,7 @@ export const BUSINESS_CLIENT_FRAGMENT = gql`
     joined_date
     avatar
     active
+    registered_client_id
   }
 `;
 
