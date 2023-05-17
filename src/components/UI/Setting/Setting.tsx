@@ -9,6 +9,7 @@ import { MoonLoader } from 'react-spinners';
 import { useClickout } from '@/utility/hooks/useClickout';
 import { testEmail } from '@/utility/functions/validation/testEmail';
 import { BiErrorCircle } from 'react-icons/bi';
+import { TextButton } from '../TextButton/TextButton';
 
 interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   label: string,
@@ -106,7 +107,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
         ? <div className={clsx(styles.action, 'noselect')} >
             {!editing ? <>
               {onRemove && <p style={{color: 'rgb(255, 70, 45)'}} onClick={onRemove}>Remove</p>}
-              <p onClick={onEdit}>Edit</p>
+              <TextButton onClick={onEdit}>Edit</TextButton>
             </>
             : <>
               {loading && <MoonLoader color='#000000' size={15} cssOverride={{marginRight: 10}} />}
