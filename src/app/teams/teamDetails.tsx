@@ -50,7 +50,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
 
   const tabs = useMemo(() => {
     const tabs = [
-      <StaffList key='staff' business={business} staffMembers={staff} services={services} />,
+      <StaffList key='staff' business={business} staffMembers={staff} services={services} userId={userId} elevated={elevated} />,
       <ClientList key='clients' clients={clients} business={business} />,
       <Services key='services' services={services} businessId={business.id} />,
     ];

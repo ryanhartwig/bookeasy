@@ -8,6 +8,7 @@ export interface Client {
   phone?: string,
   joined_date: string,
   active: boolean,
+  registered_client_id: string,
 };
 
 export interface FormClient {

@@ -5,6 +5,7 @@ import { appointmentsResolvers, appointmentsTypeDefs } from './appointmentsSchem
 import { businessResolvers, businessTypeDefs } from './businessSchema';
 import { clientResolvers, clientTypeDefs } from './clientSchema';
 import { serviceResolvers, serviceTypeDefs } from './serviceSchema';
+import { staffResolvers, staffTypeDefs } from './staffSchema';
 
 export const typeDefs = mergeTypeDefs([
   userTypeDefs, 
@@ -12,6 +13,7 @@ export const typeDefs = mergeTypeDefs([
   businessTypeDefs,
   clientTypeDefs,
   serviceTypeDefs,
+  staffTypeDefs,
   types,
 ]);
 
@@ -21,4 +23,5 @@ export const resolvers = mergeResolvers([
   businessResolvers,
   clientResolvers,
   serviceResolvers,
+  staffResolvers,
 ]);

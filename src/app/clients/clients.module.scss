@@ -1,3 +1,5 @@
+@use '/src/app/globalutil';
+
 .wrapper {
   width: 100%;
   height: calc(100% - var(--header-height));
@@ -26,6 +28,8 @@
   padding: 5px;
 
   cursor: pointer;
+
+  position: relative;
   
   display: flex;
   align-items: center;
@@ -97,10 +101,18 @@
     width: 85%
   }
 }
-.client_name {
-  font-size: 18px;
+
+.details_name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   margin-top: 15px;
 }
+.client_name {
+  font-size: 18px;
+}
+
 .client_contact {
   padding: 5px;
   width: 85%;
@@ -253,7 +265,6 @@
   flex-wrap: wrap;
 
   padding: 10px;
-
   cursor: pointer;
 
   opacity: 0.6;
@@ -267,13 +278,30 @@
 
   p {
     font-size: 12px;
-
     border: 1px solid #243666;
-
     border-radius: 10px;
     padding: 4px 12px;
-
-    
   }
-
 }
+
+.registeredIcon {
+  font-size: 12px;
+  color: var(--font-alt);
+  font-weight: 300;
+
+  display: flex;
+  align-items: center;
+
+  margin-left: 9px;
+  margin-top: 1px;
+
+  
+  @include globalutil.tooltip;
+  left: 5px;
+
+  
+  &.registered {
+    color: rgb(95, 181, 251);
+  }
+}
+

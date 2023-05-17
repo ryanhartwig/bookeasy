@@ -26,11 +26,20 @@ export interface AssignedStaff {
 
 export interface Staff {
   id: string,
-  registered_user_id: string,
+  registered_user_id: string | null,
   elevated: boolean,
   date_added: string,
   name: string,
-  contact_email: string,
-  contact_phone: string,
+  contact_email: string | null,
+  contact_phone: string | null,
+  deleted: boolean,
   avatar?: string
+}
+
+export interface StaffInput {
+  id?: string,
+  name: string,
+  business_id: string,
+  contact_phone: string | null,
+  contact_email: string | null,
 }

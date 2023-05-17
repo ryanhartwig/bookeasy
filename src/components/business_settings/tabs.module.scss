@@ -74,10 +74,13 @@
   display: flex;
   flex-direction: column;
 
+  position: relative;
+
   .header {
     padding-left: 90px;
     text-align: center;
     padding-right: 0;
+    position: relative;
 
     > p {
       width: 100%;
@@ -181,15 +184,6 @@
   }
 }
 
-.details {
-  cursor: pointer;
-  color: var(--font-alt);
-  
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .modal {
   overflow:hidden;
   
@@ -210,7 +204,8 @@
 .staff_details {
   display: flex;
   align-items: center;
-
+  position: relative;
+  
   padding: 25px 20px;
   border-bottom: 1px solid var(--dividers);
 
@@ -223,6 +218,7 @@
   li {
     font-size: 12px;
     color: var(--font-alt);
+    font-weight: 300;
 
     display: flex;
     align-items: center;
@@ -231,26 +227,26 @@
   }
 }
 
-.edit {
-  color: var(--font-utility);
-  cursor: pointer;
-
+.staff_name {
   display: flex;
-  justify-content: center;
   align-items: center;
 
-  width: 100%;
+  > div {
+    font-size: 12px;
+    color: var(--font-alt);
+    font-weight: 300;
 
-  > p {
-    opacity: 0.8;
-    transition: opacity 200ms, background-color 200ms;
-    padding: 5px 12px;
-    border-radius: 3px;
-  }
+    display: flex;
+    align-items: center;
 
-  &:hover > p {
-    opacity: 1;
-    background-color: #216fdb19;
+    margin-left: 9px;
+    margin-top: 1px;
+
+    @include globalutil.tooltip;
+    
+    &.registered {
+      color: rgb(95, 181, 251);
+    }
   }
 }
 
@@ -515,4 +511,22 @@ p.warning {
   > p {
     margin-left: 8px;
   }
+}
+
+.bookable {
+  background-color: #f8f8f8;
+  height: 100%;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.edit_staff {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  right: 15px;
 }

@@ -11,7 +11,7 @@ export const businessResolvers = {
     },
     getBusinessClients: async (_: any, args: any) => {
       const response = await db.query(`
-        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, rc.avatar
+        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_client_id, rc.avatar
         from client c
         left join registered_client rc
         on rc.id = c.registered_client_id
@@ -65,6 +65,7 @@ export const businessResolvers = {
         left join registered_user u
         on s.registered_user_id = u.id
         where business_id = $1
+        and deleted = false
       `, [parent.id]);
       return response.rows;
     }

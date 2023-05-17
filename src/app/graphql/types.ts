@@ -32,6 +32,7 @@ export const types = `#graphql
     contact_email: String,
     contact_phone: String,
     avatar: String, # added from regUser if exists
+    deleted: Boolean!,
   } 
 
   type Service {
@@ -65,7 +66,7 @@ export const types = `#graphql
     phone: String,
     joined_date: String!,
     avatar: String, # combined / merged from registered client
-    active: Boolean! 
+    active: Boolean!,
   }
 
   type RegisteredClient {

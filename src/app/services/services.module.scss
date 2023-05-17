@@ -97,34 +97,14 @@
   display: flex;
   align-items: center;
 
-  
-
   > div {
-    position: relative;
-    
+    @include globalutil.tooltip;
+
     display: flex;
     justify-content: center;
     align-items: center;
     
     margin-left: 2px;
-
-    > p {
-      opacity: 0;
-      position: absolute;
-      bottom: -20px;
-      pointer-events: none;
-      white-space: nowrap;
-
-      background: rgb(115, 115, 115);
-      border-radius: 3px;
-      padding: 2px 5px;
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--font-on-dark);
-    }
-    &:hover > p {
-      opacity: 1;
-    }
   }
 }
 

@@ -53,13 +53,6 @@ export const GET_USER_WITH_PREFS = gql`
   }
 `;
 
-export const SET_STAFF_AVAILABILITY = gql`
-  mutation($staffId: ID!, $businessId: ID!, $day: Int!, $slices: [AvailabilitySliceInput!]!) {
-    setStaffAvailability(staff_id: $staffId, business_id: $businessId, day: $day, slices: $slices)
-  }
-`;
-
-
 export const PATCH_USER = gql`
   mutation($userId: ID!, $patch: UserPatch!) {
     patchUser(user_id: $userId, patch: $patch) {

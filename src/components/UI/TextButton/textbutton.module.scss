@@ -1,0 +1,22 @@
+.action {
+  color: var(--font-utility);
+  cursor: pointer;
+
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > p {
+    opacity: 0.8;
+    transition: opacity 200ms, background-color 200ms;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-weight: 400;
+    font-size: 12px;
+
+    &:not(:hover) {
+      background-color: transparent !important;
+    }
+  }
+}

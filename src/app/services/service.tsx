@@ -28,7 +28,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideP
         {service.assigned_staff.map(staff => 
           <div key={staff.id}>
             <Avatar src={staff.avatar} size={26} />
-            <p>{staff.name}</p>
+            <p className={styles.tooltip}>{staff.name}</p>
           </div>
         )}
       </div>

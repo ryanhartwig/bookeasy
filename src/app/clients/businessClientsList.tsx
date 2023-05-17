@@ -6,6 +6,7 @@ import { GET_BUSINESS_CLIENTS } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
+import { VscVerifiedFilled, VscUnverified } from 'react-icons/vsc';
 import styles from './clients.module.scss';
 
 interface BusinessClientsListProps {
@@ -54,7 +55,11 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
           }}
         >
           <Avatar src={c.avatar} />
-          <p>{c.name.length > 20 ? `${c.name.slice(0, 17)}...` : c.name}</p>
+          <p>{c.name.length > 18 ? `${c.name.slice(0, 15)}...` : c.name}</p>
+          <div className={clsx(styles.registeredIcon, {[styles.registered]: c.registered_client_id})}>
+            {c.registered_client_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+            <p className={styles.tooltip}>{c.registered_client_id ? 'Registered Client' : 'Unregistered'}</p>
+          </div>
         </div>
       ))}
     </div>

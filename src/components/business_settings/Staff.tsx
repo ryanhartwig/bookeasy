@@ -7,22 +7,31 @@ import { Avatar } from "../UI/Avatar/Avatar";
 import { Modal } from "../UI/Modal/Modal";
 
 import { HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
+import { VscUnverified, VscVerifiedFilled } from 'react-icons/vsc';
 import { Availability } from "./Availability";
 import { NewBusiness } from "@/types/Business";
 import { useQuery } from "@apollo/client";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
 import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
+import clsx from "clsx";
+import { AiOutlinePlus } from "react-icons/ai";
+import { StaffForm } from "./StaffForm";
+import { TextButton } from "../UI/TextButton/TextButton";
 
 interface StaffProps {
   staffMembers: Staff[],
   services: Service[],
   business: NewBusiness,
+  userId: string,
+  elevated: boolean,
 }
 
-export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business}) => {
+export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business, userId, elevated}) => {
 
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
+  const [staffFormOpen, setStaffFormOpen] = useState<boolean>(false);
+  const [initialStaff, setInitialStaff] = useState<Staff>();
 
   const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selected?.id }, skip: !selected});
   useEffect(() => {
@@ -42,7 +51,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
           <p>{services.filter(s => s.assigned_staff.some(s => s.id === staff.id)).length}</p>
           <p>{new Date(staff.date_added)
             .toLocaleDateString()}</p>
-          <p className={styles.details} onClick={() => {setSelected(staff)}}>Availability</p>
+          <TextButton style={{width: '100%'}} onClick={() => {setSelected(staff)}}>Details</TextButton>
         </div>
       </div> 
       )
@@ -52,12 +61,15 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
   return (
     <div className={styles.StaffList}>
       <div className={styles.header}>
-        {['Name', 'Clients', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
+        {['Name', 'Services', 'Date Added', ''].map(t => <p key={t}>{t}</p>)}
       </div>
       {staffList}
+      <div className={styles.addService} onClick={() => setStaffFormOpen(true)}>
+        <AiOutlinePlus fontSize={18} />
+      </div>
+      {/* Staff Details Modal */}
       <Modal 
         open={!!selected} 
-        escapeCloses 
         onClose={() => setSelected(undefined)} 
         className={styles.modal} 
       >
@@ -67,7 +79,13 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
             <div className={styles.staff_details}>
               <Avatar src={selected.avatar} size={86} />
               <div>
-                <p>{selected.name}</p>
+                <div className={styles.staff_name}>
+                  <p>{selected.name}</p>
+                  <div className={clsx({[styles.registered]: selected.registered_user_id})}>
+                    {selected.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+                    <p className={styles.tooltip}>{selected.registered_user_id ? 'Registered User' : 'Unregistered'}</p>
+                  </div>
+                </div>
                 <ul>
                   <li>
                     <HiOutlinePhone />
@@ -79,11 +97,20 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                   </li>
                 </ul>
               </div>
+              {(elevated || userId === selected.registered_user_id) && <div className={styles.edit_staff}>
+                <TextButton onClick={() => {setInitialStaff(selected)}} fontSize={14}>Edit</TextButton>
+              </div>}
             </div>
-            {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id} />}
+            <div className={styles.bookable}>
+              {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id}  />}
+            </div>
+            {initialStaff && <StaffForm open={!!initialStaff} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} setSelectedStaff={setSelected} />}
           </div>
         }
       </Modal>
+
+      {/* Add / Edit Staff Form */}
+      {staffFormOpen && <StaffForm open={staffFormOpen} onClose={() => setStaffFormOpen(false)} businessId={business.id} />}
     </div>
   )
 }
