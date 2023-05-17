@@ -35,7 +35,7 @@ export const clientResolvers = {
           where id = $7
           returning *
         )
-        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, rc.avatar
+        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_client_id, rc.avatar
         from updated_client c
         left join registered_client rc
         on rc.id = c.registered_client_id
