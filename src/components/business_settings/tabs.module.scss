@@ -184,15 +184,6 @@
   }
 }
 
-.details {
-  cursor: pointer;
-  color: var(--font-alt);
-  
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .modal {
   overflow:hidden;
   

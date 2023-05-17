@@ -16,6 +16,7 @@ import { GET_STAFF_AVAILABILITY } from "@/utility/queries/availabilityQueries";
 import clsx from "clsx";
 import { AiOutlinePlus } from "react-icons/ai";
 import { StaffForm } from "./StaffForm";
+import { TextButton } from "../UI/TextButton/TextButton";
 
 interface StaffProps {
   staffMembers: Staff[],
@@ -48,7 +49,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
           <p>{services.filter(s => s.assigned_staff.some(s => s.id === staff.id)).length}</p>
           <p>{new Date(staff.date_added)
             .toLocaleDateString()}</p>
-          <p className={styles.details} onClick={() => {setSelected(staff)}}>Details</p>
+          <TextButton style={{width: '100%'}} onClick={() => {setSelected(staff)}}>Details</TextButton>
         </div>
       </div> 
       )

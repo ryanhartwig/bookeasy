@@ -4,10 +4,11 @@ import styles from './textbutton.module.scss';
 
 interface TextButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode,
+  fontSize?: string | number,
   altColor?: boolean,
 }
 
-export const TextButton: React.FC<TextButtonProps> = ({children, altColor = false, ...props}) => {
+export const TextButton: React.FC<TextButtonProps> = ({children, fontSize, altColor = false, ...props}) => {
 
   const color = altColor
     ? '#ff462d'
@@ -19,7 +20,7 @@ export const TextButton: React.FC<TextButtonProps> = ({children, altColor = fals
 
   return (
     <div {...props} className={clsx(styles.action, props.className || '')}>
-      <p style={{color, backgroundColor}} >{children}</p>
+      <p style={{color, backgroundColor, fontSize}} >{children}</p>
     </div>
   )
 }
