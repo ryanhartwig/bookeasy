@@ -22,9 +22,11 @@ interface StaffProps {
   staffMembers: Staff[],
   services: Service[],
   business: NewBusiness,
+  userId: string,
+  elevated: boolean,
 }
 
-export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business}) => {
+export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business, userId, elevated}) => {
 
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
@@ -95,9 +97,9 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                   </li>
                 </ul>
               </div>
-              <div className={styles.edit_staff}>
+              {(elevated || userId === selected.registered_user_id) && <div className={styles.edit_staff}>
                 <TextButton onClick={() => {setInitialStaff(selected)}} fontSize={14}>Edit</TextButton>
-              </div>
+              </div>}
             </div>
             <div className={styles.bookable}>
               {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id}  />}
