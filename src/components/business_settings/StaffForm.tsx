@@ -9,6 +9,7 @@ import uuid from "react-uuid";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { Input } from "../UI/Input/Input";
 import { Modal } from "../UI/Modal/Modal";
+import { TextButton } from "../UI/TextButton/TextButton";
 import styles from './staffForm.module.scss';
 
 interface StaffFormProps {
@@ -159,9 +160,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
           </div>
         </Modal>
       </>}
-      <div className={styles.input}>
-        <label htmlFor="staffphone" onClick={() => setConfirmDelete(true)}>Remove</label>
-      </div>
+      {initialStaff && <div className={styles.input}>
+        <TextButton altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
+      </div>}
     </Modal>
   )
 }

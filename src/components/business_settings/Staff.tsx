@@ -97,9 +97,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                 </ul>
               </div>
               <div className={styles.edit_staff}>
-                <p onClick={() => {
-                  setInitialStaff(selected);
-                }}>Edit</p>
+                <TextButton onClick={() => {setInitialStaff(selected)}} fontSize={14}>Edit</TextButton>
               </div>
             </div>
             <div className={styles.bookable}>
