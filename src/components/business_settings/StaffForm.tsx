@@ -1,7 +1,7 @@
 import { Staff, StaffInput } from "@/types/User"
 import { testEmail } from "@/utility/functions/validation/testEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
+import { ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
 import { gql, useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
@@ -69,7 +69,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     refetchQueries: [GET_BUSINESS_STAFF]
   });
 
-  const [editStaff, {data: updatedStaffData}] = useMutation(EDIT_STAFF, {
+  const [editStaff] = useMutation(EDIT_STAFF, {
     update(cache, { data: editStaff }) {
       cache.modify({
         fields: {
@@ -86,7 +86,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
         }
       }) 
     }
-  })
+  });
+
+  
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
@@ -102,6 +104,30 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     })();
     
   }, [addStaff, checkInputs, editStaff, initialStaff, onClose, setSelectedStaff, staff]);
+
+  const [deleteStaff, { reset: deleteStaffReset }] = useMutation(DELETE_STAFF, {
+    update(cache, { data: deleteStaff }) {
+      cache.modify({
+        fields: {
+          getBusinessStaff: (existingStaff = [], { readField }) => {
+            console.log(deleteStaff);
+            return existingStaff.filter((ref: any) => readField('id', ref) !== deleteStaff.deleteStaff);
+          }
+        }
+      }) 
+    }
+  });
+
+  const onDeleteStaff = useCallback(() => {
+    ;(async () => {
+      const res = await deleteStaff({ variables: { staffId: initialStaff!.id } });
+      console.log(res);
+      deleteStaffReset();
+      setSelectedStaff && setSelectedStaff(undefined);
+      setConfirmDelete(false);
+      onClose();
+    })();
+  }, [deleteStaff, deleteStaffReset, initialStaff, onClose, setSelectedStaff]);
 
   return (
     <Modal open={open}
@@ -138,7 +164,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
           open={confirmDelete} 
           onClose={() => setConfirmDelete(false)} 
           actionButtonText="Delete" 
-          onAction={() => {setConfirmDelete(false);}} 
+          onAction={onDeleteStaff} 
         >
           <Modal.Header>Remove Staff Member</Modal.Header>
           <div className={styles.confirmDelete}>
