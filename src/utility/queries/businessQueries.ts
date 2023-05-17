@@ -87,6 +87,7 @@ export const GET_BUSINESS_STAFF = gql`
         contact_email
         contact_phone
         avatar
+        deleted
       }
     }
   }

@@ -65,6 +65,7 @@ export const businessResolvers = {
         left join registered_user u
         on s.registered_user_id = u.id
         where business_id = $1
+        and deleted = false
       `, [parent.id]);
       return response.rows;
     }

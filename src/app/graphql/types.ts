@@ -32,6 +32,7 @@ export const types = `#graphql
     contact_email: String,
     contact_phone: String,
     avatar: String, # added from regUser if exists
+    deleted: Boolean!,
   } 
 
   type Service {

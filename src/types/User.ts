@@ -32,6 +32,7 @@ export interface Staff {
   name: string,
   contact_email: string | null,
   contact_phone: string | null,
+  deleted: boolean,
   avatar?: string
 }
 
