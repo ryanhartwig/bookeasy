@@ -68,7 +68,6 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
       {/* Staff Details Modal */}
       <Modal 
         open={!!selected} 
-        escapeCloses 
         onClose={() => setSelected(undefined)} 
         className={styles.modal} 
       >

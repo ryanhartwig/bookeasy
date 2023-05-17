@@ -41,14 +41,21 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   });
 
   const onKeyDown = useCallback((e: any) => {
+    e.stopImmediatePropagation();
+    if (!escapeCloses) return;
+
+    window.removeEventListener('keydown', onKeyDown);
     if (e.key === 'Escape') onClose();
-  }, [onClose]);
+  }, [escapeCloses, onClose]);
   
   useEffect(() => {
-    if (!escapeCloses) return;
+    if (!open) {
+      window.removeEventListener('keydown', onKeyDown);
+      return;
+    };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [escapeCloses, onKeyDown]);
+  }, [escapeCloses, onKeyDown, open]);
 
   const handleActionClick = useCallback((e: any) => {
     if (actionButtonDisabled) {
