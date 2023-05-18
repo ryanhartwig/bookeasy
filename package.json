@@ -24,6 +24,7 @@
     "graphql-request": "^5.2.0",
     "graphql-tag": "^2.12.6",
     "next": "^13.2.5-canary.30",
+    "next-auth": "^4.22.1",
     "node-postgres": "^0.6.2",
     "pg": "^8.10.0",
     "pg-native": "^3.0.1",
