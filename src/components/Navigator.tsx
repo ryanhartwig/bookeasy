@@ -21,13 +21,13 @@ export const Navigator = () => {
       </div>
       <div className='Navigator_links'>
         {navlinks.map(([name, url, Icon]) => (
-          <Link className={clsx('Navigator_link', {'active': path === `/${url}`})} key={name} href={url}>
+          <Link className={clsx('Navigator_link', {'active': path === `/home/${url}`})} key={name} href={`home/${url}`}>
             <Icon size={22} color='rgba(240,240,240,0.9)' />
             <p>{name}</p>
           </Link>
         ))}
         <hr />
-        <Link className={clsx('Navigator_link', {'active': path === '/settings'})} href='settings'>
+        <Link className={clsx('Navigator_link', {'active': path === '/home/settings'})} href='home/settings'>
           <HiOutlineCog8Tooth color='rgba(240,240,240,0.9)' />
           <p>Settings</p>
         </Link>
