@@ -1,6 +1,6 @@
 'use client';
 
-import { ClientForm } from '@/app/clients/clientForm/clientForm';
+import { ClientForm } from '@/app/home/clients/clientForm/clientForm';
 import { NewBusiness } from '@/types/Business';
 import { Client } from '@/types/Client';
 import { useEffect, useState } from 'react';

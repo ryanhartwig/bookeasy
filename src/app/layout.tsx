@@ -1,7 +1,5 @@
 import './globals.css'
-import './home.scss';
 
-import { Navigator } from '@/components/Navigator';
 import { Providers } from './Providers';
 
 export default async function RootLayout({children}: { children: React.ReactNode}) {
@@ -9,9 +7,8 @@ export default async function RootLayout({children}: { children: React.ReactNode
   return (
     <html lang="en">
       <body>
-        <main className='main'>
-          <Navigator />
-          <div className='Content'>
+        <main>
+          <div>
             <Providers>
               {children}
             </Providers>

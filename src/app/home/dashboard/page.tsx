@@ -1,6 +1,6 @@
 import styles from './dashboard.module.scss';
 
-import { SecondaryHeader } from "../../components/SecondaryHeader"
+
 import { Appointments } from './appointments';
 import { WeekDayNames } from './weekDayNames';
 import { WeekDays } from './weekDays';
@@ -9,6 +9,7 @@ import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
 import { Header } from '@/components/Header';
 import { userId } from '@/utility/sample_data/sample_userId';
 import { Stats } from './stats';
+import { SecondaryHeader } from '@/components/SecondaryHeader';
 
 export default async function Page() {
 

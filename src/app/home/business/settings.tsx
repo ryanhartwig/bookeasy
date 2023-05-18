@@ -3,7 +3,6 @@
 import { Tabs } from "@/components/UI/Tabs/Tabs";
 import { useState } from "react";
 import styles from './business.module.scss';
-import { Availability } from "../../components/business_settings/Availability";
 import { ClientList } from "@/components/business_settings/ClientList";
 import { Prefs } from "@/components/business_settings/Prefs";
 import { Services } from "@/components/business_settings/Services";
@@ -12,6 +11,7 @@ import { Client } from "@/types/Client";
 import { User } from "@/types/User";
 import { Service } from "@/types/Service";
 import { AvailabilitySlice } from "@/types/BaseAvailability";
+import { Availability } from "@/components/business_settings/Availability";
 
 interface SettingsProps {
   business: NewBusiness,

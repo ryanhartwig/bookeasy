@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './teams.module.scss';
 
-import addTeam from '../../../public/assets/team_add.svg';
+import addTeam from '@/assets/team_add.svg';
 import { Card } from '@/components/UI/Card/Card';
 import clsx from 'clsx';
 import { NewBusiness } from '@/types/Business';

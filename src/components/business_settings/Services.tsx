@@ -1,5 +1,5 @@
-import { ServiceCard } from '@/app/services/service';
-import { ServiceForm } from '@/app/services/serviceForm/serviceForm';
+import { ServiceCard } from '@/app/home/services/service';
+import { ServiceForm } from '@/app/home/services/serviceForm/serviceForm';
 import { Service } from '@/types/Service';
 import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';

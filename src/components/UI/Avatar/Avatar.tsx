@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
-import teamDefault from '../../../../public/assets/team_default.png';
+import teamDefault from '@/assets/team_default.png';
 
 interface AvatarProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   src?: string | null,
