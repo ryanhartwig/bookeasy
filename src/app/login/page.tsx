@@ -6,8 +6,10 @@ import { Login, Logout } from "./loginButtons";
 import { SessionSample } from "./sessionSample";
 
 export default async function page() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as any;
 
+  console.log(session);
+  
   return (
     <div className={styles.login}>
       <div className={styles.loginForm}>
@@ -21,12 +23,10 @@ export default async function page() {
         <br />
         <Logout />
         <br />
-        <SessionSample />
+        {/* <SessionSample /> */}
         <br />
         <br />
         <p>from getServerSession:</p>
-        {session && <p>{session.user?.email}</p>}
-        {session && <p>{session.user?.name}</p>}
       </div>
     </div>
   )
