@@ -5,6 +5,8 @@ import { createFragmentRegistry } from "@apollo/client/cache";
 import { APPOINTMENT_DATA_FRAGMENT } from "@/utility/queries/fragments/appointmentFragments";
 import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFragments";
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
+import { SessionProvider } from 'next-auth/react';
+
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
 	const client = new ApolloClient({
@@ -17,5 +19,11 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 			`)
 		}),
 	});
-	return <ApolloProvider client={client}>{children}</ApolloProvider>;
+	return (
+		<ApolloProvider client={client}>
+			<SessionProvider>
+				{children}
+			</SessionProvider>
+		</ApolloProvider>
+	);
 };
