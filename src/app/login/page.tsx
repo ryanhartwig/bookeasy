@@ -1,10 +1,18 @@
-import { Header } from "@/components/Header";
+import { Input } from "@/components/UI/Input/Input";
+import styles from './login.module.scss';
 
 export default function page() {
 
   return (
-    <>
-      <Header text="Teams" />
-    </>
+    <div className={styles.login}>
+      <div className={styles.loginForm}>
+        <p>Sample login</p>
+        <br />
+        <Input placeholder="Name" />
+        <br />
+        <Input placeholder="Email" />
+        <br />
+      </div>
+    </div>
   )
 }
