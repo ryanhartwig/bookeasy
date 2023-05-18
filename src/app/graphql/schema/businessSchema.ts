@@ -103,8 +103,8 @@ export const businessResolvers = {
           select name from registered_user
           where id = $1
         )
-        insert into staff (registered_user_id, business_id, elevated, date_added, name, id)
-        select $1, $2, $3, $4, ru.name, $5
+        insert into staff (registered_user_id, business_id, elevated, date_added, name, id, deleted)
+        select $1, $2, $3, $4, ru.name, $5, false
         from ru
       `, [user_id, response.rows[0].id, true, created, uuid()]);
       return response.rows[0];
