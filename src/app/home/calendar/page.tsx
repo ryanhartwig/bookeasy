@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
-import { userId } from '@/utility/sample_data/sample_userId';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 import { CalendarView } from './calendar';
 
 export interface View {        
@@ -9,10 +10,13 @@ export interface View {
 
 export default async function Page() {
 
+  const session = await getServerSession(authOptions);
+  if (!session) return;
+
   return (
     <>
       <Header text='Calendar' />
-      <CalendarView userId={userId}/>
+      <CalendarView userId={session.user.id}/>
     </>
   )
 }

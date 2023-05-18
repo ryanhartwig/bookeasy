@@ -1,9 +1,13 @@
 import { Header } from '@/components/Header';
 import styles from './services.module.scss';
-import { userId } from '@/utility/sample_data/sample_userId';
 import { BusinessesList } from './businessesList';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
 
-export default function Page() {
+export default async function Page() {
+
+  const session = await getServerSession(authOptions);
+  if (!session) return;
 
   return (
     <>
@@ -14,7 +18,7 @@ export default function Page() {
             <p key={t}>{t}</p>
           )}
         </div>
-        <BusinessesList userId={userId} />
+        <BusinessesList userId={session.user.id} />
       </div>
     </>
   )

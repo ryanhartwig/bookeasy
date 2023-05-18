@@ -1,14 +1,18 @@
 import { Header } from "@/components/Header";
-import { userId } from "@/utility/sample_data/sample_userId";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import { TeamsView } from "./teamsView";
 
 
-export default function page() {
+export default async function page() {
+
+  const session = await getServerSession(authOptions);
+  if (!session) return;
 
   return (
     <>
       <Header text="Teams" />
-      <TeamsView userId={userId} />
+      <TeamsView userId={session.user.id} />
     </>
   )
 }

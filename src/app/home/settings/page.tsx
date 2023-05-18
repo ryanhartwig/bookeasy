@@ -14,9 +14,9 @@ import { Setting } from '@/components/UI/Setting/Setting';
 import { User } from '@/types/User';
 import { formatMilitaryTime } from '@/utility/functions/formatting/formatMilitaryTime';
 import { GET_USER_WITH_PREFS, PATCH_USER, PATCH_USER_PREFS } from '@/utility/queries/userQueries';
-import { userId } from '@/utility/sample_data/sample_userId';
 import { useMutation, useQuery } from '@apollo/client';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import styles from './settings.module.scss';
 
@@ -35,17 +35,18 @@ export default function Page() {
     setValue(`${period === 'am' ? hours : hours + 12}:${min === 0 ? '00' : min}`)
   }, [hours, min, period]);
 
-  const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId }});
+  const { data: session } = useSession();
+  const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId: session?.user.id }, skip: !session});
   useEffect(() => data && setUser(data.getUser), [data]);
 
-  const refetchQueries = [{ query: GET_USER_WITH_PREFS, variables: { userId } }]
+  const refetchQueries = [{ query: GET_USER_WITH_PREFS, variables: { userId: user?.id } }]
   const [patchUser] = useMutation(PATCH_USER, { refetchQueries });
   const [patchUserPrefs] = useMutation(PATCH_USER_PREFS, { refetchQueries });
 
-  const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId, patch: { [key]: value || null }}})
-  , [patchUser, value]);
-  const onPatchPrefs = useCallback((key: string, value: boolean | string) => patchUserPrefs({ variables: { userId, patch: { [key]: value }}})
-  , [patchUserPrefs]);
+  const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId: user?.id, patch: { [key]: value || null }}})
+  , [patchUser, user?.id, value]);
+  const onPatchPrefs = useCallback((key: string, value: boolean | string) => patchUserPrefs({ variables: { userId: user?.id, patch: { [key]: value }}})
+  , [patchUserPrefs, user?.id]);
 
   const onModalSubmit = useCallback((key: string) => {
     setLoading(true);
