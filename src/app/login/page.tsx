@@ -1,14 +1,15 @@
 import { Input } from "@/components/UI/Input/Input";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import styles from './login.module.scss';
 import { Login, Logout } from "./loginButtons";
-import { SessionSample } from "./sessionSample";
 
 export default async function page() {
   const session = await getServerSession(authOptions) as any;
-
-  console.log(session);
+  if (session) {
+    redirect('/home/dashboard');
+  }
   
   return (
     <div className={styles.login}>
