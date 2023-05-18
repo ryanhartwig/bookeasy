@@ -1,4 +1,3 @@
-import { BookingSitePrefs } from '@/components/business_settings/BookingSitePrefs';
 import { ClientList } from '@/components/business_settings/ClientList';
 import { Prefs } from '@/components/business_settings/Prefs';
 import { Services } from '@/components/business_settings/Services';
@@ -52,7 +51,7 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
     const tabs = [
       <StaffList key='staff' business={business} staffMembers={staff} services={services} userId={userId} elevated={elevated} />,
       <ClientList key='clients' clients={clients} business={business} />,
-      <Services key='services' services={services} businessId={business.id} />,
+      <Services key='services' userId={userId} services={services} businessId={business.id} />,
     ];
     if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={staff.find(s => s.registered_user_id === userId)?.elevated || false} />);
     return tabs;
