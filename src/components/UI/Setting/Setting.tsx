@@ -7,7 +7,7 @@ import styles from './setting.module.scss';
 
 import { MoonLoader } from 'react-spinners';
 import { useClickout } from '@/utility/hooks/useClickout';
-import { testEmail } from '@/utility/functions/validation/testEmail';
+import { isValidEmail } from '@/utility/functions/validation/isValidEmail';
 import { BiErrorCircle } from 'react-icons/bi';
 import { TextButton } from '../TextButton/TextButton';
 
@@ -63,7 +63,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
       setErrorMessage('Please enter a value');
       return;
     };
-    if (email && value && !testEmail(value)) {
+    if (email && value && !isValidEmail(value)) {
       setErrorMessage('Please enter a valid email address');
       return;
     }

@@ -1,5 +1,5 @@
 import { Staff, StaffInput } from "@/types/User"
-import { testEmail } from "@/utility/functions/validation/testEmail";
+import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
 import { ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
 import { gql, useMutation } from "@apollo/client";
@@ -59,7 +59,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       setNameError('Please enter a name.')
       valid = false;
     };
-    if (contactEmail && !testEmail(contactEmail)) {
+    if (contactEmail && !isValidEmail(contactEmail)) {
       setEmailError('Please enter a valid email or none.');
       valid = false;
     }
