@@ -1,8 +1,12 @@
+import { Input } from "@/components/UI/Input/Input";
+
 export default function Page() {
 
   return (
     <div>
-      <p>test</p>
+      <Input />
+      <Input />
+      <Input />
     </div>
   )
 }

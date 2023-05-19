@@ -1,9 +1,13 @@
+import { Input } from "@/components/UI/Input/Input";
+
 export default function Page() {
 
 
   return (
     <div>
-      <p>registre</p>
+      <Input />
+      <Input />
+      <Input />
     </div>
   )
 }

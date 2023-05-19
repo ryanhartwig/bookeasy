@@ -13,8 +13,11 @@
 }
 
 .loginForm {
-  width: 40%;
-  height: 400px;
+  
+  width: 80%;
+  aspect-ratio: 10 / 7;
+  min-height: 600px;
+
   display: flex;
   justify-content: center;
   align-items: center;
