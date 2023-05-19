@@ -1,12 +1,14 @@
 'use client';''
 
 import { Input } from "@/components/UI/Input/Input";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import styles from '../login.module.scss';
 import zxcvbn from "zxcvbn";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type FormData = {
   name: string;
@@ -23,6 +25,8 @@ type Errors = {
 };
 
 export default function Page() {
+  const redirect = useRouter();
+  
   const [loading, setLoading] = useState<boolean>(false);
   
   const [formData, setFormData] = useState<FormData>({
@@ -86,7 +90,13 @@ export default function Page() {
     }));
   };
 
-  const [registerUser] = useMutation(REGISTER_USER_WITH_CREDENTIALS);
+  const [registerUser, { reset }] = useMutation(REGISTER_USER_WITH_CREDENTIALS);
+
+  const resetAll = useCallback(() => {
+    setFormData({name: '', email: '', password: '', confirmPassword: ''});
+    setLoading(false);
+    reset();
+  }, [reset]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +108,7 @@ export default function Page() {
 
     setLoading(true);    
     ;(async () => {
-      const { data, errors } = await registerUser({
+      const { errors } = await registerUser({
         variables: {
           credentials: {
             email: formData.email,
@@ -107,12 +117,15 @@ export default function Page() {
           }
         }
       });
-      setLoading(false);
 
       if (errors) {
-        setFormData({name: '', email: '', password: '', confirmPassword: ''});
+        return resetAll();
       } else {
-        console.log('success');
+        const response = await signIn('credentials', { redirect: false, email: formData.email, password: formData.password});
+        if (!response || response.error) {
+          return resetAll();
+        };
+        redirect.push('/home/dashboard');
       }
     })();
   };
