@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const USER_ADD_CLIENT = gql`
-  mutation UserAddClient($client: UserAddClientInput!) {
+  mutation UserAddClient($client: ClientInput!) {
     userAddClient(client: $client) {
       ...BusinessClientFragment
     }
@@ -9,7 +9,7 @@ export const USER_ADD_CLIENT = gql`
 `;
 
 export const USER_EDIT_CLIENT = gql`
-  mutation($client: UserEditClientInput!) {
+  mutation($client: ClientInput!) {
     userEditClient(client: $client) {
       ...BusinessClientFragment
     }

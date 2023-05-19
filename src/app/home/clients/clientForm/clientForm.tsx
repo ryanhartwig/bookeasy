@@ -67,7 +67,6 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
       notes: notes || undefined,
       address: address || undefined,
       phone: phone || undefined,
-      joined_date: new Date().toISOString(),
       active: true,
     }
   }, [address, email, id, initialClient, name, notes, phone, selectedBusiness]);

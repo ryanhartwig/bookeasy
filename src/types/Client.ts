@@ -8,7 +8,7 @@ export interface Client {
   phone?: string,
   joined_date: string,
   active: boolean,
-  registered_client_id: string,
+  registered_client_id: string | null,
 };
 
 export interface FormClient {
@@ -17,8 +17,15 @@ export interface FormClient {
   avatar: string,
 }
 
-export interface ClientInput extends Client {
-  business_id?: string,
+export interface ClientInput {
+  id: string,
+  name: string,
+  email?: string,
+  notes?: string,
+  avatar?: any,
+  address?: string,
+  phone?: string,
+  active: boolean,
 }
 
 export interface EditClientInput {
