@@ -17,7 +17,6 @@ export const LocalLogin = () => {
       const response = await signIn('credentials', { redirect: false, email, password});
       if (!response) return;
 
-      console.log(response);
       if (response.error) {
         setError('Invalid credentials');
       }
@@ -35,6 +34,7 @@ export const LocalLogin = () => {
       <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
       <br />
       <button onClick={onSubmit}>Sign in</button>
+      <br />
       {error && <p>{error}</p>}
       <br />
     </>

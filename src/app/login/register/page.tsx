@@ -142,6 +142,7 @@ export default function Page() {
   return (
     <div className={styles.form}>
       <p>Create an account</p>
+      <br />
       <Input
         disabled={loading}
         onBlur={() => validateField('name')}
