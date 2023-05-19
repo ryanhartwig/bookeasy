@@ -5,6 +5,8 @@ import { useState } from "react";
 import styles from '../login.module.scss';
 import zxcvbn from "zxcvbn";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
+import { useMutation } from "@apollo/client";
+import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
 
 type FormData = {
   name: string;
@@ -21,6 +23,8 @@ type Errors = {
 };
 
 export default function Page() {
+  const [loading, setLoading] = useState<boolean>(false);
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -82,6 +86,8 @@ export default function Page() {
     }));
   };
 
+  const [registerUser] = useMutation(REGISTER_USER_WITH_CREDENTIALS);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -90,13 +96,32 @@ export default function Page() {
       return;
     }
 
+    setLoading(true);    
+    ;(async () => {
+      const { data, errors } = await registerUser({
+        variables: {
+          credentials: {
+            email: formData.email,
+            name: formData.name,
+            password: formData.password,
+          }
+        }
+      });
+      setLoading(false);
 
+      if (errors) {
+        setFormData({name: '', email: '', password: '', confirmPassword: ''});
+      } else {
+        console.log('success');
+      }
+    })();
   };
 
   return (
     <div className={styles.form}>
       <p>Create an account</p>
       <Input
+        disabled={loading}
         onBlur={() => validateField('name')}
         className={styles.input}
         value={formData.name}
@@ -108,6 +133,7 @@ export default function Page() {
         autoFocus
       />
       <Input
+        disabled={loading}
         onBlur={() => validateField('email')}
         className={styles.input}
         value={formData.email}
@@ -118,6 +144,7 @@ export default function Page() {
         required
       />
       <Input
+        disabled={loading}
         onBlur={() => validateField('password')}
         type="password"
         className={styles.input}
@@ -129,6 +156,7 @@ export default function Page() {
         required
       />
       <Input
+        disabled={loading}
         onBlur={() => validateField('confirmPassword')}
         type="password"
         className={styles.input}
@@ -140,7 +168,7 @@ export default function Page() {
         required
       />
       <br />
-      <button onClick={handleSubmit}>Create Account</button>
+      <button disabled={loading} onClick={handleSubmit}>Create Account</button>
       <br />
 
       <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p>
