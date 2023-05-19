@@ -1,8 +1,9 @@
 export default function Page() {
 
+
   return (
     <div>
-      <p>test</p>
+      <p>registre</p>
     </div>
   )
 }
