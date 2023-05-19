@@ -1,12 +1,12 @@
 import db from "@/utility/db";
-import { throwGQLError } from "@/utility/gql/throwGQLError";
+import { GraphQLError } from "graphql";
 import uuid from "react-uuid";
 
 export const businessResolvers = {
   Query: {
     getBusiness: async (_: any, args: any) => {
       const response = await db.query('select * from business where id = $1', [args.business_id]);
-      if (!response.rows[0]) throwGQLError(`No business found for id: ${args.business_id}`);
+      if (!response.rows[0]) throw new GraphQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
     },
     getBusinessClients: async (_: any, args: any) => {
@@ -24,7 +24,7 @@ export const businessResolvers = {
         const response = await db.query('select * from service where business_id = $1', [args.business_id]);
         return response.rows;
       } catch(e: any) {
-        throwGQLError(e.message);
+        throw new GraphQLError(e.message);
       }
     },
     getBusinessAppointmentMetrics: async (_: any, args: any) => {
@@ -80,7 +80,7 @@ export const businessResolvers = {
         params.push(patch[key]);
         return `${key} = $${i + 2}`;
       });
-      if (!columns.length) throwGQLError('No patch arguments provided.');
+      if (!columns.length) throw new GraphQLError('No patch arguments provided.');
 
       query += columns.join(', ') + ' where id = $1 returning *';
 

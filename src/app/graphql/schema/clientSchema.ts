@@ -1,5 +1,5 @@
 import db from "@/utility/db";
-import { throwGQLError } from "@/utility/gql/throwGQLError";
+import { GraphQLError } from "graphql";
 
 export const clientResolvers = {
   Query: {
@@ -11,7 +11,7 @@ export const clientResolvers = {
   Mutation: {
     userAddClient: async (_: any, args: any) => {
       const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
-      if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
+      if (!id || !business_id || !name || !active) throw new GraphQLError('Missing required arguments');
 
       const response = await db.query(`
       insert into client (id, business_id, notes, name, email, address, phone, joined_date, active)

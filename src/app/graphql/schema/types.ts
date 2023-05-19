@@ -14,7 +14,7 @@ export const types = `#graphql
     id: ID!,
     name: String!,
     email: String!,
-    phone: String!,
+    phone: String,
     created: String,
     prefs: UserPrefs!, 
     avatar: String,

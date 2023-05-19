@@ -1,7 +1,7 @@
 'use client';''
 
 import { Input } from "@/components/UI/Input/Input";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import styles from '../login.module.scss';
 import zxcvbn from "zxcvbn";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
@@ -89,6 +89,8 @@ export default function Page() {
     if (Object.values(errors).some(v => !!v)) {
       return;
     }
+
+
   };
 
   return (
