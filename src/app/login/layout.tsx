@@ -11,8 +11,15 @@ export default async function Layout({children}: {children: React.ReactNode}) {
   
   return (
     <div className={styles.login}>
-      <div className={styles.loginForm}>
-        {children}
+      <div className={styles.loginBox}>
+        {/* Left side */}
+        <div>
+        </div>
+
+        {/* Right side (form) */}
+        <div className={styles.forms}>
+          {children}
+        </div>
       </div>
     </div>
   )

@@ -12,21 +12,45 @@
   font-weight: 100;
 }
 
-.loginForm {
+.loginBox {
   
   width: 80%;
   aspect-ratio: 10 / 7;
   min-height: 600px;
 
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 40px;
+
   background: rgb(46, 46, 46);
   border-radius: 30px;  
 
   p {
     font-size: 15px;
+  }
+
+  // Left & right side even
+  > div {
+    width: 50%;
+  }
+
+  overflow: hidden;
+}
+
+
+.forms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 300px;
+
+  > * {
+    margin-bottom: 10px;
   }
 }
