@@ -1,4 +1,4 @@
-import { Input } from "@/components/UI/Input/Input";
+import Link from "next/link";
 import { LocalLogin } from "./locallogin";
 
 export default function Page() {
@@ -6,6 +6,10 @@ export default function Page() {
   return (
     <div>
       <LocalLogin />
+      <br />
+      <Link href="login/register">
+        <p>New user? Click here to register.</p>
+      </Link>
     </div>
   )
 }

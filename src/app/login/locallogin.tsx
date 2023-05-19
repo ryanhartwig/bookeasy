@@ -1,13 +1,11 @@
 'use client';
 
 import { Input } from "@/components/UI/Input/Input"
-import { getCsrfToken, signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react"
 
-
 export const LocalLogin = () => {
-
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');

@@ -80,7 +80,7 @@ export const userResolvers = {
         if (existingCredentials.rowCount) {
           // If the user has already created an account with email/password strategy
           if (existingCredentials.rows.some((cred: any) => cred.provider === 'credentials')) {
-            throw new GraphQLError('An account already exists with the specified email.');
+            throw new GraphQLError('e:USER_EXISTS | An account already exists with the specified email.');
           }
 
           // If the user has an account with a separate strategy, but same email, we use their existing registered_user id

@@ -9,6 +9,7 @@ import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type FormData = {
   name: string;
@@ -28,6 +29,7 @@ export default function Page() {
   const redirect = useRouter();
   
   const [loading, setLoading] = useState<boolean>(false);
+  const [responseError, setResponseError] = useState<string>('');
   
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -108,25 +110,32 @@ export default function Page() {
 
     setLoading(true);    
     ;(async () => {
-      const { errors } = await registerUser({
-        variables: {
-          credentials: {
-            email: formData.email,
-            name: formData.name,
-            password: formData.password,
+      try {
+        await registerUser({
+          variables: {
+            credentials: {
+              email: formData.email,
+              name: formData.name,
+              password: formData.password,
+            }
           }
-        }
-      });
+        });
 
-      if (errors) {
-        return resetAll();
-      } else {
         const response = await signIn('credentials', { redirect: false, email: formData.email, password: formData.password});
         if (!response || response.error) {
           return resetAll();
         };
+        
         redirect.push('/home/dashboard');
+      } catch(e: any) {  
+        if (e.message.includes('e:USER_EXISTS')) {
+          setResponseError('A user already exists with the specified email.');
+        }
+        resetAll();
       }
+      
+
+      
     })();
   };
 
@@ -185,6 +194,15 @@ export default function Page() {
       <br />
 
       <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p>
+
+      <br />
+      {responseError && <p>{responseError}</p>}
+
+      <br />
+
+      <Link href="login">
+        <p>Go back to sign in</p>
+      </Link>
     </div>
   );
 }
