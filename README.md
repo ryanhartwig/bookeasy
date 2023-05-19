@@ -20,8 +20,6 @@ Note: This project is in development.
 ## Screenshots
 
 The following screenshots were taken from the development website. 
-  
-View the figma spec here: https://www.figma.com/file/M4xRPb21nnGBJ2k9B6VEfg/book-it.?node-id=0%3A1&t=9K8HHZ0yBTxfLoxW-1
 
 ![Screen Shot 2023-04-07 at 6 02 43 PM](https://user-images.githubusercontent.com/30914091/230684411-5de642ed-e2f7-41aa-92a7-31a7967b8ac6.png)
 ![Interactive Calendar](https://user-images.githubusercontent.com/30914091/230683994-677e0d1c-fd37-448a-ae7c-a936c3604240.png)
