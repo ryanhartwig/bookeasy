@@ -35,7 +35,6 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
   const { data, loading } = useQuery(GET_BUSINESS_CLIENTS, { variables: {
     businessId: business.id,
   }});
-  console.log(filteredClients);
 
   useEffect(() => {
     if (!data || loading) return;

@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: registered_user_id,
+          email: credentials.email,
         }
       },
     }),
@@ -63,26 +64,34 @@ export const authOptions: NextAuthOptions = {
        */
       return true;
     },
-    session: ({ session, token }) => {
-      console.log('session: ', session);
-      console.log('token: ', token);
+    session: async ({ session, token }) => {
+      const response = await db.query('select registered_user_id from federated_credentials where email = $1 limit 1', [token.email]);
+      console.log(response.rows[0], '******');
+      console.log('received session: ', session);
+      console.log('received token: ', token);
       return {
         ...session,
         user: {
-          id: token.id as string,
+          id: response.rows[0].registered_user_id,
+          email: token.email,
+          newField: 'hello',
         },
       };
     },
     jwt: ({ token, user }) => {
+      console.log('jwt received token: ', token);
+      console.log('jwt received user: ', user);
       if (user) {
         const u = user as unknown as any;
         return {
           ...token,
           id: u.id, 
+          newField: 'string',
         };
       }
       return token;
     },
+
   },
   pages: {
     error: '/login',
