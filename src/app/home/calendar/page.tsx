@@ -1,6 +1,6 @@
+'use client';
+import { useUser } from '@/app/Providers';
 import { Header } from '@/components/Header';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
 import { CalendarView } from './calendar';
 
 export interface View {        
@@ -8,15 +8,12 @@ export interface View {
   year: number,
 }
 
-export default async function Page() {
-
-  const session = await getServerSession(authOptions);
-  if (!session) return;
-
+export default function Page() {
+  const { id } = useUser();
   return (
     <>
       <Header text='Calendar' />
-      <CalendarView userId={session.user.id}/>
+      <CalendarView userId={id}/>
     </>
   )
 }

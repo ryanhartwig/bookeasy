@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useUser } from '@/app/Providers';
 import { Header } from '@/components/Header';
 import { HoursList } from '@/components/SelectLists/Hours';
 import { MinutesList } from '@/components/SelectLists/Minutes';
@@ -35,8 +36,8 @@ export default function Page() {
     setValue(`${period === 'am' ? hours : hours + 12}:${min === 0 ? '00' : min}`)
   }, [hours, min, period]);
 
-  const { data: session } = useSession();
-  const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId: session?.user.id }, skip: !session});
+  const { id } = useUser();
+  const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId: id }, skip: !id});
   useEffect(() => data && setUser(data.getUser), [data]);
 
   const refetchQueries = [{ query: GET_USER_WITH_PREFS, variables: { userId: user?.id } }]

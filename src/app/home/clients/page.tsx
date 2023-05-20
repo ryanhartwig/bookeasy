@@ -1,17 +1,15 @@
+'use client';
+
+import { useUser } from '@/app/Providers';
 import { Header } from '@/components/Header';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
 import { ClientsView } from './clientsView';
 
-export default async function Page() {
-  
-  const session = await getServerSession(authOptions);
-  if (!session) return;
-
+export default function Page() {
+  const { id } = useUser();
   return (
     <>
       <Header text='Clients' />
-      <ClientsView userId={session.user.id} />
+      <ClientsView userId={id} />
     </>
   )
 }

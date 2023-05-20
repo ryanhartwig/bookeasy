@@ -1,13 +1,12 @@
+'use client';
+
 import { Header } from '@/components/Header';
 import styles from './services.module.scss';
 import { BusinessesList } from './businessesList';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth';
+import { useUser } from '@/app/Providers';
 
-export default async function Page() {
-
-  const session = await getServerSession(authOptions);
-  if (!session) return;
+export default function Page() {
+  const { id } = useUser();
 
   return (
     <>
@@ -18,7 +17,7 @@ export default async function Page() {
             <p key={t}>{t}</p>
           )}
         </div>
-        <BusinessesList userId={session.user.id} />
+        <BusinessesList userId={id} />
       </div>
     </>
   )

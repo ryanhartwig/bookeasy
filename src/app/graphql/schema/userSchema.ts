@@ -100,7 +100,6 @@ export const userResolvers = {
           insert into federated_credentials (provider, registered_user_id, email, credential)
           values ($1, $2, $3, $4) returning *
         `, ['credentials', id, email, hash]);
-        console.log(creds.rows[0])
 
         await db.query('commit');
       } catch(e) {

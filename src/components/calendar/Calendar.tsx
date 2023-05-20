@@ -2,11 +2,9 @@
 
 import './Calendar.css';
 import { Days } from './Days';
-import { View } from '@/app/calendar/page';
 
-import { Appointment, AppointmentData } from '@/types/Appointment';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
+import { AppointmentData } from '@/types/Appointment';
+import { View } from '@/app/home/calendar/page';
 
 interface CalendarProps {
   selected?: [number, number],
