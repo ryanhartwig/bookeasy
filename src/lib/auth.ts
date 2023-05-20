@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import db from "@/utility/db";
 import bcrypt from 'bcrypt';
 
@@ -8,6 +9,10 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "Sign in",
       credentials: {
@@ -19,7 +24,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log('*****')
         if (!credentials) return null;
         if (!credentials.email || !credentials.password) return null;
 
@@ -35,6 +39,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile, email, credentials}) {
+      console.log('user ', user)
+      console.log('account ', account)
+      console.log('profile ', profile)
+      console.log('email ', email)
+      console.log('credentials ', credentials)
+      return false;
+    },
     session: ({ session, token }) => {
       return {
         ...session,
@@ -64,4 +76,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
+  pages: {
+    error: '/login',
+  }
 };

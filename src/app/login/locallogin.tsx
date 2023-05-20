@@ -35,6 +35,8 @@ export const LocalLogin = () => {
       <br />
       <button onClick={onSubmit}>Sign in</button>
       <br />
+      <button onClick={() => signIn('google', { redirect: false, callbackUrl: '/login' })}>Sign in with google</button>
+      <br />
       {error && <p>{error}</p>}
       <br />
     </>
