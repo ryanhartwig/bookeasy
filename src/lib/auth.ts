@@ -33,8 +33,9 @@ export const authOptions: NextAuthOptions = {
         const { registered_user_id, credential } = federated.rows[0];
         if (!await bcrypt.compare(credentials.password, credential)) return null;
 
-        const user = await db.query('select * from registered_user where id = $1', [registered_user_id]);
-        return user.rows[0];
+        return {
+          id: registered_user_id,
+        }
       },
     }),
   ],
@@ -63,18 +64,12 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     session: ({ session, token }) => {
-      // console.log('session: ', session);
-      // console.log('token: ', token);
+      console.log('session: ', session);
+      console.log('token: ', token);
       return {
         ...session,
         user: {
-          id: token.id,
-          name: session?.user?.name,
-          email: session?.user?.email,
-          created: token.created,
-          phone: token.phone,
-          own_business_id: token.own_business_id,
-          avatar: token.avatar,
+          id: token.id as string,
         },
       };
     },
@@ -84,10 +79,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id, 
-          created: u.created,
-          phone: u.phone,
-          own_business_id: u.own_business_id,
-          avatar: u.avatar ?? u.image,
         };
       }
       return token;
