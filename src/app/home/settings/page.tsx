@@ -35,7 +35,7 @@ export default function Page() {
     setValue(`${period === 'am' ? hours : hours + 12}:${min === 0 ? '00' : min}`)
   }, [hours, min, period]);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const { data } = useQuery(GET_USER_WITH_PREFS, { variables: { userId: session?.user.id }, skip: !session});
   useEffect(() => data && setUser(data.getUser), [data]);
 
@@ -43,10 +43,14 @@ export default function Page() {
   const [patchUser] = useMutation(PATCH_USER, { refetchQueries });
   const [patchUserPrefs] = useMutation(PATCH_USER_PREFS, { refetchQueries });
 
-  const onPatchUser = useCallback((key: string) => patchUser({ variables: { userId: user?.id, patch: { [key]: value || null }}})
-  , [patchUser, user?.id, value]);
-  const onPatchPrefs = useCallback((key: string, value: boolean | string) => patchUserPrefs({ variables: { userId: user?.id, patch: { [key]: value }}})
-  , [patchUserPrefs, user?.id]);
+  const onPatchUser = useCallback((key: string) => {
+    update();
+    return patchUser({ variables: { userId: user?.id, patch: { [key]: value || null }}});
+  }, [patchUser, update, user?.id, value]);
+  const onPatchPrefs = useCallback((key: string, value: boolean | string) => {
+    update();
+    return patchUserPrefs({ variables: { userId: user?.id, patch: { [key]: value }}});
+  }, [patchUserPrefs, update, user?.id]);
 
   const onModalSubmit = useCallback((key: string) => {
     setLoading(true);

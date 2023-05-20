@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      
     }),
     CredentialsProvider({
       name: "Sign in",
@@ -40,14 +41,31 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials}) {
-      console.log('user ', user)
-      console.log('account ', account)
-      console.log('profile ', profile)
-      console.log('email ', email)
-      console.log('credentials ', credentials)
-      return false;
+      if (account?.provider === 'google' && user) {
+        const { id: provider_id, name, email, image: avatar } = user;
+      }
+
+      /**
+       * you'll need to handle user creation after receiving the request
+       */
+      
+      // console.log('user ', user)
+      // console.log('account ', account)
+
+      /** google oauth fields
+       * account:
+       *  provider
+       * user:
+       *  id
+        * name
+        * email
+        * image
+       */
+      return true;
     },
     session: ({ session, token }) => {
+      // console.log('session: ', session);
+      // console.log('token: ', token);
       return {
         ...session,
         user: {
@@ -70,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           created: u.created,
           phone: u.phone,
           own_business_id: u.own_business_id,
-          avatar: u.avatar,
+          avatar: u.avatar ?? u.image,
         };
       }
       return token;

@@ -82,9 +82,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   // Preselect staff if userId is provided
   useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
 
-  console.log(staffData);
-  console.log(selectedStaff);
-
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
     if (!prepopulating || !initialAppointment) return;
