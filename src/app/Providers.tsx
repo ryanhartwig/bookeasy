@@ -7,13 +7,13 @@ import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFrag
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
 import { SessionProvider, useSession } from 'next-auth/react';
 
-const UserContext = React.createContext({})
+const UserContext = createContext({ id: '' })
 
 const UserProvider = ({children}: { children: React.ReactNode}) => {
 	const { data: session } = useSession();
 
 	return (
-		<UserContext.Provider value={{ id: session?.user.id}}>
+		<UserContext.Provider value={{ id: session?.user.id || ''}}>
 			{children}
 		</UserContext.Provider>
 	)
