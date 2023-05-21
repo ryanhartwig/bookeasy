@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import db from "@/utility/db";
 import bcrypt from 'bcrypt';
+import uuid from "react-uuid";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -42,33 +43,63 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials}) {
-      if (account?.provider === 'google' && user) {
-        const { id: provider_id, name, email, image: avatar } = user;
-      }
-
-      /**
-       * you'll need to handle user creation after receiving the request
-       */
+      // console.log('user: ', user);
+      // console.log('account: ', account);
+      // console.log('profile: ', profile);
+      // return false;
       
-      // console.log('user ', user)
-      // console.log('account ', account)
+      if (account?.provider === 'google' && user) {
+        const { name, email, image: avatar } = user;
+        const { providerAccountId: provider_id } = account;
 
-      /** google oauth fields
-       * account:
-       *  provider
-       * user:
-       *  id
-        * name
-        * email
-        * image
-       */
+        // find existing credentials for the email
+        const credentials = await db.query('select * from federated_credentials where email = $1', [email]);
+
+        if (!credentials.rowCount) {
+          await db.query('begin');
+
+          try {
+            const id = uuid();
+
+            await db.query(`
+              insert into registered_user (id, name, email, created, avatar) 
+              values ($1, $2, $3, $4, $5)
+            `, [id, name, email, new Date().toISOString(), avatar]);
+            await db.query('insert into user_prefs(registered_user_id) values ($1)', [id]);
+            await db.query(`
+              insert into federated_credentials (provider, registered_user_id, email, provider_id)
+              values ($1, $2, $3, $4)
+            `, [account.provider, id, email, provider_id]);
+
+            await db.query('commit');
+            return true; // Allow user sign in
+          } catch(e) {
+            await db.query('rollback');
+            console.log(e);
+            return false;
+          }
+        } else {
+          if (credentials.rows.find((c: any) => c.provider === account.provider)) {
+            return true;
+          }
+          
+          // User exists with email, but hasn't logged in with the current strategy before
+          const registered_user_id = credentials.rows[0].registered_user_id;
+
+          await db.query(`
+            insert into federated_credentials (provider, registered_user_id, email, provider_id)
+            values ($1, $2, $3, $4)
+          `, [account.provider, registered_user_id, email, provider_id]);
+          return true;
+        }
+      }
       return true;
     },
     session: async ({ session, token }) => {
       const response = await db.query('select registered_user_id from federated_credentials where email = $1 limit 1', [token.email]);
-      console.log(response.rows[0], '******');
-      console.log('received session: ', session);
-      console.log('received token: ', token);
+      // console.log(response.rows[0], '******');
+      // console.log('received session: ', session);
+      // console.log('received token: ', token);
       return {
         ...session,
         user: {
@@ -79,8 +110,8 @@ export const authOptions: NextAuthOptions = {
       };
     },
     jwt: ({ token, user }) => {
-      console.log('jwt received token: ', token);
-      console.log('jwt received user: ', user);
+      // console.log('jwt received token: ', token);
+      // console.log('jwt received user: ', user);
       if (user) {
         const u = user as unknown as any;
         return {
