@@ -26,12 +26,20 @@ export const LocalLogin = () => {
   const redirect = useRouter()
 
   const onSubmit = useCallback(() => {
+    if (!email || !password) {
+      !email && setEmailError('Please enter your email address');
+      !password && setPasswordError('Please enter your password');
+      return;
+    }
+    
+    setLoading(true);
     ;(async() => {
       const response = await signIn('credentials', { redirect: false, email, password});
       if (!response) return;
 
       if (response.error) {
         setError('Invalid credentials');
+        setLoading(false);
       }
       else if (response.url) {
         redirect.push('/home/dashboard');
@@ -78,9 +86,9 @@ export const LocalLogin = () => {
           required
           dark
         />
+        {error && <p className={styles.error}>{error}</p>}
         <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={onSubmit}>Login</Button>
         <span className={styles.shadow} />
-        
       </div>
       <div className={styles.navigate}>
         <Link href='login/register'>Create an account</Link>
