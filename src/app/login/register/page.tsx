@@ -2,14 +2,14 @@
 
 import { Input } from "@/components/UI/Input/Input";
 import { useCallback, useState } from "react";
-import styles from '../login.module.scss';
-import zxcvbn from "zxcvbn";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import styles from '../login.module.scss';
+import zxcvbn from "zxcvbn";
 
 type FormData = {
   name: string;
@@ -133,16 +133,12 @@ export default function Page() {
         }
         resetAll();
       }
-      
-
-      
     })();
   };
 
   return (
     <div className={styles.form}>
-      <p>Create an account</p>
-      <br />
+      <h3>Create an account</h3>
       <Input
         disabled={loading}
         onBlur={() => validateField('name')}
@@ -190,17 +186,9 @@ export default function Page() {
         errorMessage={errors.confirmPasswordError}
         required
       />
-      <br />
       <button disabled={loading} onClick={handleSubmit}>Create Account</button>
-      <br />
-
       <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p>
-
-      <br />
       {responseError && <p>{responseError}</p>}
-
-      <br />
-
       <Link href="login">
         <p>Go back to sign in</p>
       </Link>

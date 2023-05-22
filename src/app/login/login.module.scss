@@ -35,8 +35,6 @@
     width: 50%;
   }
 
-  
-
   overflow: hidden;
 }
 
@@ -54,6 +52,16 @@
   flex-direction: column;
 
   width: 300px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 300;
+    border-bottom: 1px solid #474747;
+    width: 70%;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
 
   .input {
     margin-top: 4px;
