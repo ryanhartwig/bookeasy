@@ -16,8 +16,6 @@ export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, dar
   const inputRef = useRef<HTMLInputElement>(undefined!);
   const [inFocus, setInFocus] = useState<boolean>(false);
 
-
-
   const setFocus = useCallback((e: any, state: boolean) => {
     if (errorOnFocusOnly) setInFocus(state);
     state 
