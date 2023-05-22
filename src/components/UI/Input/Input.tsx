@@ -28,7 +28,7 @@ export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, dar
 
   return (
     <div className={clsx(styles.inputWrapper, props.className || '', {[styles.checkbox]: props.type === 'checkbox'})}>
-      {errorMessage && (!errorOnFocusOnly || inFocus) && <div className={styles.errorMessage}>
+      {errorMessage && (!errorOnFocusOnly || inFocus) && <div className={clsx(styles.errorMessage, {[styles.dark]: dark})}>
         <BiErrorCircle fontSize={14} style={{marginRight: 8}} />
         <p>{errorMessage}</p>
       </div>}
