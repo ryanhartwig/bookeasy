@@ -154,16 +154,30 @@
   // Each column of images
   .imagecolumn {
     height: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.283);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
+
+    z-index: 20;
 
     > div {
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 4px 0;
+
+      width: 100%;
+
+      position: relative;
+
+      img {
+        margin: 2px 4px;
+        min-width: 0;
+        width: 100%;
+        height: auto;
+      }
     }
   }
 
