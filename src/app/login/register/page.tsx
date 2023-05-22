@@ -205,10 +205,10 @@ export default function Page() {
         required
         dark
       />
-      {/* <button disabled={loading} onClick={handleSubmit}>Create Account</button>
-      <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p>
-      {responseError && <p>{responseError}</p>}
-      <Link href="login">
+      <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
+      {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
+      {/* {responseError && <p>{responseError}</p>} */}
+      {/* <Link href="login">
         <p>Go back to sign in</p>
       </Link> */}
     </div>

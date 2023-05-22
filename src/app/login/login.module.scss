@@ -26,10 +26,6 @@
   border: 1px solid rgba(52, 52, 52, 0.53);
   border-radius: 30px;  
 
-  p {
-    font-size: 15px;
-  }
-
   // Left & right side even
   > div {
     width: 50%;
@@ -62,12 +58,12 @@
   // Form title 
   h3 {
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 100;
     border-bottom: 1px solid #474747;
     width: 80%;
     text-align: center;
     padding-bottom: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   // Labeled dividers
@@ -77,6 +73,8 @@
     align-items: center;
 
     width: 100%;
+
+    margin: 16px 0;
     
     hr {
       border-color: #262626;
@@ -92,5 +90,9 @@
     input {
       height: 42px;
     }
+  }
+
+  .create {
+    margin: 16px 0;
   }
 }
