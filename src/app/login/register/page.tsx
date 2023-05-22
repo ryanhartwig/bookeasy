@@ -1,6 +1,5 @@
 'use client';''
 
-import { Input } from "@/components/UI/Input/Input";
 import { useCallback, useState } from "react";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
@@ -10,6 +9,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from '../login.module.scss';
 import zxcvbn from "zxcvbn";
+import { Button } from "@/components/UI/Button/Button";
+
+import Image from "next/image";
+
+import Google from '@/assets/google.png';
+import Facebook from '@/assets/facebook.png';
+
 
 type FormData = {
   name: string;
@@ -139,7 +145,10 @@ export default function Page() {
   return (
     <div className={styles.form}>
       <h3>Create an account</h3>
-      <Input
+      <Button icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
+      <Button icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
+      
+      {/* <Input
         disabled={loading}
         onBlur={() => validateField('name')}
         className={styles.input}
@@ -191,7 +200,7 @@ export default function Page() {
       {responseError && <p>{responseError}</p>}
       <Link href="login">
         <p>Go back to sign in</p>
-      </Link>
+      </Link> */}
     </div>
   );
 }
