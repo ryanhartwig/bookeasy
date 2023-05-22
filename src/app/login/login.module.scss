@@ -35,6 +35,20 @@
   overflow: hidden;
 }
 
+.visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+  position: relative;
+
+  .colorbackground {
+    position: absolute;
+    height: 100%;
+  }
+}
+
 
 .forms {
   display: flex;
