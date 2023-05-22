@@ -15,6 +15,7 @@ import Image from "next/image";
 
 import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
+import { Input } from "@/components/UI/Input/Input";
 
 
 type FormData = {
@@ -148,7 +149,12 @@ export default function Page() {
       <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
       <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
       
-      {/* <Input
+      <div className={styles.divider}>
+        <hr />
+        <p>or</p>
+        <hr />
+      </div>
+      <Input
         disabled={loading}
         onBlur={() => validateField('name')}
         className={styles.input}
@@ -158,6 +164,7 @@ export default function Page() {
         errorOnFocusOnly={true}
         errorMessage={errors.nameError}
         required
+        dark
         autoFocus
       />
       <Input
@@ -170,6 +177,7 @@ export default function Page() {
         errorMessage={errors.emailError}
         placeholder="Your email"
         required
+        dark
       />
       <Input
         disabled={loading}
@@ -182,6 +190,7 @@ export default function Page() {
         errorOnFocusOnly={true}
         errorMessage={errors.passwordError}
         required
+        dark
       />
       <Input
         disabled={loading}
@@ -194,8 +203,9 @@ export default function Page() {
         errorOnFocusOnly={true}
         errorMessage={errors.confirmPasswordError}
         required
+        dark
       />
-      <button disabled={loading} onClick={handleSubmit}>Create Account</button>
+      {/* <button disabled={loading} onClick={handleSubmit}>Create Account</button>
       <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p>
       {responseError && <p>{responseError}</p>}
       <Link href="login">

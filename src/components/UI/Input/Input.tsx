@@ -8,12 +8,15 @@ import styles from './Input.module.scss';
 interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   errorMessage?: string,
   errorOnFocusOnly?: boolean,
+  dark?: boolean,
 }
 
-export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, ...props}) => {
+export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, dark, ...props}) => {
 
   const inputRef = useRef<HTMLInputElement>(undefined!);
   const [inFocus, setInFocus] = useState<boolean>(false);
+
+
 
   const setFocus = useCallback((e: any, state: boolean) => {
     if (errorOnFocusOnly) setInFocus(state);
@@ -34,7 +37,8 @@ export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, ...
         onFocus={(e) => setFocus(e, true)} 
         onBlur={(e) => setFocus(e, false)} 
         ref={inputRef} 
-        className={clsx(styles.input, {[styles.invalid]: !!errorMessage})} />
+        className={clsx(styles.input, {[styles.dark]: dark} , {[styles.invalid]: !!errorMessage})} 
+      />
     </div>
   )
 }

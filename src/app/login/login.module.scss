@@ -64,9 +64,33 @@
     font-size: 18px;
     font-weight: 300;
     border-bottom: 1px solid #474747;
-    width: 70%;
+    width: 80%;
     text-align: center;
     padding-bottom: 12px;
     margin-bottom: 12px;
+  }
+
+  // Labeled dividers
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    
+    hr {
+      border-color: #262626;
+    }
+    p {
+      padding: 0 15px;
+    }
+  }
+
+  .input {
+    margin: 2px 0;
+
+    input {
+      height: 42px;
+    }
   }
 }
