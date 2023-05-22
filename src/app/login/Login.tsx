@@ -11,7 +11,7 @@ import styles from './login.module.scss';
 import { Button } from "@/components/UI/Button/Button";
 import Link from "next/link";
 
-export const LocalLogin = () => {
+export const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -26,6 +26,7 @@ export const LocalLogin = () => {
   const redirect = useRouter()
 
   const onSubmit = useCallback(() => {
+    setError('');
     if (!email || !password) {
       !email && setEmailError('Please enter your email address');
       !password && setPasswordError('Please enter your password');

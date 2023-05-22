@@ -215,7 +215,7 @@ export default function Page() {
         
       </div>
       <div className={styles.navigate}>
-        <Link href='login'>Log in</Link>
+        <Link href='login'>Existing user? Log in</Link>
       </div>
     </>
   );
