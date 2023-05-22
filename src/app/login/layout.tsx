@@ -18,6 +18,16 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         {/* Left side */}
         <div className={styles.visual}>
           <Image className={styles.colorbackground} src={Radial} alt="Login background" />
+
+          <div className={styles.imagecolumn}>
+            
+          </div>
+          <div className={styles.imagecolumn}>
+            
+          </div>
+          <div className={styles.imagecolumn}>
+            
+          </div>
         </div>
 
         {/* Right side (form) */}
