@@ -212,11 +212,11 @@ export default function Page() {
         {responseError && <p className={styles.error}>{responseError}</p>}
         <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
         <span className={styles.shadow} />
-        <div className={styles.goback}>
-          <Link href='login'>Existing User</Link>
-        </div>
+        
       </div>
-      
+      <div className={styles.navigate}>
+        <Link href='login'>Log in</Link>
+      </div>
     </>
   );
 }
