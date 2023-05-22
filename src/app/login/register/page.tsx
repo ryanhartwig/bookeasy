@@ -206,6 +206,7 @@ export default function Page() {
         dark
       />
       <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
+      <span className={styles.shadow} />
       {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
       {/* {responseError && <p>{responseError}</p>} */}
       {/* <Link href="login">

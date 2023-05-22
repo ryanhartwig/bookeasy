@@ -29,6 +29,7 @@
   // Left & right side even
   > div {
     width: 50%;
+    position: relative;
   }
 
   overflow: hidden;
@@ -48,6 +49,8 @@
   align-items: center;
   flex-direction: column;
 
+  position: relative;
+
   width: 300px;
 
   // Default / backup spacing for all unspecified elements
@@ -55,7 +58,6 @@
     margin: 4px 0;
   }
 
-  // Form title 
   h3 {
     font-size: 18px;
     font-weight: 100;
@@ -66,7 +68,6 @@
     margin-bottom: 16px;
   }
 
-  // Labeled dividers
   .divider {
     display: flex;
     justify-content: center;
@@ -94,5 +95,18 @@
 
   .create {
     margin: 16px 0;
+  }
+
+  .shadow {
+    height: 9px;
+    width: 100%;
+    // border: 1px solid;
+    border-radius: 50%;
+
+    position: absolute;
+    bottom: -40px;
+
+    background: rgba(50, 50, 50, 0.5);
+    filter: blur(10px);
   }
 }
