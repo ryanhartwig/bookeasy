@@ -13,8 +13,7 @@ import { useUser } from '@/app/Providers';
 
 export default function Page() {
   const { id } = useUser();
-
-  console.log(id);
+  
   return (
     <>
       <Header text='Dashboard' />

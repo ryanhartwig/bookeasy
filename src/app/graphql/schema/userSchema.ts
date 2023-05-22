@@ -96,7 +96,7 @@ export const userResolvers = {
           user = userResponse.rows[0];
         }
 
-        const creds = await db.query(`
+        await db.query(`
           insert into federated_credentials (provider, registered_user_id, email, credential)
           values ($1, $2, $3, $4) returning *
         `, ['credentials', id, email, hash]);
