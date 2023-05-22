@@ -143,75 +143,80 @@ export default function Page() {
     })();
   };
 
+  {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
+
+  
   return (
-    <div className={styles.form}>
-      <h3>Create an account</h3>
-      <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
-      <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
-      
-      <div className={styles.divider}>
-        <hr />
-        <p>or</p>
-        <hr />
+    <>
+      <div className={styles.form}>
+        <h3>Create an account</h3>
+        <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
+        <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
+        
+        <div className={styles.divider}>
+          <hr />
+          <p>or</p>
+          <hr />
+        </div>
+        <Input
+          disabled={loading}
+          onBlur={() => validateField('name')}
+          className={styles.input}
+          value={formData.name}
+          onChange={(e) => handleChange('name', e.target.value)}
+          placeholder="Your name"
+          errorOnFocusOnly={true}
+          errorMessage={errors.nameError}
+          required
+          dark
+          autoFocus
+        />
+        <Input
+          disabled={loading}
+          onBlur={() => validateField('email')}
+          className={styles.input}
+          value={formData.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          errorOnFocusOnly={true}
+          errorMessage={errors.emailError}
+          placeholder="Your email"
+          required
+          dark
+        />
+        <Input
+          disabled={loading}
+          onBlur={() => validateField('password')}
+          type="password"
+          className={styles.input}
+          value={formData.password}
+          onChange={(e) => handleChange('password', e.target.value)}
+          placeholder="Your password"
+          errorOnFocusOnly={true}
+          errorMessage={errors.passwordError}
+          required
+          dark
+        />
+        <Input
+          disabled={loading}
+          onBlur={() => validateField('confirmPassword')}
+          type="password"
+          className={styles.input}
+          value={formData.confirmPassword}
+          onChange={(e) => handleChange('confirmPassword', e.target.value)}
+          placeholder="Confirm password"
+          errorOnFocusOnly={true}
+          errorMessage={errors.confirmPasswordError}
+          required
+          dark
+        />
+        {responseError && <p className={styles.error}>{responseError}</p>}
+        <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
+        <span className={styles.shadow} />
+        <div className={styles.goback}>
+          <Link href='login'>Existing User</Link>
+        </div>
       </div>
-      <Input
-        disabled={loading}
-        onBlur={() => validateField('name')}
-        className={styles.input}
-        value={formData.name}
-        onChange={(e) => handleChange('name', e.target.value)}
-        placeholder="Your name"
-        errorOnFocusOnly={true}
-        errorMessage={errors.nameError}
-        required
-        dark
-        autoFocus
-      />
-      <Input
-        disabled={loading}
-        onBlur={() => validateField('email')}
-        className={styles.input}
-        value={formData.email}
-        onChange={(e) => handleChange('email', e.target.value)}
-        errorOnFocusOnly={true}
-        errorMessage={errors.emailError}
-        placeholder="Your email"
-        required
-        dark
-      />
-      <Input
-        disabled={loading}
-        onBlur={() => validateField('password')}
-        type="password"
-        className={styles.input}
-        value={formData.password}
-        onChange={(e) => handleChange('password', e.target.value)}
-        placeholder="Your password"
-        errorOnFocusOnly={true}
-        errorMessage={errors.passwordError}
-        required
-        dark
-      />
-      <Input
-        disabled={loading}
-        onBlur={() => validateField('confirmPassword')}
-        type="password"
-        className={styles.input}
-        value={formData.confirmPassword}
-        onChange={(e) => handleChange('confirmPassword', e.target.value)}
-        placeholder="Confirm password"
-        errorOnFocusOnly={true}
-        errorMessage={errors.confirmPasswordError}
-        required
-        dark
-      />
-      <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
-      <span className={styles.shadow} />
-      {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
-      {/* {responseError && <p>{responseError}</p>} */}
-      {/* <Link href="login">
-        <p>Go back to sign in</p>
-      </Link> */}
-    </div>
+      
+    </>
   );
 }
