@@ -28,7 +28,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) return null;
         if (!credentials.email || !credentials.password) return null;
 
-        const federated = await db.query('select * from federated_credentials where email = $1', [credentials.email]);
+        const federated = await db.query("select * from federated_credentials where email = $1 and provider = 'credentials'", [credentials.email]);
         if (!federated.rows[0]) return null;
 
         const { registered_user_id, credential } = federated.rows[0];
@@ -43,11 +43,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials}) {
-      // console.log('user: ', user);
-      // console.log('account: ', account);
-      // console.log('profile: ', profile);
-      // return false;
-      
+      // Login in or register if signing in with OAuth
       if (account?.provider === 'google' && user) {
         const { name, email, image: avatar } = user;
         const { providerAccountId: provider_id } = account;
@@ -75,7 +71,6 @@ export const authOptions: NextAuthOptions = {
             return true; // Allow user sign in
           } catch(e) {
             await db.query('rollback');
-            console.log(e);
             return false;
           }
         } else {
@@ -97,9 +92,6 @@ export const authOptions: NextAuthOptions = {
     },
     session: async ({ session, token }) => {
       const response = await db.query('select registered_user_id from federated_credentials where email = $1 limit 1', [token.email]);
-      // console.log(response.rows[0], '******');
-      // console.log('received session: ', session);
-      // console.log('received token: ', token);
       return {
         ...session,
         user: {
@@ -110,8 +102,6 @@ export const authOptions: NextAuthOptions = {
       };
     },
     jwt: ({ token, user }) => {
-      // console.log('jwt received token: ', token);
-      // console.log('jwt received user: ', user);
       if (user) {
         const u = user as unknown as any;
         return {
