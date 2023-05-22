@@ -145,8 +145,8 @@ export default function Page() {
   return (
     <div className={styles.form}>
       <h3>Create an account</h3>
-      <Button icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
-      <Button icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
+      <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
+      <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
       
       {/* <Input
         disabled={loading}

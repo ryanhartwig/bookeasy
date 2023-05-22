@@ -45,6 +45,7 @@
   align-items: center;
 }
 
+// Each form in the login views should follow the same structure / spacing
 .form {
   display: flex;
   justify-content: center;
@@ -53,6 +54,12 @@
 
   width: 300px;
 
+  // Default / backup spacing for all unspecified elements
+  > * {
+    margin: 4px 0;
+  }
+
+  // Form title 
   h3 {
     font-size: 18px;
     font-weight: 300;
@@ -61,9 +68,5 @@
     text-align: center;
     padding-bottom: 12px;
     margin-bottom: 12px;
-  }
-
-  .input {
-    margin-top: 4px;
   }
 }
