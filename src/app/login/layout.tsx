@@ -17,6 +17,7 @@ import BR from '@/assets/login/BR.png';
 
 import L from '@/assets/login/L.png';
 import R from '@/assets/login/R.png';
+import clsx from "clsx";
 
 export default async function Layout({children}: {children: React.ReactNode}) {
   const session = await getServerSession(authOptions);
@@ -28,7 +29,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
     <div className={styles.login}>
       <div className={styles.loginBox}>
         {/* Left side */}
-        <div className={styles.visual}>
+        <div className={clsx(styles.visual, 'noselect')}>
           <Image className={styles.colorbackground} src={Radial} alt="Login background" />
           <div className={styles.imagecolumn}>
             <div>
