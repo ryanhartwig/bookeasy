@@ -10,7 +10,7 @@ interface ButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
 export const Button: React.FC<ButtonProps> = ({icon, children, ...props}) => {
 
   return (
-    <div {...props} className={clsx(styles.button, props.className ?? '')}>
+    <div {...props} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} className={clsx(styles.button, props.className ?? '')}>
       {icon && <div>{icon}</div>}
       <p>{children}</p>
     </div>
