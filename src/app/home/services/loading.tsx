@@ -1,9 +1,16 @@
 import { Header } from "@/components/Header"
+import styles from './services.module.scss';
 
 export default function Loading() {
   
   return <div>
     <Header text="Services" loading />
-    <p>loading...</p>
+    <div className={styles.services_page}>
+      <div className={styles.labels}>
+        {['Name', 'Duration', 'Provider', 'Assignee(s)', 'Cost'].map((t) => 
+          <p key={t}>{t}</p>
+        )}
+      </div>
+    </div>
   </div>
 }
