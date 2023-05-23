@@ -97,6 +97,7 @@ export default function Page() {
       ...prevErrors,
       [`${field}Error`]: errorMessage
     }));
+    return !errorMessage;
   };
 
   const [registerUser, { reset }] = useMutation(REGISTER_USER_WITH_CREDENTIALS);
@@ -110,8 +111,13 @@ export default function Page() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    ['name', 'email', 'password', 'confirmPassword'].forEach((field) => validateField(field as keyof FormData));
-    if (Object.values(errors).some(v => !!v)) {
+    let valid = true;
+    ['name', 'email', 'password', 'confirmPassword'].forEach((field) => {
+      if (!validateField(field as keyof FormData)) {
+        valid = false;
+      }
+    });
+    if (!valid) {
       return;
     }
 
@@ -160,32 +166,28 @@ export default function Page() {
         </div>
         <Input
           disabled={loading}
-          onBlur={() => validateField('name')}
           className={styles.input}
           value={formData.name}
           onChange={(e) => handleChange('name', e.target.value)}
           placeholder="Your name"
           errorOnFocusOnly={true}
           errorMessage={errors.nameError}
-          required
+          required={!!errors.nameError}
           dark
-          autoFocus
         />
         <Input
           disabled={loading}
-          onBlur={() => validateField('email')}
           className={styles.input}
           value={formData.email}
           onChange={(e) => handleChange('email', e.target.value)}
           errorOnFocusOnly={true}
           errorMessage={errors.emailError}
+          required={!!errors.emailError}
           placeholder="Your email"
-          required
           dark
         />
         <Input
           disabled={loading}
-          onBlur={() => validateField('password')}
           type="password"
           className={styles.input}
           value={formData.password}
@@ -193,12 +195,11 @@ export default function Page() {
           placeholder="Your password"
           errorOnFocusOnly={true}
           errorMessage={errors.passwordError}
-          required
+          required={!!errors.passwordError}
           dark
         />
         <Input
           disabled={loading}
-          onBlur={() => validateField('confirmPassword')}
           type="password"
           className={styles.input}
           value={formData.confirmPassword}
@@ -206,7 +207,7 @@ export default function Page() {
           placeholder="Confirm password"
           errorOnFocusOnly={true}
           errorMessage={errors.confirmPasswordError}
-          required
+          required={!!errors.confirmPasswordError}
           dark
         />
         {responseError && <p className={styles.error}>{responseError}</p>}

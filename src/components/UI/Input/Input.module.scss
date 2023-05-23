@@ -26,12 +26,14 @@
   &:focus {
     border-color: rgb(0, 128, 255);
     border-width: 1px;
+
+    &.dark { border-color: rgba(18, 104, 189, 0.517);}
   }
 
   &.invalid {
     border-color: red;
 
-    &.dark { border-color: rgb(65, 18, 10) }
+    &.dark { border-color: rgba(91, 27, 15, 0.766) }
   }
 }
 

@@ -63,20 +63,17 @@ export const Login = () => {
 
         <Input
           disabled={loading}
-          onBlur={() => !email && setEmailError('Please enter your email address')}
           className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           errorOnFocusOnly={true}
           errorMessage={emailError}
           placeholder="Your email"
-          required
-          autoFocus
+          required={!!emailError}
           dark
         />
         <Input
           disabled={loading}
-          onBlur={() => !password && setPasswordError('Please enter your password')}
           className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -84,7 +81,7 @@ export const Login = () => {
           errorMessage={passwordError}
           placeholder="Your password"
           type="password"
-          required
+          required={!!passwordError}
           dark
         />
         {error && <p className={styles.error}>{error}</p>}
