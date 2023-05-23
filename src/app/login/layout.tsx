@@ -68,7 +68,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
           </div>
           <div className={styles.imagecolumn}>
             <div>
-              <Image src={R} style={{position: 'absolute', width: '130%', left: 0}} alt="Background preview" />
+              <Image src={R} style={{position: 'absolute', width: '190%', rotate: '180deg', left: 0}} alt="Background preview" />
             </div>
           </div>
 
