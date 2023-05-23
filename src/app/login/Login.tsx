@@ -86,7 +86,6 @@ export const Login = () => {
         />
         {error && <p className={styles.error}>{error}</p>}
         <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={onSubmit}>Login</Button>
-        <span className={styles.shadow} />
       </div>
       <div className={styles.navigate}>
         <Link href='login/register'>Create an account</Link>

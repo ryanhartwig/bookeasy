@@ -81,6 +81,8 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         {/* Right side (form) */}
         <div className={styles.forms}>
           {children}
+          <span className={styles.shadow} />
+
         </div>
       </div>
     </div>
