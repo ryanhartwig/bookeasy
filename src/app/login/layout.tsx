@@ -6,6 +6,7 @@ import styles from './login.module.scss';
 import Radial from '@/assets/login_background_svg.svg';
 import Image from "next/image";
 
+// Left demo images
 import CL from '@/assets/login/CL.png';
 import CR from '@/assets/login/CR.png';
 import CT from '@/assets/login/CT.png';
@@ -14,9 +15,9 @@ import TL from '@/assets/login/TL.png';
 import TR from '@/assets/login/TR.png';
 import BL from '@/assets/login/BL.png';
 import BR from '@/assets/login/BR.png';
-
 import L from '@/assets/login/L.png';
 import R from '@/assets/login/R.png';
+
 import clsx from "clsx";
 
 export default async function Layout({children}: {children: React.ReactNode}) {
@@ -42,14 +43,18 @@ export default async function Layout({children}: {children: React.ReactNode}) {
               <Image src={TR} alt="Background preview" />
             </div>
             <div>
-              <Image src={CT} alt="Background preview" />
+              <Image style={{opacity: 0.8}} src={CT} alt="Background preview" />
             </div>
             <div>
-              <Image src={CL} alt="Background preview" />
-              <Image src={CR} alt="Background preview" />
+              <Image style={{opacity: 0.8}} src={CL} alt="Background preview" />
+              <Image style={{opacity: 0.8}} src={CR} alt="Background preview" />
+              <div className={styles.title}>
+                <p>Appointment scheduling</p>
+                <p>made easy.</p> 
+              </div>
             </div>
             <div>
-              <Image src={CB} alt="Background preview" />
+              <Image style={{opacity: 0.8}} src={CB} alt="Background preview" />
             </div>
             <div>
               <Image src={BL} alt="Background preview" />
