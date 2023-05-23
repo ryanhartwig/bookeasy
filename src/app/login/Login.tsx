@@ -10,6 +10,7 @@ import Image from "next/image";
 import styles from './login.module.scss';
 import { Button } from "@/components/UI/Button/Button";
 import Link from "next/link";
+import clsx from "clsx";
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -21,7 +22,7 @@ export const Login = () => {
   useEffect(() => setPasswordError(''), [password]);
   
   const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingElement, setLoadingElement] = useState<string>('');
 
   const redirect = useRouter()
 
@@ -33,14 +34,15 @@ export const Login = () => {
       return;
     }
     
-    setLoading(true);
+    setLoadingElement('login');
+
     ;(async() => {
       const response = await signIn('credentials', { redirect: false, email, password});
       if (!response) return;
 
       if (response.error) {
         setError('Invalid credentials');
-        setLoading(false);
+        setLoadingElement('');
       }
       else if (response.url) {
         redirect.push('/home/dashboard');
@@ -50,10 +52,22 @@ export const Login = () => {
 
   return (
     <>
-      <div className={styles.form}>
+      <div className={clsx(styles.form, {[styles.loading]: !!loadingElement})}>
         <h3>Welcome back</h3>
-        <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Log in with Google</Button>
-        <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Log in with Facebook</Button>
+        <Button loading={loadingElement === 'google'}
+          onClick={() => {
+            setLoadingElement('google')
+            signIn('google', { callbackUrl: '/home/dashboard' });
+          }} 
+          icon={<Image src={Google} alt="Google logo" />}
+        >Log in with Google</Button>
+        <Button loading={loadingElement === 'facebook'}
+          onClick={() => {
+            setLoadingElement('facebook')
+            signIn('facebook', { callbackUrl: '/home/dashboard' });
+          }} 
+          icon={<Image src={Facebook} alt="Facebook logo" />}
+        >Log in with Facebook</Button>
         
         <div className={styles.divider}>
           <hr />
@@ -62,7 +76,6 @@ export const Login = () => {
         </div>
 
         <Input
-          disabled={loading}
           className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -73,7 +86,6 @@ export const Login = () => {
           dark
         />
         <Input
-          disabled={loading}
           className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -85,7 +97,11 @@ export const Login = () => {
           dark
         />
         {error && <p className={styles.error}>{error}</p>}
-        <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={onSubmit}>Login</Button>
+        <Button loading={loadingElement === 'login'} 
+          className={styles.create} 
+          style={{width: '55%', padding: '8px 0'}} 
+          onClick={onSubmit}
+        >Login</Button>
       </div>
       <div className={styles.navigate}>
         <Link href='login/register'>Create an account</Link>
