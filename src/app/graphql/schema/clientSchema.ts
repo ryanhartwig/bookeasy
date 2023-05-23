@@ -1,5 +1,6 @@
 import db from "@/utility/db";
-import { throwGQLError } from "@/utility/gql/throwGQLError";
+import { GraphQLError } from "graphql";
+import uuid from "react-uuid";
 
 export const clientResolvers = {
   Query: {
@@ -10,14 +11,14 @@ export const clientResolvers = {
   },
   Mutation: {
     userAddClient: async (_: any, args: any) => {
-      const { id, business_id, notes, name, email, address, phone, joined_date, active } = args.client;
-      if (!id || !business_id || !name || !email || !active) throwGQLError('Missing required arguments');
+      const { business_id, notes, name, email, address, phone } = args.client;
+      if (!business_id || !name) throw new GraphQLError('Missing required arguments');
 
       const response = await db.query(`
       insert into client (id, business_id, notes, name, email, address, phone, joined_date, active)
       values (
         $1, $2, $3, $4, $5, $6, $7, $8, $9
-      ) returning *`, [id, business_id, notes, name, email, address, phone, joined_date, active]);
+      ) returning *`, [uuid(), business_id, notes, name, email, address, phone, new Date().toISOString(), true]);
       return response.rows[0];
     },
     userEditClient: async (_: any, args: any) => {
@@ -50,27 +51,15 @@ export const clientResolvers = {
 }
 
 export const clientTypeDefs = `#graphql
-  input UserAddClientInput {
+  input ClientInput {
     id: String!,
-    business_id: String!,
-    notes: String,
-    name: String!,
-    email: String,
-    address: String,
-    phone: String,
-    joined_date: String!,
-    active: Boolean!
-  }
-
-  input UserEditClientInput {
-    id: String!,
-    notes: String,
+    business_id: String,
     name: String,
     email: String,
     address: String,
     phone: String,
+    notes: String,
     active: Boolean,
-    joined_date: String #included for request compatibility, but not used
   }
 
   type Query {
@@ -78,8 +67,8 @@ export const clientTypeDefs = `#graphql
   }
 
   type Mutation {
-    userAddClient(client: UserAddClientInput!): Client!,
-    userEditClient(client: UserEditClientInput!): Client!,
+    userAddClient(client: ClientInput!): Client!,
+    userEditClient(client: ClientInput!): Client!,
     deleteClient(client_id: String!): String!,
   }
 `;

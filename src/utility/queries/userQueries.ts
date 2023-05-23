@@ -68,3 +68,11 @@ export const PATCH_USER_PREFS = gql`
     }
   }
 `;
+
+export const REGISTER_USER_WITH_CREDENTIALS = gql`
+  mutation($credentials: CredentialsInput!) {
+    registerUserWithCredentials(credentials: $credentials) {
+      id
+    }
+  }
+`;

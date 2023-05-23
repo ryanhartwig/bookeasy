@@ -1,12 +1,12 @@
 import db from "@/utility/db";
-import { throwGQLError } from "@/utility/gql/throwGQLError";
+import { GraphQLError } from "graphql";
 import uuid from "react-uuid";
 
 export const businessResolvers = {
   Query: {
     getBusiness: async (_: any, args: any) => {
       const response = await db.query('select * from business where id = $1', [args.business_id]);
-      if (!response.rows[0]) throwGQLError(`No business found for id: ${args.business_id}`);
+      if (!response.rows[0]) throw new GraphQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
     },
     getBusinessClients: async (_: any, args: any) => {
@@ -24,7 +24,7 @@ export const businessResolvers = {
         const response = await db.query('select * from service where business_id = $1', [args.business_id]);
         return response.rows;
       } catch(e: any) {
-        throwGQLError(e.message);
+        throw new GraphQLError(e.message);
       }
     },
     getBusinessAppointmentMetrics: async (_: any, args: any) => {
@@ -80,7 +80,7 @@ export const businessResolvers = {
         params.push(patch[key]);
         return `${key} = $${i + 2}`;
       });
-      if (!columns.length) throwGQLError('No patch arguments provided.');
+      if (!columns.length) throw new GraphQLError('No patch arguments provided.');
 
       query += columns.join(', ') + ' where id = $1 returning *';
 
@@ -103,8 +103,8 @@ export const businessResolvers = {
           select name from registered_user
           where id = $1
         )
-        insert into staff (registered_user_id, business_id, elevated, date_added, name, id)
-        select $1, $2, $3, $4, ru.name, $5
+        insert into staff (registered_user_id, business_id, elevated, date_added, name, id, deleted)
+        select $1, $2, $3, $4, ru.name, $5, false
         from ru
       `, [user_id, response.rows[0].id, true, created, uuid()]);
       return response.rows[0];

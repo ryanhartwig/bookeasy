@@ -4,7 +4,6 @@ import { NextRequest } from 'next/server';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { resolvers, typeDefs } from './schema';
 
-
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const server = new ApolloServer({

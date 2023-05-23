@@ -1,7 +1,6 @@
-import { ServiceCard } from '@/app/services/service';
-import { ServiceForm } from '@/app/services/serviceForm/serviceForm';
+import { ServiceCard } from '@/app/home/services/service';
+import { ServiceForm } from '@/app/home/services/serviceForm/serviceForm';
 import { Service } from '@/types/Service';
-import { userId } from '@/utility/sample_data/sample_userId';
 import clsx from 'clsx';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -11,9 +10,10 @@ interface ServicesProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>
   services: Service[],
   businessId: string,
   isOwnBusiness?: boolean,
+  userId: string,
 }
 
-export const Services: React.FC<ServicesProps> = ({services, businessId, isOwnBusiness, ...props}) => {
+export const Services: React.FC<ServicesProps> = ({services, userId, businessId, isOwnBusiness, ...props}) => {
 
   const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service>();

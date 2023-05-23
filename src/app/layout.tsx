@@ -1,17 +1,18 @@
 import './globals.css'
-import './home.scss';
 
-import { Navigator } from '@/components/Navigator';
 import { Providers } from './Providers';
+import { ReactNode } from 'react';
 
-export default async function RootLayout({children}: { children: React.ReactNode}) {
+interface IProps {
+  children: ReactNode,
+}
 
+export default async function RootLayout({children}: IProps) {
   return (
     <html lang="en">
       <body>
-        <main className='main'>
-          <Navigator />
-          <div className='Content'>
+        <main>
+          <div>
             <Providers>
               {children}
             </Providers>

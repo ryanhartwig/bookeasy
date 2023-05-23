@@ -1,0 +1,292 @@
+.login {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+
+  background: linear-gradient(180deg, #262626 0%, #000000 0.01%, rgba(12, 16, 19, 0.97) 75%, #000000 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  color: var(--font-on-dark);
+  font-weight: 100;
+}
+
+.loginBox {
+  aspect-ratio: 10 / 7;
+
+  height: 55vw;
+  min-height: 600px;
+  max-height: 710px;
+
+  display: flex;
+
+  background: linear-gradient(170.85deg, #262626 -4.1%, #000000 135.31%);
+  border: 1px solid rgba(52, 52, 52, 0.53);
+  border-radius: 30px;  
+
+  // Left & right side even
+  > div {
+    width: 50%;
+    position: relative;
+  }
+
+  overflow: hidden;
+}
+
+.forms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Each form in the login views should follow the same structure / spacing
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  text-align: center;
+
+  width: 300px;
+  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+
+  // Default / backup spacing for all unspecified elements
+  > * {
+    margin: 4px 0;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 100;
+    border-bottom: 1px solid #474747;
+    width: 80%;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    margin: 16px 0;
+    
+    hr {
+      border-color: #262626;
+    }
+    p {
+      padding: 0 15px;
+    }
+  }
+
+  .input {
+    margin: 2px 0;
+
+    input {
+      height: 42px;
+    }
+  }
+
+  .create {
+    margin: 16px 0;
+  }
+
+  .error {
+    font-size: 13px;
+    color: rgb(255, 164, 104);
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+
+  &.loading {
+    cursor: progress;
+    filter: blur(0.04em);
+    > * {
+      pointer-events: none;
+    }
+  }
+}
+
+.strength {
+  margin: 0;
+  transition: height 200ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  overflow: hidden;
+
+  div {
+    background: rgba(63, 63, 63, 0.534);
+    border-radius: 10px;
+    width: 90%;
+    height: 4px;
+  
+    position: relative;
+    overflow: hidden;
+    
+    .progress {
+      transition: width 400ms, background-color 400ms;
+      background-color: grey;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 0;
+    }
+    .min {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      left: calc(50% - 2px);
+      background-color: rgb(20, 20, 20);
+    }
+  }
+}
+
+.shadow {
+  height: 8px;
+  width: 300px;
+  border-radius: 50%;
+
+  position: absolute;
+  bottom: 110px;
+  left: calc(50% - 150px);
+
+  background: rgba(50, 50, 50, 0.4);
+  filter: blur(10px);
+}
+
+.navigate {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+
+  color: rgb(214, 214, 214);
+
+  font-size: 14px;
+  font-weight: 100;
+  
+  width:100%;
+  text-align: center;
+  cursor:pointer;
+  &:hover { 
+    text-decoration: underline;
+  }
+}
+
+
+// Left side visual
+.visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: none;
+
+  overflow: hidden;
+  position: relative;
+
+  .colorbackground {
+    position: absolute;
+    height: 100%;
+  }
+
+  // Each column of images
+  .imagecolumn {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+
+    z-index: 20;
+
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 4px 0;
+
+      width: 100%;
+
+      position: relative;
+
+      img {
+        margin: 2px 4px;
+        min-width: 0;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  // Column split
+  > div:not(:nth-of-type(2)) {
+    width: 16%;
+  }
+  > div:nth-of-type(2) {
+    width: 62%;
+  }
+  
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  position: absolute;
+  left: 0px;
+  top: 5px;
+
+  p {
+    font-size: 24px;
+
+    span { font-weight: 400;}
+  }
+}
+
+.title {
+  text-align: center;
+
+  font-size: 28px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  white-space: nowrap;
+
+  top: 0;
+  left: 0;
+
+  font-weight: 100;
+
+  > p:last-child {
+    font-weight: 400;
+  }
+}
+
+@keyframes fadeup {
+  0% {
+    top: 40px;
+    opacity: 0;
+  } 
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}

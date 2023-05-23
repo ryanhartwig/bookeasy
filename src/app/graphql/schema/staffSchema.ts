@@ -71,7 +71,6 @@ export const staffResolvers = {
         const response = await db.query('delete from staff where id = $1 returning id', [staff_id]);
         return response.rows[0].id;
       } catch(e: any) {
-        console.log(e.constraint)
         if(e?.constraint && e.constraint === 'appointment_staff_id_fkey') {
           // Appointment exists for service and won't allow full deletion
           // - therefore we set deleted property to true, to allow appointments to ref service

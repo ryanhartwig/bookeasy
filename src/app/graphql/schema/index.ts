@@ -1,6 +1,6 @@
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 import { userResolvers, userTypeDefs } from './userSchema';
-import { types } from '../types';
+import { types } from './types';
 import { appointmentsResolvers, appointmentsTypeDefs } from './appointmentsSchema';
 import { businessResolvers, businessTypeDefs } from './businessSchema';
 import { clientResolvers, clientTypeDefs } from './clientSchema';
