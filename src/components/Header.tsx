@@ -1,8 +1,6 @@
-'use client';
-
 import clsx from "clsx";
-import { signOut } from "next-auth/react";
 import styles from './header.module.scss';
+import { Logout } from "./UI/Logout";
 interface HeaderProps {
   text: string,
   loading?: boolean,
@@ -16,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({text, loading = false}) => {
         <span />
       </div>}
       <h2>{text}</h2>
-      <p onClick={() => signOut()}>Logout</p>
+      <Logout />
     </div>
   )
 }
