@@ -202,7 +202,8 @@ export default function Page() {
         />
         <div className={styles.strength} style={{height: showStrength ? '10px' : 0}}>
           <div>
-            <span style={{width: `${passwordScore * 25}%`, backgroundColor: stages[passwordScore]}} />
+            <span className={styles.progress} style={{width: `${passwordScore * 25}%`, backgroundColor: stages[passwordScore]}} />
+            <span className={styles.min} />
           </div>
         </div>
         <Input

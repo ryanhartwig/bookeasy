@@ -129,14 +129,23 @@
     position: relative;
     overflow: hidden;
     
-    span {
+    .progress {
       transition: width 400ms, background-color 400ms;
-      
-      background-color: rgb(205, 109, 189);
+      background-color: grey;
       height: 100%;
       position: absolute;
+      z-index: 1;
       left: 0;
       top: 0;
+    }
+    .min {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      left: calc(50% - 2px);
+      background-color: rgb(20, 20, 20);
     }
   }
 }
