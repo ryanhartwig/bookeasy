@@ -73,7 +73,7 @@ export default async function Layout({children}: {children: React.ReactNode}) {
           </div>
 
           <div className={styles.logo}>
-            <Image className='Navigator_logo_icon' priority src={bookit} alt="Book it logo" />
+            <Image className='Navigator_logo_icon' priority src={bookit.default} alt="Book it logo" />
             <p><span>book</span>easy.</p>
           </div>
         </div>
