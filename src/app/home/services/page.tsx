@@ -1,24 +1,12 @@
-'use client';
-
 import { Header } from '@/components/Header';
-import styles from './services.module.scss';
-import { BusinessesList } from './businessesList';
-import { useUser } from '@/app/Providers';
+import { ServicesView } from './ServicesView';
 
-export default function Page() {
-  const { id } = useUser();
-
+export default async function Page() {
+  // await (() => new Promise((res) => setTimeout(() => res('true'), 3000)))()
   return (
     <>
       <Header text='Services' />
-      <div className={styles.services_page}>
-        <div className={styles.labels}>
-          {['Name', 'Duration', 'Provider', 'Assignee(s)', 'Cost'].map((t) => 
-            <p key={t}>{t}</p>
-          )}
-        </div>
-        <BusinessesList userId={id} />
-      </div>
+      <ServicesView />
     </>
   )
 }

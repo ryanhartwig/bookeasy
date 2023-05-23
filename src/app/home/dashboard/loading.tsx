@@ -7,7 +7,7 @@ export default function Loading() {
       <SecondaryHeader>
       </SecondaryHeader>
       <div style={{padding: 20}}>
-        <SectionLabel label='Today' style={{marginBottom: 162}}/>
+        <SectionLabel label='Today'/>
         <SectionLabel label='This Week' />
       </div>
     </div>

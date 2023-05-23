@@ -4,7 +4,8 @@ import { Tabs } from '@/components/UI/Tabs/Tabs';
 import clsx from 'clsx';
 import styles from './business.module.scss';
 
-export default async function Page() {
+export default function Page() {
+  
   
   return (
     <>
