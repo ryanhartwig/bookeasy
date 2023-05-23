@@ -193,6 +193,21 @@
   
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+
+  position: absolute;
+  left: 0px;
+  top: 5px;
+
+  p {
+    font-size: 24px;
+
+    span { font-weight: 400;}
+  }
+}
+
 .title {
   text-align: center;
 

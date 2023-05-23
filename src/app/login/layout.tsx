@@ -18,6 +18,9 @@ import BR from '@/assets/login/BR.png';
 import L from '@/assets/login/L.png';
 import R from '@/assets/login/R.png';
 
+import * as bookit from '@/assets/logo_temp.svg';
+
+
 import clsx from "clsx";
 
 export default async function Layout({children}: {children: React.ReactNode}) {
@@ -31,6 +34,8 @@ export default async function Layout({children}: {children: React.ReactNode}) {
       <div className={styles.loginBox}>
         {/* Left side */}
         <div className={clsx(styles.visual, 'noselect')}>
+          
+          
           <Image className={styles.colorbackground} src={Radial} alt="Login background" />
           <div className={styles.imagecolumn}>
             <div>
@@ -65,6 +70,11 @@ export default async function Layout({children}: {children: React.ReactNode}) {
             <div>
               <Image src={R} style={{position: 'absolute', width: '130%', left: 0}} alt="Background preview" />
             </div>
+          </div>
+
+          <div className={styles.logo}>
+            <Image className='Navigator_logo_icon' priority src={bookit} alt="Book it logo" />
+            <p><span>book</span>easy.</p>
           </div>
         </div>
 
