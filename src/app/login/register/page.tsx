@@ -1,6 +1,6 @@
 'use client';''
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
@@ -52,6 +52,8 @@ export default function Page() {
     confirmPasswordError: ''
   });
 
+  const passwordScore = useMemo(() => zxcvbn(formData.password.slice(0, 256)).score, [formData.password]);
+
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -78,11 +80,9 @@ export default function Page() {
         }
         break;
       case 'password':
-        const trimmed = formData.password.slice(0, 256);
-        const { score } = zxcvbn(trimmed);
         if (!formData.password) {
           errorMessage = 'Please enter a password';
-        } else if (score < 2) {
+        } else if (passwordScore < 2) {
           errorMessage = 'Please use a stronger password';
         }
         break;
@@ -129,7 +129,7 @@ export default function Page() {
             credentials: {
               email: formData.email,
               name: formData.name,
-              password: formData.password,
+              password: formData.password.slice(0, 256),
             }
           }
         });
@@ -149,8 +149,8 @@ export default function Page() {
     })();
   };
 
-  {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
-
+  const [showStrength, setShowStrength] = useState<boolean>(false);
+  const stages = ['grey', 'grey', 'rgb(205, 175, 109)', 'rgb(109, 205, 155)', 'rgb(205, 109, 189)'];
   
   return (
     <>
@@ -194,10 +194,17 @@ export default function Page() {
           onChange={(e) => handleChange('password', e.target.value)}
           placeholder="Your password"
           errorOnFocusOnly={true}
+          onFocus={() => setShowStrength(true)}
+          onBlur={() => setShowStrength(false)}
           errorMessage={errors.passwordError}
           required={!!errors.passwordError}
           dark
         />
+        <div className={styles.strength} style={{height: showStrength ? '10px' : 0}}>
+          <div>
+            <span style={{width: `${passwordScore * 25}%`, backgroundColor: stages[passwordScore]}} />
+          </div>
+        </div>
         <Input
           disabled={loading}
           type="password"
@@ -210,6 +217,8 @@ export default function Page() {
           required={!!errors.confirmPasswordError}
           dark
         />
+  {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
+
         {responseError && <p className={styles.error}>{responseError}</p>}
         <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
         <span className={styles.shadow} />

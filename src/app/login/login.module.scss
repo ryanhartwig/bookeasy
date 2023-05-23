@@ -110,6 +110,37 @@
   }
 }
 
+.strength {
+  margin: 0;
+  transition: height 200ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  overflow: hidden;
+
+  div {
+    background: rgba(63, 63, 63, 0.534);
+    border-radius: 10px;
+    width: 90%;
+    height: 4px;
+  
+    position: relative;
+    overflow: hidden;
+    
+    span {
+      transition: width 400ms, background-color 400ms;
+      
+      background-color: rgb(205, 109, 189);
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+}
+
 .shadow {
   height: 8px;
   width: 300px;
