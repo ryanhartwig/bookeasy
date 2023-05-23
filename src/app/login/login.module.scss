@@ -47,15 +47,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
   position: relative;
-
-  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
-
   text-align: center;
 
-
   width: 300px;
+  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
 
   // Default / backup spacing for all unspecified elements
   > * {
@@ -100,13 +96,19 @@
     margin: 16px 0;
   }
 
-  
-
   .error {
     font-size: 13px;
     color: rgb(255, 164, 104);
     margin-top: 12px;
     margin-bottom: 0;
+  }
+
+  &.loading {
+    cursor: progress;
+    filter: blur(0.04em);
+    > * {
+      pointer-events: none;
+    }
   }
 }
 

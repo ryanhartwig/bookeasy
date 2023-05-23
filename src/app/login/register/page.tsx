@@ -16,6 +16,7 @@ import Image from "next/image";
 import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
 import { Input } from "@/components/UI/Input/Input";
+import clsx from "clsx";
 
 
 type FormData = {
@@ -35,7 +36,7 @@ type Errors = {
 export default function Page() {
   const redirect = useRouter();
   
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingElement, setLoadingElement] = useState<string>('');
   const [responseError, setResponseError] = useState<string>('');
   
   const [formData, setFormData] = useState<FormData>({
@@ -104,7 +105,7 @@ export default function Page() {
 
   const resetAll = useCallback(() => {
     setFormData({name: '', email: '', password: '', confirmPassword: ''});
-    setLoading(false);
+    setLoadingElement('');
     reset();
   }, [reset]);
 
@@ -121,7 +122,8 @@ export default function Page() {
       return;
     }
 
-    setLoading(true);    
+    setLoadingElement('create');
+
     ;(async () => {
       try {
         await registerUser({
@@ -154,18 +156,27 @@ export default function Page() {
   
   return (
     <>
-      <div className={styles.form}>
+      <div className={clsx(styles.form, {[styles.loading]: !!loadingElement})}>
         <h3>Create an account</h3>
-        <Button onClick={() => signIn('google', { callbackUrl: '/home/dashboard' })} icon={<Image src={Google} alt="Google logo" />}>Sign up with Google</Button>
-        <Button onClick={() => signIn('facebook', { callbackUrl: '/home/dashboard' })} icon={<Image src={Facebook} alt="Facebook logo" />}>Sign up with Facebook</Button>
+        <Button loading={loadingElement === 'google'}
+          onClick={() => {
+            setLoadingElement('google');
+            signIn('google', { callbackUrl: '/home/dashboard' });
+          }}  
+          icon={<Image src={Google} alt="Google logo" />}
+        >Sign up with Google</Button>
+        <Button loading={loadingElement === 'facebook'}
+          onClick={() => {
+            setLoadingElement('facebook');
+            signIn('facebook', { callbackUrl: '/home/dashboard' });
+          }} 
+          icon={<Image src={Facebook} alt="Facebook logo" />}
+        >Sign up with Facebook</Button>
         
-        <div className={styles.divider}>
-          <hr />
-          <p>or</p>
-          <hr />
-        </div>
+        <div className={styles.divider}><hr/><p>or</p><hr/></div>
+
         <Input
-          disabled={loading}
+          disabled={!!loadingElement}
           className={styles.input}
           value={formData.name}
           onChange={(e) => handleChange('name', e.target.value)}
@@ -176,7 +187,7 @@ export default function Page() {
           dark
         />
         <Input
-          disabled={loading}
+          disabled={!!loadingElement}
           className={styles.input}
           value={formData.email}
           onChange={(e) => handleChange('email', e.target.value)}
@@ -187,7 +198,7 @@ export default function Page() {
           dark
         />
         <Input
-          disabled={loading}
+          disabled={!!loadingElement}
           type="password"
           className={styles.input}
           value={formData.password}
@@ -207,7 +218,7 @@ export default function Page() {
           </div>
         </div>
         <Input
-          disabled={loading}
+          disabled={!!loadingElement}
           type="password"
           className={styles.input}
           value={formData.confirmPassword}
@@ -218,10 +229,13 @@ export default function Page() {
           required={!!errors.confirmPasswordError}
           dark
         />
-  {/* <p>{`strength: ${zxcvbn(formData.password.slice(0, 256)).score}`}</p> */}
 
         {responseError && <p className={styles.error}>{responseError}</p>}
-        <Button className={styles.create} style={{width: '55%', padding: '8px 0'}} onClick={handleSubmit}>Create Account</Button>
+        <Button loading={loadingElement === 'create'}
+          className={styles.create} 
+          style={{width: '55%', padding: '8px 0'}} 
+          onClick={handleSubmit}
+        >Create Account</Button>
         <span className={styles.shadow} />
         
       </div>

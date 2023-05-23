@@ -8,7 +8,7 @@ interface ButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
   loading?: boolean,
 }
 
-export const Button: React.FC<ButtonProps> = ({icon, children, loading = true, ...props}) => {
+export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, ...props}) => {
   
   return (
     <div {...props} 
@@ -18,7 +18,7 @@ export const Button: React.FC<ButtonProps> = ({icon, children, loading = true, .
     >
       {icon && <div>{icon}</div>}
       <p>{children}</p>
-      <div className={styles.spinner}></div>
+        {loading && <div className={styles.spinner}></div>}
     </div>
   )
 }
