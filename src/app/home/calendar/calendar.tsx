@@ -13,12 +13,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { useUser } from '@/app/Providers';
 
-interface CalendarProps {
-  userId: string,
+export interface View {        
+  month: number,
+  year: number,
 }
 
-export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
+export const CalendarView = () => {
+  const { id: userId } = useUser();
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);

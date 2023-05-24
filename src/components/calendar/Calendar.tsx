@@ -4,7 +4,7 @@ import './Calendar.css';
 import { Days } from './Days';
 
 import { AppointmentData } from '@/types/Appointment';
-import { View } from '@/app/home/calendar/page';
+import { View } from '@/app/home/calendar/calendar';
 
 interface CalendarProps {
   selected?: [number, number],
