@@ -16,6 +16,7 @@ import { GET_USER_WITH_PREFS, PATCH_USER, PATCH_USER_PREFS } from '@/utility/que
 import { useMutation, useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
+import Loading from './loading';
 import styles from './settings.module.scss';
 
 export const SettingsView = () => {
@@ -64,7 +65,8 @@ export const SettingsView = () => {
   
   return (
     <>
-      {user && user.prefs && <div className={styles.Settings}>
+      {user && user.prefs 
+      ? <div className={styles.Settings}>
         <Card className={styles.card}>
           <SectionLabel label="Profile Settings" className={styles.label} />
           <div className={styles.setting_block}>
@@ -138,7 +140,8 @@ export const SettingsView = () => {
             </div>
           </div>
         </Modal>
-      </div>}
+      </div>
+      : <Loading skipHeader />}
     </>
   )
 }
