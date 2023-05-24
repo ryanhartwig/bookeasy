@@ -1,9 +1,10 @@
 import { Header } from "@/components/Header"
+import { LoadingView } from "@/components/UI/LoadingView/LoadingView";
 import styles from './services.module.scss';
 
 export default function Loading() {
   
-  return <div>
+  return <>
     <Header text="Services" loading />
     <div className={styles.services_page}>
       <div className={styles.labels}>
@@ -11,6 +12,7 @@ export default function Loading() {
           <p key={t}>{t}</p>
         )}
       </div>
+      <LoadingView />
     </div>
-  </div>
+  </>
 }

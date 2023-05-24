@@ -3,6 +3,7 @@
 .services_page {
   height: calc(100% - var(--header-height));
   padding: 10px;
+  position: relative;
 }
 
 .labels {
