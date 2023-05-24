@@ -11,6 +11,11 @@
   
   background: white;
   border-bottom: 1px solid #DDDDDD;
+
+  .title {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .loadingTrack {
