@@ -2,6 +2,7 @@ import { Header } from '@/components/Header';
 import { Card } from '@/components/UI/Card/Card';
 import { LoadingDots } from '@/components/UI/LoadingDots/LoadingDots';
 import { Skeleton } from '@/components/UI/Skeleton/Skeleton';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { Tabs } from '@/components/UI/Tabs/Tabs';
 import clsx from 'clsx';
 import styles from './business.module.scss';
@@ -59,8 +60,8 @@ export default function Page() {
 
         {/* Right panel */}
         <div>
-          <Card className={clsx(styles.card, styles.prefs)}>
-            <Tabs tab={0} tabs={['Preferences', 'Client List', 'Booking Site', 'Services', 'Availability']} />
+          <Card className={clsx(styles.card, styles.prefs)} style={{background: '#F8F8F8'}}>
+            <Tabs style={{background: 'white'}} tab={0} tabs={['Preferences', 'Client List', 'Booking Site', 'Services', 'Availability']} />
           </Card>
         </div>
       </div>
