@@ -10,6 +10,9 @@ import { months, days } from '@/utility/data/calendarData';
 import calendarStyles from './calendar.module.scss';
 import styles from './daily.module.scss';
 import '@/components/calendar/Calendar.css';
+import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
+import { CSSProperties } from 'react';
+import clsx from 'clsx';
 
 export default function Page() {
   const viewing = {
@@ -55,7 +58,15 @@ export default function Page() {
             
             {/* Calendar Days */}
             <div className='Calendar-fields-wrapper noselect'>
-              <Skeleton />
+              <div className={styles.skeletonCalendar}>
+                {new Array(6).fill(
+                  <div className={styles.skeletonCalendarWeek}>
+                    {new Array(7).fill(
+                      <div className={styles.skeletonCalendarDay} />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

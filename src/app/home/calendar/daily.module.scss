@@ -69,3 +69,36 @@
       }
   }
 }
+
+.skeletonCalendar {
+  background: white;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.skeletonCalendarWeek {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+
+  &:first-child {
+    .skeletonCalendarDay {
+      border-top: none;
+    }
+  }
+}
+
+.skeletonCalendarDay {
+  border-top: 1px solid var(--dividers);
+  border-left: 1px solid var(--dividers);
+  width: 100%;
+  height:100%;
+
+  &:first-child {
+    border-left: none;
+  }  
+}
