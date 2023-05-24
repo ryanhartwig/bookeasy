@@ -13,6 +13,8 @@ import '@/components/calendar/Calendar.css';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { CSSProperties } from 'react';
 import clsx from 'clsx';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
+import { LoadingDots } from '@/components/UI/LoadingDots/LoadingDots';
 
 export default function Page() {
   const viewing = {
@@ -44,10 +46,11 @@ export default function Page() {
         </SecondaryHeader>
         <div className={calendarStyles.content}>
           <div className={styles.daily}>
-            <p className={styles.day}>...</p>
+            {/* <Spinner size={15} style={{margin: '0 auto 5px'}} /> */}
+            <LoadingDots size={4} style={{padding: '8px 0'}} />
             <div className={styles.day_wrapper}>
               <Card className={styles.day_card} style={{height: '100%'}}>
-              </Card>  
+              </Card> 
             </div>
           </div>
           <div className='Calendar'>
