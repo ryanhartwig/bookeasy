@@ -12,7 +12,7 @@ export default function Page() {
           <p key={t}>{t}</p>
         )}
       </div>
-      <LoadingView />
+      <LoadingView text="Services" />
     </div>
   </>
 }
