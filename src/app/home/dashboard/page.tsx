@@ -2,6 +2,7 @@ import { Header } from "@/components/Header"
 import { SecondaryHeader } from "@/components/SecondaryHeader"
 import { Card } from "@/components/UI/Card/Card";
 import { SectionLabel } from "@/components/UI/SectionLabel/SectionLabel"
+import { Skeleton } from "@/components/UI/Skeleton/Skeleton";
 import styles from './dashboard.module.scss';
 import { WeekDayNames } from "./weekDayNames";
 
@@ -20,10 +21,7 @@ export default function Page() {
           <SectionLabel label='This Week' />
           <Card className={styles.weekview_card}>
             <WeekDayNames />
-            <div className={styles.loadingblock } >
-              <div className={styles.loadingswipe} />
-              <div className={styles.loadingswipe} />
-            </div>
+            <Skeleton />
           </Card>
         </div>
       </div>

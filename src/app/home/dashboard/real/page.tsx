@@ -1,6 +1,6 @@
-import styles from './dashboard.module.scss';
+import styles from '../dashboard.module.scss';
 import { Header } from '@/components/Header';
-import DashboardView from './DashboardView';
+import DashboardView from '../DashboardView';
 
 export default function Page() {
   
