@@ -1,12 +1,18 @@
-import { Header } from '@/components/Header';
-import { ServicesView } from './ServicesView';
+import { Header } from "@/components/Header"
+import { LoadingView } from "@/components/UI/LoadingView/LoadingView";
+import styles from './services.module.scss';
 
-export default async function Page() {
-  await (() => new Promise((res) => setTimeout(() => res(''), 120000)))()
-  return (
-    <>
-      <Header text='Services' />
-      <ServicesView />
-    </>
-  )
+export default function Page() {
+  
+  return <>
+    <Header text="Services" loading />
+    <div className={styles.services_page}>
+      <div className={styles.labels}>
+        {['Name', 'Duration', 'Provider', 'Assignee(s)', 'Cost'].map((t) => 
+          <p key={t}>{t}</p>
+        )}
+      </div>
+      <LoadingView />
+    </div>
+  </>
 }

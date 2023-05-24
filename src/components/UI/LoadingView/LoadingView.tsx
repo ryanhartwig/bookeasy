@@ -1,3 +1,4 @@
+import { Spinner } from '../Spinner/Spinner';
 import styles from './loading.module.scss';
 
 export const LoadingView = () => {
@@ -6,7 +7,7 @@ export const LoadingView = () => {
   return (
     <div className={styles.loading}>
       <div className={styles.loadingBox}>
-        <p>Loading</p>
+        <Spinner />
       </div>
     </div>
   )

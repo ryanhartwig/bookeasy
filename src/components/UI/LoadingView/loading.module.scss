@@ -12,13 +12,15 @@
 }
 
 .loadingBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   width: 150px;
   height: 80px;
 
   border-radius: 15px;
   background: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
+  position: relative;
 }
