@@ -12,7 +12,6 @@ import { useUser } from '@/app/Providers';
 
 export default function DashboardView() {
   const { id } = useUser();
-  
   return (
     <>
       <SecondaryHeader>

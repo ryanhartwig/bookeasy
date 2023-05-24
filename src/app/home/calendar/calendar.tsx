@@ -1,7 +1,6 @@
 'use client';
 
 import styles from './calendar.module.scss';
-import { Calendar, months } from '@/components/calendar/Calendar';
 import { SecondaryHeader } from '@/components/SecondaryHeader';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -14,6 +13,8 @@ import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { useUser } from '@/app/Providers';
+import { Calendar } from '@/components/calendar/Calendar';
+import { months } from '@/utility/data/calendarData';
 
 export interface View {        
   month: number,
