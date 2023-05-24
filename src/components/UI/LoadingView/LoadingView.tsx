@@ -3,11 +3,11 @@ import styles from './loading.module.scss';
 
 export const LoadingView = () => {
 
-
   return (
     <div className={styles.loading}>
       <div className={styles.loadingBox}>
-        <Spinner />
+        <p>Loading Services</p>
+        <Spinner size={25} />
       </div>
     </div>
   )
