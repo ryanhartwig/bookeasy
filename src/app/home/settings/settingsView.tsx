@@ -70,7 +70,13 @@ export const SettingsView = () => {
         <Card className={styles.card}>
           <SectionLabel label="Profile Settings" className={styles.label} />
           <div className={styles.setting_block}>
-            <Setting label='Picture' value={value} setValue={setValue} onSave={() => onPatchUser('avatar')} allowEmptyValue >
+            <Setting label='Picture' 
+              onRemove={user?.avatar ? () => onPatchUser('avatar') : undefined}  
+              value={value} 
+              setValue={setValue} 
+              onSave={() => onPatchUser('avatar')} 
+              allowEmptyValue 
+            >
               <Avatar src={user?.avatar} size={60} />
             </Setting>
             <Setting label='Name' value={value} setValue={setValue} onSave={() => onPatchUser('name')}>
