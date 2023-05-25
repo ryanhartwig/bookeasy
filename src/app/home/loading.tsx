@@ -3,7 +3,7 @@ import './home.scss';
 import { Navigator } from '@/components/Navigator';
 import { Header } from '@/components/Header';
 
-export default async function Loading() {
+export default function Loading() {
 
   return (
     <div className='main'>
