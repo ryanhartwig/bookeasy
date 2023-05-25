@@ -16,6 +16,7 @@ import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 
 interface WeekDaysProps {
   userId: string,
@@ -77,6 +78,7 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
 
   return (
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
+      {loading && <Spinner className={styles.loadingAppointments} />}
       <div className={styles.hourly} ref={hourlyRef} style={{width}}>
         {days.map((_, i) => {
           const date = new Date(start);
