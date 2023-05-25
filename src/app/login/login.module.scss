@@ -34,7 +34,7 @@
 
   transform: translateY(30px);
 
-  // opacity: 0 !important;
+  opacity: 0 !important;
 
   // Left & right side even
   > div {
@@ -302,15 +302,15 @@
   }
 }
 
-.loadingSplash {
-  animation: fadeout 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
-}
+// .loadingSplash {
+//   animation: fadeout 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+// }
 
-@keyframes fadeout {
-  0% {
-    opacity: 1;
-  } 
-  100% {
-    opacity: 0;
-  }
-}
+// @keyframes fadeout {
+//   0% {
+//     opacity: 1;
+//   } 
+//   100% {
+//     opacity: 0;
+//   }
+// }
