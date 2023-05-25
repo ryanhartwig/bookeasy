@@ -11,7 +11,6 @@ import styles from './services.module.scss';
 import { AiOutlinePlus } from "react-icons/ai";
 import { Service } from "@/types/Service";
 import { SectionLabel } from "@/components/UI/SectionLabel/SectionLabel";
-import { ServiceCard } from "./service";
 import { LoadingDots } from "@/components/UI/LoadingDots/LoadingDots";
 
 interface BusinessesListProps {
