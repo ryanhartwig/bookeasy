@@ -6,3 +6,21 @@
   height: calc(100% - var(--secondary-header-height));
   display: flex;
 }
+
+.loading {
+  font-size: 12px;
+  margin-left: 10px;
+
+  opacity: 0;
+  animation: fadeinout 800ms linear 1500ms infinite;
+}
+
+@keyframes fadeinout {
+  0%, 100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

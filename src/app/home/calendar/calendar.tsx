@@ -15,6 +15,7 @@ import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRang
 import { useUser } from '@/app/Providers';
 import { Calendar } from '@/components/calendar/Calendar';
 import { months } from '@/utility/data/calendarData';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 
 export interface View {        
   month: number,
@@ -57,7 +58,11 @@ export const CalendarView = () => {
             <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
               <AiOutlineRight size={15}/>
             </ReactIconButton>
+
+            {loading && <Spinner style={{marginLeft: 20}} />}
+            {loading && <p className={styles.loading}>Loading appointments...</p>}
           </div>
+          
           <div className='Calendar-reset'>
             <h2>{viewing.year}</h2>
             <p onClick={onReset}>Today</p>
