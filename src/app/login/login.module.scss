@@ -29,7 +29,10 @@
 
   position: relative;
 
-  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+  animation: fadeup 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+
+  transform: translateY(30px);
+  
 
   // Left & right side even
   > div {
@@ -57,7 +60,7 @@
   text-align: center;
 
   width: 300px;
-  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+  animation: fadeup 600ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
 
   // Default / backup spacing for all unspecified elements
   > * {
@@ -288,11 +291,11 @@
 
 @keyframes fadeup {
   0% {
-    top: 40px;
+    transform: translateY(50px);
     opacity: 0;
   } 
   100% {
-    top: 0;
+    transform: translateY(0px);
     opacity: 1;
   }
 }
