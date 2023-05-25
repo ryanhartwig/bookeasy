@@ -131,7 +131,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     dateObj.setFullYear(year);
     dateObj.setMonth(month - 1); // 0 indexed
     dateObj.setDate(day);
-    dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
+    dateObj.setHours((hours % 12) + (period === 'pm' ? 12 : 0), min, 0, 0);
 
     const start = dateObj.toISOString();
     dateObj.setTime(dateObj.getTime() + 1000 * 60 * selectedService.duration);
