@@ -30,11 +30,12 @@
 
   position: relative;
 
-  animation: fadeup 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+  transform: translateY(50px);
+  opacity: 0;
+
+  animation: fadeup 400ms cubic-bezier(.09,.17,.38,.9) 250ms forwards;
 
   transform: translateY(30px);
-
-  opacity: 0 !important;
 
   // Left & right side even
   > div {
@@ -301,16 +302,3 @@
     opacity: 1;
   }
 }
-
-// .loadingSplash {
-//   animation: fadeout 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
-// }
-
-// @keyframes fadeout {
-//   0% {
-//     opacity: 1;
-//   } 
-//   100% {
-//     opacity: 0;
-//   }
-// }
