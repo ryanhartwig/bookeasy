@@ -17,6 +17,7 @@
 .loginBox {
   aspect-ratio: 10 / 7;
 
+
   height: 55vw;
   min-height: 600px;
   max-height: 710px;
@@ -32,7 +33,8 @@
   animation: fadeup 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
 
   transform: translateY(30px);
-  
+
+  // opacity: 0 !important;
 
   // Left & right side even
   > div {
@@ -301,5 +303,14 @@
 }
 
 .loadingSplash {
-  opacity: 0;
+  animation: fadeout 700ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  } 
+  100% {
+    opacity: 0;
+  }
 }
