@@ -7,6 +7,8 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { BusinessClientsList } from './businessClientsList';
 import { ClientForm } from './clientForm/clientForm';
+import { SectionLabel } from '@/components/UI/SectionLabel/SectionLabel';
+import { LoadingDots } from '@/components/UI/LoadingDots/LoadingDots';
 
 interface ClientsProps {
   selected: Client | undefined,
@@ -52,7 +54,13 @@ export const Clients: React.FC<ClientsProps> = ({selected, setSelected, userId, 
         <p>+</p>
         <p>Add Client</p>
       </div>
-      {results}
+      {loading
+        ? <div className={styles.client_team}>
+            <SectionLabel label={'Loading Clients'} />
+            <LoadingDots style={{justifyContent: 'flex-start', marginLeft: 15}} />
+          </div>
+        : results
+      }
       {formOpen && <ClientForm setSelected={setSelected} open={formOpen} setOpen={setFormOpen} userId={userId} onSubmit={() => setFormOpen(false)} />}
     </div>
   )
