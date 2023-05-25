@@ -5,7 +5,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { FormBusiness, NewBusiness } from "@/types/Business"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { gql, Reference, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries"
 import { GET_BUSINESS_SERVICES, GET_BUSINESS_FORM_STAFF } from "@/utility/queries/businessQueries"
 import { Service, ServiceInput } from '@/types/Service';
@@ -21,8 +21,6 @@ import { ADD_SERVICE, DELETE_SERVICE, EDIT_SERVICE } from '@/utility/queries/ser
 import { BsTrash3 } from 'react-icons/bs';
 import { dateToDateInput } from '@/utility/functions/conversions/dateToDateInput';
 import { dateInputToDate } from '@/utility/functions/conversions/dateInputToDate';
-import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
-import { NEW_APPOINTMENT_FRAGMENT } from '@/utility/queries/fragments/appointmentFragments';
 
 interface ServiceFormProps {
   open: boolean,
@@ -40,7 +38,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const [error, setError] = useState<string>();
   const [name, setName] = useState<string>('');
   const [duration, setDuration] = useState<number>(30);
-  const [cost, setCost] = useState<string>('');
+  const [cost, setCost] = useState<string>('0.00');
   const [isVideo, setIsVideo] = useState<boolean>(false);
   const [color, setColor] = useState<string>('#1934b8');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -283,7 +281,13 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
         <p>Cost</p>
         <div className={styles.cost}>
           <p>$</p>
-          <Input style={{paddingLeft: 25}} type='text' placeholder='120.00' value={cost} onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
+          <Input style={{paddingLeft: 25}} 
+            type='text' 
+            placeholder='120.00' 
+            value={cost} 
+            onChange={(e) => isNaN(Number(e.target.value)) ? undefined : setCost(e.target.value)} 
+            onFocus={(e) => e.currentTarget.select()}
+            onBlur={() => setCost(p => Number(p).toFixed(2).toString())} />
         </div>
         {initialService && Number(cost) !== initialService.cost && (
           <div className={styles.updateAppointment}>
