@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Loading from "./page";
+import Loading from "./loading";
 
 const Redirect = () => {
   const router = useRouter();

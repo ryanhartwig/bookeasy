@@ -1,12 +1,5 @@
-import { LoadingSplash } from '@/components/UI/LoadingSplash/LoadingSplash';
-import styles from './login/login.module.scss';
+import Redirect from "./redirect";
 
 export default function Page() {
-  return (
-    <>
-      <div className={styles.login}>
-        <LoadingSplash loading />
-      </div> 
-    </>
-  )
+  return <Redirect />
 }
