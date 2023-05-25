@@ -27,6 +27,10 @@
   border: 1px solid rgba(52, 52, 52, 0.53);
   border-radius: 30px;  
 
+  position: relative;
+
+  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+
   // Left & right side even
   > div {
     width: 50%;
@@ -35,6 +39,7 @@
 
   overflow: hidden;
 }
+
 
 .forms {
   display: flex;
@@ -292,3 +297,6 @@
   }
 }
 
+.loadingSplash {
+  opacity: 0;
+}
