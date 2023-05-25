@@ -13,7 +13,6 @@ export default function Loading() {
             <p key={t}>{t}</p>
           )}
         </div>
-        <LoadingDots size={4} style={{justifyContent: 'flex-start', margin: '15px 30px'}} />
       </div>
     </>
   )
