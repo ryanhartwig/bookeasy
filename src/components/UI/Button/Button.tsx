@@ -19,7 +19,7 @@ export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, 
     >
       {icon && <div>{icon}</div>}
       <p>{children}</p>
-      {loading && <Spinner />}
+      {loading && <Spinner style={{position: 'absolute', left: 'calc(100% + 15px)'}} />}
     </div>
   )
 }
