@@ -11,7 +11,6 @@ interface LoadingSplashProps extends React.DetailedHTMLProps<React.HTMLAttribute
 }
 
 export const LoadingSplash: React.FC<LoadingSplashProps> = ({loading = false, skipTranslate = false, ...props}) => {
-
   const bookeasy = ['b', 'o', 'o', 'k', 'e', 'a', 's', 'y'].reverse();
 
   return (
