@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@/app/Providers';
 import { AppointmentData } from '@/types/Appointment';
 import { getCurrentISOWeek } from '@/utility/functions/dateRanges/getCurrentISOWeek';
 import { getCurrentWeek } from '@/utility/functions/dateRanges/getCurrentWeek';
@@ -11,12 +12,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import styles from './dashboard.module.scss';
 
-interface StatsProps {
-  userId: string,
-}
-
-export const Stats: React.FC<StatsProps> = ({userId}) => {
-
+export const Stats = () => {
+  const { id: userId } = useUser();
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
 
   // Use whole month range so that input is the same, (and will therefore use cached data for subsequent request)
