@@ -1,13 +1,10 @@
-'use client';''
-
 import { useCallback, useMemo, useState } from "react";
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import styles from '../login.module.scss';
+import styles from './login.module.scss';
 import zxcvbn from "zxcvbn";
 import { Button } from "@/components/UI/Button/Button";
 
@@ -17,7 +14,6 @@ import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
 import { Input } from "@/components/UI/Input/Input";
 import clsx from "clsx";
-
 
 type FormData = {
   name: string;
@@ -33,7 +29,7 @@ type Errors = {
   confirmPasswordError: string;
 };
 
-export default function Page() {
+export default function Register({onNavigate}: {onNavigate: (...args: any) => any}) {
   const redirect = useRouter();
   
   const [loadingElement, setLoadingElement] = useState<string>('');
@@ -240,7 +236,7 @@ export default function Page() {
         
       </div>
       <div className={styles.navigate}>
-        <Link href='login'>Existing user? Log in</Link>
+        <p tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} onClick={onNavigate}>Existing user? Log in</p>
       </div>
     </>
   );

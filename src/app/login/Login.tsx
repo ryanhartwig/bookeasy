@@ -1,5 +1,3 @@
-'use client';
-
 import { Input } from "@/components/UI/Input/Input"
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -9,10 +7,9 @@ import Facebook from '@/assets/facebook.png';
 import Image from "next/image";
 import styles from './login.module.scss';
 import { Button } from "@/components/UI/Button/Button";
-import Link from "next/link";
 import clsx from "clsx";
 
-export const Login = () => {
+export const Login = ({onNavigate}: {onNavigate: (...args: any) => any}) => {
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -103,8 +100,8 @@ export const Login = () => {
           onClick={onSubmit}
         >Login</Button>
       </div>
-      <div className={styles.navigate}>
-        <Link href='login/register'>Create an account</Link>
+      <div className={styles.navigate} >
+        <p tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} onClick={onNavigate}>Create an account</p>
       </div>
     </>
   )
