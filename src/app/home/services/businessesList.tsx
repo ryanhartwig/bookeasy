@@ -10,6 +10,8 @@ import { ServicesList } from "./servicesList";
 import styles from './services.module.scss';
 import { AiOutlinePlus } from "react-icons/ai";
 import { Service } from "@/types/Service";
+import { SectionLabel } from "@/components/UI/SectionLabel/SectionLabel";
+import { LoadingDots } from "@/components/UI/LoadingDots/LoadingDots";
 
 interface BusinessesListProps {
   userId: string,
@@ -43,10 +45,16 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
       {businesses.map(b => (  
         <ServicesList key={b.id} business={b} setSelectedService={setSelectedService} />
       ))}
+      {loading && 
+        <div className={styles.services_wrapper}>
+          <SectionLabel label={'Loading Services'} />
+          <LoadingDots style={{justifyContent: "flex-start", margin: 15}} />
+        </div>
+      }
       {serviceFormOpen && <ServiceForm open={serviceFormOpen} setOpen={setServiceFormOpen} userId={userId} initialService={selectedService} onSubmit={() => setSelectedService(undefined)} />}
-      <div className={styles.addService} onClick={() => setServiceFormOpen(true)}>
+      {!loading && <div className={styles.addService} onClick={() => setServiceFormOpen(true)}>
         <AiOutlinePlus fontSize={18} />
-      </div>
+      </div>}
     </>
   )
 }

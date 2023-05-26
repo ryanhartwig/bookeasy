@@ -1,4 +1,4 @@
-import { View } from "@/app/home/calendar/page";
+import { View } from "@/app/home/calendar/calendar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getDayRange } from "../functions/dateRanges/getDayRange";
 

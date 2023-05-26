@@ -131,7 +131,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     dateObj.setFullYear(year);
     dateObj.setMonth(month - 1); // 0 indexed
     dateObj.setDate(day);
-    dateObj.setHours(hours + (period === 'pm' ? 12 : 0), min, 0, 0);
+    dateObj.setHours((hours % 12) + (period === 'pm' ? 12 : 0), min, 0, 0);
 
     const start = dateObj.toISOString();
     dateObj.setTime(dateObj.getTime() + 1000 * 60 * selectedService.duration);
@@ -170,7 +170,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const appointment = useMemo<AppointmentInput | null>(() => {
     if (!selectedBusiness || !selectedClient || !selectedService || !startEndDates || !selectedStaff) return null;
 
-
     return {
       id: id ?? uuid(),
       staff_id: selectedStaff.id,
@@ -207,7 +206,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
               `
             });
             return initialAppointment 
-              ? existingAppointments.map((ref: any) => readField('id', ref) === readField('id', newAppointmentRef) ? newAppointmentRef : ref)
+              ? existingAppointments.map((ref: any) => readField('id', ref) === id ? newAppointmentRef : ref)
               : [...existingAppointments, newAppointmentRef];
           }
         }

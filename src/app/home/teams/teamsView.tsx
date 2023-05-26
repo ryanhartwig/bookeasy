@@ -7,12 +7,11 @@ import styles from './teams.module.scss';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { TeamDetails } from './teamDetails';
+import { useUser } from '@/app/Providers';
 
-interface TeamsViewProps {
-  userId: string,
-}
-
-export const TeamsView: React.FC<TeamsViewProps> = ({userId}) => {
+export const TeamsView = () => {
+  const { id: userId } = useUser();
+  
   const [selected, setSelected] = useState<NewBusiness>();
   const [teams, setTeams] = useState<NewBusiness[]>([]);
 

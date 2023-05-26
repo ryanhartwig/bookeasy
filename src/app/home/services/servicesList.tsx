@@ -25,13 +25,15 @@ export const ServicesList: React.FC<ServicesListProps> = ({business, setSelected
   return (
     <div className={styles.services_wrapper}>
       <SectionLabel label={business.is_own ? `${business.name} (My Business)` : business.name} />
-      {services
+      {services.length ? services
         .filter(s => !s.deleted)
         .map(s => 
       <div key={s.id}>
         <ServiceCard service={s} onClick={() => setSelectedService(s)} />
       </div>
-      )}
+      )
+      : <p className={styles.noservices}>No services to show</p>
+    }
     </div>
   )
 }

@@ -6,12 +6,11 @@ import styles from './clients.module.scss';
 import { Client } from '@/types/Client';
 import React, { useState } from 'react';
 import { NewBusiness } from '@/types/Business';
+import { useUser } from '@/app/Providers';
 
-interface ClientsViewProps {
-  userId: string,
-}
-
-export const ClientsView: React.FC<ClientsViewProps> = ({userId}) => {
+export const ClientsView = () => {
+  const { id: userId } = useUser();
+  
   const [selected, setSelected] = useState<Client>();
   const [selectedBusiness, setSelectedBusiness] = useState<NewBusiness>();
 

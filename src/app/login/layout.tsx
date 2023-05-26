@@ -20,8 +20,8 @@ import R from '@/assets/login/R.png';
 
 import * as bookit from '@/assets/logo_temp.svg';
 
-
 import clsx from "clsx";
+import { LoadingSplash } from "@/components/UI/LoadingSplash/LoadingSplash";
 
 export default async function Layout({children}: {children: React.ReactNode}) {
   const session = await getServerSession(authOptions);
@@ -31,11 +31,10 @@ export default async function Layout({children}: {children: React.ReactNode}) {
   
   return (
     <div className={styles.login}>
+      <LoadingSplash className={styles.loadingSplash} />
       <div className={styles.loginBox}>
         {/* Left side */}
         <div className={clsx(styles.visual, 'noselect')}>
-          
-          
           <Image className={styles.colorbackground} src={Radial} alt="Login background" />
           <div className={styles.imagecolumn}>
             <div>
@@ -82,7 +81,6 @@ export default async function Layout({children}: {children: React.ReactNode}) {
         <div className={styles.forms}>
           {children}
           <span className={styles.shadow} />
-
         </div>
       </div>
     </div>

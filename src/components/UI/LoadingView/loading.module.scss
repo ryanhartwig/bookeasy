@@ -1,0 +1,39 @@
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background-color: rgba(1, 1, 1, 0.1);
+  
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+
+.loadingBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  
+  padding: 15px;
+  width: 70px;
+  height: 70px;
+
+  border-radius: 20px;
+  // background: rgb(230, 230, 230);
+
+  position: relative;
+}
+
+.loadingText {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  color: rgb(77, 77, 77);
+}

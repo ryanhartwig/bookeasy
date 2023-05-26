@@ -1,0 +1,39 @@
+.login {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+
+  background: linear-gradient(180deg, #262626 0%, #000000 0.01%, rgba(12, 16, 19, 0.97) 75%, #000000 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  color: var(--font-on-dark);
+  font-weight: 100;
+  pointer-events: none;
+}
+
+.loginBackground {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  animation: fadeout 300ms ease-out 300ms forwards;
+
+  pointer-events: none;
+
+  background: white;
+  z-index: 999;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  } 100% {
+    opacity: 0;
+  }
+}

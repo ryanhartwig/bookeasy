@@ -11,12 +11,12 @@ import { GET_USER_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
+import { useUser } from '@/app/Providers';
 
-interface AppointmentsProps {
-  userId: string,
-}
 
-export const Appointments: React.FC<AppointmentsProps> = ({userId}) => {
+export const Appointments = () => {
+  const { id: userId } = useUser();
+
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
   const todayRange = useMemo(() => getISODayRange(), []);

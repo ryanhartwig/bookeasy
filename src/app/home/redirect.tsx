@@ -1,5 +1,6 @@
 "use client";
 
+import { Header } from "@/components/Header";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -8,7 +9,9 @@ const Redirect = () => {
 
   useEffect(() => router.replace('/home/dashboard'), [router]);
 
-  return <></>
+  return <>
+    <Header text="" loading />
+  </>
 }
 
 export default Redirect;

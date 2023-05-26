@@ -1,5 +1,5 @@
 import Redirect from "./redirect";
 
-export default function page() {
+export default function Page() {
   return <Redirect />
 }

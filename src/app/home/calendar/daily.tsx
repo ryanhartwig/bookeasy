@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/UI/Card/Card';
-import { Appointment, AppointmentData } from '@/types/Appointment';
+import { AppointmentData } from '@/types/Appointment';
 import { useEffect, useState, useRef } from 'react';
 import { AppointmentForm } from '../dashboard/appointmentForm/appointmentForm';
 import { Hours } from '../dashboard/hours';

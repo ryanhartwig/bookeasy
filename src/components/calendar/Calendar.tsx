@@ -4,7 +4,8 @@ import './Calendar.css';
 import { Days } from './Days';
 
 import { AppointmentData } from '@/types/Appointment';
-import { View } from '@/app/home/calendar/page';
+import { View } from '@/app/home/calendar/calendar';
+import { days } from '@/utility/data/calendarData';
 
 interface CalendarProps {
   selected?: [number, number],
@@ -14,8 +15,6 @@ interface CalendarProps {
   appointments: AppointmentData[],
 }
 
-export const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-export const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export const Calendar: React.FC<CalendarProps> = ({startDate, onSelect, selected, viewing, appointments}) => {
 

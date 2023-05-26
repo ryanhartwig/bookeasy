@@ -3,6 +3,7 @@
 .services_page {
   height: calc(100% - var(--header-height));
   padding: 10px;
+  position: relative;
 }
 
 .labels {
@@ -145,4 +146,11 @@
   height: 40px;
 
   @include globalutil.light_shadow;
+}
+
+.noservices {
+  padding-left: 20px;
+  color: rgb(108, 107, 107);
+  font-weight: 300;
+  font-size: 14px;
 }

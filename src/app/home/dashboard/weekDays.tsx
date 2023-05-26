@@ -1,4 +1,4 @@
-  'use client';
+'use client';
 
 import styles from './weekly_overview.module.scss';
 
@@ -16,12 +16,12 @@ import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { AppointmentForm } from './appointmentForm/appointmentForm';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { GET_USER_AVAILABILITY } from '@/utility/queries/availabilityQueries';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
+import { useUser } from '@/app/Providers';
 
-interface WeekDaysProps {
-  userId: string,
-}
+export const WeekDays = () => {
+  const { id: userId } = useUser();
 
-export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
   const [rangeStart, rangeEnd] = useMemo(() => getISOMonthRange(), []);
   const [formOpen, setFormOpen] = useState<boolean>(false);
@@ -63,21 +63,15 @@ export const WeekDays: React.FC<WeekDaysProps> = ({userId}) => {
   }, [data, error, loading]);
 
   const days = Array(7).fill(true);
-  const hourlyRef = useRef<HTMLDivElement>(undefined!);
-
-  const [width, setWidth] = useState<string>('auto');
   const [start] = getCurrentWeek();
 
   const wrapperRef = useRef<HTMLDivElement>(undefined!);
   const wrapperWidth = useOptimizedResize(wrapperRef, '100%');
 
-  useEffect(() => {
-    setWidth(`calc(100% + ${hourlyRef.current.offsetWidth - hourlyRef.current.clientWidth}px)`)
-  }, []);
-
   return (
     <div className={styles.hourlywrapper} ref={wrapperRef} style={{width: wrapperWidth}}>
-      <div className={styles.hourly} ref={hourlyRef} style={{width}}>
+      {loading && <Spinner className={styles.loadingAppointments} />}
+      <div className={styles.hourly}>
         {days.map((_, i) => {
           const date = new Date(start);
           date.setDate(date.getDate() + i);

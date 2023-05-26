@@ -38,6 +38,11 @@
   align-items: center;
 
   border-bottom: 1px solid #464646;
+
+  font-weight: 100;
+  > span:first-of-type {
+    font-weight: 400;
+  }
 }
 .Navigator_logo span {
   position: relative;
@@ -86,23 +91,6 @@
   height: 100%;
 
   overflow: hidden;
-}
-
-/* Title and avatar w/notifications */
-.Header {
-  background: white;
-  overflow: hidden;
-  
-  height: 54px;
-  width: 100%;
-
-  padding: 0 25px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  border-bottom: 1px solid #DDDDDD;
 }
 
 .SecondaryHeader { 

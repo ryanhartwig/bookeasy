@@ -1,7 +1,6 @@
 'use client';
 
 import styles from './calendar.module.scss';
-import { Calendar, months } from '@/components/calendar/Calendar';
 import { SecondaryHeader } from '@/components/SecondaryHeader';
 import { ReactIconButton } from '@/components/UI/IconButton/ReactIconButton';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -13,12 +12,18 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppointmentData } from '@/types/Appointment';
 import { inRange } from '@/utility/functions/dateRanges/inRange';
 import { getISOMonthRange } from '@/utility/functions/dateRanges/getISOMonthRange';
+import { useUser } from '@/app/Providers';
+import { Calendar } from '@/components/calendar/Calendar';
+import { months } from '@/utility/data/calendarData';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 
-interface CalendarProps {
-  userId: string,
+export interface View {        
+  month: number,
+  year: number,
 }
 
-export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
+export const CalendarView = () => {
+  const { id: userId } = useUser();
   const { onMonthSwitch, onReset, startDate, selected, viewing, onSelect } = useCalendarNavigation();
 
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
@@ -53,7 +58,11 @@ export const CalendarView: React.FC<CalendarProps> = ({userId}) => {
             <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
               <AiOutlineRight size={15}/>
             </ReactIconButton>
+
+            {loading && <Spinner style={{marginLeft: 20}} />}
+            {loading && <p className={styles.loading}>Loading appointments...</p>}
           </div>
+          
           <div className='Calendar-reset'>
             <h2>{viewing.year}</h2>
             <p onClick={onReset}>Today</p>

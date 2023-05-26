@@ -1,0 +1,49 @@
+/* Title and avatar w/notifications */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  height: 54px;
+  width: 100%;
+  padding: 0 25px;
+  
+  background: white;
+  border-bottom: 1px solid #DDDDDD;
+
+  .title {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.loadingTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: rgba(175, 175, 175, 0.2);
+  width: 100%;
+  
+  > span {
+    position: absolute;
+    background-color: purple;
+    
+    animation: progress 1500ms ease-in-out infinite;
+    
+    width: 170px;
+    left: 0;
+    top: 0px;
+    height: 2px;
+    z-index: 5;
+  }
+}
+
+@keyframes progress {
+  0% {
+    left: -170px;
+  } 100% {
+    left: calc(100% + 170px);
+  }
+}

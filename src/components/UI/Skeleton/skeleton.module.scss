@@ -1,0 +1,36 @@
+.loadingblock {
+  width: 100%;
+  height: 100%;
+  background: rgb(162, 162, 162);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.loadingswipe {
+  height: 140%;
+  width: 140px;
+
+  position: absolute;
+  top: -20px;
+  rotate: 15deg;
+  filter: blur(100px);
+  background-color: white;
+
+  &:first-of-type {
+    animation: swipe 1200ms infinite;
+  }
+  &:last-of-type {
+    filter: blur(180px);
+    rotate: 45deg;
+  }
+}
+
+@keyframes swipe {
+  0% {
+    left: -400px;
+  }
+  100% {
+    left: calc(100% + 400px);
+  }
+}

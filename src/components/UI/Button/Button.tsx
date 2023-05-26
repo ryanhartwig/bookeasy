@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { Spinner } from '../Spinner/Spinner';
 import styles from './button.module.scss';
 
 interface ButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
@@ -18,7 +19,7 @@ export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, 
     >
       {icon && <div>{icon}</div>}
       <p>{children}</p>
-        {loading && <div className={styles.spinner}></div>}
+      {loading && <Spinner style={{position: 'absolute', left: 'calc(100% + 15px)'}} />}
     </div>
   )
 }

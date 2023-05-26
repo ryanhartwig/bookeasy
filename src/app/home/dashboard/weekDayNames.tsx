@@ -5,7 +5,7 @@ export const WeekDayNames = () => {
   const days = new Array(7).fill(true);
   const [start] = getCurrentWeek();
   return (
-    <div className={styles.weekdays}>
+    <div className={styles.weekdays} style={{paddingRight: 15}}>
       {days.map((_, i) => {
         const thisDay = new Date(start);
         thisDay.setDate(thisDay.getDate() + i);

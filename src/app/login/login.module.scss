@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   
   color: var(--font-on-dark);
   font-weight: 100;
@@ -26,6 +27,15 @@
   border: 1px solid rgba(52, 52, 52, 0.53);
   border-radius: 30px;  
 
+  position: relative;
+
+  transform: translateY(50px);
+  opacity: 0;
+
+  animation: fadeup 400ms cubic-bezier(.09,.17,.38,.9) 250ms forwards;
+
+  transform: translateY(30px);
+
   // Left & right side even
   > div {
     width: 50%;
@@ -34,6 +44,7 @@
 
   overflow: hidden;
 }
+
 
 .forms {
   display: flex;
@@ -51,7 +62,7 @@
   text-align: center;
 
   width: 300px;
-  animation: fadeup 500ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
+  animation: fadeup 600ms cubic-bezier(.09,.17,.38,.9) 0s forwards;
 
   // Default / backup spacing for all unspecified elements
   > * {
@@ -282,11 +293,11 @@
 
 @keyframes fadeup {
   0% {
-    top: 40px;
+    transform: translateY(50px);
     opacity: 0;
   } 
   100% {
-    top: 0;
+    transform: translateY(0px);
     opacity: 1;
   }
 }
