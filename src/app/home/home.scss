@@ -38,6 +38,11 @@
   align-items: center;
 
   border-bottom: 1px solid #464646;
+
+  font-weight: 100;
+  > span:first-of-type {
+    font-weight: 400;
+  }
 }
 .Navigator_logo span {
   position: relative;
