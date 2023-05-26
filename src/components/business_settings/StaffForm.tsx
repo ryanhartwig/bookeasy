@@ -130,21 +130,21 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       <Modal.Header>{initialStaff ? "Edit" : "Add"} Staff Member</Modal.Header>
       <div className={styles.input}>
         <label htmlFor="staffname">Staff Name</label>
-        <Input id='staffname' value={name} onChange={(e) => {
+        <Input id='staffname' autoComplete="off" value={name} onChange={(e) => {
           setNameError('');
           setName(e.target.value);
         }} required autoFocus placeholder="John Doe" errorMessage={nameError} />
       </div>
       <div className={styles.input}>
         <label htmlFor="staffemail">Client Contact Email</label>
-        <Input id='staffemail' value={contactEmail} onChange={(e) => {
+        <Input id='staffemail' autoComplete="off" value={contactEmail} onChange={(e) => {
           setEmailError('');
           setContactEmail(e.target.value);
         }} placeholder="john@example.com" errorMessage={emailError} />
       </div>
       <div className={styles.input}>
         <label htmlFor="staffphone">Client Contact Phone</label>
-        <Input id='staffphone' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(123) 456-7890" />
+        <Input id='staffphone' autoComplete="off" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(123) 456-7890" />
       </div>
 
       <hr />
@@ -162,10 +162,11 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       <div className={styles.input}>
         <label htmlFor="registerEmail">Recipient Email</label>
         <Input id='registerEmail' 
-          type={'email'} 
           value={registerEmail} 
           errorMessage={registerEmailError}
           errorOnFocusOnly
+          type={'email'}
+          autoComplete={"off"}
           onChange={(e) => {
             setRegisterEmail(e.target.value);
             setRegisterEmailError('');

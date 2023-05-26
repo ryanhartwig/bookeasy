@@ -105,7 +105,7 @@ export const staffResolvers = {
       await transporter.sendMail({
         from: 'noreply.bookeasy@gmail.com',
         to: email,
-        subject: `You've been invited to join ${team_name}!`,
+        subject: `You've received an invitation to join ${team_name}!`,
         text: 'Somebody invited you to join their team. \n\n Follow the link below to sign up or login to see the request.'
       });
 
