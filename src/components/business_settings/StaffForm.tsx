@@ -144,7 +144,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
           <IoIosHelpCircleOutline fontSize={16}  />
           <div className={styles.helpTip}>
             <p>
-              Registered / verified users can see clients, services and appointments in their dashboard.
+              Invite a Bookeasy user to join your team as this staff member. They will be prompted to create an account or use an existing one.
             </p>
           </div>
         </div>
@@ -153,7 +153,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       <div className={styles.input}>
         <label htmlFor="registerEmail">Recipient Email</label>
         <Input id='registerEmail' type={'email'} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="user@example.com" />
-        <Button className={styles.registerButton} icon={<VscLink />} >Send Invitation</Button>
+        <Button className={styles.registerButton} icon={<VscLink className={styles.registerButtonIcon} />} >Send Invitation</Button>
       </div>
       
 

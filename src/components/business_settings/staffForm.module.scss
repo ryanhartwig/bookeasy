@@ -149,6 +149,22 @@
   padding: 6px 34px;
 
   p {
-  font-size: 12px;
+    font-size: 12px;
+    opacity: 0.8;
+    transition: opacity 200ms;
+  }
+
+  .registerButtonIcon {
+    transition: rotate 200ms;
+  }
+
+  &:hover {
+    p {
+      opacity: 1;
+    }
+    .registerButtonIcon {
+      rotate: 30deg;
+    } 
+    border-color: black;
   }
 }
