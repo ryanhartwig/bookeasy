@@ -19,7 +19,7 @@ export const TextButton: React.FC<TextButtonProps> = ({children, fontSize, altCo
     : '#216fdb19'
 
   return (
-    <div {...props} className={clsx(styles.action, props.className || '')}>
+    <div {...props} className={clsx(styles.action, props.className || '')} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} tabIndex={0}>
       <p style={{color, backgroundColor, fontSize}} >{children}</p>
     </div>
   )
