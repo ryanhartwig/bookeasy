@@ -9,7 +9,12 @@ import styles from './login.module.scss';
 import { Button } from "@/components/UI/Button/Button";
 import clsx from "clsx";
 
-export const Login = ({onNavigate}: {onNavigate: (...args: any) => any}) => {
+interface LoginProps {
+  onNavigate: (...args: any) => any,
+  callbackUrl: string,
+}
+
+export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -42,10 +47,10 @@ export const Login = ({onNavigate}: {onNavigate: (...args: any) => any}) => {
         setLoadingElement('');
       }
       else if (response.url) {
-        redirect.push('/home/dashboard');
+        redirect.push(callbackUrl);
       }
     })();
-  }, [email, password, redirect]);
+  }, [callbackUrl, email, password, redirect]);
 
   return (
     <>
@@ -54,14 +59,14 @@ export const Login = ({onNavigate}: {onNavigate: (...args: any) => any}) => {
         <Button loading={loadingElement === 'google'}
           onClick={() => {
             setLoadingElement('google')
-            signIn('google', { callbackUrl: '/home/dashboard' });
+            signIn('google', { callbackUrl });
           }} 
           icon={<Image src={Google} alt="Google logo" />}
         >Log in with Google</Button>
         <Button loading={loadingElement === 'facebook'}
           onClick={() => {
             setLoadingElement('facebook')
-            signIn('facebook', { callbackUrl: '/home/dashboard' });
+            signIn('facebook', { callbackUrl });
           }} 
           icon={<Image src={Facebook} alt="Facebook logo" />}
         >Log in with Facebook</Button>

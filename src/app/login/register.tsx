@@ -29,7 +29,12 @@ type Errors = {
   confirmPasswordError: string;
 };
 
-export default function Register({onNavigate}: {onNavigate: (...args: any) => any}) {
+interface RegisterProps { 
+  onNavigate: (...args: any) => any,
+  callbackUrl: string,
+}
+
+export default function Register({onNavigate, callbackUrl}: RegisterProps) {
   const redirect = useRouter();
   
   const [loadingElement, setLoadingElement] = useState<string>('');
@@ -137,7 +142,7 @@ export default function Register({onNavigate}: {onNavigate: (...args: any) => an
           return resetAll();
         };
         
-        redirect.push('/home/dashboard');
+        redirect.push(callbackUrl);
       } catch(e: any) {  
         if (e.message.includes('e:USER_EXISTS')) {
           setResponseError('A user already exists with the specified email.');
@@ -157,14 +162,14 @@ export default function Register({onNavigate}: {onNavigate: (...args: any) => an
         <Button loading={loadingElement === 'google'}
           onClick={() => {
             setLoadingElement('google');
-            signIn('google', { callbackUrl: '/home/dashboard' });
+            signIn('google', { callbackUrl });
           }}  
           icon={<Image src={Google} alt="Google logo" />}
         >Sign up with Google</Button>
         <Button loading={loadingElement === 'facebook'}
           onClick={() => {
             setLoadingElement('facebook');
-            signIn('facebook', { callbackUrl: '/home/dashboard' });
+            signIn('facebook', { callbackUrl });
           }} 
           icon={<Image src={Facebook} alt="Facebook logo" />}
         >Sign up with Facebook</Button>
