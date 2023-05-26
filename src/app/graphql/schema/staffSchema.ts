@@ -1,5 +1,6 @@
 import db from "@/utility/db";
 import uuid from "react-uuid";
+import nodemailer from 'nodemailer';
 
 export const staffResolvers = {
   Query: {
@@ -80,16 +81,37 @@ export const staffResolvers = {
       }
     },
     addPendingRegistration: async (_: any, args: any) => {
-      const { email, staff_id } = args;
+      const { email, staff_id, team_name } = args;
       const expires = new Date();
       expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
       
-      const response = await db.query(`
-        insert into pending_registration(id, associated_email, expires, staff_id) 
-        values ($1, $2, $3, $4)
-        returning *
-      `, [uuid(), email, expires, staff_id]);
-      return response.rows[0].id
+      // const response = await db.query(`
+      //   insert into pending_registration(id, associated_email, expires, staff_id) 
+      //   values ($1, $2, $3, $4)
+      //   returning *
+      // `, [uuid(), email, expires, staff_id]);
+
+      // if (!response.rowCount) throw new Error('Could not add registration details');
+
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'noreply.bookeasy@gmail.com',
+          pass: 'aihxajjxbwawteuf',
+        },
+        from: 'noreply.bookeasy@gmail.com',
+      });
+
+      await transporter.sendMail({
+        from: 'noreply.bookeasy@gmail.com',
+        to: email,
+        subject: `You've been invited to join ${team_name}!`,
+        text: 'Somebody invited you to join their team. \n\n Follow the link below to sign up or login to see the request.'
+      });
+
+      
+      // return response.rows[0].id
+      return 'successfully probably'
     },
   }
 }
@@ -120,6 +142,6 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
-    addPendingRegistration(email: String!, staff_id: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!, team_name: String!): String!,
   }
 `;
