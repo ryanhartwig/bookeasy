@@ -12,6 +12,17 @@ export const staffResolvers = {
       `, [args.staff_id]);
       return response.rows;
     },
+    getRegistrationDetails: async (_: any, args: any) => {
+      const { pending_registration_id } = args;
+
+      const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
+      if (!response.rowCount) return { error: "notfound" }
+      
+      const { expires, staff_id } = response.rows[0];
+      if (new Date().toISOString() > expires) return { error: "expired" }
+
+      return { staff_id }
+    },
   },
   Mutation: {
     setStaffAvailability: async (_: any, args: any) => {
@@ -118,17 +129,6 @@ export const staffResolvers = {
       
       return response.rows[0].id;
     },
-    getRegistrationDetails: async (_: any, args: any) => {
-      const { pending_registration_id } = args;
-
-      const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
-      if (!response.rowCount) return { error: "notfound" }
-      
-      const { expires, staff_id } = response.rows[0];
-      if (new Date().toISOString() > expires) return { error: "expired" }
-
-      return { staff_id }
-    }
   }
 }
 
@@ -151,6 +151,7 @@ export const staffTypeDefs = `#graphql
 
   type Query {
     getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
+    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
   }
 
   type RegistrationDetails {
@@ -164,6 +165,5 @@ export const staffTypeDefs = `#graphql
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
     addPendingRegistration(email: String!, staff_id: String!, team_name: String!): String!,
-    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
   }
 `;
