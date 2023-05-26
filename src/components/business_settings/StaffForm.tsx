@@ -114,6 +114,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     if (!registerEmail || !isValidEmail(registerEmail)) {
       setRegisterEmailError('Please enter a valid email address');
     }
+    
   }, [registerEmail]);
 
   return (

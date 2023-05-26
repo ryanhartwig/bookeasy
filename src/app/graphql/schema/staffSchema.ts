@@ -79,6 +79,18 @@ export const staffResolvers = {
         }
       }
     },
+    addPendingRegistration: async (_: any, args: any) => {
+      const { email, staff_id } = args;
+      const expires = new Date();
+      expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
+      
+      const response = await db.query(`
+        insert into pending_registration(id, associated_email, expires, staff_id) 
+        values ($1, $2, $3, $4)
+        returning *
+      `, [uuid(), email, expires, staff_id]);
+      return response.rows[0].id
+    },
   }
 }
 
@@ -108,5 +120,6 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!): String!,
   }
 `;
