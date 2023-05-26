@@ -31,9 +31,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const [contactPhone, setContactPhone] = useState('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
 
+  const [registerEmail, setRegisterEmail] = useState<string>('');
+
   // Error states
   const [nameError, setNameError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
+  const [registerEmailError, setRegisterEmailError] = useState<string>('');
 
 
   // Prepopulate initialStaff fields when provided
@@ -60,11 +63,11 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const checkInputs = useCallback(() => {
     let valid = true;
     if (!name) {
-      setNameError('Please enter a name.')
+      setNameError('Please enter a name')
       valid = false;
     };
     if (contactEmail && !isValidEmail(contactEmail)) {
-      setEmailError('Please enter a valid email or none.');
+      setEmailError('Please enter a valid email or none');
       valid = false;
     }
     return valid;
@@ -107,6 +110,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     })();
   }, [deleteStaff, deleteStaffReset, initialStaff, onClose, setSelectedStaff]);
 
+  const onRegister = useCallback(() => {
+    if (!registerEmail || !isValidEmail(registerEmail)) {
+      setRegisterEmailError('Please enter a valid email address');
+    }
+  }, [registerEmail]);
+
   return (
     <Modal open={open}
       onClose={onClose}
@@ -148,10 +157,22 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
         </div>
       </div>
 
+      {/* Invite new user */}
       <div className={styles.input}>
         <label htmlFor="registerEmail">Recipient Email</label>
-        <Input id='registerEmail' type={'email'} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="user@example.com" />
+        <Input id='registerEmail' 
+          type={'email'} 
+          value={registerEmail} 
+          errorMessage={registerEmailError}
+          errorOnFocusOnly
+          onChange={(e) => {
+            setRegisterEmail(e.target.value);
+            setRegisterEmailError('');
+          }} 
+          placeholder="user@example.com" 
+        />
         <Button className={styles.registerButton} 
+          onClick={onRegister}
           icon={<VscLink className={styles.registerButtonIcon} />} 
         >Send Invitation</Button>
       </div>
