@@ -14,6 +14,7 @@ import { TextButton } from "../UI/TextButton/TextButton";
 import styles from './staffForm.module.scss';
 
 import { VscLink } from "react-icons/vsc";
+import { IoIosHelpCircleOutline } from "react-icons/io";
 
 interface StaffFormProps {
   open: boolean,
@@ -137,11 +138,22 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       </div>
 
       <hr />
-      <h2>Register User</h2>
+      <div className={styles.heading}>
+        <h2>Register User</h2>
+        <div className={styles.helpIcon}>
+          <IoIosHelpCircleOutline fontSize={16}  />
+          <div className={styles.helpTip}>
+            <p>
+              Registered / verified users can see clients, services and appointments in their dashboard.
+            </p>
+          </div>
+        </div>
+        
+      </div>
       <div className={styles.input}>
         <label htmlFor="registerEmail">Recipient Email</label>
         <Input id='registerEmail' type={'email'} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="user@example.com" />
-        <Button className={styles.registerButton} icon={<VscLink />} >Send Request</Button>
+        <Button className={styles.registerButton} icon={<VscLink />} >Send Invitation</Button>
       </div>
       
 
