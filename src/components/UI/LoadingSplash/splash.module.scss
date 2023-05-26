@@ -38,9 +38,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: row-reverse;
+    font-weight: 400;
 
     span:nth-child(-n+4) { 
-      font-weight: 400;
+      font-weight: 100;
     }
   }
 }
