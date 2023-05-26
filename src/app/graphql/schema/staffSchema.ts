@@ -116,9 +116,19 @@ export const staffResolvers = {
         html: generateTeamInviteHTML(`http://localhost:3000/login?redirect_id=${pending_registration_id}`)
       });
       
-      // return response.rows[0].id;
-      return 'workded'
+      return response.rows[0].id;
     },
+    getRegistrationDetails: async (_: any, args: any) => {
+      const { pending_registration_id } = args;
+
+      const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
+      if (!response.rowCount) return { error: "notfound" }
+      
+      const { expires, staff_id } = response.rows[0];
+      if (new Date().toISOString() > expires) return { error: "expired" }
+
+      return { staff_id }
+    }
   }
 }
 
@@ -143,11 +153,17 @@ export const staffTypeDefs = `#graphql
     getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
   }
 
+  type RegistrationDetails {
+    error: String,
+    staff_id: String,
+  }
+
   type Mutation {
     setStaffAvailability(staff_id: ID!, business_id: ID!, day: Int!, slices: [AvailabilitySliceInput!]!): String!,
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
     addPendingRegistration(email: String!, staff_id: String!, team_name: String!): String!,
+    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
   }
 `;

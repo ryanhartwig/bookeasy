@@ -11,7 +11,6 @@ export const RegisterTeam = () => {
 
   const params = useSearchParams();
 
-  
   useEffect(() => {
     const redirectId = params?.get('redirect_id');
     if (redirectId) {

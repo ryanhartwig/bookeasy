@@ -8,8 +8,6 @@ import './Modal.scss';
 
 import { ClipLoader } from 'react-spinners';
 
-/* React Icons */
-
 interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode,
   onClose: (...args: any) => void,
