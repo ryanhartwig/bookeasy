@@ -140,20 +140,20 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
       <hr />
       <div className={styles.heading}>
         <h2>Register User</h2>
-        <div className={styles.helpIcon}>
+        <div className={styles.helpIcon} tabIndex={0}>
           <IoIosHelpCircleOutline fontSize={16}  />
           <div className={styles.helpTip}>
-            <p>
-              Invite a Bookeasy user to join your team as this staff member. They will be prompted to create an account or use an existing one.
-            </p>
+            <p>Invite a Bookeasy user to join your team as this staff member. They will be prompted to create an account or use an existing one.</p>
           </div>
         </div>
-        
       </div>
+
       <div className={styles.input}>
         <label htmlFor="registerEmail">Recipient Email</label>
         <Input id='registerEmail' type={'email'} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="user@example.com" />
-        <Button className={styles.registerButton} icon={<VscLink className={styles.registerButtonIcon} />} >Send Invitation</Button>
+        <Button className={styles.registerButton} 
+          icon={<VscLink className={styles.registerButtonIcon} />} 
+        >Send Invitation</Button>
       </div>
       
 

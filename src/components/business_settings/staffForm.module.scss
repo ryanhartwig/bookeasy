@@ -54,7 +54,9 @@
       }
     }
 
-    &:hover .helpTip {
+
+    &:hover .helpTip,
+    &:focus .helpTip {
       opacity: 1;
       top: 25px;
     }
