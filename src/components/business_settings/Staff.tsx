@@ -98,7 +98,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                 </ul>
               </div>
               {(elevated || userId === selected.registered_user_id) && <div className={styles.edit_staff}>
-                <TextButton onClick={() => {setInitialStaff(selected)}} fontSize={14}>Edit</TextButton>
+                <TextButton onClick={() => {setInitialStaff(selected)}} fontSize={14}>Edit / Register</TextButton>
               </div>}
             </div>
             <div className={styles.bookable}>

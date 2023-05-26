@@ -2,15 +2,18 @@ import { Staff, StaffInput } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
 import { ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
 import uuid from "react-uuid";
 import { Avatar } from "../UI/Avatar/Avatar";
+import { Button } from "../UI/Button/Button";
 import { Input } from "../UI/Input/Input";
 import { Modal } from "../UI/Modal/Modal";
 import { TextButton } from "../UI/TextButton/TextButton";
 import styles from './staffForm.module.scss';
+
+import { VscLink } from "react-icons/vsc";
 
 interface StaffFormProps {
   open: boolean,
@@ -133,6 +136,18 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
         <Input id='staffphone' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(123) 456-7890" />
       </div>
 
+      <hr />
+      <h2>Register User</h2>
+      <div className={styles.input}>
+        <label htmlFor="registerEmail">Recipient Email</label>
+        <Input id='registerEmail' type={'email'} value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="user@example.com" />
+        <Button className={styles.registerButton} icon={<VscLink />} >Send Request</Button>
+      </div>
+      
+
+      {initialStaff && <div className={styles.input}>
+        <TextButton altColor onClick={() => setConfirmDelete(true)}>Remove Staff Member</TextButton>
+      </div>}
       {initialStaff && <>
         <Modal 
           actionCloses 
@@ -160,9 +175,6 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
           </div>
         </Modal>
       </>}
-      {initialStaff && <div className={styles.input}>
-        <TextButton altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
-      </div>}
     </Modal>
   )
 }

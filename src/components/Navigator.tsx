@@ -17,7 +17,8 @@ export const Navigator = () => {
     <div className='Navigator'>
       <div className='Navigator_logo'>
         <Image className='Navigator_logo_icon' priority src={bookit} alt="Book it logo" />
-        <span>book</span><span>easy.</span>
+        <span>book</span>
+        <span>easy.</span>
       </div>
       <div className='Navigator_links'>
         {navlinks.map(([name, url, Icon]) => (
