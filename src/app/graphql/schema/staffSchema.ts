@@ -1,6 +1,7 @@
 import db from "@/utility/db";
 import uuid from "react-uuid";
 import nodemailer from 'nodemailer';
+import { generateTeamInviteHTML } from "./emailHTML/generateTeamInviteHTML";
 
 export const staffResolvers = {
   Query: {
@@ -84,14 +85,20 @@ export const staffResolvers = {
       const { email, staff_id, team_name } = args;
       const expires = new Date();
       expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
-      
-      // const response = await db.query(`
-      //   insert into pending_registration(id, associated_email, expires, staff_id) 
-      //   values ($1, $2, $3, $4)
-      //   returning *
-      // `, [uuid(), email, expires, staff_id]);
 
-      // if (!response.rowCount) throw new Error('Could not add registration details');
+      const pending_registration_id = uuid();
+      
+      const response = await db.query(`
+        insert into pending_registration(id, associated_email, expires, staff_id) 
+        values ($1, $2, $3, $4)
+        returning *
+      `, [pending_registration_id, email, expires, staff_id]);
+      if (!response.rowCount) throw new Error('Could not add registration details');
+
+      // Link pending registration record to staff member
+      await db.query(`
+        update staff set pending_registration_id = $1 where id = $2
+      `, [pending_registration_id]);
 
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -106,12 +113,11 @@ export const staffResolvers = {
         from: 'noreply.bookeasy@gmail.com',
         to: email,
         subject: `You've received an invitation to join ${team_name}!`,
-        text: 'Somebody invited you to join their team. \n\n Follow the link below to sign up or login to see the request.'
+        html: generateTeamInviteHTML(`http://localhost:3000/login/${pending_registration_id}`)
       });
-
       
-      // return response.rows[0].id
-      return 'successfully probably'
+      // return response.rows[0].id;
+      return 'workded'
     },
   }
 }
