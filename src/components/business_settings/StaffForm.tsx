@@ -204,9 +204,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
               <div>
                 <VscVerifiedFilled />
                 <Avatar src={initialStaff.avatar} size={28} />
-                <p>{initialStaff.name}</p>
+                <p className={styles.userName}>{initialStaff.name}</p>
               </div>
-              <TextButton altColor  >Unlink User</TextButton>
+              <TextButton altColor >Unlink User</TextButton>
             </div> 
           </div>    
       }
