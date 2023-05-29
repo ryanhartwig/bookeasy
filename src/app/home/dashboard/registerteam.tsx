@@ -38,7 +38,7 @@ export const RegisterTeam = () => {
   useEffect(() => {
     if (!registrationData || !registrationData.getRegistrationDetails?.error) return;
     setError('The registration link is invalid or expired.');
-  }, [registrationData]);
+  }, [loadingRegistrationData, registrationData]);
 
   useEffect(() => {
     const redirectId = params?.get('redirect_id');

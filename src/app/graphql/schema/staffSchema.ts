@@ -168,9 +168,9 @@ export const staffTypeDefs = `#graphql
     error: String,
     staff_id: String,
     business_id: String,
-    associated_email: String!,
-    expires: String!,
-    id: String!,
+    associated_email: String,
+    expires: String,
+    id: String,
     client_id: String,
   }
 
