@@ -94,7 +94,7 @@ export const staffResolvers = {
       }
     },
     addPendingRegistration: async (_: any, args: any) => {
-      const { email, staff_id, team_name, business_id } = args;
+      const { email, staff_id, team_name, business_id, elevated } = args;
       const expires = new Date();
       expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
 
@@ -109,8 +109,8 @@ export const staffResolvers = {
 
       // Link pending registration record to staff member
       await db.query(`
-        update staff set pending_registration_id = $1 where id = $2
-      `, [pending_registration_id, staff_id]);
+        update staff set pending_registration_id = $1, elevated = $2 where id = $3
+      `, [pending_registration_id, elevated, staff_id]);
 
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -176,7 +176,7 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
-    addPendingRegistration(email: String!, staff_id: String!, team_name: String!, business_id: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!, elevated: Boolean!, team_name: String!, business_id: String!): String!,
     deletePendingRegistration(id: String!): String!,
     acceptPendingRegistration(staff_id: String!, registered_user_id: String!): String!,
   }

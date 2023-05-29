@@ -175,6 +175,16 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
           }} 
           placeholder="user@example.com" 
         />
+        <div className={styles.makeAdmin}>
+          <label htmlFor="elevated">Make admin?</label>
+          <Input type={"checkbox"} id="elevated" />
+          <div className={styles.helpIcon} tabIndex={0}>
+            <IoIosHelpCircleOutline fontSize={16}  />
+            <div className={styles.helpTip}>
+              <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
+            </div>
+          </div>
+        </div>
         {initialStaff && <Button className={styles.registerButton} 
           onClick={onRegister}
           loading={loadingPendingReg}

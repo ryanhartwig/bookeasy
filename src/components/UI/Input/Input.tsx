@@ -35,6 +35,7 @@ export const Input: React.FC<InputProps> = ({errorMessage, errorOnFocusOnly, dar
         onFocus={(e) => setFocus(e, true)} 
         onBlur={(e) => setFocus(e, false)} 
         ref={inputRef} 
+        onKeyDown={(e) => props.type === 'checkbox' && e.key === 'Enter' && e.currentTarget.click()}
         className={clsx(styles.input, {[styles.dark]: dark} , {[styles.invalid]: !!errorMessage})} 
       />
     </div>
