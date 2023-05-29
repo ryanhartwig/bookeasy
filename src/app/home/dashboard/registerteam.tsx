@@ -8,8 +8,14 @@ import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from './dashboard.module.scss';
+import teamStyles from '../teams/teams.module.scss';
+
 
 import { CiWarning } from 'react-icons/ci';
+import { Avatar } from "@/components/UI/Avatar/Avatar";
+import { Card } from "@/components/UI/Card/Card";
+import clsx from "clsx";
+import { TextButton } from "@/components/UI/TextButton/TextButton";
 
 export const RegisterTeam = () => {
   const params = useSearchParams();
@@ -50,8 +56,20 @@ export const RegisterTeam = () => {
           <p>{error}</p>
         </div>
         : business && (
-          <div>
-            <p>{business.name}</p>
+          <div className={styles.invitation}>
+            <p>You have been invited to join {business.name}!</p>
+            <Card key={business.id} 
+              className={clsx(teamStyles.team, {[teamStyles.selected]: true})}
+              style={{pointerEvents: 'none'}}
+            >
+              <p>{business.name}</p>
+              <Avatar src={business.avatar} size={70} useTeamIcon />
+            </Card>
+            <hr />
+            <div className={styles.invitationActions}>
+              <TextButton fontSize={15}>Accept</TextButton>
+              <TextButton fontSize={15}>Decline</TextButton>
+            </div>
           </div>
         )}
       </Modal>
