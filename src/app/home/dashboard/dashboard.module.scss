@@ -188,5 +188,17 @@ p.alt {
 }
 
 .invitationForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
+
+  .invalidLink {
+    display: flex;
+    align-items: center;
+    
+    color: rgb(233, 45, 16);
+    font-weight: 300;
+  }
 }
