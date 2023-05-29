@@ -14,6 +14,8 @@
     margin: 2px 0;
     font-weight: 500;
   }
+
+  padding-bottom: 10px;
 }
 
 .heading {
@@ -21,8 +23,9 @@
   align-items: center;
   justify-content: center;
   position: relative;
+}
 
-  .helpIcon {
+.helpIcon {
     position: absolute;
     height: 100%;
     right: -30px;
@@ -61,7 +64,6 @@
       top: 25px;
     }
   }
-}
 
 .input {
   margin: 8px;
@@ -169,4 +171,100 @@
     } 
     border-color: black;
   }
+}
+
+.makeAdmin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  width: fit-content;
+  margin: 12px auto 5px;
+  font-size: 14px;
+}
+
+.registered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin: 5px 0;
+
+  width: 100%;
+
+  
+
+  .isRegistered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(95, 181, 251);
+
+    > p {
+      font-size: 14px;
+      margin-left: 7px;
+    }
+  };
+  
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 10px 0;
+  padding: 0 30px;
+  
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > svg {
+      color: rgb(95, 181, 251);
+      margin-right: 15px;
+    }
+
+    .userName {
+      margin-left: 30px;
+      font-size: 14px;
+    }
+  }
+
+  width: 100%;
+}
+
+.pending {
+  margin: 15px auto 10px;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  
+  width: 100%;
+
+  .sent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--font-utility);
+
+    > p {
+      margin-left: 10px;
+    }
+  }
+}
+
+.tip {
+  font-size: 12px;
+  color: grey;
+  font-weight: 300;
+  margin-top: 2px;
 }

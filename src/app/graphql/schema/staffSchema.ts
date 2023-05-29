@@ -18,10 +18,10 @@ export const staffResolvers = {
       const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
       if (!response.rowCount) return { error: "notfound" }
       
-      const { expires, staff_id } = response.rows[0];
+      const { expires } = response.rows[0];
       if (new Date().toISOString() > expires) return { error: "expired" }
 
-      return { staff_id }
+      return response.rows[0];
     },
   },
   Mutation: {
@@ -93,23 +93,23 @@ export const staffResolvers = {
       }
     },
     addPendingRegistration: async (_: any, args: any) => {
-      const { email, staff_id, team_name } = args;
+      const { email, staff_id, team_name, business_id, elevated } = args;
       const expires = new Date();
       expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
 
       const pending_registration_id = uuid();
       
       const response = await db.query(`
-        insert into pending_registration(id, associated_email, expires, staff_id) 
-        values ($1, $2, $3, $4)
+        insert into pending_registration(id, associated_email, expires, staff_id, business_id) 
+        values ($1, $2, $3, $4, $5)
         returning *
-      `, [pending_registration_id, email, expires, staff_id]);
+      `, [pending_registration_id, email, expires, staff_id, business_id]);
       if (!response.rowCount) throw new Error('Could not add registration details');
 
       // Link pending registration record to staff member
       await db.query(`
-        update staff set pending_registration_id = $1 where id = $2
-      `, [pending_registration_id]);
+        update staff set pending_registration_id = $1, elevated = $2 where id = $3
+      `, [pending_registration_id, elevated, staff_id]);
 
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -127,7 +127,22 @@ export const staffResolvers = {
         html: generateTeamInviteHTML(`http://localhost:3000/login?redirect_id=${pending_registration_id}`)
       });
       
+      return response.rows[0];
+    },
+    deletePendingRegistration: async (_: any, args: any) => {
+      const { id } = args;
+      const response = await db.query('delete from pending_registration where id = $1 returning id', [id]);
       return response.rows[0].id;
+    },
+    acceptPendingRegistration: async (_: any, args: any) => {
+      const { staff_id, registered_user_id } = args;
+      const response = await db.query('update staff set registered_user_id = $1 where id = $2 returning id', [registered_user_id, staff_id]);
+      return response.rows[0].id;
+    },
+    unregisterUser: async (_: any, args: any) => {
+      const { staff_id } = args;
+      const response = await db.query('update staff set registered_user_id = null, elevated = false where id = $1 returning *', [staff_id]);
+      return response.rows[0];
     },
   }
 }
@@ -149,14 +164,19 @@ export const staffTypeDefs = `#graphql
     contact_phone: String,
   }
 
-  type Query {
-    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
-    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
-  }
-
   type RegistrationDetails {
     error: String,
     staff_id: String,
+    business_id: String,
+    associated_email: String,
+    expires: String,
+    id: String,
+    client_id: String,
+  }
+
+  type Query {
+    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
+    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
   }
 
   type Mutation {
@@ -164,6 +184,9 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
-    addPendingRegistration(email: String!, staff_id: String!, team_name: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!, elevated: Boolean!, team_name: String!, business_id: String!): RegistrationDetails!,
+    deletePendingRegistration(id: String!): String!,
+    acceptPendingRegistration(staff_id: String!, registered_user_id: String!): String!,
+    unregisterUser(staff_id: String!): Staff!,
   }
 `;

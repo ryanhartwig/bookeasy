@@ -54,3 +54,56 @@ export const STAFF_FRAGMENT = gql`
     avatar
   }
 `;
+
+export const GET_REGISTRATION_DETAILS = gql`
+  query($pendingRegistrationId: String!) {
+    getRegistrationDetails(pending_registration_id: $pendingRegistrationId) {
+      error
+      staff_id
+      business_id
+      client_id
+      expires
+      associated_email
+      id
+    }
+  }
+`;
+
+export const ADD_PENDING_REGISTRATION = gql`
+  mutation($email: String!, $staffId: String!, $elevated: Boolean!, $teamName: String!, $businessId: String!) {
+    addPendingRegistration(email: $email, staff_id: $staffId, elevated: $elevated, team_name: $teamName, business_id: $businessId) {
+      id
+      associated_email,
+      expires,
+      staff_id,
+      business_id,
+    }
+  }
+`;  
+
+export const DELETE_PENDING_REGISTRATION = gql`
+  mutation($id: String!) {
+    deletePendingRegistration(id: $id)
+  }
+`;
+
+export const ACCEPT_PENDING_REGISTRATION = gql`
+  mutation($staffId: String!, $registeredUserId: String!) {
+    acceptPendingRegistration(staff_id: $staffId, registered_user_id: $registeredUserId)
+  }
+`;
+
+export const UNREGISTER_USER = gql`
+  mutation($staffId: String!) {
+    unregisterUser(staff_id: $staffId) {
+      id
+      registered_user_id
+      elevated
+      date_added
+      name
+      contact_email
+      contact_phone
+      deleted
+    }
+  }
+`;

@@ -6,9 +6,12 @@ interface TextButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElemen
   children: React.ReactNode,
   fontSize?: string | number,
   altColor?: boolean,
+  colorOverride?: string,
+  backgroundColorOverride?: string,
+  icon?: JSX.Element,
 }
 
-export const TextButton: React.FC<TextButtonProps> = ({children, fontSize, altColor = false, ...props}) => {
+export const TextButton: React.FC<TextButtonProps> = ({children, icon, colorOverride, backgroundColorOverride, fontSize, altColor = false, ...props}) => {
 
   const color = altColor
     ? '#ff462d'
@@ -16,11 +19,14 @@ export const TextButton: React.FC<TextButtonProps> = ({children, fontSize, altCo
 
   const backgroundColor = altColor
     ? '#ff462d19'
-    : '#216fdb19'
+    : '#216fdb19';
 
   return (
     <div {...props} className={clsx(styles.action, props.className || '')} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} tabIndex={0}>
-      <p style={{color, backgroundColor, fontSize}} >{children}</p>
+      <div style={{color: colorOverride ?? color, backgroundColor: backgroundColorOverride ?? backgroundColor}}>
+        {icon && <div className={styles.icon}>{icon}</div>}
+        <p style={{fontSize}}>{children}</p>
+      </div>
     </div>
-  )
+  );
 }

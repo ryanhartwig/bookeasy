@@ -187,3 +187,60 @@ p.alt {
   font-size: 14px;
 }
 
+.invitationForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-direction: column;
+  text-align: center;
+
+
+  .invitation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+
+    > p {
+      padding: 0 6px;
+      font-weight: 300;
+      max-width: 450px;
+      font-size: 14px;
+      word-break: break-all;
+    }
+
+    > * {
+      margin: 6px 0;
+
+      &:is(:first-child) { 
+        margin-top: 12px;
+      }
+      &:is(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+
+    hr {
+      margin-top: 12px;
+    }
+  }
+
+  .invalidLink {
+    display: flex;
+    align-items: center;
+    
+    color: rgb(233, 45, 16);
+    font-weight: 300;
+  }
+
+  .invitationActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 80%;
+  }
+}

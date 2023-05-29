@@ -24,9 +24,10 @@ interface StaffProps {
   business: NewBusiness,
   userId: string,
   elevated: boolean,
+  setSelectedBusiness: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
 }
 
-export const StaffList: React.FC<StaffProps> = ({staffMembers, services, business, userId, elevated}) => {
+export const StaffList: React.FC<StaffProps> = ({staffMembers, setSelectedBusiness, services, business, userId, elevated}) => {
 
   const [selected, setSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
@@ -93,7 +94,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                   </li>
                   <li>
                     <HiOutlineMail />
-                    {selected.contact_email}
+                    {selected.contact_email ?? 'None'}
                   </li>
                 </ul>
               </div>
@@ -104,13 +105,12 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
             <div className={styles.bookable}>
               {selected && <Availability availabilitySlices={slices} key="availability" businessId={business.id} userId={selected.id} staffId={selected.id}  />}
             </div>
-            {initialStaff && <StaffForm open={!!initialStaff} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} setSelectedStaff={setSelected} />}
+            {initialStaff && <StaffForm setSelectedBusiness={setSelectedBusiness} userId={userId} userElevated={elevated} open={!!initialStaff} businessName={business.name} onClose={() => setInitialStaff(undefined)} businessId={business.id} initialStaff={initialStaff} setSelectedStaff={setSelected} />}
           </div>
         }
       </Modal>
 
-      {/* Add / Edit Staff Form */}
-      {staffFormOpen && <StaffForm open={staffFormOpen} onClose={() => setStaffFormOpen(false)} businessId={business.id} />}
+      {staffFormOpen && <StaffForm userElevated={elevated} businessName={business.name} open={staffFormOpen} onClose={() => setStaffFormOpen(false)} businessId={business.id} />}
     </div>
   )
 }

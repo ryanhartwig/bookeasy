@@ -4,6 +4,10 @@
 .inputWrapper {
   width: 100%;
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input {
@@ -35,6 +39,7 @@
 
     &.dark { border-color: rgba(91, 27, 15, 0.766) }
   }
+
 }
 
 .required {
@@ -57,11 +62,15 @@
   width: 16px;
 
   margin-left: 15px;
-
+  
   > input {
     height: 16px;
     width: 16px;
     cursor: pointer;
+    &:focus-visible {
+      outline: var(--font-utility) solid 2px;
+    }
+    
   }
 }
 
