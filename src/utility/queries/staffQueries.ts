@@ -82,3 +82,9 @@ export const ACCEPT_PENDING_REGISTRATION = gql`
     acceptPendingRegistration(staff_id: $staffId, registered_user_id: $registeredUserId)
   }
 `;
+
+export const UNREGISTER_USER = gql`
+  mutation($staffId: String!) {
+    unregisterUser(staff_id: $staffId)
+  }
+`;

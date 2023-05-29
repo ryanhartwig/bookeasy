@@ -1,7 +1,7 @@
 import { Staff, StaffInput, User } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
+import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT, UNREGISTER_USER } from "@/utility/queries/staffQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
@@ -88,6 +88,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   });
 
   const [addPendingRegistration, { loading: loadingPendingReg }] = useMutation(ADD_PENDING_REGISTRATION, { refetchQueries: [GET_BUSINESS_STAFF] });
+  const [unregisterUser] = useMutation(UNREGISTER_USER, { refetchQueries: [GET_BUSINESS_STAFF] });
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
@@ -124,6 +125,16 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       await addPendingRegistration({ variables: { email: registerEmail, staffId: id, elevated, teamName: businessName, businessId }});
     })();
   }, [addPendingRegistration, businessId, businessName, elevated, id, registerEmail]);
+
+  const onUnregister = useCallback(() => {
+    ;(async () => {
+      await unregisterUser({variables: { staffId: id }});
+      setSelectedStaff && setSelectedStaff({
+        ...initialStaff!,
+        registered_user_id: null,
+      })
+    })();
+  }, [id, initialStaff, setSelectedStaff, unregisterUser]);
 
   return (
     <Modal open={open}
@@ -211,7 +222,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
                 <Avatar src={user.avatar} size={28} />
                 <p className={styles.userName}>{user.name}</p>
               </div>
-              <TextButton altColor >Unlink User</TextButton>
+              <TextButton altColor onClick={onUnregister}>Unlink User</TextButton>
             </div> 
           </div>    
       }
