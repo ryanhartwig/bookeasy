@@ -26,7 +26,7 @@ export const RegisterTeam = () => {
         className={styles.invitationForm}
       >
         <Modal.Header>{"You're"} invited!</Modal.Header>
-
+        <p>You received an invitation to join</p>
       </Modal>
     </>
   )
