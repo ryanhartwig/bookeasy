@@ -31,6 +31,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [elevated, setElevated] = useState(false);
 
   const [registerEmail, setRegisterEmail] = useState<string>('');
 
@@ -114,9 +115,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
     }
     
     ;(async () => {
-      await addPendingRegistration({ variables: { email: registerEmail, staffId: id, teamName: businessName, businessId }});
+      await addPendingRegistration({ variables: { email: registerEmail, staffId: id, elevated, teamName: businessName, businessId }});
     })();
-  }, [addPendingRegistration, businessId, businessName, id, registerEmail]);
+  }, [addPendingRegistration, businessId, businessName, elevated, id, registerEmail]);
 
   return (
     <Modal open={open}
@@ -177,7 +178,12 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
         />
         <div className={styles.makeAdmin}>
           <label htmlFor="elevated">Make admin?</label>
-          <Input type={"checkbox"} id="elevated" />
+          <Input type={"checkbox"} 
+            id="elevated" 
+            style={{height: 12, width: 12}} 
+            checked={elevated} 
+            onChange={() => setElevated(p => !p)} 
+          />
           <div className={styles.helpIcon} tabIndex={0}>
             <IoIosHelpCircleOutline fontSize={16}  />
             <div className={styles.helpTip}>
