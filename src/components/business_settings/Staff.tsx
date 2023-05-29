@@ -93,7 +93,7 @@ export const StaffList: React.FC<StaffProps> = ({staffMembers, services, busines
                   </li>
                   <li>
                     <HiOutlineMail />
-                    {selected.contact_email}
+                    {selected.contact_email ?? 'None'}
                   </li>
                 </ul>
               </div>
