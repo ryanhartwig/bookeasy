@@ -1,21 +1,20 @@
 import { Staff, StaffInput, User } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT, UNREGISTER_USER } from "@/utility/queries/staffQueries";
+import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, UNREGISTER_USER } from "@/utility/queries/staffQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
-import uuid from "react-uuid";
 import { Avatar } from "../UI/Avatar/Avatar";
 import { Button } from "../UI/Button/Button";
 import { Input } from "../UI/Input/Input";
 import { Modal } from "../UI/Modal/Modal";
 import { TextButton } from "../UI/TextButton/TextButton";
-import styles from './staffForm.module.scss';
-
-import { VscLink, VscVerified, VscVerifiedFilled } from "react-icons/vsc";
+import { VscLink, VscTrash, VscVerifiedFilled } from "react-icons/vsc";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { GET_USER } from "@/utility/queries/userQueries";
+import styles from './staffForm.module.scss';
+import uuid from "react-uuid";
 
 interface StaffFormProps {
   open: boolean,
@@ -35,7 +34,9 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   const [elevated, setElevated] = useState(false);
 
   // Registered user
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [registerEmail, setRegisterEmail] = useState<string>('');
+  const [pendingRegistration, setPendingRegistration] = useState<any>();
   const [user, setUser] = useState<User>();
 
   // Error states
@@ -55,6 +56,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
     setContactEmail(initialStaff.contact_email || '');
     setContactPhone(initialStaff.contact_phone || '');
     setElevated(initialStaff.elevated);
+    setIsRegistered(!!initialStaff.registered_user_id);
   }, [initialStaff]);
   
   const staff = useMemo<StaffInput | undefined>(() => {
@@ -128,13 +130,11 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
 
   const onUnregister = useCallback(() => {
     ;(async () => {
-      await unregisterUser({variables: { staffId: id }});
-      setSelectedStaff && setSelectedStaff({
-        ...initialStaff!,
-        registered_user_id: null,
-      })
+      const { data } = await unregisterUser({variables: { staffId: id }});
+      setSelectedStaff && data && setSelectedStaff(data.unregisterUser);
+      setIsRegistered(false);
     })();
-  }, [id, initialStaff, setSelectedStaff, unregisterUser]);
+  }, [id, setSelectedStaff, unregisterUser]);
 
   return (
     <Modal open={open}
@@ -178,7 +178,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       </div>
 
       {/* Invite new user */}
-      {!initialStaff?.registered_user_id 
+      {!isRegistered 
         ? <div className={styles.input}>
             <label htmlFor="registerEmail">Recipient Email</label>
             <Input id='registerEmail' 
@@ -228,7 +228,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       }
       
       {initialStaff && <div className={styles.input}>
-        <TextButton altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
+        <TextButton icon={<VscTrash />} colorOverride="rgb(143, 6, 6)" altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
       </div>}
       {initialStaff && <>
         <Modal 

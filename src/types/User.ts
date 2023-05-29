@@ -33,7 +33,8 @@ export interface Staff {
   contact_email: string | null,
   contact_phone: string | null,
   deleted: boolean,
-  avatar?: string
+  avatar?: string,
+  pending_registration_id: string | null,
 }
 
 export interface StaffInput {

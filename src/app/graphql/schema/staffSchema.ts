@@ -142,8 +142,8 @@ export const staffResolvers = {
     },
     unregisterUser: async (_: any, args: any) => {
       const { staff_id } = args;
-      const response = await db.query('update staff set registered_user_id = null, elevated = false where id = $1 returning id', [staff_id]);
-      return response.rows[0].id;
+      const response = await db.query('update staff set registered_user_id = null, elevated = false where id = $1 returning *', [staff_id]);
+      return response.rows[0];
     },
   }
 }
@@ -184,6 +184,6 @@ export const staffTypeDefs = `#graphql
     addPendingRegistration(email: String!, staff_id: String!, elevated: Boolean!, team_name: String!, business_id: String!): String!,
     deletePendingRegistration(id: String!): String!,
     acceptPendingRegistration(staff_id: String!, registered_user_id: String!): String!,
-    unregisterUser(staff_id: String!): String!,
+    unregisterUser(staff_id: String!): Staff!,
   }
 `;
