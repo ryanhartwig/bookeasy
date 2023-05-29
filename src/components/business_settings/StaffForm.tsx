@@ -1,7 +1,7 @@
 import { Staff, StaffInput, User } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, GET_REGISTRATION_DETAILS, UNREGISTER_USER } from "@/utility/queries/staffQueries";
+import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_PENDING_REGISTRATION, DELETE_STAFF, EDIT_STAFF, GET_REGISTRATION_DETAILS, UNREGISTER_USER } from "@/utility/queries/staffQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
@@ -105,6 +105,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
 
   const [addPendingRegistration, { loading: loadingPendingReg }] = useMutation(ADD_PENDING_REGISTRATION, { refetchQueries: [GET_BUSINESS_STAFF] });
   const [unregisterUser] = useMutation(UNREGISTER_USER, { refetchQueries: [GET_BUSINESS_STAFF] });
+  const [deletePendingRegistration] = useMutation(DELETE_PENDING_REGISTRATION);
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
@@ -149,6 +150,13 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       setIsRegistered(false);
     })();
   }, [id, setSelectedStaff, unregisterUser]);
+
+  const onRevoke = useCallback(() => {
+    ;(async () => {
+      await deletePendingRegistration({ variables: { id: pendingRegistration?.id }});
+      setPendingRegistration(undefined);
+    })();
+  }, [deletePendingRegistration, pendingRegistration?.id]);
 
   return (
     <Modal open={open}
@@ -195,15 +203,17 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       {!isRegistered 
         ? (() => {
           if (pendingRegistrationLoading) return <LoadingDots style={{margin: 10}} /> 
-          console.log(pendingRegistration);
           if (pendingRegistration) return (
             <div className={styles.pending}>
               <div className={styles.sent}>
                 <AiOutlineCheck />
-                <p>Invitation sent</p>
+                <p>Sent</p>
               </div>
-              <p>Sent to {pendingRegistration.associated_email}</p>
-              <p>Expires {getDateTimeString(new Date(pendingRegistration.expires))}</p>
+              <div>
+                <p className={styles.tip}>Sent to {pendingRegistration.associated_email}</p>
+                <p className={styles.tip}>Expires {getDateTimeString(new Date(pendingRegistration.expires))}</p>
+              </div>
+              <TextButton onClick={onRevoke} altColor>Revoke</TextButton>
             </div>
           )
           return (
