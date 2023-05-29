@@ -2,9 +2,9 @@
 
 import { Modal } from "@/components/UI/Modal/Modal";
 import { NewBusiness } from "@/types/Business";
-import { GET_BUSINESS, NEW_BUSINESS_FRAGMENT } from "@/utility/queries/businessQueries";
+import { GET_BUSINESS } from "@/utility/queries/businessQueries";
 import { ACCEPT_PENDING_REGISTRATION, DELETE_PENDING_REGISTRATION, GET_REGISTRATION_DETAILS } from "@/utility/queries/staffQueries";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import styles from './dashboard.module.scss';
@@ -18,6 +18,7 @@ import clsx from "clsx";
 import { TextButton } from "@/components/UI/TextButton/TextButton";
 import { BsCheck2, BsXLg } from "react-icons/bs";
 import { useUser } from "@/app/Providers";
+import { GET_USER_BUSINESSES } from "@/utility/queries/userQueries";
 
 export const RegisterTeam = () => {
   const params = useSearchParams();
@@ -49,21 +50,7 @@ export const RegisterTeam = () => {
   }, [params]);
 
   const [acceptPendingRegistration] = useMutation(ACCEPT_PENDING_REGISTRATION, {
-    update(cache) {
-      cache.modify({
-        fields: {
-          getUserBusinesses(existingBusinesses = []) {
-            const newBusinessRef = cache.writeFragment({
-              data: business,
-              fragment: gql`
-                ${NEW_BUSINESS_FRAGMENT}
-              `
-            });
-            return [...existingBusinesses, newBusinessRef];
-          }
-        }
-      })
-    }
+    refetchQueries: [GET_USER_BUSINESSES]
   });
   const [deletePendingRegistration] = useMutation(DELETE_PENDING_REGISTRATION);
 
