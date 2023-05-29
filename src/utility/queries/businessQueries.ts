@@ -102,6 +102,7 @@ export const GET_BUSINESS_STAFF = gql`
         contact_phone
         avatar
         deleted
+        pending_registration_id
       }
     }
   }
