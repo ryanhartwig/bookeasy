@@ -13,7 +13,7 @@ import { Modal } from "../UI/Modal/Modal";
 import { TextButton } from "../UI/TextButton/TextButton";
 import styles from './staffForm.module.scss';
 
-import { VscLink } from "react-icons/vsc";
+import { VscLink, VscVerified, VscVerifiedFilled } from "react-icons/vsc";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 
 interface StaffFormProps {
@@ -49,6 +49,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
     setName(initialStaff.name);
     setContactEmail(initialStaff.contact_email || '');
     setContactPhone(initialStaff.contact_phone || '');
+    setElevated(initialStaff.elevated);
   }, [initialStaff]);
   
   const staff = useMemo<StaffInput | undefined>(() => {
@@ -161,46 +162,58 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
       </div>
 
       {/* Invite new user */}
-      <div className={styles.input}>
-        <label htmlFor="registerEmail">Recipient Email</label>
-        <Input id='registerEmail' 
-          value={registerEmail} 
-          errorMessage={registerEmailError}
-          errorOnFocusOnly
-          type={'email'}
-          autoComplete={"off"}
-          disabled={loadingPendingReg}
-          onChange={(e) => {
-            setRegisterEmail(e.target.value);
-            setRegisterEmailError('');
-          }} 
-          placeholder="user@example.com" 
-        />
-        <div className={styles.makeAdmin}>
-          <label htmlFor="elevated">Make admin?</label>
-          <Input type={"checkbox"} 
-            id="elevated" 
-            style={{height: 12, width: 12}} 
-            checked={elevated} 
-            onChange={() => setElevated(p => !p)} 
-          />
-          <div className={styles.helpIcon} tabIndex={0}>
-            <IoIosHelpCircleOutline fontSize={16}  />
-            <div className={styles.helpTip}>
-              <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
+      {!initialStaff?.registered_user_id 
+        ? <div className={styles.input}>
+            <label htmlFor="registerEmail">Recipient Email</label>
+            <Input id='registerEmail' 
+              value={registerEmail} 
+              errorMessage={registerEmailError}
+              errorOnFocusOnly
+              type={'email'}
+              autoComplete={"off"}
+              disabled={loadingPendingReg}
+              onChange={(e) => {
+                setRegisterEmail(e.target.value);
+                setRegisterEmailError('');
+              }} 
+              placeholder="user@example.com" 
+            />
+            <div className={styles.makeAdmin}>
+              <label htmlFor="elevated">Make admin?</label>
+              <Input type={"checkbox"} 
+                id="elevated" 
+                style={{height: 12, width: 12}} 
+                checked={elevated} 
+                onChange={() => setElevated(p => !p)} 
+              />
+              <div className={styles.helpIcon} tabIndex={0}>
+                <IoIosHelpCircleOutline fontSize={16}  />
+                <div className={styles.helpTip}>
+                  <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
+                </div>
+              </div>
             </div>
+            {initialStaff && <Button className={styles.registerButton} 
+              onClick={onRegister}
+              loading={loadingPendingReg}
+              icon={<VscLink className={styles.registerButtonIcon} />} 
+            >Send Invitation</Button>}
           </div>
-        </div>
-        {initialStaff && <Button className={styles.registerButton} 
-          onClick={onRegister}
-          loading={loadingPendingReg}
-          icon={<VscLink className={styles.registerButtonIcon} />} 
-        >Send Invitation</Button>}
-      </div>
+        : <div className={styles.registered}> 
+            <div className={styles.user}>
+              <div>
+                <VscVerifiedFilled />
+                <Avatar src={initialStaff.avatar} size={28} />
+                <p>{initialStaff.name}</p>
+              </div>
+              <TextButton altColor  >Unlink User</TextButton>
+            </div> 
+          </div>    
+      }
       
 
       {initialStaff && <div className={styles.input}>
-        <TextButton altColor onClick={() => setConfirmDelete(true)}>Remove Staff Member</TextButton>
+        <TextButton altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
       </div>}
       {initialStaff && <>
         <Modal 
@@ -210,7 +223,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
           actionButtonText="Delete" 
           onAction={onDeleteStaff} 
         >
-          <Modal.Header>Remove Staff Member</Modal.Header>
+          <Modal.Header>Delete Staff Member</Modal.Header>
           <div className={styles.confirmDelete}>
             <div className={styles.warning}>
               <CiWarning />
