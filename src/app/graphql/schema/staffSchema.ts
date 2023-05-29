@@ -93,17 +93,17 @@ export const staffResolvers = {
       }
     },
     addPendingRegistration: async (_: any, args: any) => {
-      const { email, staff_id, team_name } = args;
+      const { email, staff_id, team_name, business_id } = args;
       const expires = new Date();
       expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24) // 1 day expiry
 
       const pending_registration_id = uuid();
       
       const response = await db.query(`
-        insert into pending_registration(id, associated_email, expires, staff_id) 
-        values ($1, $2, $3, $4)
+        insert into pending_registration(id, associated_email, expires, staff_id, business_id) 
+        values ($1, $2, $3, $4, $5)
         returning *
-      `, [pending_registration_id, email, expires, staff_id]);
+      `, [pending_registration_id, email, expires, staff_id, business_id]);
       if (!response.rowCount) throw new Error('Could not add registration details');
 
       // Link pending registration record to staff member
