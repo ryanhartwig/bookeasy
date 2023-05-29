@@ -1,8 +1,8 @@
-import { Staff, StaffInput } from "@/types/User"
+import { Staff, StaffInput, User } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
 import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
 import uuid from "react-uuid";
@@ -15,6 +15,7 @@ import styles from './staffForm.module.scss';
 
 import { VscLink, VscVerified, VscVerifiedFilled } from "react-icons/vsc";
 import { IoIosHelpCircleOutline } from "react-icons/io";
+import { GET_USER } from "@/utility/queries/userQueries";
 
 interface StaffFormProps {
   open: boolean,
@@ -33,13 +34,17 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [elevated, setElevated] = useState(false);
 
+  // Registered user
   const [registerEmail, setRegisterEmail] = useState<string>('');
+  const [user, setUser] = useState<User>();
 
   // Error states
   const [nameError, setNameError] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [registerEmailError, setRegisterEmailError] = useState<string>('');
 
+  const { data: userData } = useQuery(GET_USER, { variables: {userId: initialStaff?.registered_user_id}, skip: !initialStaff?.registered_user_id});
+  useEffect(() => userData && setUser(userData.getUser), [userData]);
 
   // Prepopulate initialStaff fields when provided
   useEffect(() => {
@@ -199,19 +204,18 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
               icon={<VscLink className={styles.registerButtonIcon} />} 
             >Send Invitation</Button>}
           </div>
-        : <div className={styles.registered}> 
+        : user && <div className={styles.registered}> 
             <div className={styles.user}>
               <div>
                 <VscVerifiedFilled />
-                <Avatar src={initialStaff.avatar} size={28} />
-                <p className={styles.userName}>{initialStaff.name}</p>
+                <Avatar src={user.avatar} size={28} />
+                <p className={styles.userName}>{user.name}</p>
               </div>
               <TextButton altColor >Unlink User</TextButton>
             </div> 
           </div>    
       }
       
-
       {initialStaff && <div className={styles.input}>
         <TextButton altColor onClick={() => setConfirmDelete(true)}>Delete Staff Member</TextButton>
       </div>}
