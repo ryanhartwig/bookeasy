@@ -130,6 +130,11 @@ export const staffResolvers = {
       
       return response.rows[0].id;
     },
+    deletePendingRegistration: async (_: any, args: any) => {
+      const { id } = args;
+      const response = await db.query('delete from pending_registration where id = $1 returning id', [id]);
+      return response.rows[0].id;
+    },
   }
 }
 
@@ -167,5 +172,6 @@ export const staffTypeDefs = `#graphql
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
     addPendingRegistration(email: String!, staff_id: String!, team_name: String!, business_id: String!): String!,
+    deletePendingRegistration(id: String!): String!,
   }
 `;

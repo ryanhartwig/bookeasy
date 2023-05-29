@@ -3,10 +3,10 @@
 import { Modal } from "@/components/UI/Modal/Modal";
 import { NewBusiness } from "@/types/Business";
 import { GET_BUSINESS } from "@/utility/queries/businessQueries";
-import { GET_REGISTRATION_DETAILS } from "@/utility/queries/staffQueries";
-import { useQuery } from "@apollo/client";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { DELETE_PENDING_REGISTRATION, GET_REGISTRATION_DETAILS } from "@/utility/queries/staffQueries";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import styles from './dashboard.module.scss';
 import teamStyles from '../teams/teams.module.scss';
 
@@ -16,17 +16,19 @@ import { Avatar } from "@/components/UI/Avatar/Avatar";
 import { Card } from "@/components/UI/Card/Card";
 import clsx from "clsx";
 import { TextButton } from "@/components/UI/TextButton/TextButton";
-import { BsCheck2, BsX, BsXLg } from "react-icons/bs";
+import { BsCheck2, BsXLg } from "react-icons/bs";
 
 export const RegisterTeam = () => {
   const params = useSearchParams();
+  const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [regId, setRegId] = useState<string>();
   const [business, setBusiness] = useState<NewBusiness>();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { data: registrationData, loading } = useQuery(GET_REGISTRATION_DETAILS, { variables: { pendingRegistrationId: regId }, skip: !regId });
+  const { data: registrationData, loading: loadingRegistrationData } = useQuery(GET_REGISTRATION_DETAILS, { variables: { pendingRegistrationId: regId }, skip: !regId });
   const { data: businessData, loading: loadingBusinessData } = useQuery(GET_BUSINESS, { variables: { businessId: registrationData?.getRegistrationDetails?.business_id }, skip: !registrationData?.getRegistrationDetails?.business_id });
   useEffect(() => businessData && setBusiness(businessData.getBusiness), [businessData]);
 
@@ -44,14 +46,29 @@ export const RegisterTeam = () => {
     }
   }, [params]);
 
+  const onJoin = useCallback(() => {
+
+  }, []); 
+
+  const [deletePendingRegistration] = useMutation(DELETE_PENDING_REGISTRATION);
+  const onDecline = useCallback(() => {
+    setLoading(true);
+
+    ;(async() => {
+      await deletePendingRegistration({ variables: { id: regId }});  
+      setLoading(false);
+      router.replace('/home/dashboard');
+    })()
+  }, [deletePendingRegistration, regId, router]);
+
   return (
     <>
       <Modal open={open}
         onClose={() => setOpen(false)}
         className={styles.invitationForm}
-        loading={loading || loadingBusinessData}
+        loading={loadingRegistrationData || loadingBusinessData || loading}
       >
-        <Modal.Header>{"You're"} invited!</Modal.Header>
+        <Modal.Header>Join a Team</Modal.Header>
         {error ? <div className={styles.invalidLink}>
           <CiWarning style={{marginRight: 5}} />
           <p>{error}</p>
@@ -68,8 +85,8 @@ export const RegisterTeam = () => {
             </Card>
             <hr />
             <div className={styles.invitationActions}>
-              <TextButton icon={<BsCheck2 fontSize={16} />} fontSize={15}>Accept</TextButton>
-              <TextButton icon={<BsXLg fontSize={12} />} fontSize={15}>Decline</TextButton>
+              <TextButton onClick={onJoin} icon={<BsCheck2 fontSize={16} />} fontSize={15}>Accept</TextButton>
+              <TextButton onClick={onDecline} altColor icon={<BsXLg fontSize={12} />} fontSize={15}>Decline</TextButton>
             </div>
           </div>
         )}

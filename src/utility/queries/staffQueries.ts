@@ -64,3 +64,9 @@ export const GET_REGISTRATION_DETAILS = gql`
     }
   }
 `;
+
+export const DELETE_PENDING_REGISTRATION = gql`
+  mutation($id: String!) {
+    deletePendingRegistration(id: $id)
+  }
+`;
