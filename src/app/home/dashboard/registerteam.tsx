@@ -16,6 +16,7 @@ import { Avatar } from "@/components/UI/Avatar/Avatar";
 import { Card } from "@/components/UI/Card/Card";
 import clsx from "clsx";
 import { TextButton } from "@/components/UI/TextButton/TextButton";
+import { BsCheck2, BsX, BsXLg } from "react-icons/bs";
 
 export const RegisterTeam = () => {
   const params = useSearchParams();
@@ -67,8 +68,8 @@ export const RegisterTeam = () => {
             </Card>
             <hr />
             <div className={styles.invitationActions}>
-              <TextButton fontSize={15}>Accept</TextButton>
-              <TextButton fontSize={15}>Decline</TextButton>
+              <TextButton icon={<BsCheck2 fontSize={16} />} fontSize={15}>Accept</TextButton>
+              <TextButton icon={<BsXLg fontSize={12} />} fontSize={15}>Decline</TextButton>
             </div>
           </div>
         )}

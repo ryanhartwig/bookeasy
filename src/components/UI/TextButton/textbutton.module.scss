@@ -7,16 +7,30 @@
   justify-content: center;
   align-items: center;
 
-  > p {
+  > div {
     opacity: 0.8;
     transition: opacity 200ms, background-color 200ms;
     padding: 5px 12px;
     border-radius: 3px;
-    font-weight: 400;
-    font-size: 12px;
+
+    > p {
+      font-weight: 400;
+      font-size: 12px;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:not(:hover) {
       background-color: transparent !important;
     }
   }
+}
+
+.icon {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-right: 7px;
 }
