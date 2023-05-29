@@ -54,3 +54,13 @@ export const STAFF_FRAGMENT = gql`
     avatar
   }
 `;
+
+export const GET_REGISTRATION_DETAILS = gql`
+  query($pendingRegistrationId: String!) {
+    getRegistrationDetails(pending_registration_id: $pendingRegistrationId) {
+      error
+      staff_id
+      business_id
+    }
+  }
+`;

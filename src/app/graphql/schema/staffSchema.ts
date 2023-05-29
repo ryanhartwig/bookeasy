@@ -18,10 +18,11 @@ export const staffResolvers = {
       const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
       if (!response.rowCount) return { error: "notfound" }
       
-      const { expires, staff_id } = response.rows[0];
+      const { expires, staff_id, business_id } = response.rows[0];
       if (new Date().toISOString() > expires) return { error: "expired" }
 
-      return { staff_id }
+      console.log(business_id)
+      return { staff_id, business_id }
     },
   },
   Mutation: {
@@ -109,7 +110,7 @@ export const staffResolvers = {
       // Link pending registration record to staff member
       await db.query(`
         update staff set pending_registration_id = $1 where id = $2
-      `, [pending_registration_id]);
+      `, [pending_registration_id, staff_id]);
 
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -149,14 +150,15 @@ export const staffTypeDefs = `#graphql
     contact_phone: String,
   }
 
-  type Query {
-    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
-    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
-  }
-
   type RegistrationDetails {
     error: String,
     staff_id: String,
+    business_id: String,
+  }
+
+  type Query {
+    getStaffAvailability(staff_id: ID!): [AvailabilitySlice!]!,
+    getRegistrationDetails(pending_registration_id: String!): RegistrationDetails!,
   }
 
   type Mutation {
@@ -164,6 +166,6 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
-    addPendingRegistration(email: String!, staff_id: String!, team_name: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!, team_name: String!, business_id: String!): String!,
   }
 `;

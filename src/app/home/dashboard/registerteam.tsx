@@ -9,6 +9,8 @@ export const RegisterTeam = () => {
   const [open, setOpen] = useState(false);
   const [regId, setRegId] = useState<string>();
 
+  
+
   const params = useSearchParams();
 
   useEffect(() => {
@@ -27,6 +29,7 @@ export const RegisterTeam = () => {
       >
         <Modal.Header>{"You're"} invited!</Modal.Header>
         <p>You received an invitation to join</p>
+
       </Modal>
     </>
   )
