@@ -18,11 +18,10 @@ export const staffResolvers = {
       const response = await db.query('select * from pending_registration where id = $1', [pending_registration_id]);
       if (!response.rowCount) return { error: "notfound" }
       
-      const { expires, staff_id, business_id } = response.rows[0];
+      const { expires } = response.rows[0];
       if (new Date().toISOString() > expires) return { error: "expired" }
 
-      console.log(business_id)
-      return { staff_id, business_id }
+      return response.rows[0];
     },
   },
   Mutation: {
@@ -169,6 +168,10 @@ export const staffTypeDefs = `#graphql
     error: String,
     staff_id: String,
     business_id: String,
+    associated_email: String!,
+    expires: String!,
+    id: String!,
+    client_id: String,
   }
 
   type Query {

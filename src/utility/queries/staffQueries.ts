@@ -61,6 +61,10 @@ export const GET_REGISTRATION_DETAILS = gql`
       error
       staff_id
       business_id
+      client_id
+      expires
+      associated_email
+      id
     }
   }
 `;

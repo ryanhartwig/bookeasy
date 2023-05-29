@@ -237,3 +237,23 @@
 
   width: 100%;
 }
+
+.pending {
+  margin: 15px auto 10px;
+
+  .sent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--font-utility);
+    
+    > p {
+      margin-left: 10px;
+    }
+  }
+  
+  p {
+    font-size: 14px;
+  }
+}

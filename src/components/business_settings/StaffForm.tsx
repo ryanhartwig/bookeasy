@@ -1,7 +1,7 @@
 import { Staff, StaffInput, User } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, UNREGISTER_USER } from "@/utility/queries/staffQueries";
+import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, GET_REGISTRATION_DETAILS, UNREGISTER_USER } from "@/utility/queries/staffQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
@@ -15,6 +15,9 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { GET_USER } from "@/utility/queries/userQueries";
 import styles from './staffForm.module.scss';
 import uuid from "react-uuid";
+import { LoadingDots } from "../UI/LoadingDots/LoadingDots";
+import { AiOutlineCheck } from "react-icons/ai";
+import { getDateTimeString } from "@/utility/functions/conversions/getDateTimeString";
 
 interface StaffFormProps {
   open: boolean,
@@ -47,6 +50,16 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   const { data: userData } = useQuery(GET_USER, { variables: {userId: initialStaff?.registered_user_id}, skip: !initialStaff?.registered_user_id});
   useEffect(() => userData && setUser(userData.getUser), [userData]);
 
+  const { data: pendingRegistrationData, loading: pendingRegistrationLoading} = useQuery(GET_REGISTRATION_DETAILS, { 
+    variables: {
+      pendingRegistrationId: initialStaff?.pending_registration_id 
+    }, 
+    skip: !initialStaff?.pending_registration_id
+  });
+  useEffect(() => pendingRegistrationData && setPendingRegistration(pendingRegistrationData.getRegistrationDetails), [pendingRegistrationData]);
+
+  console.log(pendingRegistrationData);
+
   // Prepopulate initialStaff fields when provided
   useEffect(() => {
     if (!initialStaff) return;
@@ -57,6 +70,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
     setContactPhone(initialStaff.contact_phone || '');
     setElevated(initialStaff.elevated);
     setIsRegistered(!!initialStaff.registered_user_id);
+
   }, [initialStaff]);
   
   const staff = useMemo<StaffInput | undefined>(() => {
@@ -176,46 +190,63 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
           </div>
         </div>
       </div>
-
-      {/* Invite new user */}
+      
+      {/* Invite new user, is pending, or show registered user */}
       {!isRegistered 
-        ? <div className={styles.input}>
-            <label htmlFor="registerEmail">Recipient Email</label>
-            <Input id='registerEmail' 
-              value={registerEmail} 
-              errorMessage={registerEmailError}
-              errorOnFocusOnly
-              type={'email'}
-              autoComplete={"off"}
-              disabled={loadingPendingReg}
-              onChange={(e) => {
-                setRegisterEmail(e.target.value);
-                setRegisterEmailError('');
-              }} 
-              placeholder="user@example.com" 
-            />
-            <div className={styles.makeAdmin}>
-              <label htmlFor="elevated">Make admin?</label>
-              <Input type={"checkbox"} 
-                id="elevated" 
-                style={{height: 12, width: 12}} 
-                checked={elevated} 
-                onChange={() => setElevated(p => !p)} 
+        ? (() => {
+          if (pendingRegistrationLoading) return <LoadingDots style={{margin: 10}} /> 
+          console.log(pendingRegistration);
+          if (pendingRegistration) return (
+            <div className={styles.pending}>
+              <div className={styles.sent}>
+                <AiOutlineCheck />
+                <p>Invitation sent</p>
+              </div>
+              <p>Sent to {pendingRegistration.associated_email}</p>
+              <p>Expires {getDateTimeString(new Date(pendingRegistration.expires))}</p>
+            </div>
+          )
+          return (
+            <div className={styles.input}>
+              <label htmlFor="registerEmail">Recipient Email</label>
+              <Input id='registerEmail' 
+                value={registerEmail} 
+                errorMessage={registerEmailError}
+                errorOnFocusOnly
+                type={'email'}
+                autoComplete={"off"}
+                disabled={loadingPendingReg}
+                onChange={(e) => {
+                  setRegisterEmail(e.target.value);
+                  setRegisterEmailError('');
+                }} 
+                placeholder="user@example.com" 
               />
-              <div className={styles.helpIcon} tabIndex={0}>
-                <IoIosHelpCircleOutline fontSize={16}  />
-                <div className={styles.helpTip}>
-                  <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
+              <div className={styles.makeAdmin}>
+                <label htmlFor="elevated">Make admin?</label>
+                <Input type={"checkbox"} 
+                  id="elevated" 
+                  style={{height: 12, width: 12}} 
+                  checked={elevated} 
+                  onChange={() => setElevated(p => !p)} 
+                />
+                <div className={styles.helpIcon} tabIndex={0}>
+                  <IoIosHelpCircleOutline fontSize={16}  />
+                  <div className={styles.helpTip}>
+                    <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
+                  </div>
                 </div>
               </div>
+              {initialStaff && <Button className={styles.registerButton} 
+                onClick={onRegister}
+                loading={loadingPendingReg}
+                icon={<VscLink className={styles.registerButtonIcon} />} 
+              >Send Invitation</Button>}
             </div>
-            {initialStaff && <Button className={styles.registerButton} 
-              onClick={onRegister}
-              loading={loadingPendingReg}
-              icon={<VscLink className={styles.registerButtonIcon} />} 
-            >Send Invitation</Button>}
-          </div>
-        : user && <div className={styles.registered}> 
+          )
+        })()
+        : !user ? <LoadingDots style={{margin: 10}} /> 
+        : <div className={styles.registered}> 
             <div className={styles.user}>
               <div>
                 <VscVerifiedFilled />
