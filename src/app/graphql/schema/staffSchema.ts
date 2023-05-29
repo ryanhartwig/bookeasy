@@ -127,7 +127,7 @@ export const staffResolvers = {
         html: generateTeamInviteHTML(`http://localhost:3000/login?redirect_id=${pending_registration_id}`)
       });
       
-      return response.rows[0].id;
+      return response.rows[0];
     },
     deletePendingRegistration: async (_: any, args: any) => {
       const { id } = args;
@@ -184,7 +184,7 @@ export const staffTypeDefs = `#graphql
     addStaff(staff: StaffInput!): Staff!,
     editStaff(staff: StaffInput!): Staff!,
     deleteStaff(staff_id: String!): String!,
-    addPendingRegistration(email: String!, staff_id: String!, elevated: Boolean!, team_name: String!, business_id: String!): String!,
+    addPendingRegistration(email: String!, staff_id: String!, elevated: Boolean!, team_name: String!, business_id: String!): RegistrationDetails!,
     deletePendingRegistration(id: String!): String!,
     acceptPendingRegistration(staff_id: String!, registered_user_id: String!): String!,
     unregisterUser(staff_id: String!): Staff!,

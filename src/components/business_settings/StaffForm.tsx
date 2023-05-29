@@ -139,7 +139,8 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
     }
     
     ;(async () => {
-      await addPendingRegistration({ variables: { email: registerEmail, staffId: id, elevated, teamName: businessName, businessId }});
+      const { data } = await addPendingRegistration({ variables: { email: registerEmail, staffId: id, elevated, teamName: businessName, businessId }});
+      setPendingRegistration(data.addPendingRegistration);
     })();
   }, [addPendingRegistration, businessId, businessName, elevated, id, registerEmail]);
 
