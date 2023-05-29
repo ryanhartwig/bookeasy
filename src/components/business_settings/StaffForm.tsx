@@ -25,10 +25,11 @@ interface StaffFormProps {
   initialStaff?: Staff,
   businessId: string,
   businessName: string,
+  userElevated?: boolean,
   setSelectedStaff?: React.Dispatch<React.SetStateAction<Staff | undefined>>,
 }
 
-export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName, initialStaff, businessId, setSelectedStaff}) => {
+export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName, userElevated, initialStaff, businessId, setSelectedStaff}) => {
   const [id, setId] = useState(uuid());
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -233,7 +234,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
                 }} 
                 placeholder="user@example.com" 
               />
-              <div className={styles.makeAdmin}>
+              {userElevated && <div className={styles.makeAdmin}>
                 <label htmlFor="elevated">Make admin?</label>
                 <Input type={"checkbox"} 
                   id="elevated" 
@@ -247,7 +248,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
                     <p>Admin users can invite / create new team members, clients, services and edit details about the business. Only the business creator can delete the business.</p>
                   </div>
                 </div>
-              </div>
+              </div>}
               {initialStaff && <Button className={styles.registerButton} 
                 onClick={onRegister}
                 loading={loadingPendingReg}
