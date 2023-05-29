@@ -65,6 +65,12 @@ export const GET_REGISTRATION_DETAILS = gql`
   }
 `;
 
+export const ADD_PENDING_REGISTRATION = gql`
+  mutation($email: String!, $staffId: String!, $teamName: String!, $businessId: String!) {
+    addPendingRegistration(email: $email, staff_id: $staffId, team_name: $teamName, business_id: $businessId)
+  }
+`;  
+
 export const DELETE_PENDING_REGISTRATION = gql`
   mutation($id: String!) {
     deletePendingRegistration(id: $id)

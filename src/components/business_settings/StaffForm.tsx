@@ -1,7 +1,7 @@
 import { Staff, StaffInput } from "@/types/User"
 import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { GET_BUSINESS_STAFF } from "@/utility/queries/businessQueries";
-import { ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
+import { ADD_PENDING_REGISTRATION, ADD_STAFF, DELETE_STAFF, EDIT_STAFF, STAFF_FRAGMENT } from "@/utility/queries/staffQueries";
 import { useMutation } from "@apollo/client";
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CiWarning } from "react-icons/ci";
@@ -21,10 +21,11 @@ interface StaffFormProps {
   onClose: (...args: any) => any,
   initialStaff?: Staff,
   businessId: string,
+  businessName: string,
   setSelectedStaff?: React.Dispatch<React.SetStateAction<Staff | undefined>>,
 }
 
-export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff, businessId, setSelectedStaff}) => {
+export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName, initialStaff, businessId, setSelectedStaff}) => {
   const [id, setId] = useState(uuid());
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -73,17 +74,13 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
     return valid;
   }, [contactEmail, name]);
 
-  const [addStaff] = useMutation(ADD_STAFF, {
-    refetchQueries: [GET_BUSINESS_STAFF]
-  });
-
-  const [editStaff] = useMutation(EDIT_STAFF, {
-    refetchQueries: [GET_BUSINESS_STAFF]
-  });
-
+  const [addStaff] = useMutation(ADD_STAFF, { refetchQueries: [GET_BUSINESS_STAFF] });
+  const [editStaff] = useMutation(EDIT_STAFF, { refetchQueries: [GET_BUSINESS_STAFF] });
   const [deleteStaff, { loading: deleteStaffLoading, data: deleteStaffData, reset: deleteStaffReset }] = useMutation(DELETE_STAFF, {
     refetchQueries: [GET_BUSINESS_STAFF]
   });
+
+  const [addPendingRegistration, { loading: loadingPendingReg }] = useMutation(ADD_PENDING_REGISTRATION, { refetchQueries: [GET_BUSINESS_STAFF] });
 
   const onSubmit = useCallback(() => {
     const valid = checkInputs();
@@ -113,9 +110,13 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
   const onRegister = useCallback(() => {
     if (!registerEmail || !isValidEmail(registerEmail)) {
       setRegisterEmailError('Please enter a valid email address');
+      return;
     }
     
-  }, [registerEmail]);
+    ;(async () => {
+      await addPendingRegistration({ variables: { email: registerEmail, staffId: id, teamName: businessName, businessId }});
+    })();
+  }, [addPendingRegistration, businessId, businessName, id, registerEmail]);
 
   return (
     <Modal open={open}
@@ -133,7 +134,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
         <Input id='staffname' autoComplete="off" value={name} onChange={(e) => {
           setNameError('');
           setName(e.target.value);
-        }} required autoFocus placeholder="John Doe" errorMessage={nameError} />
+        }} required autoFocus placeholder="John Doe" errorMessage={nameError} errorOnFocusOnly />
       </div>
       <div className={styles.input}>
         <label htmlFor="staffemail">Client Contact Email</label>
@@ -167,16 +168,18 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, initialStaff
           errorOnFocusOnly
           type={'email'}
           autoComplete={"off"}
+          disabled={loadingPendingReg}
           onChange={(e) => {
             setRegisterEmail(e.target.value);
             setRegisterEmailError('');
           }} 
           placeholder="user@example.com" 
         />
-        <Button className={styles.registerButton} 
+        {initialStaff && <Button className={styles.registerButton} 
           onClick={onRegister}
+          loading={loadingPendingReg}
           icon={<VscLink className={styles.registerButtonIcon} />} 
-        >Send Invitation</Button>
+        >Send Invitation</Button>}
       </div>
       
 
