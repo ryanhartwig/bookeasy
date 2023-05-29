@@ -2,9 +2,9 @@
 
 import { Modal } from "@/components/UI/Modal/Modal";
 import { NewBusiness } from "@/types/Business";
-import { GET_BUSINESS } from "@/utility/queries/businessQueries";
-import { DELETE_PENDING_REGISTRATION, GET_REGISTRATION_DETAILS } from "@/utility/queries/staffQueries";
-import { useMutation, useQuery } from "@apollo/client";
+import { GET_BUSINESS, NEW_BUSINESS_FRAGMENT } from "@/utility/queries/businessQueries";
+import { ACCEPT_PENDING_REGISTRATION, DELETE_PENDING_REGISTRATION, GET_REGISTRATION_DETAILS } from "@/utility/queries/staffQueries";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import styles from './dashboard.module.scss';
@@ -17,10 +17,12 @@ import { Card } from "@/components/UI/Card/Card";
 import clsx from "clsx";
 import { TextButton } from "@/components/UI/TextButton/TextButton";
 import { BsCheck2, BsXLg } from "react-icons/bs";
+import { useUser } from "@/app/Providers";
 
 export const RegisterTeam = () => {
   const params = useSearchParams();
   const router = useRouter();
+  const { id: registeredUserId } = useUser();
 
   const [open, setOpen] = useState(false);
   const [regId, setRegId] = useState<string>();
@@ -46,11 +48,36 @@ export const RegisterTeam = () => {
     }
   }, [params]);
 
-  const onJoin = useCallback(() => {
-
-  }, []); 
-
+  const [acceptPendingRegistration] = useMutation(ACCEPT_PENDING_REGISTRATION, {
+    update(cache) {
+      cache.modify({
+        fields: {
+          getUserBusinesses(existingBusinesses = []) {
+            const newBusinessRef = cache.writeFragment({
+              data: business,
+              fragment: gql`
+                ${NEW_BUSINESS_FRAGMENT}
+              `
+            });
+            return [...existingBusinesses, newBusinessRef];
+          }
+        }
+      })
+    }
+  });
   const [deletePendingRegistration] = useMutation(DELETE_PENDING_REGISTRATION);
+
+  const onJoin = useCallback(() => {
+    setLoading(true);
+
+    ;(async() => {
+      await acceptPendingRegistration({ variables: { registeredUserId, staffId: registrationData?.getRegistrationDetails?.staff_id }})
+      await deletePendingRegistration({ variables: { id: regId }});
+      setLoading(false);
+      router.replace('/home/teams');
+    })();
+  }, [acceptPendingRegistration, deletePendingRegistration, regId, registeredUserId, registrationData, router]); 
+
   const onDecline = useCallback(() => {
     setLoading(true);
 

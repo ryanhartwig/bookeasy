@@ -16,6 +16,20 @@ export const GET_BUSINESS = gql`
   }
 `;
 
+export const NEW_BUSINESS_FRAGMENT = gql`
+  fragment NewBusiness on Appointment {
+    id
+    name
+    email
+    phone
+    min_booking_notice
+    min_cancel_notice
+    max_book_ahead
+    avatar
+    created
+  }
+`;
+
 export const GET_BUSINESS_WITH_STAFF_ID = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {

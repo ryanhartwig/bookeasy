@@ -135,6 +135,11 @@ export const staffResolvers = {
       const response = await db.query('delete from pending_registration where id = $1 returning id', [id]);
       return response.rows[0].id;
     },
+    acceptPendingRegistration: async (_: any, args: any) => {
+      const { staff_id, registered_user_id } = args;
+      const response = await db.query('update staff set registered_user_id = $1 where id = $2 returning id', [registered_user_id, staff_id]);
+      return response.rows[0].id;
+    },
   }
 }
 
@@ -173,5 +178,6 @@ export const staffTypeDefs = `#graphql
     deleteStaff(staff_id: String!): String!,
     addPendingRegistration(email: String!, staff_id: String!, team_name: String!, business_id: String!): String!,
     deletePendingRegistration(id: String!): String!,
+    acceptPendingRegistration(staff_id: String!, registered_user_id: String!): String!,
   }
 `;
