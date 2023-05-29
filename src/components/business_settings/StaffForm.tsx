@@ -12,12 +12,13 @@ import { Modal } from "../UI/Modal/Modal";
 import { TextButton } from "../UI/TextButton/TextButton";
 import { VscLink, VscTrash, VscVerifiedFilled } from "react-icons/vsc";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-import { GET_USER } from "@/utility/queries/userQueries";
+import { GET_USER, GET_USER_BUSINESSES } from "@/utility/queries/userQueries";
 import styles from './staffForm.module.scss';
 import uuid from "react-uuid";
 import { LoadingDots } from "../UI/LoadingDots/LoadingDots";
 import { AiOutlineCheck } from "react-icons/ai";
 import { getDateTimeString } from "@/utility/functions/conversions/getDateTimeString";
+import { NewBusiness } from "@/types/Business";
 
 interface StaffFormProps {
   open: boolean,
@@ -25,11 +26,13 @@ interface StaffFormProps {
   initialStaff?: Staff,
   businessId: string,
   businessName: string,
-  userElevated?: boolean,
+  userElevated: boolean,
+  userId?: string,
   setSelectedStaff?: React.Dispatch<React.SetStateAction<Staff | undefined>>,
+  setSelectedBusiness?: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
 }
 
-export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName, userElevated, initialStaff, businessId, setSelectedStaff}) => {
+export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, setSelectedBusiness, userId, businessName, userElevated, initialStaff, businessId, setSelectedStaff}) => {
   const [id, setId] = useState(uuid());
   const [name, setName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -105,7 +108,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   });
 
   const [addPendingRegistration, { loading: loadingPendingReg }] = useMutation(ADD_PENDING_REGISTRATION, { refetchQueries: [GET_BUSINESS_STAFF] });
-  const [unregisterUser] = useMutation(UNREGISTER_USER, { refetchQueries: [GET_BUSINESS_STAFF] });
+  const [unregisterUser] = useMutation(UNREGISTER_USER, { refetchQueries: [GET_BUSINESS_STAFF, GET_USER_BUSINESSES] });
   const [deletePendingRegistration] = useMutation(DELETE_PENDING_REGISTRATION);
 
   const onSubmit = useCallback(() => {
@@ -148,10 +151,15 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, businessName
   const onUnregister = useCallback(() => {
     ;(async () => {
       const { data } = await unregisterUser({variables: { staffId: id }});
+      if (userId === initialStaff?.registered_user_id) {
+        setSelectedStaff && setSelectedStaff(undefined);
+        setSelectedBusiness && setSelectedBusiness(undefined);
+        onClose();
+      }
       setSelectedStaff && data && setSelectedStaff(data.unregisterUser);
       setIsRegistered(false);
     })();
-  }, [id, setSelectedStaff, unregisterUser]);
+  }, [id, initialStaff, onClose, setSelectedBusiness, setSelectedStaff, unregisterUser, userId]);
 
   const onRevoke = useCallback(() => {
     ;(async () => {

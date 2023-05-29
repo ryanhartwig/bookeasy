@@ -19,9 +19,10 @@ import styles from './teams.module.scss';
 interface TeamDetailsProps {
   business: NewBusiness,
   userId: string,
+  setSelectedBusiness: React.Dispatch<React.SetStateAction<NewBusiness | undefined>>,
 }
 
-export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
+export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId, setSelectedBusiness}) => {
   const [tab, setTab] = useState<number>(0);
 
   const [staff, setStaff] = useState<Staff[]>([]);
@@ -49,13 +50,13 @@ export const TeamDetails: React.FC<TeamDetailsProps> = ({business, userId}) => {
 
   const tabs = useMemo(() => {
     const tabs = [
-      <StaffList key='staff' business={business} staffMembers={staff} services={services} userId={userId} elevated={elevated} />,
+      <StaffList setSelectedBusiness={setSelectedBusiness} key='staff' business={business} staffMembers={staff} services={services} userId={userId} elevated={elevated} />,
       <ClientList key='clients' clients={clients} business={business} />,
       <Services key='services' userId={userId} services={services} businessId={business.id} />,
     ];
     if (elevated) tabs.push(<Prefs key='prefs' business={business} isTeams elevated={staff.find(s => s.registered_user_id === userId)?.elevated || false} />);
     return tabs;
-  }, [business, clients, elevated, services, userId, staff]);
+  }, [setSelectedBusiness, business, staff, services, userId, elevated, clients]);
 
   return (
     <div className={styles.team_overview}>
