@@ -2,10 +2,13 @@
 
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { NewBusiness } from '@/types/Business';
+import { Service } from '@/types/Service';
+import { Staff } from '@/types/User';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
-import { GET_BUSINESS } from '@/utility/queries/businessQueries';
+import { GET_BUSINESS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
@@ -20,28 +23,43 @@ import { NotFound } from './notfound';
 export default function Page({params}: { params: any }) {
   const [tab, setTab] = useState('Book');
   const [formTab, setFormTab] = useState(0);
-  const tabs = useMemo(() => [
-    <SelectService key="selectService" />,
-    <SelectAgent key="selectAgent" />,
-    <SelectTime key="selectTime" />,
-    <Confirm key="confirm" />,
-  ], []);
-  
   const [business, setBusiness] = useState<NewBusiness>();
+  const [services, setServices] = useState<Service[]>([]);
+  const [staff, setStaff] = useState<Staff[]>([]);
 
+  const [selected, setSelected] = useState({
+    service: null,
+    staff: null,
+    time: null,
+  });
+
+  // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
   const { data: businessData, loading: loadingBusinessData } = useQuery(GET_BUSINESS, { variables: { businessId: bookingSiteData?.getBookingSite?.business_id }, skip: !bookingSiteData?.getBookingSite })
   useEffect(() => businessData && setBusiness(businessData.getBusiness), [businessData]);
 
-  const loading = useMemo(() => loadingBookingSiteData || loadingBusinessData, [loadingBookingSiteData, loadingBusinessData]);
+  // Form data
+  const { data: servicesData, loading: loadingServicesData} = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business?.id }, skip: !business });
+  const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id }, skip: !business });
 
-  if (loading) return <Loading />
+  useEffect(() => servicesData && setServices(servicesData.getBusinessServices), [businessData, servicesData]);
+  useEffect(() => staffData && setStaff(staffData.getBusiness.staff), [staffData]);
+
+  const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData, [loadingBookingSiteData, loadingBusinessData]);
+  const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
+
+  const tabs = useMemo(() => [
+    <SelectService key="selectService" services={services} setSelected={setSelected} selected={selected.service} />,
+    <SelectAgent key="selectAgent" />,
+    <SelectTime key="selectTime" />,
+    <Confirm key="confirm" />,
+  ], [selected.service, services]);
+
+  if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
   return (
     <div className={styles.background}>
-      <div className={styles.header}>
-
-      </div>
+      <div className={styles.header} />
       <div className={styles.page}>
         <div className={styles.title}>
           {business.avatar && <Avatar className={styles.businessPhoto} size={150} src={business.avatar} />}
@@ -64,23 +82,23 @@ export default function Page({params}: { params: any }) {
               )}
             </div>
             <div className={styles.formShowing}>
-              {tabs[formTab]}
+              {businessDataLoading ? <Spinner style={{margin: 30}} /> :  tabs[formTab]}
             </div>
             <div className={clsx(styles.formNavigate, 'noselect')}>
-              {!formTab ? <div /> : 
+              {!formTab || businessDataLoading ? <div /> : 
                 <TextButton className={styles.back}
                   onClick={() => setFormTab(p => p - 1)}
                 >
                   Go Back
                 </TextButton>
               }
-              {formTab === 3 ? <div /> :
+              {/* {formTab === 3 || businessDataLoading ? <div /> :
                 <TextButton
                   onClick={() => setFormTab(p => p + 1)}
                 >
                   Continue
                 </TextButton>
-              }
+              } */}
             </div>
           </Card>
         </div>

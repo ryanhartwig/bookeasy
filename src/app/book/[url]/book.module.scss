@@ -143,14 +143,13 @@
       padding: 0 20px;
       flex-grow: 0;
       flex-shrink: 0;
-      font-weight: 300;
+      font-weight: 400;
       font-size: 15px;
-      color: grey;
+      color: rgb(180, 180, 180);
       transition: color 200ms;
 
       &.current {
         color: var(--font-on-light);
-        font-weight: 400;
       }
     }
   }
@@ -158,6 +157,8 @@
   .formShowing {
     height: 100%;
     width: 100%;
+
+    padding: 15px;
   }
 
   .formNavigate {
