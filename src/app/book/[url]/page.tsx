@@ -2,6 +2,7 @@
 
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
+import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { NewBusiness } from '@/types/Business';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { GET_BUSINESS } from '@/utility/queries/businessQueries';
@@ -9,6 +10,7 @@ import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import styles from './book.module.scss';
+import { SelectService } from './forms/selectService';
 import Loading from './loading';
 import { NotFound } from './notfound';
 
@@ -42,7 +44,15 @@ export default function Page({params}: { params: any }) {
         </div>
         <div className={styles.form}>
           <Card className={styles.formCard}>
-            
+            <div className={styles.formProgress}>
+            </div>
+            <div className={styles.formShowing}>
+
+            </div>
+            <div className={styles.formNavigate}>
+              <TextButton className={styles.back}>Go Back</TextButton>
+              <TextButton>Continue</TextButton>
+            </div>
           </Card>
         </div>
       </div>
