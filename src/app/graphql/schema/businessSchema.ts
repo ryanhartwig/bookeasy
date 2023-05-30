@@ -64,7 +64,7 @@ export const businessResolvers = {
         from staff s
         left join registered_user u
         on s.registered_user_id = u.id
-        where business_id = $1
+        where s.business_id = $1
         and deleted = false
       `, [parent.id]);
       return response.rows;
