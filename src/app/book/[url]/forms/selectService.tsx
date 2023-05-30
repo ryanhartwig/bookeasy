@@ -6,10 +6,9 @@ import styles from './forms.module.scss';
 interface SelectServiceProps {
   services: Service[],
   setSelected: React.Dispatch<React.SetStateAction<any>>,
-  selected: Service | null,
 }
 
-export const SelectService: React.FC<SelectServiceProps> = ({services, selected, setSelected}) => {
+export const SelectService: React.FC<SelectServiceProps> = ({services, setSelected}) => {
 
   return (
     <div className={styles.selectService}>

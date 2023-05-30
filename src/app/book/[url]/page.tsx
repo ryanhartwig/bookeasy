@@ -33,6 +33,8 @@ export default function Page({params}: { params: any }) {
     time: null,
   });
 
+  useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
+
   // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
   const { data: businessData, loading: loadingBusinessData } = useQuery(GET_BUSINESS, { variables: { businessId: bookingSiteData?.getBookingSite?.business_id }, skip: !bookingSiteData?.getBookingSite })
@@ -49,11 +51,11 @@ export default function Page({params}: { params: any }) {
   const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
 
   const tabs = useMemo(() => [
-    <SelectService key="selectService" services={services} setSelected={setSelected} selected={selected.service} />,
+    <SelectService key="selectService" services={services} setSelected={setSelected} />,
     <SelectAgent key="selectAgent" />,
     <SelectTime key="selectTime" />,
     <Confirm key="confirm" />,
-  ], [selected.service, services]);
+  ], [services]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
@@ -87,7 +89,13 @@ export default function Page({params}: { params: any }) {
             <div className={clsx(styles.formNavigate, 'noselect')}>
               {!formTab || businessDataLoading ? <div /> : 
                 <TextButton className={styles.back}
-                  onClick={() => setFormTab(p => p - 1)}
+                  onClick={() => {
+                    setSelected(p => ({
+                      ...p,
+                      [Object.keys(p)[formTab - 1]]: null,
+                    }))
+                    setFormTab(p => p - 1);
+                  }}
                 >
                   Go Back
                 </TextButton>
