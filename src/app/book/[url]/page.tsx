@@ -10,12 +10,23 @@ import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import styles from './book.module.scss';
+import { Confirm } from './forms/confirm';
+import { SelectAgent } from './forms/selectAgent';
 import { SelectService } from './forms/selectService';
+import { SelectTime } from './forms/selectTime';
 import Loading from './loading';
 import { NotFound } from './notfound';
 
 export default function Page({params}: { params: any }) {
   const [tab, setTab] = useState('Book');
+  const [formTab, setFormTab] = useState(0);
+  const tabs = useMemo(() => [
+    <SelectService key="selectService" />,
+    <SelectAgent key="selectAgent" />,
+    <SelectTime key="selectTime" />,
+    <Confirm key="confirm" />,
+  ], []);
+  
   const [business, setBusiness] = useState<NewBusiness>();
 
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
@@ -47,11 +58,23 @@ export default function Page({params}: { params: any }) {
             <div className={styles.formProgress}>
             </div>
             <div className={styles.formShowing}>
-
+              {tabs[formTab]}
             </div>
-            <div className={styles.formNavigate}>
-              <TextButton className={styles.back}>Go Back</TextButton>
-              <TextButton>Continue</TextButton>
+            <div className={clsx(styles.formNavigate, 'noselect')}>
+              {!formTab ? <div /> : 
+                <TextButton className={styles.back}
+                  onClick={() => setFormTab(p => p - 1)}
+                >
+                  Go Back
+                </TextButton>
+              }
+              {formTab === 3 ? <div /> :
+                <TextButton
+                  onClick={() => setFormTab(p => p + 1)}
+                >
+                  Continue
+                </TextButton>
+              }
             </div>
           </Card>
         </div>
