@@ -30,7 +30,7 @@ export const Settings: React.FC<SettingsProps> = ({business, clients, user, serv
     <ClientList clients={clients} key={ClientList.name} business={business} />, 
     <Services businessId={business.id} userId={user.id} key={Services.name} services={services} isOwnBusiness />, 
     <Availability key={Availability.name} userId={user.id} businessId={business.id} availabilitySlices={availability} staffId={staffId} />,
-    <Prefs key={Prefs.name} userBusinessId={user.own_business_id} business={business} />, 
+    <Prefs key={Prefs.name} userBusinessId={user.business_id} business={business} />, 
   ];
 
   return (

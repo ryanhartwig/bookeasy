@@ -88,14 +88,14 @@ export const businessResolvers = {
       return response.rows[0];
     },
     newBusiness: async (_: any, args: any) => {
-      const { name, user_id, is_own } = args;
+      const { name, user_id } = args;
       const created = new Date().toISOString();
       const response = await db.query(`
-        insert into business (id, name, created, is_own)
+        insert into business (id, name, created, creator_id)
         values (
           $1, $2, $3, $4
         ) returning *
-      `, [uuid(), name, created, is_own]);
+      `, [uuid(), name, created, user_id]);
 
       // Add entry to staff mapping table
       await db.query(`
@@ -136,7 +136,7 @@ export const businessTypeDefs = `#graphql
 
   type Mutation {
     updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
-    newBusiness(name: String!, user_id: String!, is_own: Boolean): Business!,
+    newBusiness(name: String!, user_id: String!): Business!,
     removeBusiness(business_id: String!): String!,
   }
 `;

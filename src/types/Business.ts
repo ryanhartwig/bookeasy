@@ -7,8 +7,9 @@ export interface NewBusiness {
   min_cancel_notice: string | null,
   max_book_ahead: string | null,
   avatar: string | null,
-  is_own: boolean,
   created: string,
+  booking_site_id: string | null,
+  creator_id: string,
 }
 
 export interface FormBusiness {

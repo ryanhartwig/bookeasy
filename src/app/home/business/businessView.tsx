@@ -10,7 +10,7 @@ import Loading from "./loading";
 export const BusinessView = () => {
   const { id } = useUser();
   const { data: userData } = useQuery(GET_USER, { variables: { userId: id }, skip: !id});
-  const { data: businessData } = useQuery(GET_BUSINESS_WITH_STAFF_ID, { variables: { businessId: userData?.getUser?.own_business_id }, skip: !userData});
+  const { data: businessData } = useQuery(GET_BUSINESS_WITH_STAFF_ID, { variables: { businessId: userData?.getUser?.business_id }, skip: !userData});
 
   return (
     <>

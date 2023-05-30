@@ -48,7 +48,6 @@ export const AddTeamForm: React.FC<AddTeamFormProps> = ({open, onClose, setSelec
     newBusiness({ variables: {
       userId,
       name,
-      is_own: false,
     }});
     setSelected(undefined);
   }, [newBusiness, userId, name, setSelected]);

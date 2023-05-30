@@ -5,7 +5,7 @@ export interface User {
   created: string,
   phone?: number,
   avatar?: string,
-  own_business_id: string,
+  business_id: string,
   prefs?: {
     private_photo: boolean,
     private_email: boolean,
