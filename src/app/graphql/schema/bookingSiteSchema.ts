@@ -8,7 +8,7 @@ export const bookingSiteResolvers = {
       const id = uuid();
       
       const response = await db.query(`
-        insert into boking_site (id, url, business_id) 
+        insert into booking_site (id, url, business_id) 
         values ($1, $2, $3) returning *
       `, [id, id, business_id]);
 
