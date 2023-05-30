@@ -11,7 +11,8 @@ export const BUSINESS_FRAGMENT = gql`
     max_book_ahead
     avatar
     created
-    
+    booking_site_id
+    creator_id
   }
 `;
 

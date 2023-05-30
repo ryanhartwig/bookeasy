@@ -20,7 +20,7 @@ export const TeamsView = () => {
   useEffect(() => {
     if (teamsDataLoading || !teamsData) return;
     setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => b.id !== userData.getUser.business_id)); // Remove user's own business
-  }, [teamsData, teamsDataLoading, userData.getUser.business_id]);
+  }, [teamsData, teamsDataLoading, userData]);
 
   // Update selected when data changes (due to cache update)
   const selectedId = useRef<string>('');

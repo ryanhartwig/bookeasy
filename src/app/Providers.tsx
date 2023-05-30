@@ -6,6 +6,7 @@ import { APPOINTMENT_DATA_FRAGMENT } from "@/utility/queries/fragments/appointme
 import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFragments";
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
 import { SessionProvider, useSession } from 'next-auth/react';
+import { BUSINESS_FRAGMENT } from "@/utility/queries/fragments/businessFragments";
 
 const UserContext = createContext({ id: '' })
 
@@ -29,6 +30,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 				${APPOINTMENT_DATA_FRAGMENT}
 				${BUSINESS_CLIENT_FRAGMENT}
 				${SERVICE_FRAGMENT}
+				${BUSINESS_FRAGMENT}
 			`)
 		}),
 	});
