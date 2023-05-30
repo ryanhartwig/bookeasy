@@ -2,6 +2,12 @@ import db from "@/utility/db";
 import uuid from "react-uuid";
 
 export const bookingSiteResolvers = {
+  Query: {
+    getBookingSite: async (_: any, args: any) => {
+      const response = await db.query('select * from booking_site where url = $1', [args.url]);
+      return response.rows[0];      
+    },
+  },
   Mutation: {
     createBookingSite: async (_: any, args: any) => {
       const { business_id } = args;
@@ -24,6 +30,10 @@ export const bookingSiteTypeDefs = `#graphql
     id: String!,
     url: String!,
     business_id: String!,
+  }
+
+  type Query {
+    getBookingSite(url: String!): BookingSite,
   }
 
   type Mutation {
