@@ -11,6 +11,5 @@ export const GET_USER_BUSINESSES_FRAGMENT = gql`
     max_book_ahead
     avatar
     created
-    is_own
   }
 `;

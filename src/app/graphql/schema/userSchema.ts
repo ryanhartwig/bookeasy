@@ -10,6 +10,7 @@ export const userResolvers = {
       return response.rows[0];   
     },
     getUserBusinesses: async (_: any, args: any) => {
+      console.log(args.user_id)
       const response = await db.query(`
         select * from business
         where id in (
@@ -17,6 +18,7 @@ export const userResolvers = {
           where registered_user_id = $1
         )
       `, [args.user_id]);
+      console.log(response.rows)
       return response.rows;
     },
     getUserAvailability: async (_: any, args: any) => {

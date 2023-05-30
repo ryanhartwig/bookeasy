@@ -3,15 +3,7 @@ import { gql } from '@apollo/client';
 export const GET_BUSINESS = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      avatar
-      created
+      ...BusinessFragment
     }
   }
 `;
@@ -19,15 +11,7 @@ export const GET_BUSINESS = gql`
 export const GET_BUSINESS_WITH_STAFF_ID = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      avatar
-      created
+      ...BusinessFragment
       staff {
         id
       }
@@ -119,15 +103,7 @@ export const GET_BUSINESS_APPOINTMENT_METRICS = gql`
 export const UPDATE_BUSINESS_PREFS = gql`
   mutation($businessId: ID!, $patch: BusinessPrefsInput) {
     updateBusinessPrefs(business_id: $businessId, patch: $patch) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      avatar
-      created
+      ...BusinessFragment
     }
   }
 `;
@@ -135,15 +111,7 @@ export const UPDATE_BUSINESS_PREFS = gql`
 export const NEW_BUSINESS = gql`
   mutation($name: String!, $userId: String!) {
     newBusiness(name: $name, user_id: $userId) {
-      id
-      name
-      email
-      phone
-      min_booking_notice
-      min_cancel_notice
-      max_book_ahead
-      avatar
-      created
+      ...BusinessFragment
     }
   }
 `;

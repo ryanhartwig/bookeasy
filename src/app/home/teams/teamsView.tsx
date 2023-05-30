@@ -16,9 +16,10 @@ export const TeamsView = () => {
   const [teams, setTeams] = useState<NewBusiness[]>([]);
 
   const { data: userData } = useQuery(GET_USER, { variables: { userId }});
-  const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !userData});
+  const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
   useEffect(() => {
-    if (teamsDataLoading || !teamsData) return;
+    if (teamsDataLoading || !teamsData || !userData) return;
+    console.log(teamsData);
     setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => b.id !== userData.getUser.business_id)); // Remove user's own business
   }, [teamsData, teamsDataLoading, userData]);
 
