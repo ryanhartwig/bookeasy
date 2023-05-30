@@ -50,12 +50,18 @@ export default function Page({params}: { params: any }) {
         </div>
         <div className={clsx(styles.navigation, 'noselect')}>
           {['Book', 'Contact', 'About'].map(label => 
-            <p key={label} onClick={() => setTab(label)} className={clsx({[styles.active]: tab === label})}>{label}</p>
+            <p key={label} onClick={() => setTab(label)} className={clsx({[styles.current]: tab === label})}>{label}</p>
           )}
         </div>
         <div className={styles.form}>
           <Card className={styles.formCard}>
             <div className={styles.formProgress}>
+              {['Select a Service', 'Select an Agent', 'Select a Time', 'Confirm Booking'].map((label, i) => 
+                <>
+                  <p key={label} className={clsx(styles.progressLabel, {[styles.current]: formTab === i})}>{label}</p>
+                  {i !== 3 && <hr />}
+                </>
+              )}
             </div>
             <div className={styles.formShowing}>
               {tabs[formTab]}

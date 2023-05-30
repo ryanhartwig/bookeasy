@@ -103,7 +103,7 @@
     cursor: pointer;
     transition: background-color 200ms;
 
-    &.active {
+    &.current {
       background-color: #e5f3fc;
       color: var(--font-utility);
     }
@@ -134,6 +134,25 @@
     border-bottom: 2px solid var(--dividers);
     flex-shrink: 0;
     flex-grow: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    p {
+      padding: 0 20px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      font-weight: 300;
+      font-size: 15px;
+      color: grey;
+      transition: color 200ms;
+
+      &.current {
+        color: var(--font-on-light);
+        font-weight: 400;
+      }
+    }
   }
 
   .formShowing {
