@@ -49,9 +49,9 @@ export default function Page({params}: { params: any }) {
           <hr />
         </div>
         <div className={clsx(styles.navigation, 'noselect')}>
-          <p onClick={() => setTab('Book')} className={clsx({[styles.active]: tab === 'Book'})}>Book</p>
-          <p onClick={() => setTab('Contact')} className={clsx({[styles.active]: tab === 'Contact'})}>Contact</p>
-          <p onClick={() => setTab('About')} className={clsx({[styles.active]: tab === 'About'})}>About</p>
+          {['Book', 'Contact', 'About'].map(label => 
+            <p key={label} onClick={() => setTab(label)} className={clsx({[styles.active]: tab === label})}>{label}</p>
+          )}
         </div>
         <div className={styles.form}>
           <Card className={styles.formCard}>
