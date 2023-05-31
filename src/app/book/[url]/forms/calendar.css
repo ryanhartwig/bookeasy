@@ -1,9 +1,5 @@
 /* Overrides */
 
-.react-calendar__navigation__next2-button,
-.react-calendar__navigation__prev2-button {
-  display: none;
-}
 abbr {
   text-decoration: none;
   text-transform: capitalize;
@@ -19,9 +15,10 @@ abbr {
 .react-calendar__tile:disabled  {
   background: none !important;
 }
-/* .react-calendar__month-view__days__day--weekend {
-  color: #d10000;
-} */
+.react-calendar__navigation__label {
+  color: black;
+  background: none !important;
+}
 
 /* */
 
@@ -73,9 +70,7 @@ abbr {
 }
 
 
-.react-calendar__navigation__label {
-  pointer-events: none;
-}
+
 
 .react-calendar__navigation button {
   min-width: 44px;
