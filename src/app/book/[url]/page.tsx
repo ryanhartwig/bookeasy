@@ -20,6 +20,12 @@ import { SelectTime } from './forms/selectTime';
 import Loading from './loading';
 import { NotFound } from './notfound';
 
+interface SelectedState {
+  service: Service | null,
+  staff: Staff | null,
+  time: any,
+}
+
 export default function Page({params}: { params: any }) {
   const [tab, setTab] = useState('Book');
   const [formTab, setFormTab] = useState(0);
@@ -27,7 +33,7 @@ export default function Page({params}: { params: any }) {
   const [services, setServices] = useState<Service[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
 
-  const [selected, setSelected] = useState({
+  const [selected, setSelected] = useState<SelectedState>({
     service: null,
     staff: null,
     time: null,
@@ -52,10 +58,10 @@ export default function Page({params}: { params: any }) {
 
   const tabs = useMemo(() => [
     <SelectService key="selectService" services={services} setSelected={setSelected} />,
-    <SelectAgent key="selectAgent" />,
+    <SelectAgent key="selectAgent" staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
     <SelectTime key="selectTime" />,
     <Confirm key="confirm" />,
-  ], [services]);
+  ], [selected?.service?.assigned_staff, services, staff]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
@@ -69,7 +75,7 @@ export default function Page({params}: { params: any }) {
           <hr />
         </div>
         <div className={clsx(styles.navigation, 'noselect')}>
-          {['Book', 'Contact', 'About'].map(label => 
+          {['Book', 'Staff', 'Contact', 'About'].map(label => 
             <p key={label} onClick={() => setTab(label)} className={clsx({[styles.current]: tab === label})}>{label}</p>
           )}
         </div>
