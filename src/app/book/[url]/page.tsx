@@ -40,6 +40,7 @@ export default function Page({params}: { params: any }) {
   });
 
   useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
+  useEffect(() => { selected.staff && setFormTab(p => p + 1) }, [selected.staff]);
 
   // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
@@ -58,7 +59,7 @@ export default function Page({params}: { params: any }) {
 
   const tabs = useMemo(() => [
     <SelectService key="selectService" services={services} setSelected={setSelected} />,
-    <SelectAgent key="selectAgent" businessId={business?.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
+    <SelectAgent key="selectAgent" setSelected={setSelected} businessId={business?.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
     <SelectTime key="selectTime" />,
     <Confirm key="confirm" />,
   ], [business?.id, selected?.service?.assigned_staff, services, staff]);
