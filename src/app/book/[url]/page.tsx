@@ -38,7 +38,6 @@ export default function Page({params}: { params: any }) {
     staff: null,
     time: null,
   });
-
   useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
   useEffect(() => { selected.staff && setFormTab(p => p + 1) }, [selected.staff]);
 
@@ -49,9 +48,8 @@ export default function Page({params}: { params: any }) {
 
   // Form data
   const { data: servicesData, loading: loadingServicesData} = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business?.id }, skip: !business });
-  const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id }, skip: !business });
-
   useEffect(() => servicesData && setServices(servicesData.getBusinessServices), [businessData, servicesData]);
+  const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id }, skip: !business });
   useEffect(() => staffData && setStaff(staffData.getBusiness.staff), [staffData]);
 
   const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData, [loadingBookingSiteData, loadingBusinessData]);
@@ -62,9 +60,9 @@ export default function Page({params}: { params: any }) {
     return [
     <SelectService key="selectService" services={services} setSelected={setSelected} />,
     <SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
-    <SelectTime key="selectTime" business={business} />,
+    <SelectTime key="selectTime" business={business} selectedStaff={selected.staff} />,
     <Confirm key="confirm" />,
-  ]}, [business, selected?.service?.assigned_staff, services, staff]);
+  ]}, [business, selected?.service?.assigned_staff, selected.staff, services, staff]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
