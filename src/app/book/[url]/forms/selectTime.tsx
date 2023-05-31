@@ -2,10 +2,22 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import styles from './forms.module.scss';
 import './calendar.css';
+import { NewBusiness } from '@/types/Business';
 
-export const SelectTime = () => {
+interface SelectTimeProps {
+  business: NewBusiness,
+}
 
-  const [value, onChange] = useState(new Date());
+export const SelectTime: React.FC<SelectTimeProps> = ({business}) => {
+  const minDate = new Date();
+  minDate.setTime(minDate.getTime() + Number(business.min_booking_notice ?? 0));
+  let maxDate: Date | undefined = undefined;
+  if (business.max_book_ahead) {
+    maxDate = new Date();
+    maxDate.setTime(maxDate.getTime() + Number(business.max_book_ahead));
+  }
+
+  const [value, onChange] = useState(minDate);
 
 
   useEffect(() => {
@@ -22,7 +34,8 @@ export const SelectTime = () => {
           console.log(date)
           return false
         }}
-        minDate={new Date()} 
+        minDate={minDate} 
+        maxDate={maxDate}
         onChange={(value, e) => { onChange(new Date(value as Date))}} 
         value={value} 
       />

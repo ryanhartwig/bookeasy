@@ -57,12 +57,14 @@ export default function Page({params}: { params: any }) {
   const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData, [loadingBookingSiteData, loadingBusinessData]);
   const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
 
-  const tabs = useMemo(() => [
+  const tabs = useMemo(() => {
+    if (!business) return [];
+    return [
     <SelectService key="selectService" services={services} setSelected={setSelected} />,
-    <SelectAgent key="selectAgent" setSelected={setSelected} businessId={business?.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
-    <SelectTime key="selectTime" />,
+    <SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
+    <SelectTime key="selectTime" business={business} />,
     <Confirm key="confirm" />,
-  ], [business?.id, selected?.service?.assigned_staff, services, staff]);
+  ]}, [business, selected?.service?.assigned_staff, services, staff]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
