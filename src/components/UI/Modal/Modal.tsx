@@ -22,9 +22,10 @@ interface ModalProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDi
   onClickDisabledAction?: (...args: any) => any,
   loading?: boolean,
   pauseListener?: boolean,
+  noOffset?: boolean,
 }
 
-export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener = false, onClickDisabledAction, open, escapeCloses = false, actionButtonText, onAction, actionCloses = false, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
+export const Modal = ({zIndex = 15, refs = [], noOffset, children, onClose, pauseListener = false, onClickDisabledAction, open, escapeCloses = false, actionButtonText, onAction, actionCloses = false, actionButtonDisabled, loading = false, ...divProps}: ModalProps) => {
   const header = React.Children.map(children, (child: any) => child?.type?.displayName === 'Header' ? child : null)
   const content = React.Children.map(children, (child: any) => child?.type?.displayName !== 'Header' ? child : null)
 
@@ -70,7 +71,7 @@ export const Modal = ({zIndex = 15, refs = [], children, onClose, pauseListener 
   return (
     <>
       {open && 
-      <div className='Modal' style={{zIndex}} ref={modalRef}>
+      <div className={clsx('Modal', {'noOffset': noOffset})} style={{zIndex}} ref={modalRef}>
         <div className={clsx('Modal-box', {'Modal-box-disabled': loading})} ref={contentRef} >
           {loading && <div className='Loading-cover'>
             <ClipLoader loading={loading} color="white" size={40} />

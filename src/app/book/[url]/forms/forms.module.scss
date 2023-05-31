@@ -7,6 +7,8 @@
   overflow-x: auto;
   height: 100%;
 
+  padding: 2px;
+
   .staffCard {
     width: 180px;
     height: fit-content;
@@ -27,7 +29,7 @@
     text-align: center;
   
     border-radius: 15px;
-    @include globalutil.shadow;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.22);
 
     > * { margin: 10px 0 }
     
@@ -38,7 +40,8 @@
 
     .credentials {
       font-size: 14px;
-      font-weight: 100;
+      font-weight: 300;
+      color: rgb(98, 98, 98);
     }
 
     .bio {
