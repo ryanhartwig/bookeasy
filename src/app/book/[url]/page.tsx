@@ -64,8 +64,8 @@ export default function Page({params}: { params: any }) {
       <div className={styles.header} />
       <div className={styles.page}>
         <div className={styles.title}>
-          {business.avatar && <Avatar className={styles.businessPhoto} size={150} src={business.avatar} />}
-          <h2 style={{marginLeft: business.avatar ? '150px' : ''}}>{business.name}</h2>
+          {business.avatar && <Avatar className={styles.businessPhoto} size={170} src={business.avatar} />}
+          <h2 style={{marginLeft: business.avatar ? '170px' : ''}}>{business.name}</h2>
           <hr />
         </div>
         <div className={clsx(styles.navigation, 'noselect')}>

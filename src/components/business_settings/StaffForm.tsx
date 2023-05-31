@@ -62,8 +62,6 @@ export const StaffForm: React.FC<StaffFormProps> = ({open, onClose, setSelectedB
   });
   useEffect(() => pendingRegistrationData && setPendingRegistration(pendingRegistrationData.getRegistrationDetails), [pendingRegistrationData]);
 
-  console.log(pendingRegistrationData);
-
   // Prepopulate initialStaff fields when provided
   useEffect(() => {
     if (!initialStaff) return;
