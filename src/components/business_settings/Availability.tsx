@@ -12,10 +12,11 @@ interface AvailabilityProps {
   availabilitySlices: AvailabilitySlice[],
   businessId: string,
   userId?: string,
+  readonly?: boolean,
   staffId: string,
 }
 
-export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, userId, staffId, businessId}) => {
+export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, readonly, userId, staffId, businessId}) => {
   const [formSlices, setFormSlices] = useState<AvailabilitySlice[]>();
   const [day, setDay] = useState<number>();
 
@@ -36,7 +37,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
 
   const slices = useMemo(() => {
     return weekDays.map((d, i) => (
-      <Setting label={d} key={d} onEditOverride={() => {setFormSlices(availability.get(i) ?? []); setDay(i)}}>
+      <Setting noEdit={readonly} label={d} key={d} onEditOverride={() => {setFormSlices(availability.get(i) ?? []); setDay(i)}}>
         {availability.get(i) ? (availability.get(i) ?? []).map((slice) => {
           return <div key={slice.start_time}>
             <p>{formatMilitaryTime(slice.start_time)} - {formatMilitaryTime(slice.end_time)}</p>
@@ -44,7 +45,7 @@ export const Availability: React.FC<AvailabilityProps> = ({availabilitySlices, u
         }) : <p>None</p>}
       </Setting>
     ))
-  }, [availability]);
+  }, [availability, readonly]);
 
   return ( 
     <div className={styles.Availability}>

@@ -6,13 +6,12 @@ import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { Staff } from '@/types/User';
 import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { useQuery } from '@apollo/client';
-import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { HiOutlineMail } from 'react-icons/hi';
 import { HiOutlinePhone } from 'react-icons/hi2';
-import { VscVerifiedFilled, VscUnverified } from 'react-icons/vsc';
 import styles from './forms.module.scss';
 import staffStyles from '@/components/business_settings/tabs.module.scss';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 
 interface SelectAgentProps {
   staff: Staff[],
@@ -37,7 +36,7 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
           <h2>{s.name}</h2>
           <p className={styles.credentials}>Credentials</p>
           <p className={styles.bio}>This person is a person who offers a service for a company of whom you have decided to book an appointment with at this current point in time.</p>
-          <TextButton onClick={() => setSelected(s)} >Availability</TextButton>
+          <TextButton onClick={() => setSelected(s)} >Details</TextButton>
         </div>
       ))}
 
@@ -48,7 +47,7 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
         className={staffStyles.modal} 
         noOffset
       >
-        <Modal.Header>Staff Details</Modal.Header>
+        <Modal.Header>Agent Details</Modal.Header>
         {selected &&
           <div className={staffStyles.staff_content}>
             <div className={staffStyles.staff_details}>
@@ -56,10 +55,6 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
               <div>
                 <div className={staffStyles.staff_name}>
                   <p>{selected.name}</p>
-                  <div className={clsx({[staffStyles.registered]: selected.registered_user_id})}>
-                    {selected.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
-                    <p className={staffStyles.tooltip}>{selected.registered_user_id ? 'Registered User' : 'Unregistered'}</p>
-                  </div>
                 </div>
                 <ul>
                   <li>
@@ -74,7 +69,10 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
               </div>
             </div>
             <div className={staffStyles.bookable}>
-              {selected && businessId && <Availability availabilitySlices={slices} key="availability" businessId={businessId} userId={selected.id} staffId={selected.id}  />}
+              {loading 
+                ? <Spinner style={{margin: 20}} />
+                : selected && businessId && <Availability availabilitySlices={slices} key="availability" businessId={businessId} userId={selected.id} staffId={selected.id} readonly />
+              }
             </div>
           </div>
         }

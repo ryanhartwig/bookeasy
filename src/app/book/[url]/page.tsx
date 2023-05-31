@@ -58,10 +58,10 @@ export default function Page({params}: { params: any }) {
 
   const tabs = useMemo(() => [
     <SelectService key="selectService" services={services} setSelected={setSelected} />,
-    <SelectAgent key="selectAgent" staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
+    <SelectAgent key="selectAgent" businessId={business?.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
     <SelectTime key="selectTime" />,
     <Confirm key="confirm" />,
-  ], [selected?.service?.assigned_staff, services, staff]);
+  ], [business?.id, selected?.service?.assigned_staff, services, staff]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />

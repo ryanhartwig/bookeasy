@@ -31,9 +31,10 @@ interface SettingProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>,
   setValue?: React.Dispatch<React.SetStateAction<any>>,
   onSave?: (...args: any) => Promise<any>,
   email?: boolean,
+  noEdit?: boolean,
 }
 
-export const Setting = ({label, children, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onRemove, onSave, ...props}: SettingProps) => {
+export const Setting = ({label, children, noEdit, toggleState, onEditOverride, value, email, allowEmptyValue, setValue, onRemove, onSave, ...props}: SettingProps) => {
 
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -107,7 +108,7 @@ export const Setting = ({label, children, toggleState, onEditOverride, value, em
         ? <div className={clsx(styles.action, 'noselect')} >
             {!editing ? <>
               {onRemove && <TextButton altColor onClick={onRemove}>Remove</TextButton>}
-              <TextButton onClick={onEdit}>Edit</TextButton>
+              {!noEdit && <TextButton onClick={onEdit}>Edit</TextButton>}
             </>
             : <>
               {loading && <MoonLoader color='#000000' size={15} cssOverride={{marginRight: 10}} />}
