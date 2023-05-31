@@ -19,10 +19,10 @@ interface SelectAgentProps {
 }
 
 export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => {
-  const [selected, setSelected] = useState<Staff>();
+  const [detailsSelected, setDetailsSelected] = useState<Staff>();
   const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
   
-  const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selected?.id }, skip: !selected});
+  const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: detailsSelected?.id }, skip: !detailsSelected});
   useEffect(() => {
     if (!availabilityData || loading) return;
     setSlices(availabilityData.getStaffAvailability);
@@ -36,34 +36,32 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
           <h2>{s.name}</h2>
           <p className={styles.credentials}>Credentials</p>
           <p className={styles.bio}>This person is a person who offers a service for a company of whom you have decided to book an appointment with at this current point in time.</p>
-          <TextButton onClick={() => setSelected(s)} >Details</TextButton>
+          <TextButton onClick={() => setDetailsSelected(s)} >Details</TextButton>
         </div>
       ))}
-
-
       <Modal 
-        open={!!selected} 
-        onClose={() => setSelected(undefined)} 
+        open={!!detailsSelected} 
+        onClose={() => setDetailsSelected(undefined)} 
         className={staffStyles.modal} 
         noOffset
       >
         <Modal.Header>Agent Details</Modal.Header>
-        {selected &&
+        {detailsSelected &&
           <div className={staffStyles.staff_content}>
             <div className={staffStyles.staff_details}>
-              <Avatar src={selected.avatar} size={86} />
+              <Avatar src={detailsSelected.avatar} size={86} />
               <div>
                 <div className={staffStyles.staff_name}>
-                  <p>{selected.name}</p>
+                  <p>{detailsSelected.name}</p>
                 </div>
                 <ul>
                   <li>
                     <HiOutlinePhone />
-                    {selected.contact_phone ?? 'None'}
+                    {detailsSelected.contact_phone ?? 'None'}
                   </li>
                   <li>
                     <HiOutlineMail />
-                    {selected.contact_email ?? 'None'}
+                    {detailsSelected.contact_email ?? 'None'}
                   </li>
                 </ul>
               </div>
@@ -71,7 +69,7 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId}) => 
             <div className={staffStyles.bookable}>
               {loading 
                 ? <Spinner style={{margin: 20}} />
-                : selected && businessId && <Availability availabilitySlices={slices} key="availability" businessId={businessId} userId={selected.id} staffId={selected.id} readonly />
+                : detailsSelected && businessId && <Availability availabilitySlices={slices} key="availability" businessId={businessId} userId={detailsSelected.id} staffId={detailsSelected.id} readonly />
               }
             </div>
           </div>
