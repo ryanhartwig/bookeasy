@@ -8,7 +8,7 @@ import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { useQuery } from '@apollo/client';
 import { Appointment } from '@/types/Appointment';
-import { GET_STAFF_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
+import { GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
 
 interface SelectTimeProps {
   business: NewBusiness,
@@ -22,12 +22,13 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
   const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
 
   const minDate = useMemo(() => {
-    if (!baseAvailability || !baseAvailability.size) return;
+    if (!baseAvailability) return;
     const date = new Date();
     date.setTime(date.getTime() + Number(business.min_booking_notice ?? 0));
     let dayIndex = date.getDay() - 1 % 7;
 
     for (let i = 0; i < 7; i++) {
+      if (i === 6 && !baseAvailability.has(dayIndex)) return date;
       if (baseAvailability.has(dayIndex)) break;
       dayIndex = (dayIndex + 1) % 7;
       date.setDate(date.getDate() + 1);
@@ -43,17 +44,49 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
     return date;
   }, [business.max_book_ahead]);
   
-  
   // Fetch appointments for the current month
+  const [currentMonthStart, setCurrentMonthStart] = useState<Date>();
+
+  useEffect(() => {
+    if (!minDate) return;
+    const date = new Date(minDate);
+    date.setDate(1);
+    date.setHours(0,0,0,0);
+    setCurrentMonthStart(date);
+  }, [minDate]);
+
+  // Set current month range
+  const [monthStart, monthEnd] = useMemo(() => {
+    if (!currentMonthStart) return [null, null];
+    const end = new Date(currentMonthStart);
+    end.setMonth(end.getMonth() + 1);
+    end.setDate(end.getDate() - 1);
+    end.setHours(23, 59, 59, 999);
+
+    return [currentMonthStart, end];
+  }, [currentMonthStart]);
+
   const [appointmentsMap, setAppointmentsMap] = useState<Map<string, Appointment[]>>(new Map());
 
-  // Alllll the month appointments
-  const { data: appointmentData, loading: loadingAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS, { variables: {
-    staffId: selectedStaff?.id,
-    start_date: null,
-    end_date: null,
-  }, skip: !selectedStaff})
+  // use appropriate fetch (user or staff) if the staff is registered 
 
+  const { data: staffAppointmentData, loading: loadingStaffAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS_DATES, { variables: {
+    staffId: selectedStaff?.id,
+    rangeStart: monthStart?.toISOString(),
+    rangeEnd: monthEnd?.toISOString(),
+  }, skip: !selectedStaff || !!selectedStaff.registered_user_id || !monthStart || !monthEnd});
+
+  const { data: userAppointmentData, loading: loadingUserAppointmentData } = useQuery(GET_USER_APPOINTMENTS_DATES, { variables: {
+    registeredUserId: selectedStaff?.registered_user_id,
+    rangeStart: monthStart?.toISOString(),
+    rangeEnd: monthEnd?.toISOString(),
+  }, skip: !selectedStaff || !selectedStaff.registered_user_id || !monthStart || !monthEnd});
+
+
+  console.log('user apps: ', userAppointmentData);
+  console.log('staff apps: ', staffAppointmentData);
+
+  
   // For each week of the month
   //  For each day of baseAvailability
   //    Grab appointments from fetch for current day, and determine available booking periods
@@ -62,13 +95,16 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
 
 
   // Set base / recurring availability
-  const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff?.id }, skip: !selectedStaff});
+  const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff?.id }, skip: !selectedStaff});
   useEffect(() => {
-    if (!availabilityData || loading) return;
+    if (loadingAvailabilityData) return;
+    if (!availabilityData) {
+      setBaseAvailability
+    }
     const map = new Map<number, [string, string][]>();
     (availabilityData.getStaffAvailability as AvailabilitySlice[]).forEach(({day, start_time, end_time}) => map.set(day, [...(map.get(day) ?? []), [start_time, end_time]]))
     setBaseAvailability(map);
-  }, [availabilityData, loading]); 
+  }, [availabilityData, loadingAvailabilityData]); 
 
   return (
     <div className={styles.selectTime}>
@@ -86,6 +122,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
         maxDetail={'month'}
         minDetail={'month'}
         onChange={(value, e) => { setSelectedDate(new Date(value as Date))}} 
+        // On navigate / month change
+        onActiveStartDateChange={({activeStartDate}) => {setCurrentMonthStart(activeStartDate!)}}
         value={selectedDate} 
       />}
     </div>
