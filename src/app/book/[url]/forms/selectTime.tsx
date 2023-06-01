@@ -1,7 +1,7 @@
+import './calendar.css';
 import { useEffect, useMemo, useState } from 'react';
 import Calendar from 'react-calendar';
 import styles from './forms.module.scss';
-import './calendar.css';
 import { NewBusiness } from '@/types/Business';
 import { Staff } from '@/types/User';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
@@ -26,31 +26,34 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
     return date;
   }, [business.max_book_ahead]);
 
-  const [dayAvailability, setDayAvailability] = useState<Map<number, [string, string][]>>(new Map());
+  const [selectedDate, setSelectedDate] = useState<any>(undefined);
 
-  const [value, onChange] = useState<any>(undefined);
-  const [slices, setSlices] = useState<AvailabilitySlice[]>([]);
+  // Base / recurring availability
+  const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
+  
+  // Fetch appointments for the current month
+
+  // For each week of the month
+  //  For each day of baseAvailability
+  //    Grab appointments from fetch for current day, and determine available booking periods
+
+  // Set base / recurring availability
   const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff?.id }, skip: !selectedStaff});
-  useEffect(() => availabilityData && !loading && setSlices(availabilityData.getStaffAvailability)
-  , [availabilityData, loading]); 
-
   useEffect(() => {
+    if (!availabilityData || loading) return;
     const map = new Map<number, [string, string][]>();
-    slices.forEach(({day, start_time, end_time}) => map.set(day, [...(map.get(day) ?? []), [start_time, end_time]]));
-    setDayAvailability(map);
-  }, [slices]);
-
-  // const onClickDay = useCallback(() => {}, []);
+    (availabilityData.getStaffAvailability as AvailabilitySlice[]).forEach(({day, start_time, end_time}) => map.set(day, [...(map.get(day) ?? []), [start_time, end_time]]))
+    setBaseAvailability(map);
+  }, [availabilityData, loading]); 
 
   return (
     <div className={styles.selectTime}>
       <Calendar 
         // tileContent={({date}) => {return <p>Y</p>}}
-        tileDisabled={({activeStartDate, date}) => {
+        tileDisabled={({date}) => {
           const monIndexedDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
-          return !dayAvailability.has(monIndexedDay);
+          return !baseAvailability.has(monIndexedDay);
         }}
-        // showFixedNumberOfWeeks
         showNeighboringMonth={false}
         minDate={minDate} 
         maxDate={maxDate}
@@ -58,8 +61,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
         next2Label={null}
         maxDetail={'month'}
         minDetail={'month'}
-        onChange={(value, e) => { onChange(new Date(value as Date))}} 
-        value={value} 
+        onChange={(value, e) => { setSelectedDate(new Date(value as Date))}} 
+        value={selectedDate} 
       />
     </div>
   )
