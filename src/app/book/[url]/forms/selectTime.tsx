@@ -16,25 +16,32 @@ interface SelectTimeProps {
 }
 
 export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff}) => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
+  // Base / recurring availability
+  const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
+
   const minDate = useMemo(() => {
+    if (!baseAvailability || !baseAvailability.size) return;
     const date = new Date();
     date.setTime(date.getTime() + Number(business.min_booking_notice ?? 0));
+    let dayIndex = date.getDay() - 1 % 7;
+
+    for (let i = 0; i < 7; i++) {
+      if (baseAvailability.has(dayIndex)) break;
+      dayIndex = (dayIndex + 1) % 7;
+      date.setDate(date.getDate() + 1);
+    }
+
+    setSelectedDate(date);
     return date;
-  }, [business.min_booking_notice]);
+  }, [baseAvailability, business.min_booking_notice]);
   const maxDate = useMemo(() => {
     if (!business.max_book_ahead) return undefined;
     let date = new Date();
     date.setTime(date.getTime() + Number(business.max_book_ahead));
     return date;
   }, [business.max_book_ahead]);
-
-  const [selectedDate, setSelectedDate] = useState<any>(undefined);
-
-  // Base / recurring availability
-  const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
-  useEffect(() => {
-    let dayIndex = minDate.getDay() - 1 % 7;
-  }, [minDate]);
   
   
   // Fetch appointments for the current month
@@ -65,7 +72,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
 
   return (
     <div className={styles.selectTime}>
-      <Calendar 
+      {minDate && <Calendar 
         // tileContent={({date}) => {return <p>Y</p>}}
         tileDisabled={({date}) => {
           const monIndexedDay = date.getDay() - 1 % 7;
@@ -80,7 +87,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
         minDetail={'month'}
         onChange={(value, e) => { setSelectedDate(new Date(value as Date))}} 
         value={selectedDate} 
-      />
+      />}
     </div>
   )
 }
