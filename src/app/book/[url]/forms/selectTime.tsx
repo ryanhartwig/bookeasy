@@ -93,7 +93,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     return [currentMonthStart, end];
   }, [currentMonthStart]);
 
-  const [appointmentsMap, setAppointmentsMap] = useState<Map<string, AppointmentDates[]>>(new Map());
+  const [appointmentsMap, setAppointmentsMap] = useState<Map<string, AppointmentDates[]>>();
   const setAppointments = useCallback((apps: AppointmentDates[]) => {
     const map = new Map<string, AppointmentDates[]>();
 
@@ -135,7 +135,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   const [timeSlicesMap, setTimeSlicesMap] = useState<Map<string, string[]>>(new Map());
   
   useEffect(() => {
-    if (!appointmentsMap.size) return;
+    if (!appointmentsMap) return;
     if (!monthStart || !monthEnd || !minDate || !maxDate) return;
     const timeSlices = new Map<string, string[]>();
 
@@ -149,7 +149,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     if (endDateKey.toISOString() === getStartMonth(endDateKey).toISOString()) {
       endDateKey = getStartDay(endDateKey);
     }
-
 
     // Get all apps for minKey and maxKey, but be sure to use the actual minDate and maxDate when dermining periods
     while (startDateKey.toISOString() <= endDateKey.toISOString()) {
@@ -216,12 +215,10 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
 
-  console.log(timeSlicesMap);
-
   return (
     <div className={styles.selectTime}>
       {minDate && <Calendar 
-        // tileContent={({date}) => {return <p>Y</p>}}
+        // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
         tileDisabled={({date}) => !timeSlicesMap.has(getStartDay(date).toISOString())}
         showNeighboringMonth={false}
         minDate={minDate} 
