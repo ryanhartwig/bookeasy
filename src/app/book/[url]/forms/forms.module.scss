@@ -17,6 +17,9 @@
     margin: 0 10px;
     padding: 0 10px;
 
+    flex-grow: 0;
+    flex-shrink: 0;
+
     cursor: pointer;
     transition: scale 200ms;
     &:hover {
