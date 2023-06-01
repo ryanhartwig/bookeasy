@@ -18,13 +18,19 @@ interface SelectTimeProps {
 }
 
 const sortApps = ((a: AppointmentDates, b: AppointmentDates) => a.start_date < b.start_date ? -1 : 1);
-const getStartDateKey = (d: Date | string | number) => {
+const getStartDay = (d: Date | string | number) => {
   const date = new Date(d);
   date.setHours(0,0,0,0);
-  return date.toISOString();
+  return date;
+}
+const getStartMonth = (d: Date | string | number) => {
+  const date = new Date(d);
+  date.setHours(0,0,0,0);
+  date.setDate(1);
+  return date;
 }
 
-export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff}) => {
+export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, selectedService}) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
   // Base / recurring availability
@@ -63,8 +69,10 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
   }, [baseAvailability, business.max_book_ahead]);
   
   // Fetch appointments for the current month
+  // Updated when user navigates month to month, which triggers monthStart & monthEnd memo
   const [currentMonthStart, setCurrentMonthStart] = useState<Date>();
 
+  // Sets the initial monthStartDate based on the minDate
   useEffect(() => {
     if (!minDate) return;
     const date = new Date(minDate);
@@ -91,13 +99,13 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
     const sorted = [...apps].sort(sortApps);
     for (let leftIndex = 0; leftIndex < sorted.length; leftIndex++) {
       const {start_date, end_date} = sorted[leftIndex];
-      const key = getStartDateKey(start_date);
+      const key = getStartDay(start_date).toISOString();
       const value: AppointmentDates[] = [{start_date, end_date}]; 
       let rightIndex = leftIndex + 1;
 
       while(rightIndex < sorted.length) {
         const {start_date, end_date} = sorted[rightIndex];
-        const rightStart = getStartDateKey(start_date);
+        const rightStart = getStartDay(start_date).toISOString();
         if (key !== rightStart) break;
         value.push({start_date, end_date});
         rightIndex++;
@@ -111,28 +119,49 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
 
   // use appropriate fetch (user or staff) if the staff is registered 
   const { data: staffAppointmentData, loading: loadingStaffAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS_DATES, { variables: {
-    staffId: selectedStaff?.id,
+    staffId: selectedStaff.id,
     rangeStart: monthStart?.toISOString(),
     rangeEnd: monthEnd?.toISOString(),
-  }, skip: !selectedStaff || !!selectedStaff.registered_user_id || !monthStart || !monthEnd});
+  }, skip: !!selectedStaff.registered_user_id || !monthStart || !monthEnd});
   useEffect(() => staffAppointmentData && setAppointments(staffAppointmentData.getStaffAppointments), [setAppointments, staffAppointmentData]);
   const { data: userAppointmentData, loading: loadingUserAppointmentData } = useQuery(GET_USER_APPOINTMENTS_DATES, { variables: {
-    registeredUserId: selectedStaff?.registered_user_id,
+    registeredUserId: selectedStaff.registered_user_id,
     rangeStart: monthStart?.toISOString(),
     rangeEnd: monthEnd?.toISOString(),
-  }, skip: !selectedStaff || !selectedStaff.registered_user_id || !monthStart || !monthEnd});
+  }, skip: !selectedStaff.registered_user_id || !monthStart || !monthEnd});
   useEffect(() => userAppointmentData && setAppointments(userAppointmentData.getUserAppointments), [setAppointments, userAppointmentData]);
 
 
-  // For each week of the month
+  // For each day of current viewing month
   //  For each day of baseAvailability
   //    Grab appointments from fetch for current day, and determine available booking periods
   const [timeSlicesMap, setTimeSlicesMap] = useState<Map<string, any[]>>();
   
+  useEffect(() => {
+    if (!appointmentsMap.size) return;
+    if (!monthStart || !monthEnd || !minDate || !maxDate) return;
+    let minDayStart = monthStart;
+    let maxDayStart = getStartDay(monthEnd);
+
+    // If current month includes the minDate value, adjust min accordingly
+    if (minDayStart.toISOString() === getStartMonth(minDayStart).toISOString()) {
+      minDayStart = getStartDay(minDayStart);
+    }
+    if (maxDayStart.toISOString() === getStartMonth(maxDayStart).toISOString()) {
+      maxDayStart = getStartDay(maxDayStart);
+    }
+
+    // Get all apps for minKey and maxKey, but be sure to use the actual minDate and maxDate when dermining periods
+    
+
+
+
+    
+  }, [appointmentsMap.size, maxDate, minDate, monthEnd, monthStart]);
 
 
   // Set base / recurring availability
-  const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff?.id }, skip: !selectedStaff});
+  const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff.id }});
   useEffect(() => {
     if (loadingAvailabilityData) return;
     if (!availabilityData) {
