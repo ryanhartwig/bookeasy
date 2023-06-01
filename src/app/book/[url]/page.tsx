@@ -84,10 +84,10 @@ export default function Page({params}: { params: any }) {
           <Card className={styles.formCard}>
             <div className={styles.formProgress}>
               {['Select a Service', 'Select an Agent', 'Select a Time', 'Confirm Booking'].map((label, i) => 
-                <>
-                  <p key={label} className={clsx(styles.progressLabel, {[styles.current]: formTab === i})}>{label}</p>
+                <div key={label} className={styles.progressLabel}>
+                  <p key={label} className={clsx({[styles.current]: formTab === i})}>{label}</p>
                   {i !== 3 && <hr />}
-                </>
+                </div>
               )}
             </div>
             <div className={styles.formShowing}>
