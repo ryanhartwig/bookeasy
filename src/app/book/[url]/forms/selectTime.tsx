@@ -7,6 +7,8 @@ import { Staff } from '@/types/User';
 import { AvailabilitySlice } from '@/types/BaseAvailability';
 import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { useQuery } from '@apollo/client';
+import { Appointment } from '@/types/Appointment';
+import { GET_STAFF_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 
 interface SelectTimeProps {
   business: NewBusiness,
@@ -30,12 +32,27 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
 
   // Base / recurring availability
   const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
+  useEffect(() => {
+    let dayIndex = minDate.getDay() - 1 % 7;
+  }, [minDate]);
+  
   
   // Fetch appointments for the current month
+  const [appointmentsMap, setAppointmentsMap] = useState<Map<string, Appointment[]>>(new Map());
+
+  // Alllll the month appointments
+  const { data: appointmentData, loading: loadingAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS, { variables: {
+    staffId: selectedStaff?.id,
+    start_date: null,
+    end_date: null,
+  }, skip: !selectedStaff})
 
   // For each week of the month
   //  For each day of baseAvailability
   //    Grab appointments from fetch for current day, and determine available booking periods
+
+  
+
 
   // Set base / recurring availability
   const { data: availabilityData, loading } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff?.id }, skip: !selectedStaff});
@@ -51,7 +68,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
       <Calendar 
         // tileContent={({date}) => {return <p>Y</p>}}
         tileDisabled={({date}) => {
-          const monIndexedDay = date.getDay() === 0 ? 6 : date.getDay() - 1;
+          const monIndexedDay = date.getDay() - 1 % 7;
           return !baseAvailability.has(monIndexedDay);
         }}
         showNeighboringMonth={false}
