@@ -9,10 +9,12 @@ import { GET_STAFF_AVAILABILITY } from '@/utility/queries/availabilityQueries';
 import { useQuery } from '@apollo/client';
 import { AppointmentDates } from '@/types/Appointment';
 import { GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
+import { Service } from '@/types/Service';
 
 interface SelectTimeProps {
   business: NewBusiness,
-  selectedStaff: Staff | null,
+  selectedStaff: Staff,
+  selectedService: Service,
 }
 
 const sortApps = ((a: AppointmentDates, b: AppointmentDates) => a.start_date < b.start_date ? -1 : 1);
@@ -83,7 +85,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
   }, [currentMonthStart]);
 
   const [appointmentsMap, setAppointmentsMap] = useState<Map<string, AppointmentDates[]>>(new Map());
-
   const setAppointments = useCallback((apps: AppointmentDates[]) => {
     const map = new Map<string, AppointmentDates[]>();
 
@@ -108,10 +109,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
     setAppointmentsMap(map);
   } ,[]);
 
-  console.log(appointmentsMap);
-
   // use appropriate fetch (user or staff) if the staff is registered 
-
   const { data: staffAppointmentData, loading: loadingStaffAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS_DATES, { variables: {
     staffId: selectedStaff?.id,
     rangeStart: monthStart?.toISOString(),
@@ -129,7 +127,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff})
   // For each week of the month
   //  For each day of baseAvailability
   //    Grab appointments from fetch for current day, and determine available booking periods
-
+  const [timeSlicesMap, setTimeSlicesMap] = useState<Map<string, any[]>>();
   
 
 

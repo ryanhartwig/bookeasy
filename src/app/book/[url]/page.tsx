@@ -57,12 +57,21 @@ export default function Page({params}: { params: any }) {
 
   const tabs = useMemo(() => {
     if (!business) return [];
-    return [
-    <SelectService key="selectService" services={services} setSelected={setSelected} />,
-    <SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={staff.filter(s => selected?.service?.assigned_staff.find(staff => staff.id === s.id))} />,
-    <SelectTime key="selectTime" business={business} selectedStaff={selected.staff} />,
-    <Confirm key="confirm" />,
-  ]}, [business, selected?.service?.assigned_staff, selected.staff, services, staff]);
+    const tabs = [];
+    tabs.push(<SelectService key="selectService" services={services} setSelected={setSelected} />)
+
+    if (!selected.service) return tabs;
+    const filteredStaff = staff.filter(s => selected.service!.assigned_staff.find(staff => staff.id === s.id));
+    tabs.push(<SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={filteredStaff} />)
+
+    if (!selected.staff) return tabs;
+    tabs.push(<SelectTime key="selectTime" business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
+
+    if (!selected.time) return tabs;
+    tabs.push(<Confirm key="confirm" />)
+
+    return tabs;
+  }, [business, selected, services, staff]);
 
   if (initialLoading) return <Loading />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
@@ -91,7 +100,7 @@ export default function Page({params}: { params: any }) {
               )}
             </div>
             <div className={styles.formShowing}>
-              {businessDataLoading ? <Spinner style={{margin: 30}} /> :  tabs[formTab]}
+              {businessDataLoading ? <Spinner style={{margin: 30}} /> : tabs[formTab]}
             </div>
             <div className={clsx(styles.formNavigate, 'noselect')}>
               {!formTab || businessDataLoading ? <div /> : 
