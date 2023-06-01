@@ -46,6 +46,22 @@ export const appointmentsResolvers = {
       const response = await db.query('select * from appointment where client_id = $1', [args.client_id]);
       return response.rows;
     },
+    getStaffAppointments: async (_: any, args: any) => {
+      const { staff_id, range_start, range_end } = args;
+
+      let query = `
+        select * from appointment where staff_id = $1
+      `;
+      const params = [staff_id]
+
+      if (range_start && range_end) {
+        params.push(range_start, range_end);
+        query += ' and start_date between $2 and $3';
+      }
+
+      const response = await db.query(query, params);
+      return response.rows;
+    },
   },
   
   
@@ -87,6 +103,7 @@ export const appointmentsTypeDefs = `#graphql
   type Query {
     getUserAppointments(registered_user_id: ID!, range_start: String, range_end: String): [Appointment!]!,
     getClientAppointments(client_id: ID!): [Appointment!]!,
+    getStaffAppointments(staff_id: ID!, range_start: String, range_end: String): [Appointment!]!,
   }
   type Mutation {
     addEditAppointment(appointment: AppointmentInput!, edit: Boolean): Appointment!,
