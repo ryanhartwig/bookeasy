@@ -57,3 +57,8 @@ export interface AppointmentMetrics {
   is_paid: boolean,
   service_cost: number,
 }
+
+export interface AppointmentDates {
+  start_date: string,
+  end_date: string,
+}
