@@ -153,9 +153,10 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     // Get all apps for minKey and maxKey, but be sure to use the actual minDate and maxDate when dermining periods
     while (startDateKey.toISOString() <= endDateKey.toISOString()) {
       const startTimes: string[] = [];
+
       
       const currentDayAvailability = baseAvailability.get((startDateKey.getDay() - 1) % 7);
-      if (!currentDayAvailability) {
+      if (!currentDayAvailability) { 
         startDateKey.setDate(startDateKey.getDate() + 1);
         continue;
       }
@@ -169,24 +170,20 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           if (accumulativeDuration >= selectedService.duration) {
             const str = working.toString();
             const pivot = Math.floor(str.length / 2);
-            startTimes.unshift([str.slice(0, pivot), Number(str.slice(pivot)) > 0 ? (Number(str.slice(pivot)) / 25 * 15).toString() : '00'].join(':'));
+            const formattedTime = [str.slice(0, pivot), (Math.floor(Number(str.slice(pivot)) / 25) * 15).toString().padStart(2, '0')].join(':');
+            startTimes.unshift(formattedTime);
           }
 
           accumulativeDuration += 15;
           working -= 25;
         }
       }
-      
-      console.log(startTimes);
-      
 
-      console.log(currentDayAvailability);
+        console.log(startTimes);
+        console.log(currentDayAvailability);
+
       startDateKey.setDate(startDateKey.getDate() + 1);
     }
-
-
-
-    
   }, [appointmentsMap.size, baseAvailability, maxDate, minDate, monthEnd, monthStart, selectedService.duration]);
 
 
