@@ -134,7 +134,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           const currentTime = new Date(currentDateKey);
           currentTime.setHours(Number(hr), Number(min));
           const current = currentTime.toISOString();
-
+           
           // Inclusive start & exclusive end required for back to back booking
           if (currentDayAppointments.some(({start_date: s, end_date: e}) => s <= current && e > current)) {
             accumulativeDuration = 0; // reset when appointment exists in current 15m block
@@ -212,9 +212,17 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           // Format to 12hr time
           let period = 'am';
           let [hr, min] = slot.split(':');
-          if (Number(hr) > 12) { 
-            hr = (Number(hr) - 12).toString();
-            period = 'pm';
+          if (Number(hr) >= 12 || !Number(hr)) { 
+            if (hr === '12') {
+              period = 'pm';
+            }
+            else if (hr === '0') {
+              hr = '12';
+              period = 'am';
+            } else {
+              hr = (Number(hr) - 12).toString();
+              period = 'pm';
+            }
           }
 
           return (

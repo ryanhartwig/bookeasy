@@ -4,7 +4,7 @@
  * @returns Time slice in military format eg 5:15, 16:45
  */ 
 export const numericToTimeSlice = (num: number) => {
-  const str = num.toString();
+  let str = num.toString().padStart(3, '0');
   const pivot = Math.floor(str.length / 2);
   return [str.slice(0, pivot), (Math.floor(Number(str.slice(pivot)) / 25) * 15).toString().padStart(2, '0')].join(':');
 }
