@@ -4,7 +4,6 @@
   width: 100vw;
 
   background: linear-gradient(180deg, #ffffff 0%, #fff 0.01%, rgba(225, 241, 255, 0.726) 75%, #fff 100%);
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,9 +74,10 @@
   .businessPhoto {
     position: absolute;
     left: 5px; 
-    
+
     img {
-      border: 3px solid white;
+      border: 5px solid rgb(254, 254, 254);
+      border-bottom-color: transparent;
     }
   }
   
