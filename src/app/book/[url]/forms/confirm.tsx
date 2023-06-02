@@ -2,6 +2,8 @@ import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
+import { NewBusiness } from '@/types/Business';
+import { getDateTimeString, getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { useMemo } from 'react';
 import uuid from 'react-uuid';
 import { SelectedState } from '../page';
@@ -9,10 +11,10 @@ import styles from './forms.module.scss';
 
 interface ConfirmProps {
   selected: SelectedState,
-  businessId: string,
+  business: NewBusiness,
 }
 
-export const Confirm: React.FC<ConfirmProps> = ({selected, businessId}) => {
+export const Confirm: React.FC<ConfirmProps> = ({selected, business}) => {
 
   const endDate = useMemo(() => {
     const endDate = new Date(selected.startDate!);
@@ -21,7 +23,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, businessId}) => {
   }, [selected.service, selected.startDate]);
 
   const appointment = useMemo<AppointmentInput>(() => ({
-    business_id: businessId,
+    business_id: business.id,
     client_id: 'c7',
     id: uuid(),
     staff_id: selected.staff!.id,
@@ -32,7 +34,10 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, businessId}) => {
     is_paid: false,
     start_date: selected.startDate!.toISOString(),
     end_date: endDate.toISOString(),
-  }), [businessId, endDate, selected.service, selected.staff, selected.startDate]);
+  }), [business.id, endDate, selected.service, selected.staff, selected.startDate]);
+
+  const [date, time] = getDateTimeStringFull(selected.startDate!);
+  console.log(selected.startDate);
   
   return (
     <div className={styles.confirm}>
@@ -41,6 +46,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, businessId}) => {
         <p>Confirm Appointment Details</p>
         <hr />
       </div>
+      <p className={styles.date}>{date} {time}</p>
       <div className={styles.overview}>
         <div className={styles.agent}>
           <p>Your agent</p>
@@ -57,7 +63,9 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, businessId}) => {
               <p>{selected.service!.name}</p>
               <p className={styles.serviceDuration}>{selected.service!.duration} min</p>
             </div>
-            <p className={styles.date}>{selected.startDate!.toDateString()}</p>
+            <div>
+              <p className={styles.business}>{business.name}</p>
+            </div>
             <p className={styles.cost}>${selected.service!.cost.toFixed(2)}</p>
           </Card>
         </div>

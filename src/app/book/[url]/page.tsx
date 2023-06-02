@@ -69,7 +69,7 @@ export default function Page({params}: { params: any }) {
     tabs.push(<SelectTime key="selectTime" setSelected={setSelected} business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
 
     if (!selected.startDate) return tabs;
-    tabs.push(<Confirm businessId={business.id} selected={selected} key="confirm" />)
+    tabs.push(<Confirm business={business} selected={selected} key="confirm" />)
 
     return tabs;
   }, [business, selected, services, staff]);
