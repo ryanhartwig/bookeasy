@@ -192,16 +192,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
 
-
-  // Debugging / styling (preselect)
-  useEffect(() => {
-    if (!timeSlotsMap.size) return;
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
-    const startDate = getStartDay(date);
-    setSelectedDate(startDate)
-  },[timeSlotsMap.size]);
-
   const slots = useMemo(() => (timeSlotsMap.get('' + selectedDate?.toISOString()) ?? []).map(slot => {
     // Format to 12hr time
     let period = 'am';
@@ -224,18 +214,12 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       </div>
   )}), [selectedDate, timeSlotsMap]);
 
-  console.log(timeSlotsMap);
-
   return (
     <div className={styles.selectTime}>
       {minDate && <Calendar 
         className={styles.calendar}
         // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
-        tileDisabled={({date}) => {
-          const slots = timeSlotsMap.get(getStartDay(date).toISOString());
-
-          return false;
-        }}
+        tileDisabled={({date}) => !timeSlotsMap.get(getStartDay(date).toISOString())?.length}
         showNeighboringMonth={false}
         minDate={minDate} 
         maxDate={maxDate}
@@ -250,8 +234,10 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       />}
       <div className={styles.timeSlots}>
         <div className={styles.info}>
-          <p>Available booking times</p>
-          {slots.length}
+          {selectedDate 
+            ? <p>Available booking times for {selectedDate.toDateString().split(' ').slice(0, 3).join(' ')}</p>
+            : <p>Select a date to see booking times</p>
+          }
         </div>
         <div className={styles.slots}>
           {slots}
