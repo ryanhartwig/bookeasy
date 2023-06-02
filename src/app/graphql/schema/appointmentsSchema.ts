@@ -4,6 +4,7 @@ export const appointmentsResolvers = {
   Mutation: {
     addEditAppointment: async (_: any, args: any) => {
       const { id, staff_id, service_id, business_id, client_id, start_date, end_date, service_cost, is_video, is_paid, service_duration } = args.appointment; 
+
       const query = args.edit 
         // update existing appointment
           ? `update appointment set

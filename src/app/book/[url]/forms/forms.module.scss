@@ -210,14 +210,16 @@
 
       // Service card
       .serviceDetails {
-        p {
-          margin: 3px 0;
+        > p {
+          margin: 4px 0;
+          &:first-child { font-size: 14px; }
         }
         font-weight: 300;
         .serviceDuration {
           position: relative;
           color: var(--font-alt);
           font-size: 14px;
+          margin-bottom: 0;
         }
       }
       .business {
@@ -225,7 +227,7 @@
         font-weight: 300;
       }
       .cost {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 100;
       }
     }
@@ -246,3 +248,7 @@
 }
   
 
+// Success modal
+.success {
+  padding: 15px 5px;
+}
