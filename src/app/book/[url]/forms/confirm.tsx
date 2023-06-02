@@ -98,7 +98,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
         </div>
       </div>
       <div className={styles.confirmButton}>
-        <TextButton onClick={onConfirmBooking}>Confirm Booking</TextButton>
+        <TextButton fontSize={14} onClick={onConfirmBooking}>Confirm Booking</TextButton>
       </div>
     </div>
   )
