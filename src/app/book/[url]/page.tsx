@@ -116,13 +116,6 @@ export default function Page({params}: { params: any }) {
                   Go Back
                 </TextButton>
               }
-              {/* {formTab === 3 || businessDataLoading ? <div /> :
-                <TextButton
-                  onClick={() => setFormTab(p => p + 1)}
-                >
-                  Continue
-                </TextButton>
-              } */}
             </div>
           </Card>
         </div>

@@ -10,7 +10,6 @@ import { useQuery } from '@apollo/client';
 import { AppointmentDates } from '@/types/Appointment';
 import { GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
 import { Service } from '@/types/Service';
-import { inRange } from '@/utility/functions/dateRanges/inRange';
 
 interface SelectTimeProps {
   business: NewBusiness,
@@ -218,6 +217,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   return (
     <div className={styles.selectTime}>
       {minDate && <Calendar 
+        className={styles.calendar}
         // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
         tileDisabled={({date}) => !timeSlicesMap.has(getStartDay(date).toISOString())}
         showNeighboringMonth={false}
@@ -232,6 +232,16 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         onActiveStartDateChange={({activeStartDate}) => {setCurrentMonthStart(activeStartDate!)}}
         value={selectedDate} 
       />}
+      <div className={styles.timeSlots}>
+        {(timeSlicesMap.get('' + selectedDate?.toISOString()) ?? []).map(slot => {
+          // Format to 12hr time
+          
+          return (
+            <div key={slot} className={styles.slot}>
+              <p>{slot}</p>
+            </div>
+        )})}
+      </div>
     </div>
   )
 }
