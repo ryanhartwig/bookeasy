@@ -83,6 +83,10 @@
 
     overflow: hidden;
 
+    > p {
+      margin: 15px 0;
+    }
+
     .slots {
       display: flex;  
       flex-direction: column;
@@ -91,6 +95,7 @@
       height: 100%;
       width: 100%;
       overflow-x: auto;
+
   
       .slot {
         width: 130px;
