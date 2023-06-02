@@ -2,11 +2,13 @@
 
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
+import { Modal } from '@/components/UI/Modal/Modal';
 import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { NewBusiness } from '@/types/Business';
 import { Service } from '@/types/Service';
 import { Staff } from '@/types/User';
+import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { GET_BUSINESS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
@@ -19,11 +21,17 @@ import { SelectService } from './forms/selectService';
 import { SelectTime } from './forms/selectTime';
 import Loading from './loading';
 import { NotFound } from './notfound';
+import formStyles from './forms/forms.module.scss';
 
 export interface SelectedState {
   service: Service | null,
   staff: Staff | null,
   startDate: Date | null,
+}
+export interface Details {
+  service: Service,
+  staff: Staff,
+  startDate: Date,
 }
 
 export default function Page({params}: { params: any }) {
@@ -32,12 +40,16 @@ export default function Page({params}: { params: any }) {
   const [business, setBusiness] = useState<NewBusiness>();
   const [services, setServices] = useState<Service[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
-
+  
+  const [successDetails, setSuccessDetails] = useState<Details | null>(null);
   const [selected, setSelected] = useState<SelectedState>({
     service: null,
     staff: null,
     startDate: null,
   });
+
+  const dateString = useMemo(() => selected.startDate && getDateTimeStringFull(selected.startDate), [selected.startDate]);
+
   useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
   useEffect(() => { selected.staff && setFormTab(p => p + 1) }, [selected.staff]);
   useEffect(() => { selected.startDate && setFormTab(p => p + 1) }, [selected.startDate]);
@@ -69,7 +81,7 @@ export default function Page({params}: { params: any }) {
     tabs.push(<SelectTime key="selectTime" setSelected={setSelected} business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
 
     if (!selected.startDate) return tabs;
-    tabs.push(<Confirm setSelected={setSelected} business={business} selected={selected} key="confirm" />)
+    tabs.push(<Confirm setSuccessModal={setSuccessDetails} setSelected={setSelected} business={business} selected={selected} key="confirm" />)
 
     return tabs;
   }, [business, selected, services, staff]);
@@ -121,6 +133,42 @@ export default function Page({params}: { params: any }) {
           </Card>
         </div>
       </div>
+
+      {successDetails && <Modal open={!!successDetails} 
+        onClose={() => setSuccessDetails(null)}
+        noOffset
+        actionButtonText='Close'
+        actionCloses
+        onAction={() => setSuccessDetails(null)}
+        className={formStyles.success}
+      >
+        <Modal.Header>Appointment Booked!</Modal.Header>
+        <p>Your booking has been placed.</p>
+        <p className={formStyles.date}>{dateString}</p>
+        <div className={formStyles.overview}>
+          <div className={formStyles.agent}>
+            <p>Your agent</p>
+            <Card className={formStyles.agentCard}>
+              <Avatar src={successDetails.staff.avatar} size={114} />
+              <p className={formStyles.name}>{successDetails.staff.name}</p>
+              <p className={formStyles.credentials}>Credentials</p>
+            </Card>
+          </div>
+          <div className={formStyles.service}>
+            <p>Your Service</p>
+            <Card className={formStyles.serviceCard} style={{borderColor: successDetails.service.color}}>
+              <div className={formStyles.serviceDetails}>
+                <p>{successDetails.service.name}</p>
+                <p className={formStyles.serviceDuration}>{successDetails.service.duration} min</p>
+              </div>
+              <div>
+                <p className={formStyles.business}>{business.name}</p>
+              </div>
+              <p className={formStyles.cost}>${successDetails.service.cost.toFixed(2)}</p>
+            </Card>
+          </div>
+        </div>
+      </Modal>}
     </div>
   )
 }

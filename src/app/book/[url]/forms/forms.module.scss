@@ -144,111 +144,111 @@
   max-width: 450px;
   margin: 0 auto;
   padding-top: 15px;
+}
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 
-  .header {
+  p {
+    padding: 0 20px;
+  }
+}
+
+.date {
+  margin: 20px 0 0;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.overview {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+  margin: 30px 0;
+
+  // Card wrapper
+  > div {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    flex-direction: column;
 
-    p {
-      padding: 0 20px;
+    > p {
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 20px;
     }
   }
 
-  .date {
-    margin: 20px 0 0;
-    font-size: 14px;
-    font-weight: 300;
-  }
+  .agentCard,
+  .serviceCard {
+    width: 160px;
+    height: 230px;
+    padding: 13px;
 
-  .overview {
+    border-radius: 15px;
+
     display: flex;
-    justify-content: space-around;
-    width: 100%;
     align-items: center;
-    margin: 30px 0;
+    justify-content: space-between;
+    flex-direction: column;
 
-    // Card wrapper
-    > div {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
+    white-space: pre-wrap;
 
+    // Agent card
+    .name {
+      font-size: 14px;
+    }
+    .credentials {
+      font-size: 12px;
+      margin-bottom: 12px;
+      color: var(--font-alt);
+    }
+
+    // Service card
+    .serviceDetails {
       > p {
-        font-size: 14px;
-        font-weight: 300;
-        margin-bottom: 20px;
+        margin: 4px 0;
+        &:first-child { font-size: 14px; }
       }
-    }
-
-    .agentCard,
-    .serviceCard {
-      width: 160px;
-      height: 230px;
-      padding: 13px;
-
-      border-radius: 15px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-direction: column;
-
-      white-space: pre-wrap;
-
-      // Agent card
-      .name {
-        font-size: 14px;
-      }
-      .credentials {
-        font-size: 12px;
-        margin-bottom: 12px;
+      font-weight: 300;
+      .serviceDuration {
+        position: relative;
         color: var(--font-alt);
-      }
-
-      // Service card
-      .serviceDetails {
-        > p {
-          margin: 4px 0;
-          &:first-child { font-size: 14px; }
-        }
-        font-weight: 300;
-        .serviceDuration {
-          position: relative;
-          color: var(--font-alt);
-          font-size: 14px;
-          margin-bottom: 0;
-        }
-      }
-      .business {
         font-size: 14px;
-        font-weight: 300;
-      }
-      .cost {
-        font-size: 16px;
-        font-weight: 100;
+        margin-bottom: 0;
       }
     }
-
-    .serviceCard {
-      border-left: 3px solid;
+    .business {
+      font-size: 14px;
+      font-weight: 300;
     }
-  }
-
-  .confirmButton {
-    margin-top: 15px;
-    p {
+    .cost {
       font-size: 16px;
-      font-weight: 400;
+      font-weight: 100;
     }
   }
 
+  .serviceCard {
+    border-left: 3px solid;
+  }
+}
+
+.confirmButton {
+  margin-top: 15px;
+  p {
+    font-size: 16px;
+    font-weight: 400;
+  }
 }
   
 
 // Success modal
 .success {
   padding: 15px 5px;
+
+  text-align: center;
 }

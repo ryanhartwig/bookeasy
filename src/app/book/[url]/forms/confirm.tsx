@@ -1,28 +1,27 @@
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
-import { Modal } from '@/components/UI/Modal/Modal';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
 import { NewBusiness } from '@/types/Business';
-import { getDateTimeString, getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
+import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { ADD_EDIT_APPOINTMENT } from '@/utility/queries/appointmentQueries';
 import { useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
-import { SelectedState } from '../page';
+import { Details, SelectedState } from '../page';
 import styles from './forms.module.scss';
 
 interface ConfirmProps {
   selected: SelectedState,
   business: NewBusiness,
   setSelected: React.Dispatch<React.SetStateAction<any>>,
+  setSuccessModal: React.Dispatch<React.SetStateAction<Details | null>>,
 }
 
-export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, business}) => {
+export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSuccessModal, business}) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [successModal, setSuccessModal] = useState(false);
 
   const endDate = useMemo(() => {
     const endDate = new Date(selected.startDate!);
@@ -44,7 +43,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, business
     end_date: endDate.toISOString(),
   }), [business.id, endDate, selected.service, selected.staff, selected.startDate]);
 
-  const [date, time] = getDateTimeStringFull(selected.startDate!);
+  const dateString = getDateTimeStringFull(selected.startDate!);
 
   const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, { variables: { appointment }});
   const onConfirmBooking = useCallback(() => {
@@ -56,14 +55,16 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, business
         setError('Could not schedule appointment. Please try again or refresh the page.');
         return;
       }
+      setSuccessModal({
+        ...selected as Details
+      });
       setSelected({
         service: null,
         staff: null,
         startDate: null,
       });
-      setSuccessModal(true);
     })();
-  }, [addAppointment, setSelected]);
+  }, [addAppointment, selected, setSelected, setSuccessModal]);
   
   return (
     <div className={styles.confirm}>
@@ -72,7 +73,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, business
         <p>Confirm Appointment Details</p>
         <hr />
       </div>
-      <p className={styles.date}>{date} {time}</p>
+      <p className={styles.date}>{dateString}</p>
       <div className={styles.overview}>
         <div className={styles.agent}>
           <p>Your agent</p>
@@ -99,42 +100,6 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, business
       <div className={styles.confirmButton}>
         <TextButton onClick={onConfirmBooking}>Confirm Booking</TextButton>
       </div>
-
-      <Modal open={successModal} 
-        onClose={() => setSuccessModal(false)}
-        noOffset
-        actionButtonText='Close'
-        actionCloses
-        onAction={() => setSuccessModal(false)}
-        className={styles.success}
-      >
-        <Modal.Header>Appointment Booked!</Modal.Header>
-        <p>Your booking has been placed.</p>
-        <p className={styles.date}>{date} {time}</p>
-        <div className={styles.overview}>
-          <div className={styles.agent}>
-            <p>Your agent</p>
-            <Card className={styles.agentCard}>
-              <Avatar src={selected.staff!.avatar} size={114} />
-              <p className={styles.name}>{selected.staff!.name}</p>
-              <p className={styles.credentials}>Credentials</p>
-            </Card>
-          </div>
-          <div className={styles.service}>
-            <p>Your Service</p>
-            <Card className={styles.serviceCard} style={{borderColor: selected.service!.color}}>
-              <div className={styles.serviceDetails}>
-                <p>{selected.service!.name}</p>
-                <p className={styles.serviceDuration}>{selected.service!.duration} min</p>
-              </div>
-              <div>
-                <p className={styles.business}>{business.name}</p>
-              </div>
-              <p className={styles.cost}>${selected.service!.cost.toFixed(2)}</p>
-            </Card>
-          </div>
-        </div>
-      </Modal>
     </div>
   )
 }

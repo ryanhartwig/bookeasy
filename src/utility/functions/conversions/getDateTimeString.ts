@@ -24,8 +24,5 @@ export const getDateTimeStringFull = (d: number | string | Date) => {
   const [time, period] = initDate.toLocaleTimeString().split(' ');
   const [hr, min] = time.split(":");
 
-  return [
-    `${days[day as Days]}, ${month} ${date}, ${year}`,
-    `at ${hr}:${min} ${period}`,
-  ]
+  return `${days[day as Days]}, ${month} ${date}, ${year} at ${hr}:${min} ${period}`;
 }
