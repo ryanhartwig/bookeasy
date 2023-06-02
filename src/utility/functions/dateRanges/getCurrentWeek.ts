@@ -1,6 +1,6 @@
 export const getCurrentWeek = (): [Date, Date] => {
   const weekStart = new Date();
-  const day = weekStart.getDay() + 6 % 7;
+  const day = (weekStart.getDay() + 6) % 7;
   weekStart.setDate(weekStart.getDate() - day)
 
   const weekEnd = new Date(weekStart);
