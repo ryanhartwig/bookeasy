@@ -130,7 +130,7 @@ export const AvailabilityForm: React.FC<AvailabilityFormProps> = ({open, onClose
     })
   }, [endValue, newSlices, startValue]);
   const invalidValues = useMemo(() => startValue !== undefined && endValue !== undefined && startValue >= endValue, [endValue, startValue]);
-  const canSubmit = useMemo(() => startValue && endValue && !invalidValues && !overlapping, [endValue, invalidValues, overlapping, startValue]);
+  const canSubmit = useMemo(() => startValue !== undefined && endValue !== undefined && !invalidValues && !overlapping, [endValue, invalidValues, overlapping, startValue]);
 
   const onAddSlice = useCallback(() => {
     if (!canSubmit || !startString || !endString) return;

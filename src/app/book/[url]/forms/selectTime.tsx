@@ -210,10 +210,16 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       <div className={styles.timeSlots}>
         {(timeSlotsMap.get('' + selectedDate?.toISOString()) ?? []).map(slot => {
           // Format to 12hr time
-          
+          let period = 'am';
+          let [hr, min] = slot.split(':');
+          if (Number(hr) > 12) { 
+            hr = (Number(hr) - 12).toString();
+            period = 'pm';
+          }
+
           return (
             <div key={slot} className={styles.slot}>
-              <p>{slot}</p>
+              <p>{`${hr}:${min} ${period}`}</p>
             </div>
         )})}
       </div>
