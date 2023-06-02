@@ -161,6 +161,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       }
       const currentDayAppointments = appointmentsMap.get(startDateKey.toISOString()) ?? [];
 
+      console.log(currentDayAvailability);
       for (let i = currentDayAvailability.length - 1; i >= 0; i--) {
         const [start, end] = currentDayAvailability[i].map(str => {
           let [hr, min] = str.split(':').map(str => Number(str));
@@ -213,6 +214,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     (availabilityData.getStaffAvailability as AvailabilitySlice[]).forEach(({day, start_time, end_time}) => map.set(day, [...(map.get(day) ?? []), [start_time, end_time]]))
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
+
 
   return (
     <div className={styles.selectTime}>
