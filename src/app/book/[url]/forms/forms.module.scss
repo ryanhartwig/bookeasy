@@ -83,9 +83,20 @@
 
 
     .slot {
-      width: fit-content;
+      width: 130px;
+      padding: 8px 12px;
+      margin: 3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid rgb(194, 194, 194);
+      border-radius: 15px;
+      
       p {
         width: fit-content;
+        font-size: 14px;
       }
     }
   }

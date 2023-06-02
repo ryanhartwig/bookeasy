@@ -12,6 +12,7 @@ import { GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/uti
 import { Service } from '@/types/Service';
 import { timeSliceToNumeric } from '@/utility/functions/conversions/timeSliceToNumeric';
 import { numericToTimeSlice } from '@/utility/functions/conversions/numericToTimeSlice';
+import clsx from 'clsx';
 
 interface SelectTimeProps {
   business: NewBusiness,
@@ -226,7 +227,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           }
 
           return (
-            <div key={slot} className={styles.slot}>
+            <div key={slot} className={clsx(styles.slot, 'noselect')}>
               <p>{`${hr}:${min} ${period}`}</p>
             </div>
         )})}
