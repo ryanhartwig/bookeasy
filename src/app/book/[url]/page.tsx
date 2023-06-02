@@ -50,9 +50,7 @@ export default function Page({params}: { params: any }) {
 
   const dateString = useMemo(() => selected.startDate && getDateTimeStringFull(selected.startDate), [selected.startDate]);
 
-  useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
-  useEffect(() => { selected.staff && setFormTab(p => p + 1) }, [selected.staff]);
-  useEffect(() => { selected.startDate && setFormTab(p => p + 1) }, [selected.startDate]);
+  useEffect(() => setFormTab(Object.values(selected).filter(v => !!v).length), [selected]);
 
   // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
