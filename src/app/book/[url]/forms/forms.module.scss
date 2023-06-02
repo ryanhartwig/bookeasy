@@ -74,29 +74,48 @@
   }
 
   .timeSlots {
-    display: flex;  
-    flex-direction: column;
+    display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    position: relative;
     height: 100%;
     width: 100%;
 
+    overflow: hidden;
 
-    .slot {
-      width: 130px;
-      padding: 8px 12px;
-      margin: 3px;
-      cursor: pointer;
-      display: flex;
+    .slots {
+      display: flex;  
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-
-      border: 1px solid rgb(194, 194, 194);
-      border-radius: 15px;
-      
-      p {
-        width: fit-content;
-        font-size: 14px;
+      flex-wrap: wrap;
+      height: 100%;
+      width: 100%;
+      overflow-x: auto;
+  
+      .slot {
+        width: 130px;
+        padding: 8px 12px;
+        margin: 3px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        border: 1px solid rgb(194, 194, 194);
+        border-radius: 15px;
+  
+        transition: color 130ms, background-color 130ms;
+        
+        p {
+          width: fit-content;
+          font-size: 14px;
+        }
+  
+        &:hover {
+          background-color: #e5f3fc;
+          color: var(--font-utility);
+          border-color: #abbdec;
+        }
       }
     }
   }

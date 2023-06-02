@@ -192,10 +192,15 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
 
-  // useEffect(() => {
-  //   if (!baseAvailability) return;
-  //   console.log('base availability map from effect: ', baseAvailability);
-  // }, [baseAvailability]);
+
+  // Debugging / styling (preselect)
+  useEffect(() => {
+    if (!timeSlotsMap.size) return;
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    const startDate = getStartDay(date);
+    setSelectedDate(startDate)
+  },[timeSlotsMap.size]);
 
   return (
     <div className={styles.selectTime}>
@@ -210,34 +215,37 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         next2Label={null}
         maxDetail={'month'}
         minDetail={'month'}
-        onChange={(value, e) => { setSelectedDate(new Date(value as Date))}} 
+        onChange={(value) => { setSelectedDate(new Date(value as Date))}} 
         // On navigate / month change
         onActiveStartDateChange={({activeStartDate}) => {setViewingMonthStart(activeStartDate!)}}
         value={selectedDate} 
       />}
       <div className={styles.timeSlots}>
-        {(timeSlotsMap.get('' + selectedDate?.toISOString()) ?? []).map(slot => {
-          // Format to 12hr time
-          let period = 'am';
-          let [hr, min] = slot.split(':');
-          if (Number(hr) >= 12 || !Number(hr)) { 
-            if (hr === '12') {
-              period = 'pm';
+        <p>Available booking times</p>
+        <div className={styles.slots}>
+          {(timeSlotsMap.get('' + selectedDate?.toISOString()) ?? []).map(slot => {
+            // Format to 12hr time
+            let period = 'am';
+            let [hr, min] = slot.split(':');
+            if (Number(hr) >= 12 || !Number(hr)) { 
+              if (hr === '12') {
+                period = 'pm';
+              }
+              else if (hr === '0') {
+                hr = '12';
+                period = 'am';
+              } else {
+                hr = (Number(hr) - 12).toString();
+                period = 'pm';
+              }
             }
-            else if (hr === '0') {
-              hr = '12';
-              period = 'am';
-            } else {
-              hr = (Number(hr) - 12).toString();
-              period = 'pm';
-            }
-          }
+            return (
+              <div key={slot} className={clsx(styles.slot, 'noselect')}>
+                <p>{`${hr}:${min} ${period}`}</p>
+              </div>
+          )})}
+        </div>
 
-          return (
-            <div key={slot} className={clsx(styles.slot, 'noselect')}>
-              <p>{`${hr}:${min} ${period}`}</p>
-            </div>
-        )})}
       </div>
     </div>
   )
