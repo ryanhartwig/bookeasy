@@ -43,7 +43,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
         height = `${appointment.service_duration - 3}px`;
       }
 
-      const hour = i / 4; // 0 - 23
+      const hour = Math.floor(i / 4); // 0 - 23
       const segment = (i % 4) * 15; // 0 15 30 45
 
       const isHour = i % 4 === 0;
@@ -54,12 +54,12 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
 
       // If day is undefined, then this component is being used in the calendar view and shouldn't show availability
       if (day !== undefined && availability && availability.length) {
-        covered = !availability.some((slice) => {
-          let [startHr, startMin] = slice.start_time.split(':').map(s => Number(s));
-          let [endHr, endMin] = slice.end_time.split(':').map(s => Number(s));
+        covered = !availability.some(({start_time, end_time}) => {
+          let [startHr, startMin] = start_time.split(':').map(s => Number(s));
+          let [endHr, endMin] = end_time.split(':').map(s => Number(s));
 
           return (startHr === hour ? startMin <= segment : startHr < hour)
-            && (endHr === hour ? endMin > segment : endHr > hour);
+            && (endHr === hour ? endMin > segment : endHr > hour) 
         });
       }
 
