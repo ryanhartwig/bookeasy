@@ -1,9 +1,6 @@
 'use client';
 
-import { Appointment, AppointmentData } from '@/types/Appointment';
-import { Client } from '@/types/Client';
-import { Service } from '@/types/Service';
-import { getDayRange } from '@/utility/functions/dateRanges/getDayRange';
+import { AppointmentData } from '@/types/Appointment';
 import { getISODayRange } from '@/utility/functions/dateRanges/getISODayRange';
 import { CSSProperties, useMemo } from 'react';
 import { Day } from './Day';
