@@ -37,7 +37,6 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, business}) => {
   }), [business.id, endDate, selected.service, selected.staff, selected.startDate]);
 
   const [date, time] = getDateTimeStringFull(selected.startDate!);
-  console.log(selected.startDate);
   
   return (
     <div className={styles.confirm}>

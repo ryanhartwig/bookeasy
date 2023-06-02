@@ -197,6 +197,9 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     // Format to 12hr time
     let period = 'am';
     let [hr, min] = slot.split(':');
+    const startDate = new Date(selectedDate!);
+    startDate.setHours(Number(hr), Number(min));
+    
     if (Number(hr) >= 12 || !Number(hr)) { 
       if (hr === '12') {
         period = 'pm';
@@ -210,9 +213,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       }
     }
 
-    const startDate = new Date(selectedDate!);
-    startDate.setHours(Number(hr), Number(min));
-    
     return (
       <div key={slot} className={clsx(styles.slot, 'noselect')} onClick={() => setSelected((p: any) => ({...p, startDate}))}>
         <p>{`${hr}:${min} ${period}`}</p>
