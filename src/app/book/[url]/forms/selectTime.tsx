@@ -140,28 +140,28 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     if (!monthStart || !monthEnd || !minDate || !maxDate) return;
     const timeSlices = new Map<string, string[]>();
 
-    let startDateKey = getStartDay(monthStart);
+    let currentDateKey = getStartDay(monthStart);
     let endDateKey = getStartDay(monthEnd);
 
     // If current month includes the minDate value, adjust min accordingly
-    if (startDateKey.toISOString() === getStartMonth(minDate).toISOString()) {
-      startDateKey = getStartDay(minDate);
+    if (currentDateKey.toISOString() === getStartMonth(minDate).toISOString()) {
+      currentDateKey = getStartDay(minDate);
     }
-    if (endDateKey.toISOString() === getStartMonth(maxDate).toISOString()) {
+    if (getStartMonth(endDateKey).toISOString() === getStartMonth(maxDate).toISOString()) {
       endDateKey = getStartDay(maxDate);
     }
 
     // Get all apps for minKey and maxKey, but be sure to use the actual minDate and maxDate when dermining periods
-    while (startDateKey.toISOString() <= endDateKey.toISOString()) {
+    while (currentDateKey.toISOString() <= endDateKey.toISOString()) {
       const startTimes: string[] = [];
-      const currentDayIndex = (startDateKey.getDay() - 1) % 7;
+      const currentDayIndex = (currentDateKey.getDay() - 1) % 7;
       
       const currentDayAvailability = baseAvailability.get(currentDayIndex);
       if (!currentDayAvailability) { 
-        startDateKey.setDate(startDateKey.getDate() + 1);
+        currentDateKey.setDate(currentDateKey.getDate() + 1);
         continue;
       }
-      const currentDayAppointments = appointmentsMap.get(startDateKey.toISOString()) ?? [];
+      const currentDayAppointments = appointmentsMap.get(currentDateKey.toISOString()) ?? [];
 
       for (let i = currentDayAvailability.length - 1; i >= 0; i--) {
         const [start, end] = currentDayAvailability[i].map(str => timeSliceToNumeric(str));
@@ -171,8 +171,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
 
         while (working >= start) {
           const [hr, min] = numericToTimeSlice(working).split(':');
-
-          const currentTime = new Date(startDateKey);
+          const currentTime = new Date(currentDateKey);
           currentTime.setHours(Number(hr), Number(min));
           const current = currentTime.toISOString();
 
@@ -181,7 +180,25 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
             accumulativeDuration = 0; // reset when appointment exists in current 15m block
           }
 
-          // 
+          if (currentDateKey.toISOString() === getStartDay(minDate).toISOString()) {
+            let [minHr, minMin] = minDate.toTimeString().split(':').map(str => Number(str));
+            minMin = Math.floor(minMin / 15) * 15;
+            
+            if ((Number(hr) === minHr ? Number(min) < minMin : Number(hr) < minHr)) {
+              break;
+            }
+          }
+          if (currentDateKey.toISOString() === getStartDay(maxDate).toISOString()) {
+            let [maxHr, maxMin] = maxDate.toTimeString().split(':').map(str => Number(str));
+            maxMin = Math.floor(maxMin / 15) * 15;
+
+            if ((Number(hr) === maxHr ? Number(min) > maxMin : Number(hr) > maxHr)) {
+              accumulativeDuration += 15;
+              working -= 25;
+              continue;
+            }
+          }
+          
           
           if (accumulativeDuration >= selectedService.duration) {
             const formattedTime = `${hr}:${min}`;
@@ -193,8 +210,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         }
       }
 
-      timeSlices.set(startDateKey.toISOString(), startTimes);
-      startDateKey.setDate(startDateKey.getDate() + 1);
+      timeSlices.set(currentDateKey.toISOString(), startTimes);
+      currentDateKey.setDate(currentDateKey.getDate() + 1);
     }
 
     setTimeSlicesMap(timeSlices);
@@ -203,8 +220,9 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   useEffect(() => {
     if (!minDate || !timeSlicesMap) return;
     console.log('min date', minDate);
+    console.log('max date', maxDate);
     console.log(timeSlicesMap);
-  }, [minDate, timeSlicesMap])
+  }, [maxDate, minDate, timeSlicesMap])
  
 
   // Set base / recurring availability
