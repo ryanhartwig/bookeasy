@@ -10,6 +10,8 @@ import { useQuery } from '@apollo/client';
 import { AppointmentDates } from '@/types/Appointment';
 import { GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
 import { Service } from '@/types/Service';
+import { timeSliceToNumeric } from '@/utility/functions/conversions/timeSliceToNumeric';
+import { numericToTimeSlice } from '@/utility/functions/conversions/numericToTimeSlice';
 
 interface SelectTimeProps {
   business: NewBusiness,
@@ -161,23 +163,17 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       }
       const currentDayAppointments = appointmentsMap.get(startDateKey.toISOString()) ?? [];
 
-      console.log(currentDayAvailability);
       for (let i = currentDayAvailability.length - 1; i >= 0; i--) {
-        const [start, end] = currentDayAvailability[i].map(str => {
-          let [hr, min] = str.split(':').map(str => Number(str));
-          min = min / 15 * 25;
-          return Number(`${hr}${min.toString().padStart(2, '0')}`);
-        });
+        const [start, end] = currentDayAvailability[i].map(str => timeSliceToNumeric(str));
 
         let accumulativeDuration = 0;
         let working = end;
 
         while (working >= start) {
-          const workingString = working.toString();
-          const pivot = Math.floor(workingString.length / 2);
-          const [hr, min] = [Number(workingString.slice(0, pivot)), (Math.floor(Number(workingString.slice(pivot)) / 25) * 15)];
+          const [hr, min] = numericToTimeSlice(working).split(':');
+
           const currentTime = new Date(startDateKey);
-          currentTime.setHours(hr, min);
+          currentTime.setHours(Number(hr), Number(min));
           const current = currentTime.toISOString();
 
           // Inclusive start & exclusive end required for back to back booking
@@ -186,7 +182,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           }
           
           if (accumulativeDuration >= selectedService.duration) {
-            const formattedTime = [hr.toString(), min.toString().padStart(2, '0')].join(':');
+            const formattedTime = `${hr}:${min}`;
             startTimes.unshift(formattedTime);
           }
 
