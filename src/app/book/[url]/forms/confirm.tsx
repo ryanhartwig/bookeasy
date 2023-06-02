@@ -4,7 +4,7 @@ import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
 import { NewBusiness } from '@/types/Business';
 import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
-import { ADD_EDIT_APPOINTMENT } from '@/utility/queries/appointmentQueries';
+import { ADD_EDIT_APPOINTMENT, GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
 import { useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
@@ -45,7 +45,9 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
 
   const dateString = getDateTimeStringFull(selected.startDate!);
 
-  const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, { variables: { appointment }});
+  const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, { variables: { appointment },
+    refetchQueries: [GET_USER_APPOINTMENTS_DATES]
+  });
   const onConfirmBooking = useCallback(() => {
     setLoading(true);
     ;(async () => {

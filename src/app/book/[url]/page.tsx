@@ -68,6 +68,7 @@ export default function Page({params}: { params: any }) {
 
   const tabs = useMemo(() => {
     if (!business) return [];
+    
     const tabs = [];
     tabs.push(<SelectService key="selectService" services={services} setSelected={setSelected} />)
 

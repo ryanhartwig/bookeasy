@@ -85,18 +85,26 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   } ,[]);
 
   // use appropriate fetch (user or staff) depending on if the staff is registered 
-  const { data: staffAppointmentData, loading: loadingStaffAppointmentData } = useQuery(GET_STAFF_APPOINTMENTS_DATES, { variables: {
+  const { data: staffAppointmentData, loading: loadingStaffAppointmentData, client: clientStaff } = useQuery(GET_STAFF_APPOINTMENTS_DATES, { variables: {
     staffId: selectedStaff.id,
     rangeStart: monthStart?.toISOString(),
     rangeEnd: monthEnd?.toISOString(),
   }, skip: !!selectedStaff.registered_user_id || !monthStart || !monthEnd});
   useEffect(() => staffAppointmentData && setAppointments(staffAppointmentData.getStaffAppointments), [setAppointments, staffAppointmentData]);
-  const { data: userAppointmentData, loading: loadingUserAppointmentData } = useQuery(GET_USER_APPOINTMENTS_DATES, { variables: {
+  const { data: userAppointmentData, loading: loadingUserAppointmentData, client: clientUser } = useQuery(GET_USER_APPOINTMENTS_DATES, { variables: {
     registeredUserId: selectedStaff.registered_user_id,
     rangeStart: monthStart?.toISOString(),
     rangeEnd: monthEnd?.toISOString(),
   }, skip: !selectedStaff.registered_user_id || !monthStart || !monthEnd});
   useEffect(() => userAppointmentData && setAppointments(userAppointmentData.getUserAppointments), [setAppointments, userAppointmentData]);
+
+  // Reset cache on unmount
+  useEffect(() => {
+    return () => {
+      clientStaff.resetStore();
+      clientUser.resetStore();
+    }
+  },[clientStaff, clientUser]);
   
   // Populate timeSlices map with the day start as key, and all available booking slots as value
   useEffect(() => {
