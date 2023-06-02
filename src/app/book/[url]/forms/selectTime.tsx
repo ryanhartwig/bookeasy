@@ -39,36 +39,17 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
 
   const minDate = useMemo(() => {
-    if (!baseAvailability) return;
     const date = new Date();
     date.setTime(date.getTime() + Number(business.min_booking_notice ?? 0));
-    let dayIndex = date.getDay() - 1 % 7;
 
-    for (let i = 0; i < 7; i++) {
-      if (i === 6 && !baseAvailability.has(dayIndex)) return date;
-      if (baseAvailability.has(dayIndex)) break;
-      dayIndex = (dayIndex + 1) % 7;
-      date.setDate(date.getDate() + 1);
-    }
-
-    setSelectedDate(date);
     return date;
-  }, [baseAvailability, business.min_booking_notice]);
+  }, [business.min_booking_notice]);
   const maxDate = useMemo(() => {
     if (!business.max_book_ahead) return undefined;
     let date = new Date();
-    date.setTime(date.getTime() + Number(business.max_book_ahead));
-    let dayIndex = date.getDay() - 1 % 7;
-
-    for (let i = 0; i < 7; i++) {
-      if (i === 6 && !baseAvailability.has(dayIndex)) return date;
-      if (baseAvailability.has(dayIndex)) break;
-      dayIndex = (dayIndex - 1) % 7;
-      date.setDate(date.getDate() - 1);
-    }
-    
+    date.setTime(date.getTime() + Number(business.max_book_ahead));    
     return date;
-  }, [baseAvailability, business.max_book_ahead]);
+  }, [business.max_book_ahead]);
   
   // Fetch appointments for the current month
   // Updated when user navigates month to month, which triggers monthStart & monthEnd memo
@@ -137,7 +118,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   
   useEffect(() => {
     if (!appointmentsMap) return;
-    if (!monthStart || !monthEnd || !minDate || !maxDate) return;
+    if (!monthStart || !monthEnd || !minDate) return;
     const timeSlices = new Map<string, string[]>();
 
     let currentDateKey = getStartDay(monthStart);
@@ -147,7 +128,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     if (currentDateKey.toISOString() === getStartMonth(minDate).toISOString()) {
       currentDateKey = getStartDay(minDate);
     }
-    if (getStartMonth(endDateKey).toISOString() === getStartMonth(maxDate).toISOString()) {
+    if (maxDate && getStartMonth(endDateKey).toISOString() === getStartMonth(maxDate).toISOString()) {
       endDateKey = getStartDay(maxDate);
     }
 
@@ -188,7 +169,7 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
               break;
             }
           }
-          if (currentDateKey.toISOString() === getStartDay(maxDate).toISOString()) {
+          if (maxDate && currentDateKey.toISOString() === getStartDay(maxDate).toISOString()) {
             let [maxHr, maxMin] = maxDate.toTimeString().split(':').map(str => Number(str));
             maxMin = Math.floor(maxMin / 15) * 15;
 
@@ -217,14 +198,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setTimeSlicesMap(timeSlices);
   }, [appointmentsMap, baseAvailability, maxDate, minDate, monthEnd, monthStart, selectedService.duration]);
 
-  useEffect(() => {
-    if (!minDate || !timeSlicesMap) return;
-    console.log('min date', minDate);
-    console.log('max date', maxDate);
-    console.log(timeSlicesMap);
-  }, [maxDate, minDate, timeSlicesMap])
- 
-
   // Set base / recurring availability
   const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff.id }});
   useEffect(() => {
@@ -237,7 +210,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
 
-
   return (
     <div className={styles.selectTime}>
       {minDate && <Calendar 
@@ -245,8 +217,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
         tileDisabled={({date}) => !timeSlicesMap.has(getStartDay(date).toISOString())}
         showNeighboringMonth={false}
-        // minDate={minDate} 
-        // maxDate={maxDate}
+        minDate={minDate} 
+        maxDate={maxDate}
         prev2Label={null}
         next2Label={null}
         maxDetail={'month'}
