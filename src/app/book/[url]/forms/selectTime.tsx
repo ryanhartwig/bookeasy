@@ -140,15 +140,15 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     if (!monthStart || !monthEnd || !minDate || !maxDate) return;
     const timeSlices = new Map<string, string[]>();
 
-    let startDateKey = monthStart;
+    let startDateKey = getStartDay(monthStart);
     let endDateKey = getStartDay(monthEnd);
 
     // If current month includes the minDate value, adjust min accordingly
-    if (startDateKey.toISOString() === getStartMonth(startDateKey).toISOString()) {
-      startDateKey = getStartDay(startDateKey);
+    if (startDateKey.toISOString() === getStartMonth(minDate).toISOString()) {
+      startDateKey = getStartDay(minDate);
     }
-    if (endDateKey.toISOString() === getStartMonth(endDateKey).toISOString()) {
-      endDateKey = getStartDay(endDateKey);
+    if (endDateKey.toISOString() === getStartMonth(maxDate).toISOString()) {
+      endDateKey = getStartDay(maxDate);
     }
 
     // Get all apps for minKey and maxKey, but be sure to use the actual minDate and maxDate when dermining periods
@@ -180,6 +180,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
           if (currentDayAppointments.some(({start_date: s, end_date: e}) => s <= current && e > current)) {
             accumulativeDuration = 0; // reset when appointment exists in current 15m block
           }
+
+          // 
           
           if (accumulativeDuration >= selectedService.duration) {
             const formattedTime = `${hr}:${min}`;
@@ -198,6 +200,12 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
     setTimeSlicesMap(timeSlices);
   }, [appointmentsMap, baseAvailability, maxDate, minDate, monthEnd, monthStart, selectedService.duration]);
 
+  useEffect(() => {
+    if (!minDate || !timeSlicesMap) return;
+    console.log('min date', minDate);
+    console.log(timeSlicesMap);
+  }, [minDate, timeSlicesMap])
+ 
 
   // Set base / recurring availability
   const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff.id }});
@@ -219,8 +227,8 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
         tileDisabled={({date}) => !timeSlicesMap.has(getStartDay(date).toISOString())}
         showNeighboringMonth={false}
-        minDate={minDate} 
-        maxDate={maxDate}
+        // minDate={minDate} 
+        // maxDate={maxDate}
         prev2Label={null}
         next2Label={null}
         maxDetail={'month'}
