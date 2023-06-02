@@ -130,3 +130,112 @@
     }
   }
 }
+
+.confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+
+  max-width: 450px;
+  margin: 0 auto;
+
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    p {
+      padding: 0 20px;
+    }
+  }
+
+  .overview {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+    margin: 30px 0;
+
+    // Card wrapper
+    > div {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      > p {
+        font-size: 14px;
+        font-weight: 300;
+        margin-bottom: 20px;
+      }
+    }
+
+    .agentCard,
+    .serviceCard {
+      width: 160px;
+      height: 230px;
+      padding: 13px;
+
+      border-radius: 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+
+      white-space: pre-wrap;
+
+      // Agent card
+      .name {
+        font-size: 14px;
+      }
+      .credentials {
+        font-size: 12px;
+        margin-bottom: 12px;
+        color: var(--font-alt);
+      }
+
+      // Service card
+      .serviceDetails {
+        p {
+          margin: 3px 0;
+        }
+        font-weight: 300;
+        .serviceDuration {
+          position: relative;
+          color: var(--font-alt);
+          font-size: 14px;
+        }
+      }
+      .date {
+        font-size: 14px;
+        font-weight: 300;
+      }
+      .cost {
+        font-size: 18px;
+        font-weight: 100;
+      }
+    }
+
+    .serviceCard {
+      border-left: 3px solid;
+      border-right: 3px solid;
+    }
+  }
+
+  .confirmButton {
+    p {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+
+}
+  
+
