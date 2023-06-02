@@ -18,6 +18,7 @@ interface SelectTimeProps {
   business: NewBusiness,
   selectedStaff: Staff,
   selectedService: Service,
+  setSelected: React.Dispatch<React.SetStateAction<any>>,
 }
 
 const getStartDay = (d: Date | string | number) => {
@@ -37,7 +38,7 @@ const addMsToDate = (ms: number | string, date: Date = new Date()) => {
   return d;
 }
 
-export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, selectedService}) => {
+export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, setSelected, selectedService}) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>();
   const [viewingMonthStart, setViewingMonthStart] = useState<Date>(getStartMonth());
@@ -208,11 +209,15 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
         period = 'pm';
       }
     }
+
+    const startDate = new Date(selectedDate!);
+    startDate.setHours(Number(hr), Number(min));
+    
     return (
-      <div key={slot} className={clsx(styles.slot, 'noselect')}>
+      <div key={slot} className={clsx(styles.slot, 'noselect')} onClick={() => setSelected((p: any) => ({...p, startDate}))}>
         <p>{`${hr}:${min} ${period}`}</p>
       </div>
-  )}), [selectedDate, timeSlotsMap]);
+  )}), [selectedDate, setSelected, timeSlotsMap]);
 
   return (
     <div className={styles.selectTime}>

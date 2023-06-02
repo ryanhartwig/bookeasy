@@ -23,7 +23,7 @@ import { NotFound } from './notfound';
 interface SelectedState {
   service: Service | null,
   staff: Staff | null,
-  time: any,
+  startDate: Date | null,
 }
 
 export default function Page({params}: { params: any }) {
@@ -36,10 +36,11 @@ export default function Page({params}: { params: any }) {
   const [selected, setSelected] = useState<SelectedState>({
     service: null,
     staff: null,
-    time: null,
+    startDate: null,
   });
   useEffect(() => { selected.service && setFormTab(p => p + 1) }, [selected.service]);
   useEffect(() => { selected.staff && setFormTab(p => p + 1) }, [selected.staff]);
+  useEffect(() => { selected.startDate && setFormTab(p => p + 1) }, [selected.startDate]);
 
   // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
@@ -65,9 +66,9 @@ export default function Page({params}: { params: any }) {
     tabs.push(<SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={filteredStaff} />)
 
     if (!selected.staff) return tabs;
-    tabs.push(<SelectTime key="selectTime" business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
+    tabs.push(<SelectTime key="selectTime" setSelected={setSelected} business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
 
-    if (!selected.time) return tabs;
+    if (!selected.startDate) return tabs;
     tabs.push(<Confirm key="confirm" />)
 
     return tabs;
