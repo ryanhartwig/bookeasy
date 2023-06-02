@@ -39,7 +39,7 @@ const addMsToDate = (ms: number | string, date: Date = new Date()) => {
 
 export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, selectedService}) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>(new Map());
+  const [baseAvailability, setBaseAvailability] = useState<Map<number, [string, string][]>>();
   const [viewingMonthStart, setViewingMonthStart] = useState<Date>(getStartMonth());
   const [appointmentsMap, setAppointmentsMap] = useState<Map<string, AppointmentDates[]>>();
   const [timeSlotsMap, setTimeSlotsMap] = useState<Map<string, string[]>>(new Map());
@@ -116,13 +116,17 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
 
     // For each day of the month (or clamped month)
     while (currentDateKey.toISOString() <= endDateKey.toISOString()) {
+      if (!baseAvailability) return;
+
       const startTimes: string[] = [];
-      const currentDayAvailability = baseAvailability.get((currentDateKey.getDay() - 1) % 7);
+      const currentDayAvailability = baseAvailability.get(((currentDateKey.getDay() + 6) % 7));
+      
       if (!currentDayAvailability) { 
         currentDateKey.setDate(currentDateKey.getDate() + 1);
         continue;
       }
       const currentDayAppointments = appointmentsMap.get(currentDateKey.toISOString()) ?? [];
+
 
       // Traverse backwards from end of each availability period to start, 15 minutes at a time
       for (let i = currentDayAvailability.length - 1; i >= 0; i--) {
@@ -182,20 +186,23 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
   const { data: availabilityData, loading: loadingAvailabilityData } = useQuery(GET_STAFF_AVAILABILITY, { variables: { staffId: selectedStaff.id }});
   useEffect(() => {
     if (loadingAvailabilityData) return;
-    if (!availabilityData) {
-      setBaseAvailability
-    }
+    if (!availabilityData) return;
     const map = new Map<number, [string, string][]>();
     (availabilityData.getStaffAvailability as AvailabilitySlice[]).forEach(({day, start_time, end_time}) => map.set(day, [...(map.get(day) ?? []), [start_time, end_time]]))
     setBaseAvailability(map);
   }, [availabilityData, loadingAvailabilityData]); 
+
+  // useEffect(() => {
+  //   if (!baseAvailability) return;
+  //   console.log('base availability map from effect: ', baseAvailability);
+  // }, [baseAvailability]);
 
   return (
     <div className={styles.selectTime}>
       {minDate && <Calendar 
         className={styles.calendar}
         // tileContent={({date}) => {return <p>{timeSlicesMap.get(getStartDay(date).toISOString())?.length}</p>}}
-        tileDisabled={({date}) => !timeSlotsMap.has(getStartDay(date).toISOString())}
+        tileDisabled={({date}) => !timeSlotsMap.get(getStartDay(date).toISOString())?.length}
         showNeighboringMonth={false}
         minDate={minDate} 
         maxDate={maxDate}
