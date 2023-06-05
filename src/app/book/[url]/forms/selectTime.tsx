@@ -136,7 +136,6 @@ export const SelectTime: React.FC<SelectTimeProps> = ({business, selectedStaff, 
       }
       const currentDayAppointments = appointmentsMap.get(currentDateKey.toISOString()) ?? [];
 
-
       // Traverse backwards from end of each availability period to start, 15 minutes at a time
       for (let i = currentDayAvailability.length - 1; i >= 0; i--) {
         const [start, end] = currentDayAvailability[i].map(str => timeSliceToNumeric(str));
