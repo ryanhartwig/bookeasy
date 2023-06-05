@@ -11,12 +11,13 @@ import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { GET_BUSINESS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './book.module.scss';
 import Loading from './loading';
 import { NotFound } from './notfound';
 import formStyles from './forms/forms.module.scss';
 import { Book } from './book';
+import { About } from './about';
 
 export interface SelectedState {
   service: Service | null,
@@ -34,16 +35,13 @@ export default function Page({params}: { params: any }) {
   const [business, setBusiness] = useState<NewBusiness>();
   const [services, setServices] = useState<Service[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
-  
   const [successDetails, setSuccessDetails] = useState<Details | null>(null);
   const [selected, setSelected] = useState<SelectedState>({
     service: null,
     staff: null,
     startDate: null,
   });
-
   const dateString = useMemo(() => selected.startDate && getDateTimeStringFull(selected.startDate), [selected.startDate]);
-
 
   // Booking site & business data if available
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: params.url }});
@@ -71,13 +69,19 @@ export default function Page({params}: { params: any }) {
           <hr />
         </div>
         <div className={clsx(styles.navigation, 'noselect')}>
-          {['Book', 'Staff', 'Contact', 'About'].map(label => 
+          {['Book', 'About'].map(label => 
             <p key={label} onClick={() => setTab(label)} className={clsx({[styles.current]: tab === label})}>{label}</p>
           )}
         </div>
         <div className={styles.form}>
           <Card className={styles.formCard}>
-            <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails}  />
+            {(() => {
+              switch(tab) {
+                case 'Book': return <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails}  />
+                case 'About': return <About business={business} />
+                default: return <></>
+              }
+            })()}
           </Card>
         </div>
       </div>
