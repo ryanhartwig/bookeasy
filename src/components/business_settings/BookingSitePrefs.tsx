@@ -80,9 +80,6 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
         <Setting label="Minimum Cancellation Notice" onEditOverride={() => onEdit(business.min_cancel_notice ?? '0', 'min_cancel_notice')} >
           <p>{Number(business.min_cancel_notice) ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
         </Setting>
-        {/* <Setting label="Booking Site Url" onAction={() => setInitialValue(Number(business.min_cancel_notice))}>
-          <p>{business.min_cancel_notice ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
-        </Setting> */}
 
         {business.min_booking_notice && business.max_book_ahead && Number(business.min_booking_notice) >= Number(business.max_book_ahead) && 
           <p className={styles.bookingWarning}>* minimum book ahead is greater than or equal to maximum book ahead, preventing client bookings</p>

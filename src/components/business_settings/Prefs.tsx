@@ -107,15 +107,27 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
         <Setting label='Business Name' placeholder='Name' value={value} setValue={setValue} onSave={() => onSave('name')}>
           <p>{business.name}</p>
         </Setting>
-        <Setting label='Business Email' placeholder='Email' email value={value} setValue={setValue} onSave={() => onSave('email')} onRemove={business.email ? () => onSave('email', null) : undefined}>
+        <Setting label='Contact Email' placeholder='Email' email value={value} setValue={setValue} onSave={() => onSave('email')} onRemove={business.email ? () => onSave('email', null) : undefined}>
           <p>{business.email ?? 'None'}</p>
         </Setting>
-        <Setting label='Business Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')} onRemove={business.phone ? () => onSave('phone', null) : undefined}>
+        <Setting label='Contact Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')} onRemove={business.phone ? () => onSave('phone', null) : undefined}>
           <p>{business.phone ?? 'None'}</p>
+        </Setting>
+        <Setting label='Website Link' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('website_url')} onRemove={business.website_url ? () => onSave('website_url', null) : undefined}>
+          <p>{business.website_url ?? 'None'}</p>
         </Setting>
       </div>
 
       <BookingSitePrefs business={business} isTeams userBusinessId={userBusinessId} />
+
+      <div className={styles.header}>
+        <p>Bio</p>
+      </div>
+      <div className={styles.settings}>
+        <Setting label='Booking Site Bio' placeholder='Bio' value={value} setValue={setValue} onSave={() => onSave('bio')} onRemove={business.bio ? () => onSave('bio', null) : undefined}>
+          <p>{business.bio ?? 'None'}</p>
+        </Setting>
+      </div>
 
       {isTeams && elevated && (
         <>
