@@ -13,6 +13,8 @@ export const BUSINESS_FRAGMENT = gql`
     created
     booking_site_id
     creator_id
+    bio
+    website_url
   }
 `;
 

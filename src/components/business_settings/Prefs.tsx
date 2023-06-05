@@ -113,7 +113,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
         <Setting label='Contact Phone' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('phone')} onRemove={business.phone ? () => onSave('phone', null) : undefined}>
           <p>{business.phone ?? 'None'}</p>
         </Setting>
-        <Setting label='Website Link' placeholder='Phone' value={value} setValue={setValue} onSave={() => onSave('website_url')} onRemove={business.website_url ? () => onSave('website_url', null) : undefined}>
+        <Setting label='Website Link' placeholder='Website URL' value={value} setValue={setValue} onSave={() => onSave('website_url')} onRemove={business.website_url ? () => onSave('website_url', null) : undefined}>
           <p>{business.website_url ?? 'None'}</p>
         </Setting>
       </div>
@@ -125,7 +125,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
       </div>
       <div className={styles.settings}>
         <Setting label='Booking Site Bio' placeholder='Bio' value={value} setValue={setValue} onSave={() => onSave('bio')} onRemove={business.bio ? () => onSave('bio', null) : undefined}>
-          <p>{business.bio ?? 'None'}</p>
+          <p style={{width: '50%', overflow: 'hidden'}}>{business.bio ?? 'None'}</p>
         </Setting>
       </div>
 
