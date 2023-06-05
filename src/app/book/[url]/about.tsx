@@ -33,7 +33,7 @@ export const About: React.FC<AboutProps> = ({business}) => {
       <div className={styles.contactLink}>
         <TbWorldWww />
         {false // to be business.website 
-          ? <a href={''} target={"_blank"}>http://www.tobeimplemented.ca</a>
+          ? <a href={''} target={"_blank"}></a>
           : <p>None</p>
         }
       </div>

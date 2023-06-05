@@ -125,6 +125,8 @@ export const businessTypeDefs = `#graphql
     min_booking_notice: String,
     max_book_ahead: String,
     min_cancel_notice: String,
+    bio: String,
+    website_url: String,
   }
 
   type Query {

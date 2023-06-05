@@ -90,6 +90,8 @@ export const types = `#graphql
     created: String!,
     booking_site_id: String,
     creator_id: String!,
+    website_url: String,
+    bio: String,
     staff: [Staff!]!,
   }
 

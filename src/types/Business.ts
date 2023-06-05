@@ -10,6 +10,8 @@ export interface NewBusiness {
   created: string,
   booking_site_id: string | null,
   creator_id: string,
+  website_url: string | null,
+  bio: string | null,
 }
 
 export interface FormBusiness {
