@@ -209,10 +209,29 @@
   height: 100%;
   
   padding: 15px;
-
-  p, a {
-    position: relative;
-    font-weight: 300;
-    
+  font-weight: 300;
+  white-space: pre-wrap;
+  
+  .bio, .nobio {
+    padding: 5px;
+    padding-left: 10px;
   }
+
+  .nobio {
+    font-weight: 100;
+  }
+  
+  .contactLink {
+    position: relative;
+    padding-left: 5px;
+    margin: 6px 0;
+    
+    display: flex;
+    align-items: center;
+
+    p, a {
+      margin-left: 15px;
+    }
+  }
+
 }
