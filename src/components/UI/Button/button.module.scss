@@ -8,12 +8,27 @@
   cursor: pointer;
   
   width: 100%;
-  padding: 10px 0;
+  padding: 11px 0;
 
   opacity: 0.9;
 
   background-color: transparent;
   transition: background-color 250ms, border-color 250ms, opacity 250ms;
+
+  // Light mode overrides
+  &.light {
+    border-color: #cfcfcf;
+    p {
+      color: grey;
+      transition: color 200ms;
+    }
+
+    &:hover {
+      p {
+        color: rgb(52, 52, 52);
+      }
+    }
+  }
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.05);
@@ -39,6 +54,8 @@
     pointer-events: none;
     animation: loading 800ms linear infinite;
   }
+
+  
 }
 
 @keyframes loading {

@@ -29,6 +29,8 @@ export const Login: React.FC<LoginProps> = ({url}) => {
           setLoadingElement('google')
           signIn('google', { callbackUrl });
         }} 
+        light
+        style={{borderRadius: 30, padding: 12}}
         icon={<Image src={Google} alt="Google logo" />}
       >Log in with Google</Button>
       <Button className={styles.loginButton}
@@ -37,6 +39,8 @@ export const Login: React.FC<LoginProps> = ({url}) => {
           setLoadingElement('facebook')
           signIn('facebook', { callbackUrl });
         }} 
+        light
+        style={{borderRadius: 30, padding: 12}}
         icon={<Image src={Facebook} alt="Facebook logo" />}
       >Log in with Facebook</Button>
 
