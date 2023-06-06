@@ -346,3 +346,9 @@
     }
   }
 }
+
+.results {
+  padding: 5px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
