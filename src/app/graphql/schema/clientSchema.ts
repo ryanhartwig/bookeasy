@@ -8,6 +8,13 @@ export const clientResolvers = {
       const response = await db.query('select count(*) from appointment where client_id = $1', [args.client_id]);
       return response.rows[0].count;
     },
+    getBookingSiteClientId: async (_: any, args: any) => {
+      const { registered_user_id, business_id } = args;
+      const response = await db.query(
+        'select id from client where registered_user_id = $1 and business_id = $2'
+      , [registered_user_id, business_id]);
+      return response.rows[0]?.id;
+    }
   },
   Mutation: {
     userAddClient: async (_: any, args: any) => {
@@ -64,6 +71,7 @@ export const clientTypeDefs = `#graphql
 
   type Query {
     getClientAppointmentCount(client_id: String!): Int!,
+    getBookingSiteClientId(registered_user_id: String!, business_id: String!): String,
   }
 
   type Mutation {

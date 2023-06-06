@@ -42,7 +42,6 @@ export const Login: React.FC<LoginProps> = ({url}) => {
 
       <div className={styles.logo}>
         <Image className='Navigator_logo_icon' priority src={bookit.default} alt="Book it logo" />
-        {/* <p><span>book</span>easy.</p> */}
       </div>
     </div>
   </div>
