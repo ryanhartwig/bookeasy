@@ -5,9 +5,11 @@ import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
 import { NewBusiness } from '@/types/Business';
+import { User } from '@/types/User';
 import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { ADD_EDIT_APPOINTMENT, GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
-import { GET_BOOKING_SITE_CLIENT_ID } from '@/utility/queries/clientQueries';
+import { GET_BOOKING_SITE_CLIENT_ID, USER_ADD_CLIENT } from '@/utility/queries/clientQueries';
+import { GET_USER } from '@/utility/queries/userQueries';
 import { useMutation, useQuery } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
@@ -28,6 +30,8 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
   const [error, setError] = useState('');
 
   const { data: clientData, loading: loadingClientData } = useQuery(GET_BOOKING_SITE_CLIENT_ID, { variables: { businessId: business.id, registeredUserId }});
+  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId: registeredUserId }})
+  const [userAddClient] = useMutation(USER_ADD_CLIENT);
 
   const dateString = getDateTimeStringFull(selected.startDate!);
   const endDate = useMemo(() => {
@@ -36,30 +40,45 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
     return endDate;
   }, [selected.service, selected.startDate]);
 
-  const appointment = useMemo<AppointmentInput>(() => ({
-    business_id: business.id,
-    client_id: 'c7',
-    id: uuid(),
-    staff_id: selected.staff!.id,
-    service_id: selected.service!.id,
-    service_cost: selected.service!.cost,
-    service_duration: selected.service!.duration,
-    is_video: selected.service!.is_video,
-    is_paid: false,
-    start_date: selected.startDate!.toISOString(),
-    end_date: endDate.toISOString(),
-  }), [business.id, endDate, selected.service, selected.staff, selected.startDate]);
+  
 
-  const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, { variables: { appointment },
+  const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, {
     refetchQueries: [GET_USER_APPOINTMENTS_DATES]
   });
   const onConfirmBooking = useCallback(() => {
     setLoading(true);
+    let clientId = clientData.getBookingSiteClientId as string | null;
+    
     ;(async () => {
-      if (!clientData.getBookingSiteClientId) {
+      if (!clientId) {
         // Add new client to business
+        const user = userData.getUser as User;
+        const { data: clientData } = await userAddClient({variables: { client: {
+          id: uuid(),
+          business_id: business.id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          registered_user_id: user.id
+        }}});
+        clientId = clientData.userAddClient.id;
       }
-      const { errors } = await addAppointment();
+
+
+      const { errors } = await addAppointment({ variables: { appointment: {
+        business_id: business.id,
+        client_id: clientId,
+        id: uuid(),
+        staff_id: selected.staff!.id,
+        service_id: selected.service!.id,
+        service_cost: selected.service!.cost,
+        service_duration: selected.service!.duration,
+        is_video: selected.service!.is_video,
+        is_paid: false,
+        start_date: selected.startDate!.toISOString(),
+        end_date: endDate.toISOString(),
+      }}});
+
       if (errors) {
         setLoading(false);
         setError('Could not schedule appointment. Please try again or refresh the page.');
@@ -74,7 +93,7 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
         startDate: null,
       });
     })();
-  }, [addAppointment, selected, setSelected, setSuccessModal]);
+  }, [addAppointment, business.id, clientData, endDate, selected, setSelected, setSuccessModal, userAddClient, userData]);
   
   return (
     <div className={styles.confirm}>
@@ -108,9 +127,9 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
         </div>
       </div>
       <div className={styles.confirmButton}>
-        {!loadingClientData 
-          ? <TextButton fontSize={14} onClick={onConfirmBooking}>Confirm Booking</TextButton>
-          : <Spinner />
+        {loadingClientData || loadingUserData
+          ? <Spinner />
+          : <TextButton fontSize={14} onClick={onConfirmBooking}>Confirm Booking</TextButton>
         }
       </div>
     </div>

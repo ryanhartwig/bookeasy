@@ -18,14 +18,14 @@ export const clientResolvers = {
   },
   Mutation: {
     userAddClient: async (_: any, args: any) => {
-      const { business_id, notes, name, email, address, phone } = args.client;
+      const { id, business_id, notes, name, email, address, phone, registered_user_id } = args.client;
       if (!business_id || !name) throw new GraphQLError('Missing required arguments');
 
       const response = await db.query(`
-      insert into client (id, business_id, notes, name, email, address, phone, joined_date, active)
+      insert into client (id, business_id, notes, name, email, address, phone, joined_date, active, registered_user_id)
       values (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9
-      ) returning *`, [uuid(), business_id, notes, name, email, address, phone, new Date().toISOString(), true]);
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+      ) returning *`, [id, business_id, notes, name, email, address, phone, new Date().toISOString(), true, registered_user_id]);
       return response.rows[0];
     },
     userEditClient: async (_: any, args: any) => {
@@ -67,6 +67,7 @@ export const clientTypeDefs = `#graphql
     phone: String,
     notes: String,
     active: Boolean,
+    registered_user_id: String,
   }
 
   type Query {
