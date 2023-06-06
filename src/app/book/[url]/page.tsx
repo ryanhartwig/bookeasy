@@ -24,7 +24,7 @@ import { GET_USER } from '@/utility/queries/userQueries';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { useClickout } from '@/utility/hooks/useClickout';
 import { FiLogOut } from 'react-icons/fi';
-import { GrScheduleNew, GrSchedules } from 'react-icons/gr';
+import { AiOutlineSchedule } from 'react-icons/ai';
 import { signOut } from 'next-auth/react';
 export interface SelectedState {
   service: Service | null,
@@ -92,12 +92,12 @@ export default function Page({params}: { params: any }) {
 
             {menuOpen && <div className={styles.profileMenu} ref={menuRef}>
               <ul>
-                <li onClick={() => signOut()}>
+              <li onClick={() => signOut()}>
                   <FiLogOut style={{opacity: 0.7}} />
                   <p>Logout</p>
                 </li>
                 <li>
-                  <GrScheduleNew style={{opacity: 0.7}} />
+                  <AiOutlineSchedule style={{opacity: 0.7, flexShrink: 0}} />
                   <p>Appointments</p>
                 </li>
               </ul>
