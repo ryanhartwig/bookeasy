@@ -18,6 +18,8 @@ import { NotFound } from './notfound';
 import formStyles from './forms/forms.module.scss';
 import { Book } from './book';
 import { About } from './about';
+import { useUser } from '@/app/Providers';
+import { Login } from './login';
 
 export interface SelectedState {
   service: Service | null,
@@ -31,6 +33,7 @@ export interface Details {
 }
 
 export default function Page({params}: { params: any }) {
+  const { id: userId } = useUser();
   const [tab, setTab] = useState('Book');
   const [business, setBusiness] = useState<NewBusiness>();
   const [services, setServices] = useState<Service[]>([]);
@@ -58,6 +61,7 @@ export default function Page({params}: { params: any }) {
   const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
 
   if (initialLoading) return <Loading />
+  if (!userId) return <Login url={params.url} />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
   return (
     <div className={styles.background}>
@@ -75,13 +79,10 @@ export default function Page({params}: { params: any }) {
         </div>
         <div className={styles.form}>
           <Card className={styles.formCard}>
-            {(() => {
-              switch(tab) {
-                case 'Book': return <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails}  />
-                case 'About': return <About business={business} />
-                default: return <></>
-              }
-            })()}
+            {(() => { switch(tab) {
+              case 'Book': return <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails}  />
+              case 'About': return <About business={business} />
+            }})()}
           </Card>
         </div>
       </div>

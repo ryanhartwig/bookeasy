@@ -235,3 +235,44 @@
   }
 
 }
+
+
+/* Login */
+.loginForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+  font-weight: 300;
+  color: rgb(100, 100, 100);
+
+  box-shadow: 0px 3px 10px 1px rgba(216, 216, 216, 0.9);
+
+  padding: 20px 40px;
+  border-radius: 30px;
+  background: linear-gradient(160deg, #fff 0%, #fff 0.01%, rgba(250, 210, 251, 0.08) 50%, #fff 100%);
+
+  width: 340px;
+
+  .formTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    white-space: nowrap;
+
+    p {
+      padding: 0 5px;
+    }
+
+    margin-bottom: 10px;
+  }
+
+  .loginButton {
+    margin: 1px auto;
+    width: 95%;
+  }
+}
+
