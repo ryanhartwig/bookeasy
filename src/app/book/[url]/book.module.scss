@@ -308,8 +308,34 @@
     border-radius: 15px;
     box-shadow: 0px 2px 5px -2px rgba(139, 139, 139, 0.497);
 
+    cursor: pointer;
     p {
-      margin: 0 10px;
+      margin: 0 15px;
+    }
+
+    .profileMenu {
+      position: absolute;
+      width: 100%;
+      top: calc(100% + 3px);
+      left: 0;
+      border: 1px solid rgba(191, 191, 191, 0.578);
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0px 2px 5px -2px rgba(139, 139, 139, 0.497);
+      overflow: hidden;
+
+      li {
+        padding: 10px 0 10px 15px;
+
+        display: flex;
+        align-items: center;
+
+
+        transition: background-color 200ms;
+        &:hover {
+          background: rgb(240, 240, 240);
+        }
+      }
     }
   }
 }

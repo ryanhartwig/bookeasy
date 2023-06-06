@@ -11,7 +11,7 @@ import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { GET_BUSINESS, GET_BUSINESS_SERVICES, GET_BUSINESS_STAFF } from '@/utility/queries/businessQueries';
 import { useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './book.module.scss';
 import Loading from './loading';
 import { NotFound } from './notfound';
@@ -22,7 +22,10 @@ import { useUser } from '@/app/Providers';
 import { Login } from './login';
 import { GET_USER } from '@/utility/queries/userQueries';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-
+import { useClickout } from '@/utility/hooks/useClickout';
+import { FiLogOut } from 'react-icons/fi';
+import { GrScheduleNew, GrSchedules } from 'react-icons/gr';
+import { signOut } from 'next-auth/react';
 export interface SelectedState {
   service: Service | null,
   staff: Staff | null,
@@ -38,6 +41,8 @@ export default function Page({params}: { params: any }) {
   const { id: userId } = useUser();
 
   const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
+
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   
   const [tab, setTab] = useState('Book');
   const [business, setBusiness] = useState<NewBusiness>();
@@ -65,6 +70,14 @@ export default function Page({params}: { params: any }) {
   const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData || loadingUserData, [loadingBookingSiteData, loadingBusinessData, loadingUserData]);
   const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const onToggleMenu = useCallback((e: any) => {
+    if (menuRef.current?.contains(e.target)) return;
+    setMenuOpen(p => !p);
+  }, []);
+  useClickout({ onClickout: () => setMenuOpen(false), contentRefs: [profileRef], enabled: true})
+
   if (initialLoading) return <Loading />
   if (!userId) return <Login url={params.url} />
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
@@ -72,10 +85,23 @@ export default function Page({params}: { params: any }) {
     <div className={styles.background}>
       <div className={styles.header}>
         <div className={styles.profileWrapper}>
-          <div className={styles.profile}>
+          <div className={styles.profile} onClick={onToggleMenu} ref={profileRef}>
             <Avatar src={userData.getUser.avatar} />
             <p>{userData.getUser.name.split(' ')[0]}</p>
-            <MdOutlineKeyboardArrowDown />
+            <MdOutlineKeyboardArrowDown style={{opacity: 0.5}} />
+
+            {menuOpen && <div className={styles.profileMenu} ref={menuRef}>
+              <ul>
+                <li onClick={() => signOut()}>
+                  <FiLogOut style={{opacity: 0.7}} />
+                  <p>Logout</p>
+                </li>
+                <li>
+                  <GrScheduleNew style={{opacity: 0.7}} />
+                  <p>Appointments</p>
+                </li>
+              </ul>
+            </div>}
           </div>
         </div>
       </div>
