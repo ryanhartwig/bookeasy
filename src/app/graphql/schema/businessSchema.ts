@@ -11,11 +11,11 @@ export const businessResolvers = {
     },
     getBusinessClients: async (_: any, args: any) => {
       const response = await db.query(`
-        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_client_id, rc.avatar
+        select coalesce(c.email, ru.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_user_id, ru.avatar
         from client c
-        left join registered_client rc
-        on rc.id = c.registered_client_id
-        where business_id = $1
+        left join registered_user ru
+        on ru.id = c.registered_user_id
+        where c.business_id = $1
       `, [args.business_id]);
       return response.rows;
     },
