@@ -47,3 +47,11 @@ export const GET_USER_APPOINTMENTS_DATES = gql`
     }
   }
 `;
+
+export const GET_REGISTERED_CLIENT_APPOINTMENTS = gql`
+  query($registeredUserId: ID!) {
+    getClientAppointments(registered_user_id: $registeredUserId) {
+      ...AppointmentDataFragment
+    }
+  }
+`;

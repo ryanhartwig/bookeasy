@@ -1,12 +1,24 @@
 import db from "@/utility/db";
 import { GraphQLError } from "graphql";
-import uuid from "react-uuid";
 
 export const clientResolvers = {
   Query: {
     getClientAppointmentCount: async (_: any, args: any) => {
       const response = await db.query('select count(*) from appointment where client_id = $1', [args.client_id]);
       return response.rows[0].count;
+    },
+    getRegisteredClientAppointments: async (_: any, args: any) => {
+      const response = await db.query(`
+        with clients as (
+          select id from client
+          where registered_user_id = $1
+        )
+        select * from appointment
+        where client_id in (
+          select id from clients
+        )
+      `, [args.registered_user_id]);
+      return response.rows;
     },
     getBookingSiteClientId: async (_: any, args: any) => {
       const { registered_user_id, business_id } = args;
@@ -73,6 +85,7 @@ export const clientTypeDefs = `#graphql
   type Query {
     getClientAppointmentCount(client_id: String!): Int!,
     getBookingSiteClientId(registered_user_id: String!, business_id: String!): String,
+    getRegisteredClientAppointments(registered_user_id: String!): [Appointment!]!,
   }
 
   type Mutation {
