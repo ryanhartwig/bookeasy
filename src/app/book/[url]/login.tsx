@@ -5,6 +5,7 @@ import styles from './book.module.scss';
 import Image from 'next/image';
 import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
+import * as bookit from '@/assets/logo_temp.svg';
 
 interface LoginProps {
   url: string
@@ -38,6 +39,11 @@ export const Login: React.FC<LoginProps> = ({url}) => {
         }} 
         icon={<Image src={Facebook} alt="Facebook logo" />}
       >Log in with Facebook</Button>
+
+      <div className={styles.logo}>
+        <Image className='Navigator_logo_icon' priority src={bookit.default} alt="Book it logo" />
+        {/* <p><span>book</span>easy.</p> */}
+      </div>
     </div>
   </div>
 )}
