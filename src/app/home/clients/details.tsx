@@ -14,6 +14,7 @@ import { ClientForm } from './clientForm/clientForm';
 import styles from './clients.module.scss';
 import clsx from 'clsx';
 import { VscUnverified, VscVerifiedFilled } from 'react-icons/vsc';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 
 interface DetailsProps {
   selected: Client,
@@ -24,7 +25,7 @@ interface DetailsProps {
 
 export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, selectedBusiness}) => {
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
-  const { data, loading } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
+  const { data: clientAppointmentData, loading: loadingClientAppointments } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId: selected.id }});
 
   const [selectedAppointment, setSelectedAppointment] = useState<AppointmentData>();
   const [appointmentFormOpen, setAppointmentFormOpen] = useState<boolean>(false);
@@ -44,9 +45,9 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!data || loading) return;
-    setAppointments(data.getClientAppointments);
-  }, [data, loading]);
+    if (!clientAppointmentData || loadingClientAppointments) return;
+    setAppointments(clientAppointmentData.getClientAppointments);
+  }, [clientAppointmentData, loadingClientAppointments]);
   
   const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 
@@ -145,6 +146,7 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
         <Card className={clsx(styles.card, styles.apps)} style={{height: 736, position: 'relative'}}>
           <Tabs tabs={['Booked', 'Previous']} tab={tab} setTab={setTab} />
           <div className={styles.results}>
+            {loadingClientAppointments && <Spinner />}
             {tab === 0
               ? booked.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)
               : previous.map((app) => <AppointmentCard key={app.id} app={app} setSelectedAppointment={setSelectedAppointment} />)}
