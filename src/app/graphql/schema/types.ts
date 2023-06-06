@@ -59,7 +59,7 @@ export const types = `#graphql
 
   type Client {
     id: String!,
-    registered_client_id: String,
+    registered_user_id: String,
     notes: String,
     name: String!, 
     email: String,

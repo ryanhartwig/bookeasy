@@ -86,9 +86,9 @@ export const Details: React.FC<DetailsProps> = ({selected, setSelected, userId, 
           <Avatar src={selected.avatar} size={115} />
           <div className={styles.details_name}>
             <p className={styles.client_name}>{selected.name}</p>
-            <div className={clsx(styles.registeredIcon, {[styles.registered]: selected.registered_client_id})}>
-              {selected.registered_client_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
-              <p className={styles.tooltip}>{selected.registered_client_id ? 'Registered Client' : 'Unregistered'}</p>
+            <div className={clsx(styles.registeredIcon, {[styles.registered]: selected.registered_user_id})}>
+              {selected.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+              <p className={styles.tooltip}>{selected.registered_user_id ? 'Registered Client' : 'Unregistered'}</p>
             </div>
           </div>
           
