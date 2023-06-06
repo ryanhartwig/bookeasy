@@ -16,14 +16,26 @@
   flex-direction: column;
   justify-content: space-between;
 
-  p:nth-child(1) {
+  .date {
     font-size: 14px;
   }
-  p:nth-child(2) {
+  .duration {
     color: var(--font-alt);
     margin: 3px;
     font-size: 0.9em;
     font-weight: 300;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .provider {
+    margin: 4px 0 16px;
+    font-size: 14px;
+
   }
 
   > div:last-child {
@@ -32,10 +44,7 @@
     justify-content: space-between;
     align-items: center;
 
-    p {
-      line-height: 1;
-    }
-    p:last-child {
+    .edit {
       cursor: pointer;
       font-size: 12px;
 

@@ -1,7 +1,5 @@
 import { Card } from "@/components/UI/Card/Card"
-import { Appointment, AppointmentData } from "@/types/Appointment"
-import { Client } from "@/types/Client"
-import { Service } from "@/types/Service"
+import { AppointmentData } from "@/types/Appointment"
 import { formatTime } from "@/utility/functions/formatting/formatTime"
 import { BsCameraVideo, BsCalendar, BsLink45Deg } from "react-icons/bs"
 

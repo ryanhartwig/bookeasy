@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { TeamSelect } from './teamSelect';
 import styles from './teams.module.scss';
 import { useQuery } from '@apollo/client';
-import { GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
+import { GET_USER, GET_USER_BUSINESSES } from '@/utility/queries/userQueries';
 import { TeamDetails } from './teamDetails';
 import { useUser } from '@/app/Providers';
 
@@ -15,11 +15,12 @@ export const TeamsView = () => {
   const [selected, setSelected] = useState<NewBusiness>();
   const [teams, setTeams] = useState<NewBusiness[]>([]);
 
+  const { data: userData } = useQuery(GET_USER, { variables: { userId }});
   const { data: teamsData, loading: teamsDataLoading } = useQuery(GET_USER_BUSINESSES, { variables: { userId }});
   useEffect(() => {
-    if (teamsDataLoading || !teamsData) return;
-    setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => !b.is_own)); // Remove user's own business
-  }, [teamsData, teamsDataLoading]);
+    if (teamsDataLoading || !teamsData || !userData) return;
+    setTeams(teamsData.getUserBusinesses.filter((b: NewBusiness) => b.id !== userData.getUser.business_id)); // Remove user's own business
+  }, [teamsData, teamsDataLoading, userData]);
 
   // Update selected when data changes (due to cache update)
   const selectedId = useRef<string>('');

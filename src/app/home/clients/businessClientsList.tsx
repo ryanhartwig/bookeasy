@@ -55,9 +55,9 @@ export const BusinessClientsList: React.FC<BusinessClientsListProps> = ({busines
         >
           <Avatar src={c.avatar} />
           <p>{c.name.length > 18 ? `${c.name.slice(0, 15)}...` : c.name}</p>
-          <div className={clsx(styles.registeredIcon, {[styles.registered]: c.registered_client_id})}>
-            {c.registered_client_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
-            <p className={styles.tooltip}>{c.registered_client_id ? 'Registered Client' : 'Unregistered'}</p>
+          <div className={clsx(styles.registeredIcon, {[styles.registered]: c.registered_user_id})}>
+            {c.registered_user_id ? <VscVerifiedFilled fontSize={15} /> : <VscUnverified fontSize={15} />}
+            <p className={styles.tooltip}>{c.registered_user_id ? 'Registered Client' : 'Unregistered'}</p>
           </div>
         </div>
       ))}

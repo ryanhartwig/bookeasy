@@ -1,3 +1,4 @@
+import { useUser } from "@/app/Providers";
 import { SectionLabel } from "@/components/UI/SectionLabel/SectionLabel"
 import { NewBusiness } from "@/types/Business"
 import { Service } from "@/types/Service";
@@ -13,7 +14,6 @@ interface ServicesListProps {
 }
 
 export const ServicesList: React.FC<ServicesListProps> = ({business, setSelectedService}) => {
-
   const { data, loading } = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business.id }});
   const [services, setServices] = useState<Service[]>([]);
 
@@ -24,7 +24,7 @@ export const ServicesList: React.FC<ServicesListProps> = ({business, setSelected
 
   return (
     <div className={styles.services_wrapper}>
-      <SectionLabel label={business.is_own ? `${business.name} (My Business)` : business.name} />
+      <SectionLabel label={business.name} />
       {services.length ? services
         .filter(s => !s.deleted)
         .map(s => 

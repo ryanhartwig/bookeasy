@@ -29,3 +29,29 @@ export const DELETE_APPOINTMENT = gql`
     deleteAppointment(id: $appointmentId)
   }
 `;
+
+export const GET_STAFF_APPOINTMENTS_DATES = gql`
+  query($staffId: ID!, $rangeStart: String, $rangeEnd: String) {
+    getStaffAppointments(staff_id: $staffId, range_start: $rangeStart, range_end: $rangeEnd) {
+      start_date
+      end_date
+    }
+  }
+`;
+
+export const GET_USER_APPOINTMENTS_DATES = gql`
+  query($registeredUserId: ID!, $rangeStart: String, $rangeEnd: String) {
+    getUserAppointments(registered_user_id: $registeredUserId, range_start: $rangeStart, range_end: $rangeEnd) {
+      start_date
+      end_date
+    }
+  }
+`;
+
+export const GET_REGISTERED_CLIENT_APPOINTMENTS = gql`
+  query($registeredUserId: String!) {
+    getRegisteredClientAppointments(registered_user_id: $registeredUserId) {
+      ...AppointmentDataFragment
+    }
+  }
+`;

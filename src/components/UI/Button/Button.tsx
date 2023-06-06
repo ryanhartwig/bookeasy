@@ -7,15 +7,16 @@ interface ButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
   icon?: JSX.Element,
   children?: React.ReactNode,
   loading?: boolean,
+  light?: boolean,
 }
 
-export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, ...props}) => {
+export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, light = false, ...props}) => {
   
   return (
     <div {...props} 
       tabIndex={0} 
       onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} 
-      className={clsx(styles.button, props.className ?? '', {[styles.loading]: loading})}
+      className={clsx(styles.button, props.className ?? '', {[styles.loading]: loading}, {[styles.light]: light})}
     >
       {icon && <div>{icon}</div>}
       <p>{children}</p>

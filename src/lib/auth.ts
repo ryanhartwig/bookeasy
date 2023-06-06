@@ -103,7 +103,6 @@ export const authOptions: NextAuthOptions = {
         user: {
           id: response.rows[0].registered_user_id,
           email: token.email,
-          newField: 'hello',
         },
       };
     },
@@ -113,7 +112,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id, 
-          newField: 'string',
         };
       }
       return token;

@@ -1,0 +1,254 @@
+@use 'src/app/globalutil';
+
+
+.selectAgent {
+  display: flex; 
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  height: 100%;
+
+  padding: 2px;
+
+  .staffCard {
+    width: 180px;
+    height: fit-content;
+    min-height: 150px;
+    
+    margin: 0 10px;
+    padding: 0 10px;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    cursor: pointer;
+    transition: scale 200ms;
+    &:hover {
+      scale: 1.03;
+    }
+
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    white-space: pre-wrap;
+    text-align: center;
+  
+    border-radius: 15px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.22);
+
+    > * { margin: 10px 0 }
+    
+    > h2 {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .credentials {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgb(98, 98, 98);
+    }
+
+    .bio {
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+
+}
+
+.selectTime {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+
+  .calendar {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  .timeSlots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    overflow: hidden;
+
+    .info {
+      p {
+        margin: 10px 0;
+        font-size: 14px;
+        font-weight: 300;
+        white-space: pre-wrap;
+      }
+    }
+
+    .slots {
+      display: flex;  
+      flex-direction: column;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+      overflow-x: auto;
+
+  
+      .slot {
+        width: 130px;
+        padding: 8px 12px;
+        margin: 3px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        border: 1px solid rgb(194, 194, 194);
+        border-radius: 15px;
+  
+        transition: color 130ms, background-color 130ms;
+        
+        p {
+          width: fit-content;
+          font-size: 14px;
+        }
+  
+        &:hover {
+          background-color: #e5f3fc;
+          color: var(--font-utility);
+          border-color: #abbdec;
+        }
+      }
+    }
+  }
+}
+
+.confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+
+  max-width: 450px;
+  margin: 0 auto;
+  padding-top: 15px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  p {
+    padding: 0 20px;
+  }
+}
+
+.date {
+  margin: 20px 0 0;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.overview {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+  margin: 30px 0;
+
+  // Card wrapper
+  > div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    > p {
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+  }
+
+  .agentCard,
+  .serviceCard {
+    width: 160px;
+    height: 230px;
+    padding: 13px;
+
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    white-space: pre-wrap;
+
+    // Agent card
+    .name {
+      font-size: 14px;
+    }
+    .credentials {
+      font-size: 12px;
+      margin-bottom: 12px;
+      color: var(--font-alt);
+    }
+
+    // Service card
+    .serviceDetails {
+      > p {
+        margin: 4px 0;
+        &:first-child { font-size: 14px; }
+      }
+      font-weight: 300;
+      .serviceDuration {
+        position: relative;
+        color: var(--font-alt);
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+    }
+    .business {
+      font-size: 14px;
+      font-weight: 300;
+    }
+    .cost {
+      font-size: 16px;
+      font-weight: 100;
+    }
+  }
+
+  .serviceCard {
+    border-left: 3px solid;
+  }
+}
+
+.confirmButton {
+  margin-top: 15px;
+  p {
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+  
+
+// Success modal
+.success {
+  padding: 15px 5px;
+
+  text-align: center;
+}

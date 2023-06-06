@@ -1,13 +1,14 @@
 "use client";
 import React, { createContext, useContext } from "react";
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery } from "@apollo/client";
 import { createFragmentRegistry } from "@apollo/client/cache";
 import { APPOINTMENT_DATA_FRAGMENT } from "@/utility/queries/fragments/appointmentFragments";
 import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFragments";
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
 import { SessionProvider, useSession } from 'next-auth/react';
+import { BUSINESS_FRAGMENT } from "@/utility/queries/fragments/businessFragments";
 
-const UserContext = createContext({ id: '' })
+const UserContext = createContext<{id: string}>({ id: '' })
 
 const UserProvider = ({children}: { children: React.ReactNode}) => {
 	const { data: session } = useSession();
@@ -29,6 +30,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 				${APPOINTMENT_DATA_FRAGMENT}
 				${BUSINESS_CLIENT_FRAGMENT}
 				${SERVICE_FRAGMENT}
+				${BUSINESS_FRAGMENT}
 			`)
 		}),
 	});

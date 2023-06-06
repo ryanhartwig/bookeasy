@@ -11,11 +11,11 @@ export const businessResolvers = {
     },
     getBusinessClients: async (_: any, args: any) => {
       const response = await db.query(`
-        select coalesce(c.email, rc.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_client_id, rc.avatar
+        select coalesce(c.email, ru.email) as email, c.id, c.address, c.phone, c.joined_date, c.active, c.notes, c.name, c.registered_user_id, ru.avatar
         from client c
-        left join registered_client rc
-        on rc.id = c.registered_client_id
-        where business_id = $1
+        left join registered_user ru
+        on ru.id = c.registered_user_id
+        where c.business_id = $1
       `, [args.business_id]);
       return response.rows;
     },
@@ -64,7 +64,7 @@ export const businessResolvers = {
         from staff s
         left join registered_user u
         on s.registered_user_id = u.id
-        where business_id = $1
+        where s.business_id = $1
         and deleted = false
       `, [parent.id]);
       return response.rows;
@@ -88,14 +88,14 @@ export const businessResolvers = {
       return response.rows[0];
     },
     newBusiness: async (_: any, args: any) => {
-      const { name, user_id, is_own } = args;
+      const { name, user_id } = args;
       const created = new Date().toISOString();
       const response = await db.query(`
-        insert into business (id, name, created, is_own)
+        insert into business (id, name, created, creator_id)
         values (
           $1, $2, $3, $4
         ) returning *
-      `, [uuid(), name, created, is_own]);
+      `, [uuid(), name, created, user_id]);
 
       // Add entry to staff mapping table
       await db.query(`
@@ -125,6 +125,8 @@ export const businessTypeDefs = `#graphql
     min_booking_notice: String,
     max_book_ahead: String,
     min_cancel_notice: String,
+    bio: String,
+    website_url: String,
   }
 
   type Query {
@@ -136,7 +138,7 @@ export const businessTypeDefs = `#graphql
 
   type Mutation {
     updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
-    newBusiness(name: String!, user_id: String!, is_own: Boolean): Business!,
+    newBusiness(name: String!, user_id: String!): Business!,
     removeBusiness(business_id: String!): String!,
   }
 `;

@@ -2,7 +2,7 @@
 
 
 import { ReactIconButton } from "@/components/UI/IconButton/ReactIconButton";
-import { Appointment, AppointmentMetrics } from "@/types/Appointment";
+import { AppointmentMetrics } from "@/types/Appointment";
 import { Client } from "@/types/Client";
 import { User } from "@/types/User";
 import { getISOYearRange } from "@/utility/functions/dateRanges/getISOYearRange";

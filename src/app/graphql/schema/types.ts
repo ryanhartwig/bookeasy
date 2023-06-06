@@ -18,7 +18,7 @@ export const types = `#graphql
     created: String,
     prefs: UserPrefs!, 
     avatar: String,
-    own_business_id: String,
+    business_id: String,
   }
 
   # Staff member of a team or own business. 
@@ -59,7 +59,7 @@ export const types = `#graphql
 
   type Client {
     id: String!,
-    registered_client_id: String,
+    registered_user_id: String,
     notes: String,
     name: String!, 
     email: String,
@@ -86,9 +86,12 @@ export const types = `#graphql
     min_booking_notice: String,
     min_cancel_notice: String,
     max_book_ahead: String,
-    is_own: Boolean!,
     avatar: String,
     created: String!,
+    booking_site_id: String,
+    creator_id: String!,
+    website_url: String,
+    bio: String,
     staff: [Staff!]!,
   }
 
