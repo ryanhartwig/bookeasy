@@ -20,6 +20,8 @@ import { Book } from './book';
 import { About } from './about';
 import { useUser } from '@/app/Providers';
 import { Login } from './login';
+import { GET_USER } from '@/utility/queries/userQueries';
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
 export interface SelectedState {
   service: Service | null,
@@ -34,6 +36,9 @@ export interface Details {
 
 export default function Page({params}: { params: any }) {
   const { id: userId } = useUser();
+
+  const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
+  
   const [tab, setTab] = useState('Book');
   const [business, setBusiness] = useState<NewBusiness>();
   const [services, setServices] = useState<Service[]>([]);
@@ -57,7 +62,7 @@ export default function Page({params}: { params: any }) {
   const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id }, skip: !business });
   useEffect(() => staffData && setStaff(staffData.getBusiness.staff), [staffData]);
 
-  const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData, [loadingBookingSiteData, loadingBusinessData]);
+  const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData || loadingUserData, [loadingBookingSiteData, loadingBusinessData, loadingUserData]);
   const businessDataLoading = useMemo(() => loadingServicesData || loadingStaffData, [loadingServicesData, loadingStaffData]);
 
   if (initialLoading) return <Loading />
@@ -65,7 +70,15 @@ export default function Page({params}: { params: any }) {
   if(!bookingSiteData?.getBookingSite || !business) return <NotFound />
   return (
     <div className={styles.background}>
-      <div className={styles.header} />
+      <div className={styles.header}>
+        <div className={styles.profileWrapper}>
+          <div className={styles.profile}>
+            <Avatar src={userData.getUser.avatar} />
+            <p>{userData.getUser.name.split(' ')[0]}</p>
+            <MdOutlineKeyboardArrowDown />
+          </div>
+        </div>
+      </div>
       <div className={styles.page}>
         <div className={styles.title}>
           {business.avatar && <Avatar className={styles.businessPhoto} size={170} src={business.avatar} />}
