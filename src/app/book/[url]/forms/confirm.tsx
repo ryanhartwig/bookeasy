@@ -1,7 +1,6 @@
 import { useUser } from '@/app/Providers';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
-import { LoadingDots } from '@/components/UI/LoadingDots/LoadingDots';
 import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
@@ -57,6 +56,9 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
   const onConfirmBooking = useCallback(() => {
     setLoading(true);
     ;(async () => {
+      if (!clientData.getBookingSiteClientId) {
+        // Add new client to business
+      }
       const { errors } = await addAppointment();
       if (errors) {
         setLoading(false);
