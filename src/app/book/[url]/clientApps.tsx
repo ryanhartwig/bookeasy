@@ -1,21 +1,24 @@
 import { AppointmentCard } from "@/app/home/clients/appointment"
+import { useUser } from "@/app/Providers"
 import { Spinner } from "@/components/UI/Spinner/Spinner"
 import { Tabs } from "@/components/UI/Tabs/Tabs"
 import { AppointmentData } from "@/types/Appointment"
-import { GET_CLIENT_APPOINTMENTS } from "@/utility/queries/appointmentQueries"
+import { GET_REGISTERED_CLIENT_APPOINTMENTS } from "@/utility/queries/appointmentQueries"
 import { useQuery } from "@apollo/client"
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import styles from './book.module.scss';
 
 
 interface ClientAppsProps {
-  clientId: string, // this actually will need to be reg. user id
 }
 
-export const ClientApps: React.FC<ClientAppsProps> = ({clientId}) => {
+export const ClientApps: React.FC<ClientAppsProps> = ({}) => {
+  const { id: registeredUserId } = useUser();
+  
   const [tab, setTab] = useState(0);
   const [appointments, setAppointments] = useState<AppointmentData[]>([]);
-  const { data: clientAppointmentData, loading: loadingClientAppointments } = useQuery(GET_CLIENT_APPOINTMENTS, { variables: { clientId }});
+  const { data: clientAppointmentData, loading: loadingClientAppointments } = useQuery(GET_REGISTERED_CLIENT_APPOINTMENTS, { variables: { registeredUserId }});
+  useEffect(() => clientAppointmentData && setAppointments(clientAppointmentData.getRegisteredClientAppointments), [clientAppointmentData]);
 
   const previous = useMemo<AppointmentData[]>(() => {
     return appointments.filter(app => 

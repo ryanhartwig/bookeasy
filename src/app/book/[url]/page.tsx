@@ -135,7 +135,7 @@ export default function Page({params}: { params: any }) {
         className={styles.clientApps}
       >
         <Modal.Header>Your appointments</Modal.Header>
-        {/* <ClientApps clientId={} /> */}
+        <ClientApps />
       </Modal>
 
       {successDetails && <Modal open={!!successDetails} 
