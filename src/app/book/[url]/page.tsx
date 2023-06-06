@@ -26,6 +26,7 @@ import { useClickout } from '@/utility/hooks/useClickout';
 import { FiLogOut } from 'react-icons/fi';
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { signOut } from 'next-auth/react';
+import { ClientApps } from './clientApps';
 export interface SelectedState {
   service: Service | null,
   staff: Staff | null,
@@ -42,8 +43,6 @@ export default function Page({params}: { params: any }) {
 
   const { data: userData, loading: loadingUserData } = useQuery(GET_USER, { variables: { userId }});
 
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  
   const [tab, setTab] = useState('Book');
   const [business, setBusiness] = useState<NewBusiness>();
   const [services, setServices] = useState<Service[]>([]);
@@ -54,6 +53,9 @@ export default function Page({params}: { params: any }) {
     staff: null,
     startDate: null,
   });
+  const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+  const [showAppointments, setShowAppointments] = useState<boolean>(false);
+
   const dateString = useMemo(() => selected.startDate && getDateTimeStringFull(selected.startDate), [selected.startDate]);
 
   // Booking site & business data if available
@@ -74,9 +76,9 @@ export default function Page({params}: { params: any }) {
   const profileRef = useRef<HTMLDivElement>(null);
   const onToggleMenu = useCallback((e: any) => {
     if (menuRef.current?.contains(e.target)) return;
-    setMenuOpen(p => !p);
+    setProfileMenuOpen(p => !p);
   }, []);
-  useClickout({ onClickout: () => setMenuOpen(false), contentRefs: [profileRef], enabled: true})
+  useClickout({ onClickout: () => setProfileMenuOpen(false), contentRefs: [profileRef], enabled: true})
 
   if (initialLoading) return <Loading />
   if (!userId) return <Login url={params.url} />
@@ -90,13 +92,14 @@ export default function Page({params}: { params: any }) {
             <p>{userData.getUser.name.split(' ')[0]}</p>
             <MdOutlineKeyboardArrowDown style={{opacity: 0.5}} />
 
-            {menuOpen && <div className={styles.profileMenu} ref={menuRef}>
+            {profileMenuOpen && 
+            <div className={styles.profileMenu} ref={menuRef}>
               <ul>
-              <li onClick={() => signOut()}>
+                <li onClick={() => signOut()}>
                   <FiLogOut style={{opacity: 0.7}} />
                   <p>Logout</p>
                 </li>
-                <li>
+                <li onClick={() => {setShowAppointments(true); setProfileMenuOpen(false)}}>
                   <AiOutlineSchedule style={{opacity: 0.7, flexShrink: 0}} />
                   <p>Appointments</p>
                 </li>
@@ -125,6 +128,15 @@ export default function Page({params}: { params: any }) {
           </Card>
         </div>
       </div>
+
+      <Modal open={showAppointments} 
+        onClose={() => setShowAppointments(false)}
+        noOffset
+        className={styles.clientApps}
+      >
+        <Modal.Header>Your appointments</Modal.Header>
+        {/* <ClientApps clientId={} /> */}
+      </Modal>
 
       {successDetails && <Modal open={!!successDetails} 
         onClose={() => setSuccessDetails(null)}
