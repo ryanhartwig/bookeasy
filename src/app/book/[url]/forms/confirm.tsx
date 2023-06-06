@@ -1,11 +1,15 @@
+import { useUser } from '@/app/Providers';
 import { Avatar } from '@/components/UI/Avatar/Avatar';
 import { Card } from '@/components/UI/Card/Card';
+import { LoadingDots } from '@/components/UI/LoadingDots/LoadingDots';
+import { Spinner } from '@/components/UI/Spinner/Spinner';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { AppointmentInput } from '@/types/Appointment';
 import { NewBusiness } from '@/types/Business';
 import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { ADD_EDIT_APPOINTMENT, GET_STAFF_APPOINTMENTS_DATES, GET_USER_APPOINTMENTS_DATES } from '@/utility/queries/appointmentQueries';
-import { useMutation } from '@apollo/client';
+import { GET_BOOKING_SITE_CLIENT_ID } from '@/utility/queries/clientQueries';
+import { useMutation, useQuery } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { Details, SelectedState } from '../page';
@@ -19,10 +23,14 @@ interface ConfirmProps {
 }
 
 export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSuccessModal, business}) => {
+  const { id: registeredUserId } = useUser();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const { data: clientData, loading: loadingClientData } = useQuery(GET_BOOKING_SITE_CLIENT_ID, { variables: { businessId: business.id, registeredUserId }});
+
+  const dateString = getDateTimeStringFull(selected.startDate!);
   const endDate = useMemo(() => {
     const endDate = new Date(selected.startDate!);
     endDate.setTime(endDate.getTime() + (selected.service!.duration * 1000 * 60));
@@ -42,8 +50,6 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
     start_date: selected.startDate!.toISOString(),
     end_date: endDate.toISOString(),
   }), [business.id, endDate, selected.service, selected.staff, selected.startDate]);
-
-  const dateString = getDateTimeStringFull(selected.startDate!);
 
   const [addAppointment] = useMutation(ADD_EDIT_APPOINTMENT, { variables: { appointment },
     refetchQueries: [GET_USER_APPOINTMENTS_DATES]
@@ -100,7 +106,10 @@ export const Confirm: React.FC<ConfirmProps> = ({selected, setSelected, setSucce
         </div>
       </div>
       <div className={styles.confirmButton}>
-        <TextButton fontSize={14} onClick={onConfirmBooking}>Confirm Booking</TextButton>
+        {!loadingClientData 
+          ? <TextButton fontSize={14} onClick={onConfirmBooking}>Confirm Booking</TextButton>
+          : <Spinner />
+        }
       </div>
     </div>
   )

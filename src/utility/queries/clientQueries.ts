@@ -27,3 +27,9 @@ export const GET_CLIENT_APPOINTMENT_COUNT = gql`
     getClientAppointmentCount(client_id: $clientId)
   }
 `;
+
+export const GET_BOOKING_SITE_CLIENT_ID = gql`
+  query($registeredUserId: String!, $businessId: String!) {
+    getBookingSiteClientId(registered_user_id: $registeredUserId, business_id: $businessId) 
+  }
+`;
