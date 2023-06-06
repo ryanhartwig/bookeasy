@@ -7,17 +7,14 @@ import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFrag
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
 import { SessionProvider, useSession } from 'next-auth/react';
 import { BUSINESS_FRAGMENT } from "@/utility/queries/fragments/businessFragments";
-import { User } from "@/types/User";
-import { GET_USER } from "@/utility/queries/userQueries";
 
-const UserContext = createContext<{id: string} | User>({ id: '' })
+const UserContext = createContext<{id: string}>({ id: '' })
 
 const UserProvider = ({children}: { children: React.ReactNode}) => {
 	const { data: session } = useSession();
-	const { data: userData } = useQuery(GET_USER, { variables: { userId: session?.user.id }, skip: !session?.user.id})
 
 	return (
-		<UserContext.Provider value={userData?.getUser ? userData.getUser : { id: session?.user.id || ''}}>
+		<UserContext.Provider value={{ id: session?.user.id || ''}}>
 			{children}
 		</UserContext.Provider>
 	)
