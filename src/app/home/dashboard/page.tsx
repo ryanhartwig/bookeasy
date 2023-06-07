@@ -10,7 +10,6 @@ import { WeekDayNames } from "./weekDayNames";
 import { WeekDays } from "./weekDays";
 
 export default function Page() {
-  
   return (
     <>
       <RegisterTeam />
