@@ -1,11 +1,12 @@
 import styles from './appointment.module.scss';
 
 import { AppointmentData } from "@/types/Appointment"
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
 import { BsTrash3 } from 'react-icons/bs';
+import { DELETE_APPOINTMENT, GET_REGISTERED_CLIENT_APPOINTMENTS } from '@/utility/queries/appointmentQueries';
 interface AppointmentCardProps {
   app: AppointmentData,
   setSelectedAppointment?: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
@@ -37,6 +38,16 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
     return Date.now() < minTime.getTime();
   }, [app.start_date, minCancelNotice]);
 
+  const [deleteAppointment, { loading: deletingAppointment }] = useMutation(DELETE_APPOINTMENT, {
+    refetchQueries: [GET_REGISTERED_CLIENT_APPOINTMENTS]
+  });
+  const onCancel = useCallback(() => {
+    ;(async () => {
+      await deleteAppointment({variables: { appointmentId: app.id }});
+      // Todo: send notification to user through email & notification table
+    })();
+  }, [app.id, deleteAppointment]);
+
   return (
     <div className={styles.app} style={{borderLeftColor: app.service.color}}>
       <p className={styles.paid} style={{color: !app.is_paid ? '' : 'rgb(39, 131, 174)'}} >{app.is_paid ? '✓ Paid' : 'Unpaid'}</p>
@@ -53,7 +64,12 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
 
         </div>
         {setSelectedAppointment && <p className={styles.edit} onClick={() => setSelectedAppointment(app)}>Edit</p>}
-        {allowCancellation && <TextButton icon={<BsTrash3 fontSize={11} />} disabled={!canCancel} altColor className={styles.cancel}>Cancel</TextButton>}
+        {allowCancellation && <TextButton icon={<BsTrash3 fontSize={11} />} 
+          disabled={!canCancel || deletingAppointment} 
+          altColor 
+          className={styles.cancel}
+          onClick={() => canCancel && onCancel()}
+        >Cancel</TextButton>}
       </div>
 
     </div>
