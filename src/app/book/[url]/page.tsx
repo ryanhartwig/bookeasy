@@ -95,7 +95,7 @@ export default function Page({params}: { params: any }) {
             {profileMenuOpen && 
             <div className={styles.profileMenu} ref={menuRef}>
               <ul>
-                <li onClick={() => signOut()}>
+                <li onClick={() => {signOut(); setProfileMenuOpen(false)}}>
                   <FiLogOut style={{opacity: 0.7}} />
                   <p>Logout</p>
                 </li>
