@@ -38,7 +38,7 @@
 
   }
 
-  > div:last-child {
+  .infoWrapper {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -64,4 +64,24 @@
   font-size: 12px !important;
 
   color: rgb(174, 84, 39);
+}
+
+.confirm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+  padding: 10px;
+
+  
+
+  > * {
+    margin: 2px 0;
+  }
+
+  .warning {
+    margin: 5px 0;
+    color: red;
+    font-size: 19px;
+  }
 }

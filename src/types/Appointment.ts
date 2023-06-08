@@ -17,6 +17,10 @@ export interface AppointmentData {
     id: string,
     name: string,
   }
+  staff: {
+    id: string,
+    name: string,
+  }
   start_date: string,
   end_date: string,
   service_duration: number,
