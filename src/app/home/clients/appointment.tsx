@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getDateTimeStringFull } from '@/utility/functions/conversions/getDateTimeString';
 import { gql, useQuery } from '@apollo/client';
 import { TextButton } from '@/components/UI/TextButton/TextButton';
-
+import { BsTrash3 } from 'react-icons/bs';
 interface AppointmentCardProps {
   app: AppointmentData,
   setSelectedAppointment?: React.Dispatch<React.SetStateAction<AppointmentData | undefined>>,
@@ -53,7 +53,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
 
         </div>
         {setSelectedAppointment && <p className={styles.edit} onClick={() => setSelectedAppointment(app)}>Edit</p>}
-        {allowCancellation && <TextButton altColor className={styles.cancel}>Cancel</TextButton>}
+        {allowCancellation && <TextButton icon={<BsTrash3 fontSize={11} />} disabled={!canCancel} altColor className={styles.cancel}>Cancel</TextButton>}
       </div>
 
     </div>
