@@ -10,9 +10,10 @@ interface ServiceCardProps {
   service: Service,
   onClick: (...args:any) => any,
   hideProvider?: boolean,
+  hideEdit?: boolean,
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideProvider = false}) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideProvider = false, hideEdit = false}) => {
    
   return (
     <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={(e) => onClick && onClick(e)}>
@@ -34,9 +35,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideP
       </div>
       <p>${service.cost.toFixed(2)}</p>
 
-      <div className={styles.edit}>
+      {!hideEdit && <div className={styles.edit}>
         <FiEdit2 />
-      </div>
+      </div>}
     </div>
   )
 }
