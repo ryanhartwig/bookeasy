@@ -38,7 +38,7 @@ export const ClientApps: React.FC<ClientAppsProps> = () => {
       <div className={styles.results}>
         {loadingClientAppointments && <Spinner />}
         {tab === 0
-          ? booked.map((app) => <AppointmentCard key={app.id} app={app} showProvider/>)
+          ? booked.map((app) => <AppointmentCard key={app.id} app={app} showProvider allowCancellation />)
           : previous.map((app) => <AppointmentCard key={app.id} app={app} showProvider/>)}
       </div>
     </div>
