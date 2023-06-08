@@ -76,17 +76,19 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
           onClick={() => canCancel && setConfirmDelete(true)}
         >Cancel</TextButton>}
       </div>
-      <Modal open={true}
+      <Modal open={confirmDelete}
         onClose={() => setConfirmDelete(false)}
         actionButtonDisabled={deletingAppointment}
         actionButtonText={'Confirm'}
+        actionCloses
+        onAction={() => onCancel()}
         noOffset
       >
         <Modal.Header>Confirm Cancellation</Modal.Header>
         <div className={styles.confirm}>
           <CiWarning className={styles.warning} />
           <p>This will cancel your appointment with</p>
-          <p>{app.business.name}</p>
+          <p>{app.staff.name}</p>
           <p>on</p>
           <p>{date}</p>
         </div>

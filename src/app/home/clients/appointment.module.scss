@@ -76,12 +76,22 @@
   
 
   > * {
-    margin: 2px 0;
+    margin: 3px 0;
   }
 
   .warning {
     margin: 5px 0;
     color: red;
     font-size: 19px;
+  }
+
+  > p:nth-of-type(2n - 1) {
+    font-size: 14px;
+    color: grey;
+  }
+  > p:nth-of-type(2n) {
+    margin: 8px 0;
+    font-size: 16px;
+    color: black;
   }
 }
