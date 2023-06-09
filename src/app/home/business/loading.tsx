@@ -61,7 +61,7 @@ export default function Loading({skipHeader = false}: {skipHeader?: boolean}) {
         {/* Right panel */}
         <div>
           <Card className={clsx(styles.card, styles.prefs)} style={{background: '#F8F8F8'}}>
-            <Tabs style={{background: 'white'}} tab={0} tabs={['Preferences', 'Client List', 'Booking Site', 'Services', 'Availability']} />
+            <Tabs style={{background: 'white'}} tab={0} tabs={['Client List', 'Services', 'Availability', 'Preferences']} />
           </Card>
         </div>
       </div>
