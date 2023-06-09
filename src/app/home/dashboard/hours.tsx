@@ -71,11 +71,15 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
           {isHour && <p>{hour12} {period}</p>}
           {appointment && 
             <div className={clsx(styles.weekly_app, 'noselect')} onClick={() => setEditAppointment(appointment)} style={{height, borderColor: color}}>
-              <div>
-                <p style={{fontSize: 12}}>{appointment.client.name}</p>
-                <p>{formatTime(appointment.start_date)}</p>
-              </div>
-              <p>{appointment.service.name}</p>
+              {appointment.service_duration <= 30 ? <p style={{fontSize: 10}}>{appointment.service_duration !== 15 && appointment.client.name}</p>
+              : <>
+                <div>
+                  <p style={{fontSize: 12}}>{appointment.client.name}</p>
+                  <p>{formatTime(appointment.start_date)}</p>
+                </div>
+                <p>{appointment.service.name}</p>
+              </>}
+              
             </div>
           }
         </div>
