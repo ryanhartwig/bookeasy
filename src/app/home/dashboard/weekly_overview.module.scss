@@ -83,7 +83,7 @@
   background-size: 5px 5px;
   background-image: repeating-linear-gradient(-45deg, #aeaeae 0, #aeaeae 1px, #e1e1e1 0, #e1e1e1 50%);
 
-  z-index: 5;
+  z-index: 1;
 
   top: -1px;
   left: -1px;
@@ -133,7 +133,7 @@
   overflow: hidden;
 
 
-  z-index: 1;
+  z-index: 2;
 
   p {
     color: var(--font-on-light);
