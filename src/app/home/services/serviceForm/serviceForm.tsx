@@ -331,10 +331,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
           <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} style={{cursor: 'pointer'}} />
         </div>
 
-        <div className={styles.ispaid}>
+        {/* <div className={styles.ispaid}>
           <label htmlFor='ispaid'>Is Video Service</label>
           <Input id='ispaid' type='checkbox' checked={isVideo} onChange={(e) => setIsVideo(e.target.checked)} />  
-        </div>
+        </div> */}
       </div>
       <hr />
       {error && <p className={styles.warning}>{error}</p>}
