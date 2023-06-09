@@ -68,7 +68,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({app, setSelecte
           <p className={styles.date}>{date}</p>
 
         </div>
-        {setSelectedAppointment && <p className={styles.edit} onClick={() => setSelectedAppointment(app)}>Edit</p>}
+        {setSelectedAppointment && <TextButton className={styles.edit} onClick={() => setSelectedAppointment(app)}>Edit</TextButton>}
         {allowCancellation && <TextButton icon={<BsTrash3 fontSize={11} />} 
           disabled={!canCancel || deletingAppointment} 
           altColor 

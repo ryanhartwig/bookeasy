@@ -15,11 +15,12 @@ export const Header: React.FC<HeaderProps> = ({text, loading = false}) => {
         {loading && <div className={styles.loadingTrack}>
           <span />
         </div>}
+
         <div className={styles.title}>
           <h2>{text}</h2>
           {loading && <Spinner style={{marginLeft: 10}} size={12} />}
         </div>
-      <Logout />
+        <Logout />
       </div>
     </div>
   )
