@@ -172,7 +172,9 @@
 .confirmDelete {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 140px;
   width: 80%;
   margin: 10px auto 20px auto;
 
