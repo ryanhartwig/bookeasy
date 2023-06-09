@@ -12,7 +12,11 @@ interface AppointmentActionCardProps {
   mini?: boolean,
 }
 
-export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({app, canEnterSession = false, mini = false}) => {
+export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({
+  app, 
+  canEnterSession = false, 
+  mini = true // defaulting this to true until video calling is enabled
+}) => {
 
   return (
     <Card className={styles.appointment_wrapper} style={{height: mini ? 108 : ''}}>
