@@ -81,10 +81,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   // Prepopulate business field if provided (from teams / business view)
   useEffect(() => {
-    console.log('from effect: ', businessId, businesses);
     if (!businessId || !businesses) return;
     setSelectedBusiness(businesses.find(b => b.id === businessId))
-    console.log(businesses);
   }, [businessId, businesses]);
 
   // Prepopulate assignee field if it's a user's own business
@@ -115,7 +113,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [staff.length, businesses, initialService, userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
-    console.log(selectedBusiness, name, duration, cost, color, assignedStaff.size);
     if (!selectedBusiness || !name || !duration || !cost || !color || !assignedStaff.size) return null;
 
     return {

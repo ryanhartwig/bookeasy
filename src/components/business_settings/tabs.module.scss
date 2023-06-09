@@ -465,6 +465,9 @@ p.warning {
   display: flex;
   justify-content: center;
   align-content: center;
+
+  flex-shrink: 0;
+  flex-grow: 0;
   
   cursor: pointer;
   scale: 1;
