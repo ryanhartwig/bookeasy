@@ -25,7 +25,7 @@ export const LoadingSplash: React.FC<LoadingSplashProps> = ({loading = false, sk
           />
           <p>
             {bookeasy.map((c, i) => 
-              <span className={clsx({[styles.outright]: !loading && !skipTranslate}, {[styles.fadeup]: loading})} style={{animationDelay: !loading ? `${(i * 25)}ms` : '0ms'}}
+              <span className={clsx({[styles.outright]: !loading && !skipTranslate}, {[styles.fadeup]: loading})} style={{animationDelay: !loading ? `${(i * 30)}ms` : '0ms'}}
                 key={`${c}${i}`}
               >{c}</span>
             )}
