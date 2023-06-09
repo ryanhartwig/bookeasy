@@ -17,7 +17,7 @@ export const Services: React.FC<ServicesProps> = ({services, userId, businessId,
 
   const [serviceFormOpen, setServiceFormOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<Service>();
-  
+
   useEffect(() => {
     if (!selectedService) return;
     setServiceFormOpen(true);

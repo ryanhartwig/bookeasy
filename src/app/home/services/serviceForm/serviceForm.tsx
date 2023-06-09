@@ -55,7 +55,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const { data: userBusinessesData, loading: loadingUserBusinessesData } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
   const { data: staffData, loading: loadingStaffData } = useQuery(GET_BUSINESS_FORM_STAFF, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
-  useEffect(() => setAssignedStaff(new Map()), [selectedBusiness]);
+  // Reset assigned staff when changing selected team (only in service create form)
+  useEffect(() => {!initialService?.business_id && setAssignedStaff(new Map())}, [initialService?.business_id, selectedBusiness]);
 
   useEffect(() => {
     if (!staffData || loadingStaffData) return;
@@ -70,19 +71,21 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   // Clear fields on closing form
   useEffect(() => {
     if (open) return;
-    setSelectedBusiness(undefined);
+    setSelectedBusiness(businessId ? businesses.find(b => b.id === businessId) : undefined);
     setName('');
     setCost('0');
     setDuration(30);
     setColor('#1934b8');
     setIsVideo(false);
-  }, [open]);
+  }, [businessId, businesses, open]);
 
   // Prepopulate business field if provided (from teams / business view)
   useEffect(() => {
-    if (!businessId || !userBusinessesData || !businesses) return;
+    console.log('from effect: ', businessId, businesses);
+    if (!businessId || !businesses) return;
     setSelectedBusiness(businesses.find(b => b.id === businessId))
-  }, [businessId, businesses, userBusinessesData]);
+    console.log(businesses);
+  }, [businessId, businesses]);
 
   // Prepopulate assignee field if it's a user's own business
   useEffect(() => {
@@ -112,6 +115,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [staff.length, businesses, initialService, userBusinessesData]);
 
   const service = useMemo<ServiceInput | null>(() => {
+    console.log(selectedBusiness, name, duration, cost, color, assignedStaff.size);
     if (!selectedBusiness || !name || !duration || !cost || !color || !assignedStaff.size) return null;
 
     return {
