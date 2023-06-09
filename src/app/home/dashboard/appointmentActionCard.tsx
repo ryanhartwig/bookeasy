@@ -1,7 +1,7 @@
 import { Card } from "@/components/UI/Card/Card"
 import { AppointmentData } from "@/types/Appointment"
 import { formatTime } from "@/utility/functions/formatting/formatTime"
-import { BsCameraVideo, BsCalendar, BsLink45Deg } from "react-icons/bs"
+import { BsCameraVideo, BsCalendar, BsLink45Deg, BsFillCameraVideoFill } from "react-icons/bs"
 
 import styles from './dashboard.module.scss';
 
@@ -23,7 +23,14 @@ export const AppointmentActionCard: React.FC<AppointmentActionCardProps> = ({
       <div className={styles.appointment} style={{borderLeftColor: app?.service?.color || 'blue', height: mini ? 108 : '', paddingBottom: mini ? '12px' : ''}}>
         <div>
           <div className={styles.app_header}>
-            <p>{app.service?.name}</p>
+            <div className={styles.app_name}>
+              {app.is_video && 
+                <div className={styles.video}>
+                  <BsFillCameraVideoFill fontSize={12} />
+                </div>
+              }
+              <p>{app.service?.name}</p>
+            </div>
             <p>{app.service?.duration}m</p>
           </div>
           <p className={styles.alt}>{formatTime(app.start_date)}</p>

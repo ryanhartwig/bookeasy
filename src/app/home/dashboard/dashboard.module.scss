@@ -123,6 +123,15 @@
   display: flex;
   justify-content: space-between;
 }
+.app_name {
+  display: flex;
+  align-items: center;
+
+  .video { 
+    color: rgb(165, 165, 165);
+    margin-right: 8px;
+  }
+}
 p.alt {
   font-size: 14px;
   color: #787878;
