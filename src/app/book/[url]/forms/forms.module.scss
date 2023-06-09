@@ -3,10 +3,7 @@
 
 .selectAgent {
   display: flex; 
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  height: 100%;
-
+  flex-wrap: wrap;
   padding: 2px;
 
   .staffCard {
@@ -14,7 +11,7 @@
     height: fit-content;
     min-height: 150px;
     
-    margin: 0 10px;
+    margin: 10px;
     padding: 0 10px;
 
     flex-grow: 0;

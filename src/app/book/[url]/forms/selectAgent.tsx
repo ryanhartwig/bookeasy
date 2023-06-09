@@ -39,8 +39,8 @@ export const SelectAgent: React.FC<SelectAgentProps> = ({staff, businessId, setS
       <div key={s.id} className={styles.staffCard} onClick={(e) => onSelectAgent(e, s)}>
         <Avatar size={100} src={s.avatar} />
         <h2>{s.name}</h2>
-        <p className={styles.credentials}>Credentials</p>
-        <p className={styles.bio}>This person is a person who offers a service for a company of whom you have decided to book an appointment with at this current point in time.</p>
+        {/* <p className={styles.credentials}>Credentials</p> */}
+        {/* <p className={styles.bio}>This person is a person who offers a service for a company of whom you have decided to book an appointment with at this current point in time.</p> */}
         <TextButton ref={(ref) => buttonRefs.current.push(ref!)} onClick={() => setDetailsSelected(s)}>Details</TextButton>
       </div>
     ))
