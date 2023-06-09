@@ -2,9 +2,7 @@ import { Card } from "@/components/UI/Card/Card"
 import { AppointmentData } from "@/types/Appointment"
 import { formatTime } from "@/utility/functions/formatting/formatTime"
 import { BsCameraVideo, BsCalendar, BsLink45Deg, BsFillCameraVideoFill } from "react-icons/bs"
-
 import styles from './dashboard.module.scss';
-
 
 interface AppointmentActionCardProps {
   app: AppointmentData,

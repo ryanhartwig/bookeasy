@@ -220,7 +220,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
         <textarea placeholder='Modified rates to 90%' value={notes} onChange={(e) => setNotes(e.target.value)} />
 
       </div>
-      {/* <hr /> */}
+      <hr />
       {error && <p className={styles.warning}>{error}</p>}
       {!!initialClient && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />
