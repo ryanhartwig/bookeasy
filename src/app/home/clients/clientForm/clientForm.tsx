@@ -37,6 +37,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
 
   const [selectedBusiness, setSelectedBusiness] = useState<FormBusiness>();
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
+  const [clientError, setClientError] = useState('');
 
   const { data: userBusinessesData, loading: loadingUserBusinesses } = useQuery(GET_USER_BUSINESSES, { variables: { userId }, skip: !!initialClient || !!initialBusiness }); 
 
@@ -174,6 +175,7 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
     <Modal actionButtonText='Confirm' 
       onAction={onSubmitForm} 
       actionButtonDisabled={!client} 
+      onClickDisabledAction={() => { !client && setClientError('Please enter a client name')}}
       open={open}
       actionCloses
       onClose={() => setOpen && setOpen(false)} 
@@ -195,22 +197,30 @@ export const ClientForm: React.FC<AppointmentFormProps> = ({open, setOpen, setSe
         )}
         
         <p>Name</p>
-        <Input type='text' autoFocus value={name} onChange={(e) => setName(e.target.value)} />
+        <Input type='text' 
+          errorMessage={clientError} 
+          errorOnFocusOnly 
+          placeholder='John Doe' 
+          autoFocus 
+          value={name} 
+          onChange={(e) => { setClientError(''); setName(e.target.value);}} 
+          required
+        />
 
         <p>Email</p>
-        <Input type='text' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input type='text' placeholder='johndoe@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <p>Address</p>
-        <Input type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
+        <Input type='text' placeholder='1234 Hamilton St' value={address} onChange={(e) => setAddress(e.target.value)} />
 
         <p>Phone</p>
-        <Input type='text' value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Input type='text' placeholder='(123) 456-7890' value={phone} onChange={(e) => setPhone(e.target.value)} />
 
         <p>Notes</p>
-        <textarea placeholder={!initialClient ? 'Modified rate to 90%.' : ''} value={notes} onChange={(e) => setNotes(e.target.value)} />
+        <textarea placeholder='Modified rates to 90%' value={notes} onChange={(e) => setNotes(e.target.value)} />
 
       </div>
-      <hr />
+      {/* <hr /> */}
       {error && <p className={styles.warning}>{error}</p>}
       {!!initialClient && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />
