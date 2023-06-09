@@ -9,13 +9,17 @@
   border: 1px solid rgba(191, 191, 191, 0.578);
   background-color: rgba(250, 250, 250, 0.384);
   border-radius: 15px;
-  box-shadow: 0px 2px 5px -2px rgba(139, 139, 139, 0.497);
 
   z-index: 10;
   
   cursor: pointer;
   p {
     margin: 0 15px;
+  }
+
+  transition: border-color 200ms;
+  &:hover {
+    border-color: rgba(93, 92, 92, 0.5);
   }
 
   .profileMenu {
@@ -26,7 +30,6 @@
     border: 1px solid rgba(191, 191, 191, 0.578);
     background-color: white;
     border-radius: 15px;
-    box-shadow: 0px 2px 5px -2px rgba(139, 139, 139, 0.497);
     overflow: hidden;
     z-index: 10;
 

@@ -4,6 +4,7 @@ import { useUser } from "@/app/Providers";
 import { useClickout } from "@/utility/hooks/useClickout";
 import { GET_USER } from "@/utility/queries/userQueries";
 import { useQuery } from "@apollo/client";
+import clsx from "clsx";
 import { signOut } from "next-auth/react";
 import { useRef, useCallback, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
@@ -25,8 +26,8 @@ export const Logout = () => {
   useClickout({ onClickout: () => setProfileMenuOpen(false), contentRefs: [profileRef], enabled: true})
   
   return (
-    <div className={styles.profile} onClick={onToggleMenu} ref={profileRef}>
-      <Avatar src={userData?.getUser.avatar} />
+    <div className={clsx(styles.profile, 'noselect')} onClick={onToggleMenu} ref={profileRef}>
+      <Avatar src={userData?.getUser?.avatar} style={{pointerEvents: 'none'}} />
       {profileMenuOpen && 
       <div className={styles.profileMenu} ref={menuRef}>
         <ul>
