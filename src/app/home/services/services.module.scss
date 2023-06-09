@@ -4,6 +4,12 @@
   height: calc(100% - var(--header-height));
   padding: 10px;
   position: relative;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.services_content {
+  max-width: 1550px;
 }
 
 .labels {

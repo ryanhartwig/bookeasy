@@ -9,12 +9,15 @@ export const ServicesView = () => {
 
   return (
     <div className={styles.services_page}>
-      <div className={styles.labels}>
-        {['Name', 'Duration', 'Provider', 'Assignee(s)', 'Cost'].map((t) => 
-          <p key={t}>{t}</p>
-        )}
+      <div className={styles.services_content}>
+        <div className={styles.labels}>
+          {['Name', 'Duration', 'Provider', 'Assignee(s)', 'Cost'].map((t) => 
+            <p key={t}>{t}</p>
+          )}
+        </div>
+        <BusinessesList userId={id} />
       </div>
-      <BusinessesList userId={id} />
+      
     </div>
   )
 }
