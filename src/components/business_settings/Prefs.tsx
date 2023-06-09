@@ -120,14 +120,14 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
 
       <BookingSitePrefs business={business} isTeams userBusinessId={userBusinessId} />
 
-      <div className={styles.header}>
+      {/* <div className={styles.header}>
         <p>Bio</p>
       </div>
       <div className={styles.settings}>
         <Setting label='Booking Site Bio' placeholder='Bio' value={value} setValue={setValue} onSave={() => onSave('bio')} onRemove={business.bio ? () => onSave('bio', null) : undefined}>
           <p style={{width: '50%', overflow: 'hidden'}}>{business.bio ?? 'None'}</p>
         </Setting>
-      </div>
+      </div> */}
 
       {isTeams && elevated && (
         <>

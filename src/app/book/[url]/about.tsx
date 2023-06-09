@@ -12,11 +12,11 @@ export const About: React.FC<AboutProps> = ({business}) => {
 
   return (
     <div className={styles.contact}>  
-      <SectionLabel label={`About ${business.name}`} />
-      {false // to be business.bio
-        ? <p className={styles.bio}></p>
+      {/* <SectionLabel label={`About ${business.name}`} />
+      {business.bio // to be business.bio
+        ? <p className={styles.bio}>{business.bio}</p>
         : <p className={styles.nobio}>No details.</p>
-      }
+      } */}
       
       <SectionLabel label={`Contact`} />
       <div className={styles.contactLink}>
