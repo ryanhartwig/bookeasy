@@ -26,10 +26,15 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideP
       <p>{service.duration} min</p>
       {!hideProvider && <p>{service.provider}</p>}
       <div className={styles.assignees}>
-        {service.assigned_staff.map(staff => 
+        {service.assigned_staff.slice(0, 8).map((staff, i) => 
           <div key={staff.id}>
-            <Avatar src={staff.avatar} size={26} />
-            <p className={styles.tooltip}>{staff.name}</p>
+            {i === 7 
+              ? <p style={{margin: '0px 0px 4px 7px'}}>...</p>
+              : <>
+                <Avatar src={staff.avatar} size={26} />
+                <p className={styles.tooltip}>{staff.name}</p>
+              </>
+            }
           </div>
         )}
       </div>
