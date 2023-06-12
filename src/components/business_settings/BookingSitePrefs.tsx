@@ -8,7 +8,7 @@ import { PeriodSelectForm } from './PeriodSelectForm';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
-import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
+import { CREATE_BOOKING_SITE, GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { BookingSite } from '@/types/BookingSite';
 import { Button } from '../UI/Button/Button';
 import { CgWebsite } from 'react-icons/cg';
@@ -24,9 +24,12 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const [total, setTotal] = useState<number>();
   const [updateProperty, setUpdateProperty] = useState<string>('');
   const [bookingSite, setBookingSite] = useState<BookingSite>();
+  const [loadingBookingSite, setLoadingBookingSite] = useState<boolean>(false);
 
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: business.booking_site_id }, skip: !business.booking_site_id });
-
+  useEffect(() => bookingSiteData && setBookingSite(bookingSiteData.getBookingSite), [bookingSiteData]);
+  
+  const [createBookingSite] = useMutation(CREATE_BOOKING_SITE);
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: !userBusinessId ? [] : [{
       query: GET_BUSINESS,
@@ -43,7 +46,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
                 ${GET_USER_BUSINESSES_FRAGMENT}
               `
             }); 
-            return existingBusinesses.map((ref: any) => readField('id', ref) === business.id ? newBusinessRef : ref)
+            return existingBusinesses.map((ref: any) => readField('id', ref) === business.id ? newBusinessRef : ref);
           }
         }
       })
@@ -61,17 +64,25 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
 
   // On mutation complete
   useEffect(() => {
-    if (loading || !data) return;
+    if (loadingBookingSite || !data) return;
     setInitialValue(undefined);
     setTotal(undefined);
-  }, [data, loading]);
+  }, [data, loadingBookingSite]);
 
   const onEdit = useCallback((init: string, property: string) => {
     setInitialValue(Number(init));
     setUpdateProperty(property);
   }, []);
 
-  
+  const onCreateBookingSite = useCallback(() => {
+    setLoadingBookingSite(true);
+
+    ;(async () => {
+      const { data: bookingSiteData } = await createBookingSite({ variables: { businessId: business.id }});
+      await updateBusinessPrefs({ variables: { businessId: business.id, patch: { booking_site_id: bookingSiteData.createBookingSite.id }}});
+      setLoadingBookingSite(false);
+    })();
+  }, [business.id, createBookingSite, updateBusinessPrefs]);
 
   return (
     <div className={styles.BookingSitePrefs}>
@@ -97,7 +108,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
               }
             </div> 
           : <div className={styles.createBookingSite}>
-            <Button light icon={<CgWebsite />} fontSize={12} >Create Booking Site</Button>
+            <Button onClick={onCreateBookingSite} loading={loadingBookingSite} light icon={<CgWebsite />} fontSize={13} >Create Booking Site</Button>
           </div> 
       }
       
@@ -107,7 +118,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
           onClose={() => { setInitialValue(undefined); setTotal(undefined); }} 
           initialValue={initialValue} 
           setTotal={setTotal} 
-          loading={loading}
+          loading={loadingBookingSite}
         />
       }
     </div>
