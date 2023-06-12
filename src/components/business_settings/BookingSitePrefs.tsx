@@ -10,6 +10,8 @@ import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQ
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { BookingSite } from '@/types/BookingSite';
+import { TextButton } from '../UI/TextButton/TextButton';
+import { Button } from '../UI/Button/Button';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
@@ -78,22 +80,28 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
         <p>Booking Site Preferences</p>
       </div>
 
+      {
+        bookingSite 
+          ? <div className={styles.settings}>
+              <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice ?? '0', 'min_booking_notice')} >
+                <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
+              </Setting>
+              <Setting label="Maximum Book Ahead" onEditOverride={() => onEdit(business.max_book_ahead ?? '0', 'max_book_ahead')} >
+                <p>{Number(business.max_book_ahead) ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
+              </Setting>
+              <Setting label="Minimum Cancellation Notice" onEditOverride={() => onEdit(business.min_cancel_notice ?? '0', 'min_cancel_notice')} >
+                <p>{Number(business.min_cancel_notice) ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
+              </Setting>
       
-      <div className={styles.settings}>
-        <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice ?? '0', 'min_booking_notice')} >
-          <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
-        </Setting>
-        <Setting label="Maximum Book Ahead" onEditOverride={() => onEdit(business.max_book_ahead ?? '0', 'max_book_ahead')} >
-          <p>{Number(business.max_book_ahead) ? formatPrefPeriod(Number(business.max_book_ahead)).text : 'None'}</p>
-        </Setting>
-        <Setting label="Minimum Cancellation Notice" onEditOverride={() => onEdit(business.min_cancel_notice ?? '0', 'min_cancel_notice')} >
-          <p>{Number(business.min_cancel_notice) ? formatPrefPeriod(Number(business.min_cancel_notice)).text : 'None'}</p>
-        </Setting>
-
-        {business.min_booking_notice && business.max_book_ahead && Number(business.min_booking_notice) >= Number(business.max_book_ahead) && 
-          <p className={styles.bookingWarning}>* minimum book ahead is greater than or equal to maximum book ahead, preventing client bookings</p>
-        }
-      </div>
+              {business.min_booking_notice && business.max_book_ahead && Number(business.min_booking_notice) >= Number(business.max_book_ahead) && 
+                <p className={styles.bookingWarning}>* minimum book ahead is greater than or equal to maximum book ahead, preventing client bookings</p>
+              }
+            </div> 
+          : <div className={styles.createBookingSite}>
+            <Button fontSize={12} >Create Booking Site</Button>
+          </div> 
+      }
+      
       {initialValue !== undefined && 
         <PeriodSelectForm 
           open={initialValue !== undefined} 

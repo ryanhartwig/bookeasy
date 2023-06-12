@@ -46,10 +46,6 @@
     left: 8px;
   }
 
-  p {
-    font-size: 14px;
-  }
-
   &.loading {
     pointer-events: none;
     animation: loading 800ms linear infinite;
