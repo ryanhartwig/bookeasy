@@ -72,17 +72,6 @@ export const authOptions: NextAuthOptions = {
               insert into federated_credentials (provider, registered_user_id, email, provider_id)
               values ($1, $2, $3, $4)
             `, [account.provider, id, email, provider_id]);
-
-            // Create user's business (for "My Business" tab)
-            const businessId = uuid();
-            await db.query(`
-              insert into business (id, name, created, creator_id) 
-              values ($1, $2, $3, $4)
-              returning id
-            `, [businessId, name, new Date().toISOString(), id]);
-            // Update link in reg. user
-            await db.query('update registered_user set business_id = $1 where id = $2', [businessId, id]);
-
             await db.query('commit');
             return true; // Allow user sign in
           } catch(e) {

@@ -88,14 +88,14 @@ export const businessResolvers = {
       return response.rows[0];
     },
     newBusiness: async (_: any, args: any) => {
-      const { name, user_id } = args;
+      const { name: businessName, user_id } = args;
       const created = new Date().toISOString();
       const response = await db.query(`
         insert into business (id, name, created, creator_id)
         values (
           $1, $2, $3, $4
         ) returning *
-      `, [uuid(), name, created, user_id]);
+      `, [uuid(), businessName, created, user_id]);
 
       // Add entry to staff mapping table
       await db.query(`
