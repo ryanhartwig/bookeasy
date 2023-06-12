@@ -92,7 +92,17 @@ export const userResolvers = {
             values ($1, $2, $3, $4)
             returning *`
           , [id, name, email, new Date().toISOString()]);
-          await db.query('insert into user_prefs (registered_user_id) values ($1)', [id])
+          await db.query('insert into user_prefs (registered_user_id) values ($1)', [id]);
+
+          // Create user's business (for "My Business" tab)
+          const businessId = uuid();
+          await db.query(`
+            insert into business (id, name, created, creator_id) 
+            values ($1, $2, $3, $4)
+            returning id
+          `, [businessId, name, new Date().toISOString(), id]);
+          // Update link in reg. user
+          await db.query('update registered_user set business_id = $1 where id = $2', [businessId, id]);
           user = userResponse.rows[0];
         }
 
