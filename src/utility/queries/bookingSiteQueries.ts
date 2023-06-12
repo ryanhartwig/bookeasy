@@ -9,3 +9,13 @@ export const GET_BOOKING_SITE = gql`
     }
   }
 `;
+
+export const CREATE_BOOKING_SITE = gql`
+  mutation($businessId: String!) {
+    createBookingSite(business_id: $businessId) {
+      business_id
+      id
+      url
+    }
+  }
+`;

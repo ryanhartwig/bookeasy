@@ -5,9 +5,11 @@ import { NewBusiness } from '@/types/Business';
 import { useCallback, useEffect, useState } from 'react';
 import { formatPrefPeriod } from '@/utility/functions/formatting/formatPrefPeriod';
 import { PeriodSelectForm } from './PeriodSelectForm';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQueries';
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
+import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
+import { BookingSite } from '@/types/BookingSite';
 
 interface BookingSitePrefsProps {
   business: NewBusiness,
@@ -20,6 +22,9 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const [initialValue, setInitialValue] = useState<number>();
   const [total, setTotal] = useState<number>();
   const [updateProperty, setUpdateProperty] = useState<string>('');
+  const [bookingSite, setBookingSite] = useState<BookingSite>();
+
+  const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: business.booking_site_id }, skip: !business.booking_site_id });
 
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: !userBusinessId ? [] : [{
@@ -65,11 +70,15 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
     setUpdateProperty(property);
   }, []);
 
+  
+
   return (
     <div className={styles.BookingSitePrefs}>
       <div className={styles.header}>
         <p>Booking Site Preferences</p>
       </div>
+
+      
       <div className={styles.settings}>
         <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice ?? '0', 'min_booking_notice')} >
           <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
