@@ -12,6 +12,7 @@ import { CREATE_BOOKING_SITE, GET_BOOKING_SITE } from '@/utility/queries/booking
 import { BookingSite } from '@/types/BookingSite';
 import { Button } from '../UI/Button/Button';
 import { CgWebsite } from 'react-icons/cg';
+import { BookingSiteOverview } from './BookingSiteOverview';
 interface BookingSitePrefsProps {
   business: NewBusiness,
   userBusinessId?: string,
@@ -93,6 +94,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
       {
         bookingSite 
           ? <div className={styles.settings}>
+              <BookingSiteOverview />
               <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice ?? '0', 'min_booking_notice')} >
                 <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
               </Setting>

@@ -282,6 +282,15 @@
   font-size: 14px;
 }
 
+.bookingSiteOverview {
+  background-color: white;
+  width: 100%;
+  min-height: 50px;
+  border-radius: 10px;
+  box-shadow: 0 5px 12px -8px rgba(128, 128, 128, 0.7);
+  margin: 5px 0;
+}
+
 .durationSelect {
   display: flex;
   justify-content: space-between;
