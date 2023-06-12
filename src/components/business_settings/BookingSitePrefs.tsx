@@ -10,9 +10,8 @@ import { GET_BUSINESS, UPDATE_BUSINESS_PREFS } from '@/utility/queries/businessQ
 import { GET_USER_BUSINESSES_FRAGMENT } from '@/utility/queries/fragments/userFragments';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { BookingSite } from '@/types/BookingSite';
-import { TextButton } from '../UI/TextButton/TextButton';
 import { Button } from '../UI/Button/Button';
-
+import { CgWebsite } from 'react-icons/cg';
 interface BookingSitePrefsProps {
   business: NewBusiness,
   userBusinessId?: string,
@@ -98,7 +97,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
               }
             </div> 
           : <div className={styles.createBookingSite}>
-            <Button fontSize={12} >Create Booking Site</Button>
+            <Button light icon={<CgWebsite />} fontSize={12} >Create Booking Site</Button>
           </div> 
       }
       
