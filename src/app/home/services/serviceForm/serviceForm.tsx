@@ -306,9 +306,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
         <p>Duration</p>
         <div className={styles.durationSelect}>
-          <AiOutlineMinusCircle onClick={() => setDuration(p => p === 15 ? p : p - 15)} />
+          <AiOutlineMinusCircle onClick={() => setDuration(p => p === 15 ? p : p - 15)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setDuration(p => p === 15 ? p : p - 15)} />
           <p>{duration > 45 && `${Math.floor(duration / 60)} hr${Math.floor(duration / 60) > 1 ? 's' : ''}`} {duration % 60} mins</p>
-          <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} />
+          <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setDuration(p => p === 720 ? p : p + 15)} />
         </div>
         {initialService && duration !== initialService.duration && (
           <div className={styles.updateAppointment}>
@@ -327,7 +327,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
         <p>Service Color</p>
         <div className={styles.colorSelect}>
-          <GiRollingDices fontSize={34} onClick={() => setColor(getRandomHexColor([234, 6])!)} />
+          <GiRollingDices fontSize={34} onClick={() => setColor(getRandomHexColor([234, 6])!)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setColor(getRandomHexColor([234, 6])!)} />
           <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} style={{cursor: 'pointer'}} />
         </div>
 
