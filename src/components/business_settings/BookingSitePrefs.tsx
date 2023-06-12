@@ -94,7 +94,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
       {
         bookingSite 
           ? <div className={styles.settings}>
-              <BookingSiteOverview />
+              <BookingSiteOverview bookingSiteId={bookingSite.id} />
               <Setting label="Minimum Book Ahead" onEditOverride={() => onEdit(business.min_booking_notice ?? '0', 'min_booking_notice')} >
                 <p>{Number(business.min_booking_notice) ? formatPrefPeriod(Number(business.min_booking_notice)).text : 'None'}</p>
               </Setting>
