@@ -109,8 +109,8 @@ export const UPDATE_BUSINESS_PREFS = gql`
 `;
 
 export const NEW_BUSINESS = gql`
-  mutation($name: String!, $userId: String!) {
-    newBusiness(name: $name, user_id: $userId) {
+  mutation($name: String!, $userId: String!, $avatar: String) {
+    newBusiness(name: $name, user_id: $userId, avatar: $avatar) {
       ...BusinessFragment
     }
   }
