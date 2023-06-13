@@ -287,7 +287,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const staffList = useMemo(() => 
     staffData?.getBusiness ? staffData.getBusiness.staff
-      // .filter(s => selectedService.assi)
+      .filter((s: any) => !!selectedService?.assigned_staff.find((serviceStaff) => serviceStaff.id === s.id))
       .map((s: AssignedStaff) => (
         <div key={s.id} className={styles.option} onClick={() => setSelectedStaff(s)}>
           <Avatar src={s.avatar} size={28} />
@@ -295,7 +295,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         </div>
       )) 
     : []
-  , [staffData]);
+  , [selectedService?.assigned_staff, staffData?.getBusiness]);
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
