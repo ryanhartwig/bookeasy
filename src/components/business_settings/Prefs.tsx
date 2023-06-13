@@ -122,7 +122,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
 
       <BookingSitePrefs business={business} isTeams userBusinessId={userBusinessId} />
 
-      {userId === business.creator_id && (
+      {userId === business.creator_id && isTeams && (
         <>
         <div className={styles.header}>
           <p>Additional Settings</p>
