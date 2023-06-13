@@ -64,7 +64,8 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[selectedClient, setSelectedClient], [selectedService, setSelectedService], [selectedStaff, setSelectedStaff]], // second chunk, resets when first updates
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
+    [[selectedStaff, setSelectedStaff]],
   ], undefined, !!initialClientBusiness);
 
   // Not returning userData
@@ -80,7 +81,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
 
   // Preselect staff if userId is provided
-  useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
+  // useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
@@ -286,6 +287,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const staffList = useMemo(() => 
     staffData?.getBusiness ? staffData.getBusiness.staff
+      // .filter(s => selectedService.assi)
       .map((s: AssignedStaff) => (
         <div key={s.id} className={styles.option} onClick={() => setSelectedStaff(s)}>
           <Avatar src={s.avatar} size={28} />
@@ -326,16 +328,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             </div>
           )} hasSelected={!!selectedBusiness}/>
         </>}
-
-        {!userId && <>
-          <p>Select Staff Member</p>
-          <Select list={staffList} selected={(
-            <div className={styles.selectedOption} style={{left: 0}}>
-              <Avatar src={selectedStaff?.avatar} size={26} />
-              <p>{selectedStaff?.name}</p>
-            </div>
-          )} hasSelected={!!selectedStaff} />
-        </>}
         
         {!fromClientForm && !initialAppointment && <>
           <p>Select a client</p>
@@ -354,6 +346,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             <p>{selectedService?.name}</p>
           </div>
         )}/>
+
+        {/* {!userId && <> */}
+        <p>Select Staff Member</p>
+          <Select disabled={!selectedService} list={staffList} selected={(
+            <div className={styles.selectedOption} style={{left: 0}}>
+              <Avatar src={selectedStaff?.avatar} size={26} />
+              <p>{selectedStaff?.name}</p>
+            </div>
+          )} hasSelected={!!selectedStaff} />
+        {/* </>} */}
         
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />

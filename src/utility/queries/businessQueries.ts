@@ -47,6 +47,11 @@ export const GET_BUSINESS_SERVICES_FORM = gql`
       cost
       duration
       deleted
+      assigned_staff {
+        name
+        id
+        avatar
+      }
     }
   }
 `;

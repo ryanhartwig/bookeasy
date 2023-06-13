@@ -21,6 +21,7 @@ export interface FormService {
   cost: number,
   duration: number,
   deleted: boolean,
+  assigned_staff: { name: string, id: string, avatar: string | null }[],
 }
 
 export interface ServiceInput {
