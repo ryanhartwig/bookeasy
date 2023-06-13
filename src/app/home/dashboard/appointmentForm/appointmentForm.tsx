@@ -7,7 +7,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { AppointmentData, AppointmentInput } from "@/types/Appointment"
 import { FormBusiness, NewBusiness } from "@/types/Business"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 import { BsFillCameraVideoFill, BsTrash3 } from 'react-icons/bs';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
@@ -65,8 +65,21 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
     [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
-    [[selectedStaff, setSelectedStaff]],
   ], undefined, !!initialClientBusiness);
+
+  // Reset staff - buffer against prepopulating state change one time when editing appointment
+  const finishedPrepopulating = useRef(false);
+  useEffect(() => {
+    if (prepopulating) return;
+    else {
+      if (!finishedPrepopulating.current) {
+        finishedPrepopulating.current = true;
+        return;
+      }
+    }
+    
+    setSelectedStaff(undefined);
+  }, [prepopulating, selectedService]);
 
   // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }, skip: !userId}); 
@@ -102,9 +115,14 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
     setSelectedClient(clientsData.getBusinessClients.find((c: FormClient) => c.id === initialAppointment.client.id));
     setSelectedService(servicesData.getBusinessServices.find((s: FormService) => s.id === initialAppointment.service.id));
-    setPrepopulating(false);
   }, [clientsData, initialAppointment, prepopulating, servicesData]);
+  useEffect(() => {
+    if (!prepopulating || !initialAppointment) return;
+    if (!staffData) return;
 
+    setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.id === initialAppointment.staff.id));
+    setPrepopulating(false);
+  }, [initialAppointment, prepopulating, staffData]);
 
   // Prepopulate client & business data if booking a new appointment in clients view
   useEffect(() => {
