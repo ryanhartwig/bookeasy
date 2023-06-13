@@ -1,5 +1,5 @@
 import db from "@/utility/db";
-import uuid from "react-uuid";
+import { generateRandomUUID } from "@/utility/functions/misc/generateRandomUUID";
 
 export const bookingSiteResolvers = {
   Query: {
@@ -11,7 +11,7 @@ export const bookingSiteResolvers = {
   Mutation: {
     createBookingSite: async (_: any, args: any) => {
       const { business_id } = args;
-      const id = uuid();
+      const id = generateRandomUUID();
       
       const response = await db.query(`
         insert into booking_site (id, url, business_id) 
