@@ -24,6 +24,7 @@ export const BookingSiteOverview: React.FC<BookingSiteOverviewProps> = ({ bookin
     ;(async () => {
       await navigator.clipboard.writeText(url);
       setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
     })();
   }, [url]);
   
