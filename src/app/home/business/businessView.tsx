@@ -18,7 +18,7 @@ export const BusinessView = () => {
   const [patchUser] = useMutation(PATCH_USER, { refetchQueries: [ GET_USER ]});
   useEffect(() => {
     if (loadingUserData || userData?.getUser?.business_id) return;
-    const user = userData.getUser;
+    const user = userData?.getUser;
 
     ;(async () => {
       const { data: businessData } = await createBusiness({ variables: { name: user.name, userId: user.id, avatar: user.avatar }});

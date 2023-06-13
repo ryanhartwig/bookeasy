@@ -292,7 +292,20 @@
   
   display: flex;
   align-items: center;
-  padding: 5px;
+  justify-content: space-between;
+  padding: 5px 15px;
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .path {
+    font-weight: 300;
+    color: rgba(128, 128, 128, 0.8);
+    font-size: 12px;
+    margin-right: 3px;
+  }
 }
 
 .durationSelect {
