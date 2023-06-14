@@ -107,19 +107,19 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setIsPaid(initialAppointment.is_paid);
   }, [initialAppointment, prepopulating]);
   useEffect(() => {
-    if (!prepopulating || !initialAppointment) return;
+    if (!prepopulating || !initialAppointment || !selectedBusiness) return;
     if (!clientsData || !servicesData) return;
 
     setSelectedClient(clientsData.getBusinessClients.find((c: FormClient) => c.id === initialAppointment.client.id));
     setSelectedService(servicesData.getBusinessServices.find((s: FormService) => s.id === initialAppointment.service.id));
-  }, [clientsData, initialAppointment, prepopulating, servicesData]);
+  }, [clientsData, initialAppointment, prepopulating, selectedBusiness, servicesData]);
   useEffect(() => {
-    if (!prepopulating || !initialAppointment) return;
+    if (!prepopulating || !initialAppointment || !selectedService) return;
     if (!staffData) return;
 
     setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.id === initialAppointment.staff.id));
     setPrepopulating(false);
-  }, [initialAppointment, prepopulating, staffData]);
+  }, [initialAppointment, prepopulating, selectedService, staffData]);
 
   // Prepopulate client & business data if booking a new appointment in clients view
   useEffect(() => {
@@ -230,6 +230,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   });
 
+  // Reset state on form submit
   useEffect(() => {
     if (!appMutationData || appMutationLoading) return;
     if (appMutationError) {
