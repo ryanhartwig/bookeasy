@@ -7,7 +7,9 @@ export const useCalendarNavigation = () => {
   const today = new Date();
   const initDate = new Date();
   initDate.setDate(1);
+  
   initDate.setDate(initDate.getDay() * -1);
+  
 
   const [startDate, setStartDate] = useState<Date>(initDate);
 
@@ -19,7 +21,7 @@ export const useCalendarNavigation = () => {
     month: today.getMonth(),
     year: today.getFullYear(),
   });
-
+  
   // On selecting day
   const onSelect = useCallback(([min, max]: [number, number]) => {
     setSelected([min, max]);
@@ -50,12 +52,17 @@ export const useCalendarNavigation = () => {
       month: newDate.getMonth(),
       year: newDate.getFullYear(),
     })
+    
 
     newDate.setDate(1);
-    const selectedDate = new Date(newDate);
+    const selectedDate = new Date(newDate); // set selected to first day of month when navigating forward
+    console.log('get day: ', newDate.getDay())
+    console.log('get day * -1: ', newDate.getDay() * -1)
+
     newDate.setDate(newDate.getDay() * -1);
 
     setStartDate(newDate);
+    console.log('full date: ', newDate);
 
     if (n === 2) {
       setSelected(getDayRange(selectedDate));
@@ -63,7 +70,7 @@ export const useCalendarNavigation = () => {
     if (n === 0) {
       selectedDate.setMonth(selectedDate.getMonth() + 1);
       selectedDate.setDate(1);
-      selectedDate.setDate(selectedDate.getDate() - 1);
+      selectedDate.setDate(selectedDate.getDate() - 1); // set selected to last day of month when navigating backward
       setSelected(getDayRange(selectedDate));
     }
   }, [startDate]);
