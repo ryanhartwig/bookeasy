@@ -4,7 +4,9 @@ import uuid from "react-uuid";
 
 export const businessResolvers = {
   Query: {
-    getBusiness: async (_: any, args: any) => {
+    getBusiness: async (_: any, args: any, ctx: any) => {
+      ctx.use_hidden_avatar = !!args.use_hidden_avatar;
+
       const response = await db.query('select * from business where id = $1', [args.business_id]);
       if (!response.rows[0]) throw new GraphQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
@@ -58,15 +60,34 @@ export const businessResolvers = {
     },
   },
   Business: {
-    staff: async (parent: any) => {
-      const response = await db.query(`
+    staff: async (parent: any, args: any) => {
+      console.log('args: ', args);
+      
+      let query = `
         select s.*, u.avatar 
         from staff s
         left join registered_user u
         on s.registered_user_id = u.id
         where s.business_id = $1
         and deleted = false
-      `, [parent.id]);
+      `;
+      
+      if (args.use_hidden_avatar) {
+        query = `
+          select s.*, 
+            case 
+              when up.private_photo = true then null 
+              else u.avatar 
+            end as avatar
+          from staff s
+          left join registered_user u ON s.registered_user_id = u.id
+          left join user_prefs up ON u.id = up.registered_user_id
+          where s.business_id = $1
+            and s.deleted = false;
+        `;
+      }
+      
+      const response = await db.query(query, [parent.id]);
       return response.rows;
     }
   },

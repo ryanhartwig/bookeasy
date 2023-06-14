@@ -30,8 +30,6 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
   const redirect = useRouter()
 
   const onSubmit = useCallback(() => {
-    console.log(email);
-    console.log(isValidEmail(email));
     setError('');
     if (!email || !password || !isValidEmail(email)) {
       (!email || !isValidEmail(email)) && setEmailError('Please enter a valid email address');

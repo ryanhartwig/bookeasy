@@ -63,11 +63,11 @@ export const GET_BUSINESS_SERVICES = gql`
     }
   }
 `;
-
+``
 export const GET_BUSINESS_STAFF = gql`
-  query($businessId: ID!) {
+  query($businessId: ID!, $useHiddenAvatar: Boolean) {
     getBusiness(business_id: $businessId) {
-      staff {
+      staff(use_hidden_avatar: $useHiddenAvatar) {
         date_added
         elevated
         id

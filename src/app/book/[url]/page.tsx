@@ -66,7 +66,7 @@ export default function Page({params}: { params: any }) {
   // Form data
   const { data: servicesData, loading: loadingServicesData} = useQuery(GET_BUSINESS_SERVICES, { variables: { businessId: business?.id }, skip: !business });
   useEffect(() => servicesData && setServices(servicesData.getBusinessServices), [businessData, servicesData]);
-  const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id }, skip: !business });
+  const { data: staffData, loading: loadingStaffData} = useQuery(GET_BUSINESS_STAFF, { variables: { businessId: business?.id, useHiddenAvatar: true }, skip: !business });
   useEffect(() => staffData && setStaff(staffData.getBusiness.staff), [staffData]);
 
   const initialLoading = useMemo(() => loadingBookingSiteData || loadingBusinessData || loadingUserData, [loadingBookingSiteData, loadingBusinessData, loadingUserData]);

@@ -92,7 +92,7 @@ export const types = `#graphql
     creator_id: String!,
     website_url: String,
     bio: String,
-    staff: [Staff!]!,
+    staff(use_hidden_avatar: Boolean): [Staff!]!,
   }
 
   type AvailabilitySlice {
