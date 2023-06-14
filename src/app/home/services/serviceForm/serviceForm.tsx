@@ -87,12 +87,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
   // Prepopulate assignee field if it's a user's own business
   useEffect(() => {
-    if (!isOwnBusiness || !staff.length) return;
+    if (!isOwnBusiness || !staff.length || !selectedBusiness) return;
 
     const staffMap = new Map()
     staffMap.set(staff[0].id, staff[0]);
     setAssignedStaff(staffMap)
-  }, [staff, isOwnBusiness]);
+  }, [staff, isOwnBusiness, selectedBusiness]);
 
   // Prepopulate if editing
   useEffect(() => {
