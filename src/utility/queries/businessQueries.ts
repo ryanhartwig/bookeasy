@@ -65,9 +65,9 @@ export const GET_BUSINESS_SERVICES = gql`
 `;
 ``
 export const GET_BUSINESS_STAFF = gql`
-  query($businessId: ID!, $useHiddenAvatar: Boolean) {
+  query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
-      staff(use_hidden_avatar: $useHiddenAvatar) {
+      staff {
         date_added
         elevated
         id

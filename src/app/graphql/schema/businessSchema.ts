@@ -60,9 +60,7 @@ export const businessResolvers = {
     },
   },
   Business: {
-    staff: async (parent: any, args: any) => {
-      console.log('args: ', args);
-      
+    staff: async (parent: any) => {
       let query = `
         select s.*, u.avatar 
         from staff s
@@ -71,22 +69,6 @@ export const businessResolvers = {
         where s.business_id = $1
         and deleted = false
       `;
-      
-      if (args.use_hidden_avatar) {
-        query = `
-          select s.*, 
-            case 
-              when up.private_photo = true then null 
-              else u.avatar 
-            end as avatar
-          from staff s
-          left join registered_user u ON s.registered_user_id = u.id
-          left join user_prefs up ON u.id = up.registered_user_id
-          where s.business_id = $1
-            and s.deleted = false;
-        `;
-      }
-      
       const response = await db.query(query, [parent.id]);
       return response.rows;
     }

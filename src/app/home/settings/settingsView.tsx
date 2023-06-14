@@ -90,13 +90,13 @@ export const SettingsView = () => {
             </Setting>
           </div>
 
-          <SectionLabel label="Privacy Settings" className={styles.label} />
+          {/* <SectionLabel label="Privacy Settings" className={styles.label} />
           <div className={styles.setting_block}>
             <Setting label='Hide my profile picture on booking sites' 
               toggleState={user.prefs.private_photo} 
               onSave={() => onPatchPrefs('private_photo', !user.prefs!.private_photo)}
             />
-          </div>
+          </div> */}
 
           <SectionLabel label="Notification Settings (Coming soon)" className={styles.label} />
           <div className={clsx(styles.setting_block, styles.disabled)}>
