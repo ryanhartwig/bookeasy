@@ -61,7 +61,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-
+                
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
     [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
@@ -92,9 +92,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   useEffect(() => availabilityData && setAvailability(availabilityData.getUserAvailability), [availabilityData, loadingAvailability]);
   useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
-
-  // Preselect staff if userId is provided
-  // useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {

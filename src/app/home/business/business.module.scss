@@ -131,6 +131,11 @@
   background: #F8F8F8
 }
 
+.setting {
+  overflow: auto;
+  max-height: 100%;
+}
+
 .loadingAvatar {
   border-radius: 50%;
   margin: 15px;
