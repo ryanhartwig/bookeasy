@@ -4,7 +4,9 @@ import uuid from "react-uuid";
 
 export const businessResolvers = {
   Query: {
-    getBusiness: async (_: any, args: any) => {
+    getBusiness: async (_: any, args: any, ctx: any) => {
+      ctx.use_hidden_avatar = !!args.use_hidden_avatar;
+
       const response = await db.query('select * from business where id = $1', [args.business_id]);
       if (!response.rows[0]) throw new GraphQLError(`No business found for id: ${args.business_id}`);
       return response.rows[0];
@@ -59,14 +61,15 @@ export const businessResolvers = {
   },
   Business: {
     staff: async (parent: any) => {
-      const response = await db.query(`
+      let query = `
         select s.*, u.avatar 
         from staff s
         left join registered_user u
         on s.registered_user_id = u.id
         where s.business_id = $1
         and deleted = false
-      `, [parent.id]);
+      `;
+      const response = await db.query(query, [parent.id]);
       return response.rows;
     }
   },
@@ -88,14 +91,14 @@ export const businessResolvers = {
       return response.rows[0];
     },
     newBusiness: async (_: any, args: any) => {
-      const { name, user_id } = args;
+      const { name: businessName, user_id } = args;
       const created = new Date().toISOString();
       const response = await db.query(`
-        insert into business (id, name, created, creator_id)
+        insert into business (id, name, created, creator_id, avatar)
         values (
-          $1, $2, $3, $4
+          $1, $2, $3, $4, $5
         ) returning *
-      `, [uuid(), name, created, user_id]);
+      `, [uuid(), businessName, created, user_id, args.avatar || null]);
 
       // Add entry to staff mapping table
       await db.query(`
@@ -127,6 +130,7 @@ export const businessTypeDefs = `#graphql
     min_cancel_notice: String,
     bio: String,
     website_url: String,
+    booking_site_id: String,
   }
 
   type Query {
@@ -138,7 +142,7 @@ export const businessTypeDefs = `#graphql
 
   type Mutation {
     updateBusinessPrefs(business_id: ID!, patch: BusinessPrefsInput): Business!,
-    newBusiness(name: String!, user_id: String!): Business!,
+    newBusiness(name: String!, user_id: String!, avatar: String): Business!,
     removeBusiness(business_id: String!): String!,
   }
 `;

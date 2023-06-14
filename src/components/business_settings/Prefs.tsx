@@ -12,6 +12,7 @@ import { BookingSitePrefs } from './BookingSitePrefs';
 import styles from './tabs.module.scss';
 import { CiWarning } from 'react-icons/ci';
 import { Input } from '../UI/Input/Input';
+import { useUser } from '@/app/Providers';
 
 interface PrefsProps {
   business: NewBusiness,
@@ -21,6 +22,7 @@ interface PrefsProps {
 }
 
 export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, elevated}) => {
+  const { id: userId } = useUser();
 
   const [value, setValue] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -120,16 +122,7 @@ export const Prefs: React.FC<PrefsProps> = ({business, userBusinessId, isTeams, 
 
       <BookingSitePrefs business={business} isTeams userBusinessId={userBusinessId} />
 
-      <div className={styles.header}>
-        <p>Bio</p>
-      </div>
-      <div className={styles.settings}>
-        <Setting label='Booking Site Bio' placeholder='Bio' value={value} setValue={setValue} onSave={() => onSave('bio')} onRemove={business.bio ? () => onSave('bio', null) : undefined}>
-          <p style={{width: '50%', overflow: 'hidden'}}>{business.bio ?? 'None'}</p>
-        </Setting>
-      </div>
-
-      {isTeams && elevated && (
+      {userId === business.creator_id && isTeams && (
         <>
         <div className={styles.header}>
           <p>Additional Settings</p>

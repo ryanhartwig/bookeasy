@@ -99,4 +99,8 @@
  overflow: hidden;
  background: white;
  box-shadow: var(--ds);
+
+ > * {
+  max-width: 1550px;
+ }
 }

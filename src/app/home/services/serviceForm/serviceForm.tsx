@@ -55,7 +55,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   const { data: userBusinessesData, loading: loadingUserBusinessesData } = useQuery(GET_USER_BUSINESSES, { variables: { userId }}); 
   const { data: staffData, loading: loadingStaffData } = useQuery(GET_BUSINESS_FORM_STAFF, { variables: { businessId: selectedBusiness?.id }, skip: !selectedBusiness}); 
 
-  useEffect(() => setAssignedStaff(new Map()), [selectedBusiness]);
+  // Reset assigned staff when changing selected team (only in service create form)
+  useEffect(() => {!initialService?.business_id && setAssignedStaff(new Map())}, [initialService?.business_id, selectedBusiness]);
 
   useEffect(() => {
     if (!staffData || loadingStaffData) return;
@@ -70,19 +71,19 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   // Clear fields on closing form
   useEffect(() => {
     if (open) return;
-    setSelectedBusiness(undefined);
+    setSelectedBusiness(businessId ? businesses.find(b => b.id === businessId) : undefined);
     setName('');
     setCost('0');
     setDuration(30);
     setColor('#1934b8');
     setIsVideo(false);
-  }, [open]);
+  }, [businessId, businesses, open]);
 
   // Prepopulate business field if provided (from teams / business view)
   useEffect(() => {
-    if (!businessId || !userBusinessesData || !businesses) return;
+    if (!businessId || !businesses) return;
     setSelectedBusiness(businesses.find(b => b.id === businessId))
-  }, [businessId, businesses, userBusinessesData]);
+  }, [businessId, businesses]);
 
   // Prepopulate assignee field if it's a user's own business
   useEffect(() => {
@@ -305,9 +306,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
         <p>Duration</p>
         <div className={styles.durationSelect}>
-          <AiOutlineMinusCircle onClick={() => setDuration(p => p === 15 ? p : p - 15)} />
+          <AiOutlineMinusCircle onClick={() => setDuration(p => p === 15 ? p : p - 15)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setDuration(p => p === 15 ? p : p - 15)} />
           <p>{duration > 45 && `${Math.floor(duration / 60)} hr${Math.floor(duration / 60) > 1 ? 's' : ''}`} {duration % 60} mins</p>
-          <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} />
+          <AiOutlinePlusCircle onClick={() => setDuration(p => p === 720 ? p : p + 15)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setDuration(p => p === 720 ? p : p + 15)} />
         </div>
         {initialService && duration !== initialService.duration && (
           <div className={styles.updateAppointment}>
@@ -326,14 +327,14 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
 
         <p>Service Color</p>
         <div className={styles.colorSelect}>
-          <GiRollingDices fontSize={34} onClick={() => setColor(getRandomHexColor([234, 6])!)} />
+          <GiRollingDices fontSize={34} onClick={() => setColor(getRandomHexColor([234, 6])!)} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setColor(getRandomHexColor([234, 6])!)} />
           <Input type='color' placeholder='120' value={color} onChange={(e) => setColor(e.target.value)} style={{cursor: 'pointer'}} />
         </div>
 
-        <div className={styles.ispaid}>
+        {/* <div className={styles.ispaid}>
           <label htmlFor='ispaid'>Is Video Service</label>
           <Input id='ispaid' type='checkbox' checked={isVideo} onChange={(e) => setIsVideo(e.target.checked)} />  
-        </div>
+        </div> */}
       </div>
       <hr />
       {error && <p className={styles.warning}>{error}</p>}

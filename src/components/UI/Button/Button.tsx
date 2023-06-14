@@ -8,9 +8,10 @@ interface ButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
   children?: React.ReactNode,
   loading?: boolean,
   light?: boolean,
+  fontSize?: string | number,
 }
 
-export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, light = false, ...props}) => {
+export const Button: React.FC<ButtonProps> = ({icon, fontSize = 14, children, loading = false, light = false, ...props}) => {
   
   return (
     <div {...props} 
@@ -19,7 +20,7 @@ export const Button: React.FC<ButtonProps> = ({icon, children, loading = false, 
       className={clsx(styles.button, props.className ?? '', {[styles.loading]: loading}, {[styles.light]: light})}
     >
       {icon && <div>{icon}</div>}
-      <p>{children}</p>
+      <p style={{fontSize}}>{children}</p>
       {loading && <Spinner style={{position: 'absolute', left: 'calc(100% + 15px)'}} />}
     </div>
   )

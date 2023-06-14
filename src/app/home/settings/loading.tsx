@@ -29,20 +29,7 @@ export default function Loading({skipHeader = false}: {skipHeader?: boolean}) {
               <LoadingDots style={{padding: 4}} />
             </Setting>
           </div>
-
-          <SectionLabel label="Privacy Settings" className={styles.label} />
-          <div className={styles.setting_block}>
-            <Setting label='Hide my profile picture on booking sites' 
-              toggleState={false} 
-            />
-            <Setting label='Hide my email on booking sites' 
-              toggleState={false} 
-            />
-            <Setting label='Hide my phone number on booking sites' 
-              toggleState={false} 
-            />
-          </div>
-
+          
           <SectionLabel label="Notification Settings" className={styles.label} />
           <div className={styles.setting_block}>
             <Setting label='Receive email notification when an appointment is booked or cancelled' 

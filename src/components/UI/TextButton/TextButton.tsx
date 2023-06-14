@@ -10,6 +10,7 @@ interface TextButtonProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElemen
   colorOverride?: string,
   backgroundColorOverride?: string,
   icon?: JSX.Element,
+  disabled?: boolean,
 }
 
 export const TextButton = forwardRef<HTMLDivElement, TextButtonProps>(({
@@ -19,6 +20,7 @@ export const TextButton = forwardRef<HTMLDivElement, TextButtonProps>(({
   backgroundColorOverride,
   fontSize,
   altColor = false,
+  disabled = false,
   ...props
 }, ref) => {
   const color = altColor ? '#ff462d' : '#216FDB';
@@ -27,16 +29,18 @@ export const TextButton = forwardRef<HTMLDivElement, TextButtonProps>(({
   return (
     <div
       {...props}
+      onClick={undefined}
       ref={ref}
-      className={clsx(styles.action, props.className || '')}
-      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()}
-      tabIndex={0}
+      className={clsx(styles.action, props.className || '', {[styles.disabled]: disabled})}
     >
       <div
         style={{
           color: colorOverride ?? color,
           backgroundColor: backgroundColorOverride ?? backgroundColor
         }}
+        onClick={(e) => !disabled && props.onClick && props.onClick(e)}
+        onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()}
+        tabIndex={0}
       >
         {icon && <div className={styles.icon}>{icon}</div>}
         <p style={{ fontSize }}>{children}</p>

@@ -72,7 +72,6 @@ export const authOptions: NextAuthOptions = {
               insert into federated_credentials (provider, registered_user_id, email, provider_id)
               values ($1, $2, $3, $4)
             `, [account.provider, id, email, provider_id]);
-
             await db.query('commit');
             return true; // Allow user sign in
           } catch(e) {

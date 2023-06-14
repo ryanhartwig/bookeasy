@@ -1,5 +1,6 @@
 'use client';
 
+import { Spinner } from "@/components/UI/Spinner/Spinner";
 import { useSession } from "next-auth/react";
 import { redirect, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -19,7 +20,7 @@ export default function Page() {
   }
 
   if (status === 'loading') {
-    return <></>
+    return <Spinner />
   }
 
   return (

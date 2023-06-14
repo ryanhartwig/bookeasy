@@ -7,19 +7,11 @@ export const getDayRange = (d: Date | number = new Date()): [number, number] => 
   const date = new Date(d);
 
   // Set to very start of provided day
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-
+  date.setHours(0, 0, 0, 0)
   const start = date.getTime();
 
   // Set to very end of provided day
-  date.setHours(23);
-  date.setMinutes(59);
-  date.setSeconds(59);
-  date.setMilliseconds(999);
-
+  date.setHours(23, 59, 59, 999);
   const end = date.getTime();
 
   return [start, end];

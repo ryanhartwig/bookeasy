@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
 import * as bookit from '@/assets/logo_temp.svg';
+import { LoadingSplash } from '@/components/UI/LoadingSplash/LoadingSplash';
 
 interface LoginProps {
   url: string
@@ -17,6 +18,7 @@ export const Login: React.FC<LoginProps> = ({url}) => {
   
   return (
   <div className={styles.background}>
+    <LoadingSplash />
     <div className={styles.loginForm}>
       <div className={styles.formTitle}>
         <hr />

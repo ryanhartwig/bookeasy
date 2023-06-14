@@ -38,22 +38,12 @@
 
   }
 
-  > div:last-child {
+  .infoWrapper {
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
 
-    .edit {
-      cursor: pointer;
-      font-size: 12px;
-
-      transition: opacity 200ms;
-      &:hover {
-        opacity: 1;
-        text-decoration: underline;
-      }
-    }
   }
 }
 
@@ -64,4 +54,34 @@
   font-size: 12px !important;
 
   color: rgb(174, 84, 39);
+}
+
+.confirm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  
+  padding: 10px;
+
+  
+
+  > * {
+    margin: 3px 0;
+  }
+
+  .warning {
+    margin: 5px 0;
+    color: red;
+    font-size: 19px;
+  }
+
+  > p:nth-of-type(2n - 1) {
+    font-size: 14px;
+    color: grey;
+  }
+  > p:nth-of-type(2n) {
+    margin: 8px 0;
+    font-size: 16px;
+    color: black;
+  }
 }

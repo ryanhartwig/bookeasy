@@ -11,14 +11,17 @@ export const Header: React.FC<HeaderProps> = ({text, loading = false}) => {
 
   return (
     <div className={clsx(styles.header, {[styles.loading]: loading})}>
-      {loading && <div className={styles.loadingTrack}>
-        <span />
-      </div>}
-      <div className={styles.title}>
-        <h2>{text}</h2>
-        {loading && <Spinner style={{marginLeft: 10}} size={12} />}
+      <div className={styles.headerContent}>
+        {loading && <div className={styles.loadingTrack}>
+          <span />
+        </div>}
+
+        <div className={styles.title}>
+          <h2>{text}</h2>
+          {loading && <Spinner style={{marginLeft: 10}} size={12} />}
+        </div>
+        <Logout />
       </div>
-      <Logout />
     </div>
   )
 }

@@ -14,7 +14,7 @@ export const SelectService: React.FC<SelectServiceProps> = ({services, setSelect
     <div className={styles.selectService}>
       {services.filter(s => !s.deleted).map(s => (
         <div key={s.id}>
-          <ServiceCard key={s.id} service={s} onClick={() => {setSelected((p: any) => ({...p, service: s}))}} hideProvider />
+          <ServiceCard key={s.id} service={s} onClick={() => {setSelected((p: any) => ({...p, service: s}))}} hideProvider hideEdit />
         </div>
       ))}
     </div>

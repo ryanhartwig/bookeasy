@@ -17,6 +17,10 @@ export const APPOINTMENT_DATA_FRAGMENT = gql`
       id
       name
     }
+    staff {
+      id
+      name
+    }
     start_date
     end_date
     service_duration

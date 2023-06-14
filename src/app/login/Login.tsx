@@ -8,6 +8,7 @@ import Image from "next/image";
 import styles from './login.module.scss';
 import { Button } from "@/components/UI/Button/Button";
 import clsx from "clsx";
+import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 
 interface LoginProps {
   onNavigate: (...args: any) => any,
@@ -30,8 +31,8 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
 
   const onSubmit = useCallback(() => {
     setError('');
-    if (!email || !password) {
-      !email && setEmailError('Please enter your email address');
+    if (!email || !password || !isValidEmail(email)) {
+      (!email || !isValidEmail(email)) && setEmailError('Please enter a valid email address');
       !password && setPasswordError('Please enter your password');
       return;
     }

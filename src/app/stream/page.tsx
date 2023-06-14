@@ -8,8 +8,6 @@ export default function Page() {
   const [stream, setStream] = useState<MediaStream>();
   const [devices, setDevices] = useState<MediaDeviceInfo[]>();
 
-  console.log(devices);
-
   const updateDevices = useCallback(() => {
     ;(async () => {
       const devices = await navigator.mediaDevices.enumerateDevices();

@@ -10,9 +10,10 @@ interface ServiceCardProps {
   service: Service,
   onClick: (...args:any) => any,
   hideProvider?: boolean,
+  hideEdit?: boolean,
 }
 
-export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideProvider = false}) => {
+export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideProvider = false, hideEdit = false}) => {
    
   return (
     <div className={clsx(styles.service)} style={{borderLeftColor: service.color}} onClick={(e) => onClick && onClick(e)}>
@@ -25,18 +26,23 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({service, onClick, hideP
       <p>{service.duration} min</p>
       {!hideProvider && <p>{service.provider}</p>}
       <div className={styles.assignees}>
-        {service.assigned_staff.map(staff => 
+        {service.assigned_staff.slice(0, 8).map((staff, i) => 
           <div key={staff.id}>
-            <Avatar src={staff.avatar} size={26} />
-            <p className={styles.tooltip}>{staff.name}</p>
+            {i === 7 
+              ? <p style={{margin: '0px 0px 4px 7px'}}>...</p>
+              : <>
+                <Avatar src={staff.avatar} size={26} />
+                <p className={styles.tooltip}>{staff.name}</p>
+              </>
+            }
           </div>
         )}
       </div>
       <p>${service.cost.toFixed(2)}</p>
 
-      <div className={styles.edit}>
+      {!hideEdit && <div className={styles.edit}>
         <FiEdit2 />
-      </div>
+      </div>}
     </div>
   )
 }

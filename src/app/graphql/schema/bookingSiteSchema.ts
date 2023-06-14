@@ -1,17 +1,17 @@
 import db from "@/utility/db";
-import uuid from "react-uuid";
+import { generateRandomUUID } from "@/utility/functions/misc/generateRandomUUID";
 
 export const bookingSiteResolvers = {
   Query: {
     getBookingSite: async (_: any, args: any) => {
-      const response = await db.query('select * from booking_site where url = $1', [args.url]);
+      const response = await db.query('select * from booking_site where url = $1 or id = $2', [args.url, args.booking_site_id]);
       return response.rows[0];      
     },
   },
   Mutation: {
     createBookingSite: async (_: any, args: any) => {
       const { business_id } = args;
-      const id = uuid();
+      const id = generateRandomUUID();
       
       const response = await db.query(`
         insert into booking_site (id, url, business_id) 
@@ -33,7 +33,7 @@ export const bookingSiteTypeDefs = `#graphql
   }
 
   type Query {
-    getBookingSite(url: String!): BookingSite,
+    getBookingSite(url: String, booking_site_id: String): BookingSite,
   }
 
   type Mutation {

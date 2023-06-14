@@ -7,7 +7,7 @@ import { Modal } from "@/components/UI/Modal/Modal"
 import { Select } from "@/components/UI/Select/Select"
 import { AppointmentData, AppointmentInput } from "@/types/Appointment"
 import { FormBusiness, NewBusiness } from "@/types/Business"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { AppointmentActionCard } from "../appointmentActionCard"
 import { BsFillCameraVideoFill, BsTrash3 } from 'react-icons/bs';
 import { useWaterfall } from "@/utility/hooks/useWaterfall"
@@ -61,11 +61,25 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const [businesses, setBusinesses] = useState<NewBusiness[]>([]);
   const [prepopulating, setPrepopulating] = useState<boolean>(!!initialAppointment);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-
+                
   useWaterfall([
     [[selectedBusiness, setSelectedBusiness]], // first waterfall chunk
-    [[selectedClient, setSelectedClient], [selectedService, setSelectedService], [selectedStaff, setSelectedStaff]], // second chunk, resets when first updates
+    [[selectedClient, setSelectedClient], [selectedService, setSelectedService]], // second chunk, resets when first updates
   ], undefined, !!initialClientBusiness);
+
+  // Reset staff - buffer against prepopulating state change one time when editing appointment
+  const finishedPrepopulating = useRef(false);
+  useEffect(() => {
+    if (prepopulating) return;
+    else {
+      if (!finishedPrepopulating.current) {
+        finishedPrepopulating.current = true;
+        return;
+      }
+    }
+    
+    setSelectedStaff(undefined);
+  }, [prepopulating, selectedService]);
 
   // Not returning userData
   const { data: availabilityData, loading: loadingAvailability } = useQuery(GET_USER_AVAILABILITY, { variables: { userId }, skip: !userId}); 
@@ -78,9 +92,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   useEffect(() => availabilityData && setAvailability(availabilityData.getUserAvailability), [availabilityData, loadingAvailability]);
   useEffect(() => userBusinessesData && setBusinesses(userBusinessesData.getUserBusinesses), [userBusinessesData]);
-
-  // Preselect staff if userId is provided
-  useEffect(() => staffData && userId && setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.registered_user_id === userId)), [staffData, userId]);
 
   // Prepopulate data incrementally if editing an existing appointment
   useEffect(() => {
@@ -96,14 +107,19 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     setIsPaid(initialAppointment.is_paid);
   }, [initialAppointment, prepopulating]);
   useEffect(() => {
-    if (!prepopulating || !initialAppointment) return;
+    if (!prepopulating || !initialAppointment || !selectedBusiness) return;
     if (!clientsData || !servicesData) return;
 
     setSelectedClient(clientsData.getBusinessClients.find((c: FormClient) => c.id === initialAppointment.client.id));
     setSelectedService(servicesData.getBusinessServices.find((s: FormService) => s.id === initialAppointment.service.id));
-    setPrepopulating(false);
-  }, [clientsData, initialAppointment, prepopulating, servicesData]);
+  }, [clientsData, initialAppointment, prepopulating, selectedBusiness, servicesData]);
+  useEffect(() => {
+    if (!prepopulating || !initialAppointment || !selectedService) return;
+    if (!staffData) return;
 
+    setSelectedStaff(staffData.getBusiness.staff.find((s: Staff) => s.id === initialAppointment.staff.id));
+    setPrepopulating(false);
+  }, [initialAppointment, prepopulating, selectedService, staffData]);
 
   // Prepopulate client & business data if booking a new appointment in clients view
   useEffect(() => {
@@ -214,6 +230,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
     }
   });
 
+  // Reset state on form submit
   useEffect(() => {
     if (!appMutationData || appMutationLoading) return;
     if (appMutationError) {
@@ -286,6 +303,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
 
   const staffList = useMemo(() => 
     staffData?.getBusiness ? staffData.getBusiness.staff
+      .filter((s: any) => !!selectedService?.assigned_staff.find((serviceStaff) => serviceStaff.id === s.id))
       .map((s: AssignedStaff) => (
         <div key={s.id} className={styles.option} onClick={() => setSelectedStaff(s)}>
           <Avatar src={s.avatar} size={28} />
@@ -293,7 +311,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
         </div>
       )) 
     : []
-  , [staffData]);
+  , [selectedService?.assigned_staff, staffData?.getBusiness]);
 
   const servicesList = useMemo(() => servicesData?.getBusinessServices 
     ? servicesData.getBusinessServices 
@@ -326,16 +344,6 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             </div>
           )} hasSelected={!!selectedBusiness}/>
         </>}
-
-        {!userId && <>
-          <p>Select Staff Member</p>
-          <Select list={staffList} selected={(
-            <div className={styles.selectedOption} style={{left: 0}}>
-              <Avatar src={selectedStaff?.avatar} size={26} />
-              <p>{selectedStaff?.name}</p>
-            </div>
-          )} hasSelected={!!selectedStaff} />
-        </>}
         
         {!fromClientForm && !initialAppointment && <>
           <p>Select a client</p>
@@ -354,6 +362,16 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
             <p>{selectedService?.name}</p>
           </div>
         )}/>
+
+        {/* {!userId && <> */}
+        <p>Select Staff Member</p>
+          <Select disabled={!selectedService} list={staffList} selected={(
+            <div className={styles.selectedOption} style={{left: 0}}>
+              <Avatar src={selectedStaff?.avatar} size={26} />
+              <p>{selectedStaff?.name}</p>
+            </div>
+          )} hasSelected={!!selectedStaff} />
+        {/* </>} */}
         
         <p>Select date and time</p>
         <input type='date' value={date} onChange={(e) => setDate(e.target.value)} className={styles.dateInput} />

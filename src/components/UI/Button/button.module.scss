@@ -17,16 +17,15 @@
 
   // Light mode overrides
   &.light {
-    border-color: #cfcfcf;
-    p {
-      color: grey;
-      transition: color 200ms;
-    }
+    border-color: rgb(175, 175, 175);
+    color: rgb(116, 116, 116);
+    transition: color 200ms, border-color 200ms;
+
+    opacity: 1;
 
     &:hover {
-      p {
-        color: rgb(52, 52, 52);
-      }
+      color: rgb(70, 70, 70);
+      border-color: rgb(70, 70, 70);
     }
   }
 
@@ -44,10 +43,6 @@
     height: 100%;
     position: absolute;
     left: 8px;
-  }
-
-  p {
-    font-size: 14px;
   }
 
   &.loading {

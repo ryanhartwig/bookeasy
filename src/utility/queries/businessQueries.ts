@@ -47,6 +47,11 @@ export const GET_BUSINESS_SERVICES_FORM = gql`
       cost
       duration
       deleted
+      assigned_staff {
+        name
+        id
+        avatar
+      }
     }
   }
 `;
@@ -58,7 +63,7 @@ export const GET_BUSINESS_SERVICES = gql`
     }
   }
 `;
-
+``
 export const GET_BUSINESS_STAFF = gql`
   query($businessId: ID!) {
     getBusiness(business_id: $businessId) {
@@ -109,8 +114,8 @@ export const UPDATE_BUSINESS_PREFS = gql`
 `;
 
 export const NEW_BUSINESS = gql`
-  mutation($name: String!, $userId: String!) {
-    newBusiness(name: $name, user_id: $userId) {
+  mutation($name: String!, $userId: String!, $avatar: String) {
+    newBusiness(name: $name, user_id: $userId, avatar: $avatar) {
       ...BusinessFragment
     }
   }

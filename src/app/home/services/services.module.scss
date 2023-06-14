@@ -4,6 +4,12 @@
   height: calc(100% - var(--header-height));
   padding: 10px;
   position: relative;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.services_content {
+  max-width: 1550px;
 }
 
 .labels {
@@ -48,7 +54,7 @@
   transition: transform 200ms;
 
   &:hover {
-    transform: scaleY(1.1) scaleX(1.02);
+    transform: scaleY(1.06) scaleX(1.01);
   }
 
   &:hover .edit {
@@ -98,6 +104,10 @@
 
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+
+  max-height: 80%;
+
 
   > div {
     @include globalutil.tooltip;
