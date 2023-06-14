@@ -50,12 +50,12 @@ export const CalendarView = () => {
         {/* Year/Month Select */}
         <div className='Calendar-period noselect'>
           <div className='Calendar-period-month'>
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(0)} style={{borderRadius: '12px'}}>
+            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(-1)} style={{borderRadius: '12px'}}>
               <AiOutlineLeft size={15}/>
             </ReactIconButton> 
             <h2>{months[viewing.month]}</h2>
 
-            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(2)} style={{borderRadius: '12px'}}>
+            <ReactIconButton buttonSize='30px' onClick={() => onMonthSwitch(1)} style={{borderRadius: '12px'}}>
               <AiOutlineRight size={15}/>
             </ReactIconButton>
 
