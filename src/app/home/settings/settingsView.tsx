@@ -96,18 +96,10 @@ export const SettingsView = () => {
               toggleState={user.prefs.private_photo} 
               onSave={() => onPatchPrefs('private_photo', !user.prefs!.private_photo)}
             />
-            <Setting label='Hide my email on booking sites' 
-              toggleState={user.prefs.private_email} 
-              onSave={() => onPatchPrefs('private_email', !user.prefs!.private_email)}
-            />
-            <Setting label='Hide my phone number on booking sites' 
-              toggleState={user.prefs.private_phone} 
-              onSave={() => onPatchPrefs('private_phone', !user.prefs!.private_phone)}
-            />
           </div>
 
-          <SectionLabel label="Notification Settings" className={styles.label} />
-          <div className={styles.setting_block}>
+          <SectionLabel label="Notification Settings (Coming soon)" className={styles.label} />
+          <div className={clsx(styles.setting_block, styles.disabled)}>
             <Setting label='Receive email notification when an appointment is booked or cancelled' 
               toggleState={user.prefs.notification_booking} 
               onSave={() => onPatchPrefs('notification_booking', !user.prefs!.notification_booking)}
