@@ -329,6 +329,23 @@
   }
 }
 
+.confirmDeleteBookingSite {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+
+  .warning {
+    margin: 15px 0;
+    font-size: 18px;
+  }
+  p {
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: 300;
+  }
+}
+
 .durationSelect {
   display: flex;
   justify-content: space-between;

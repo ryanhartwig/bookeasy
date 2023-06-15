@@ -3,6 +3,7 @@ import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AiOutlineCheck, AiOutlineCopy } from 'react-icons/ai';
+import { BsTrash3 } from 'react-icons/bs';
 import { RxExternalLink } from 'react-icons/rx';
 import { Spinner } from '../UI/Spinner/Spinner';
 import { TextButton } from '../UI/TextButton/TextButton';
