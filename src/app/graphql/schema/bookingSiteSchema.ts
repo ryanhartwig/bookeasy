@@ -23,6 +23,11 @@ export const bookingSiteResolvers = {
 
       return response.rows[0];
     },
+    deleteBookingSite: async (_: any, args: any) => {
+      const { id } = args;
+      const response = await db.query('delete from booking_site where id = $1 returning id', [id]);
+      return response.rows[0].id; 
+    },
   },
 }
 
@@ -40,5 +45,6 @@ export const bookingSiteTypeDefs = `#graphql
 
   type Mutation {
     createBookingSite(business_id: String!, is_own: Boolean!): BookingSite!,
+    deleteBookingSite(id: String!): String!,
   }
 `;

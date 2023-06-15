@@ -21,3 +21,9 @@ export const CREATE_BOOKING_SITE = gql`
     }
   }
 `;
+
+export const DELETE_BOOKING_SITE = gql`
+  mutation($deleteBookingSiteId: String!) {
+    deleteBookingSite(id: $deleteBookingSiteId)
+  }
+`;
