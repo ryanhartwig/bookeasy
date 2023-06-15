@@ -166,6 +166,25 @@
   flex-direction: column;
 }
 
+.live {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+
+  p {
+    margin-left: 5px;
+    color: rgb(48, 186, 10);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: .05em;
+    line-height: 0;
+    
+    &:first-child {
+      font-size: 16px;
+    }
+  }
+}
+
 .Services {
   height: 100%;
   width: 100%;

@@ -89,6 +89,10 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
     <div className={styles.BookingSitePrefs}>
       <div className={styles.header}>
         <p>Booking Site Preferences</p>
+        {bookingSite && <div className={styles.live}>
+          <p>•</p>
+          <p>Live</p>
+        </div>}
       </div>
 
       {

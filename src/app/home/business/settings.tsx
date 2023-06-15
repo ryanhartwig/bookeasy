@@ -24,7 +24,7 @@ interface SettingsProps {
 
 export const Settings: React.FC<SettingsProps> = ({business, clients, user, services, availability, staffId}) => {
 
-  const [tab, setTab] = useState<number>(0);
+  const [tab, setTab] = useState<number>(3);
   const tabs = ['Client List', 'Services', 'Availability', 'Preferences'];
   const tabComponents = [
     <ClientList clients={clients} key={ClientList.name} business={business} />, 
