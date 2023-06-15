@@ -27,7 +27,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const [bookingSite, setBookingSite] = useState<BookingSite>();
   const [loadingBookingSite, setLoadingBookingSite] = useState<boolean>(false);
 
-  const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: business.booking_site_id }, skip: !business.booking_site_id });
+  const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { id: business.booking_site_id }, skip: !business.booking_site_id });
   useEffect(() => bookingSiteData && setBookingSite(bookingSiteData.getBookingSite), [bookingSiteData]);
 
   const [createBookingSite] = useMutation(CREATE_BOOKING_SITE);

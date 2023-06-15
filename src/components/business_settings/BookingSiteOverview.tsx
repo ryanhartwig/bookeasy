@@ -16,7 +16,7 @@ export const BookingSiteOverview: React.FC<BookingSiteOverviewProps> = ({ bookin
   const [bookingSite, setBookingSite] = useState<BookingSite>();
   const [copied, setCopied] = useState(false);
   
-  const { data: bookingSiteData } = useQuery(GET_BOOKING_SITE,  { variables: { bookingSiteId }});
+  const { data: bookingSiteData } = useQuery(GET_BOOKING_SITE,  { variables: { id: bookingSiteId }});
   useEffect(() => bookingSiteData && setBookingSite(bookingSiteData.getBookingSite), [bookingSiteData]);
 
   const url = useMemo(() => bookingSite ? 'http://localhost:3000/book/' + bookingSite.url : '', [bookingSite]); 

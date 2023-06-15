@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_BOOKING_SITE = gql`
-  query($url: String, $bookingSiteId: String) {
-    getBookingSite(url: $url, booking_site_id: $bookingSiteId) {
+  query($url: String, $id: String) {
+    getBookingSite(url: $url, id: $id) {
       id
       business_id
       url
