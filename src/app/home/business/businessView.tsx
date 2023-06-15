@@ -17,7 +17,7 @@ export const BusinessView = () => {
   const [createBusiness] = useMutation(NEW_BUSINESS);
   const [patchUser] = useMutation(PATCH_USER, { refetchQueries: [ GET_USER ]});
   useEffect(() => {
-    if (loadingUserData || userData?.getUser?.business_id) return;
+    if (loadingUserData || !userData || userData?.getUser?.business_id) return;
     const user = userData?.getUser;
 
     ;(async () => {
