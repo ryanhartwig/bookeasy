@@ -6,6 +6,7 @@ export const GET_BOOKING_SITE = gql`
       id
       business_id
       url
+      is_own
     }
   }
 `;

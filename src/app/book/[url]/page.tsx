@@ -122,7 +122,7 @@ export default function Page({params}: { params: any }) {
         <div className={styles.form}>
           <Card className={styles.formCard}>
             {(() => { switch(tab) {
-              case 'Book': return <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails}  />
+              case 'Book': return <Book selected={selected} business={business} loadingData={businessDataLoading} setSelected={setSelected} staff={staff} services={services} setSuccessDetails={setSuccessDetails} skipStaff={!!bookingSiteData.getBookingSite.is_own}  />
               case 'About': return <About business={business} />
             }})()}
           </Card>

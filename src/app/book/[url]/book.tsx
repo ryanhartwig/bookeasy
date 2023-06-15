@@ -20,12 +20,14 @@ interface BookProps {
   services: Service[],
   setSuccessDetails: React.Dispatch<React.SetStateAction<Details | null>>
   loadingData?: boolean,
+  skipStaff?: boolean,
 }
 
-export const Book: React.FC<BookProps> = ({selected, setSelected, business, staff, services, loadingData = false, setSuccessDetails}) => {
-
+export const Book: React.FC<BookProps> = ({selected, setSelected, business, staff, services, loadingData = false, setSuccessDetails, skipStaff}) => {
   const [formTab, setFormTab] = useState(0);
-  useEffect(() => setFormTab(Object.values(selected).filter(v => !!v).length), [selected]);
+  useEffect(() => setFormTab(Object.values(selected)
+    .filter(v => !!v).length + (selected.staff && skipStaff ? -1 : 0)) // subtract selected staff when skipStaff is true
+  , [selected, skipStaff]);
 
   const tabs = useMemo(() => {
     if (!business) return [];
@@ -34,8 +36,20 @@ export const Book: React.FC<BookProps> = ({selected, setSelected, business, staf
     tabs.push(<SelectService key="selectService" services={services} setSelected={setSelected} />)
 
     if (!selected.service) return tabs;
-    const filteredStaff = staff.filter(s => selected.service!.assigned_staff.find(staff => staff.id === s.id));
-    tabs.push(<SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={filteredStaff} />)
+    
+    // If it's a user's own business, select the staff member and skip the tab
+    if (skipStaff) {
+      if (!selected.staff) {
+        setSelected(p => ({
+          ...p,
+          staff: staff[0],
+        }));
+      }
+    } else {
+      const filteredStaff = staff.filter(s => selected.service!.assigned_staff.find(staff => staff.id === s.id));
+      tabs.push(<SelectAgent key="selectAgent" setSelected={setSelected} businessId={business.id} staff={filteredStaff} />)
+    }
+    
 
     if (!selected.staff) return tabs;
     tabs.push(<SelectTime key="selectTime" setSelected={setSelected} business={business} selectedStaff={selected.staff} selectedService={selected.service} />);
@@ -44,12 +58,14 @@ export const Book: React.FC<BookProps> = ({selected, setSelected, business, staf
     tabs.push(<Confirm setSuccessModal={setSuccessDetails} setSelected={setSelected} business={business} selected={selected} key="confirm" />)
 
     return tabs;
-  }, [business, selected, services, setSelected, setSuccessDetails, staff]);
-  
+  }, [business, selected, services, setSelected, setSuccessDetails, skipStaff, staff]);
+
   return (
     <>
       <div className={styles.formProgress}>
-        {['Select a Service', 'Select an Agent', 'Select a Time', 'Confirm Booking'].map((label, i) => 
+        {['Select a Service', 'Select an Agent', 'Select a Time', 'Confirm Booking']
+          .filter(tag => tag === 'Select an Agent' ? !skipStaff : true)
+          .map((label, i) => 
           <div key={label} className={styles.progressLabel}>
             <p key={label} className={clsx({[styles.current]: formTab === i})}>{label}</p>
             {i !== 3 && <hr />}
