@@ -33,7 +33,7 @@ export const Book: React.FC<BookProps> = ({selected, setSelected, business, staf
     if (!business) return [];
     
     const tabs = [];
-    tabs.push(<SelectService key="selectService" services={services} setSelected={setSelected} />)
+    tabs.push(<SelectService key="selectService" services={services} setSelected={setSelected} hideStaff={skipStaff} />)
 
     if (!selected.service) return tabs;
     
