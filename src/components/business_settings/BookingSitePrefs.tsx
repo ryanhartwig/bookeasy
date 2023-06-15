@@ -61,7 +61,13 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
     }
   });
   const [deleteBookingSite] = useMutation(DELETE_BOOKING_SITE, {
-    refetchQueries: [GET_BUSINESS, GET_BUSINESS_WITH_STAFF_ID]
+    refetchQueries: [{
+      query: GET_BUSINESS,
+      variables: { businessId: business.id }
+    }, {
+      query: GET_BUSINESS_WITH_STAFF_ID,
+      variables: { businessId: business.id }
+    }]
   });
 
   // If total is truthy, form has been submitted
@@ -98,6 +104,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
   const onDeleteBookingSite = useCallback(() => {
     ;(async () => {
       await deleteBookingSite({ variables: { id: bookingSite?.id}});
+      setBookingSite(undefined);
     })();
   }, [bookingSite?.id, deleteBookingSite]);
 
