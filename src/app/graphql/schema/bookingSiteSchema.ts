@@ -25,7 +25,8 @@ export const bookingSiteResolvers = {
     },
     deleteBookingSite: async (_: any, args: any) => {
       const { id } = args;
-      const response = await db.query('delete from booking_site where id = $1 returning id', [id]);
+      const response = await db.query('delete from booking_site where id = $1 returning *', [id]);
+      await db.query('update business set booking_site_id = null where id = $1', [response.rows[0].business_id]);
       return response.rows[0].id; 
     },
   },
