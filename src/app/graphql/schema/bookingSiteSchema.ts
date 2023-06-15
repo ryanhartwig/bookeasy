@@ -30,6 +30,7 @@ export const bookingSiteTypeDefs = `#graphql
     id: String!,
     url: String!,
     business_id: String!,
+    is_own: Boolean!,
   }
 
   type Query {

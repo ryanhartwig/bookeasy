@@ -29,7 +29,7 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
 
   const { data: bookingSiteData, loading: loadingBookingSiteData } = useQuery(GET_BOOKING_SITE, { variables: { url: business.booking_site_id }, skip: !business.booking_site_id });
   useEffect(() => bookingSiteData && setBookingSite(bookingSiteData.getBookingSite), [bookingSiteData]);
-  
+
   const [createBookingSite] = useMutation(CREATE_BOOKING_SITE);
   const [updateBusinessPrefs, { data, loading}] = useMutation(UPDATE_BUSINESS_PREFS, {
     refetchQueries: !userBusinessId ? [] : [{
@@ -79,11 +79,11 @@ export const BookingSitePrefs: React.FC<BookingSitePrefsProps> = ({business, use
     setLoadingBookingSite(true);
 
     ;(async () => {
-      const { data: bookingSiteData } = await createBookingSite({ variables: { businessId: business.id }});
+      const { data: bookingSiteData } = await createBookingSite({ variables: { businessId: business.id, isOwn: !!userBusinessId }});
       await updateBusinessPrefs({ variables: { businessId: business.id, patch: { booking_site_id: bookingSiteData.createBookingSite.id }}});
       setLoadingBookingSite(false);
     })();
-  }, [business.id, createBookingSite, updateBusinessPrefs]);
+  }, [business.id, createBookingSite, updateBusinessPrefs, userBusinessId]);
 
   return (
     <div className={styles.BookingSitePrefs}>
