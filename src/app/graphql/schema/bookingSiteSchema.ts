@@ -10,13 +10,13 @@ export const bookingSiteResolvers = {
   },
   Mutation: {
     createBookingSite: async (_: any, args: any) => {
-      const { business_id } = args;
+      const { business_id, is_own } = args;
       const id = generateRandomUUID();
       
       const response = await db.query(`
-        insert into booking_site (id, url, business_id) 
-        values ($1, $2, $3) returning *
-      `, [id, id, business_id]);
+        insert into booking_site (id, url, business_id, is_own) 
+        values ($1, $2, $3, $4) returning *
+      `, [id, id, business_id, is_own]);
 
       await db.query('update business set booking_site_id = $1 where id = $2', [id, business_id]);
 
@@ -37,6 +37,6 @@ export const bookingSiteTypeDefs = `#graphql
   }
 
   type Mutation {
-    createBookingSite(business_id: String!): BookingSite!,
+    createBookingSite(business_id: String!, is_own: Boolean!): BookingSite!,
   }
 `;

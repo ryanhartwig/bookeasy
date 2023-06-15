@@ -12,10 +12,11 @@ export const GET_BOOKING_SITE = gql`
 
 export const CREATE_BOOKING_SITE = gql`
   mutation($businessId: String!) {
-    createBookingSite(business_id: $businessId) {
+    createBookingSite(business_id: $businessId, is_own: $isOwn) {
       business_id
       id
       url
+      is_own
     }
   }
 `;
