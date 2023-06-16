@@ -221,6 +221,17 @@
   font-weight: 300;
   font-size: 18px;
 
+  svg {
+    &:focus {
+      border: none;
+      outline: none;
+    }
+    &:focus-visible {
+      outline: 2px solid var(--font-utility);
+      border-radius: 5px;
+    }
+  }
+
   > *:not(p) {
     cursor: pointer;
     color: grey;
@@ -282,6 +293,15 @@
     cursor: pointer;
 
     margin: 0 15px;
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
+    &:focus-visible {
+      outline: 2px solid var(--font-utility);
+      border-radius: 5px;
+    }
 
     &:hover { 
       opacity: 1;
