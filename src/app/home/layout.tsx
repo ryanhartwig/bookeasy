@@ -8,7 +8,6 @@ import { LoadingSplash } from '@/components/UI/LoadingSplash/LoadingSplash';
 
 import styles from './layout.module.scss';
 
-
 export default async function Layout({children}: { children: React.ReactNode}) {
   const session = await getServerSession(authOptions);
   if (!session) {
