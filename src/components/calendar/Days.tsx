@@ -45,7 +45,7 @@ export const Days: React.FC<DaysProps> = ({date, viewing, selected, onSelect, ap
       }
       
       return <Day 
-        key={`${i}-${d.getDate}`} 
+        key={`${i}-${start}`} 
         selected={selected} 
         onSelect={onSelect} 
         appointments={appointments.filter(app => app.start_date >= start && app.start_date <= end)}

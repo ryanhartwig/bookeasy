@@ -293,7 +293,7 @@ export const AppointmentForm: React.FC<AppointmentFormProps> = ({open, setOpen, 
   const clientsList = useMemo(() => clientsData?.getBusinessClients 
     ? clientsData.getBusinessClients
         .map((c: FormClient) => (
-          <div key={c.name} className={styles.option} onClick={() => setSelectedClient(c)}>
+          <div key={c.id} className={styles.option} onClick={() => setSelectedClient(c)}>
             <Avatar src={c.avatar} size={28} />
             <p>{c.name}</p>
           </div>

@@ -28,7 +28,7 @@ export const ServicesList: React.FC<ServicesListProps> = ({business, setSelected
       {services.length ? services
         .filter(s => !s.deleted)
         .map(s => 
-      <div key={s.id}>
+      <div key={'slist' + s.id}>
         <ServiceCard service={s} onClick={() => setSelectedService(s)} />
       </div>
       )

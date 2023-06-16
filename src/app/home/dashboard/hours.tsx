@@ -66,7 +66,7 @@ export const Hours: React.FC<HoursProps> = ({day, appointments, setEditAppointme
       const color = appointment?.service.color;
 
       return (
-        <div key={i} className={styles.block} style={{borderBottomColor}}>
+        <div key={`day-hours-${day}-${i}`} className={styles.block} style={{borderBottomColor}}>
           {covered && <div className={styles.cover} />}
           {isHour && <p>{hour12} {period}</p>}
           {appointment && 

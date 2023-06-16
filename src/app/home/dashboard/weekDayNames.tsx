@@ -15,7 +15,7 @@ export const WeekDayNames = () => {
           ? '#216FDB'
           : 'inherit';
         
-        return <div key={i}>
+        return <div key={`day-${i}`}>
           <p style={{color}}>{day}</p>
           <p style={{color}}>{month} {date}</p>
         </div>

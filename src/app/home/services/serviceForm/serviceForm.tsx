@@ -208,7 +208,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
   }, [deleteService, initialService?.id, reset]);
 
   const businessesList = useMemo(() => businesses.map(b => (
-    <div key={b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
+    <div key={'blist' + b.id} className={styles.option} onClick={() => {setSelectedBusiness(b)}}>
       <p>{b.name}</p>
     </div>
   )), [businesses]);

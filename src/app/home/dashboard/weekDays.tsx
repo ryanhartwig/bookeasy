@@ -77,7 +77,7 @@ export const WeekDays = () => {
           date.setDate(date.getDate() + i);
           const thisDayApps = appointments.filter((app) => inRange(getISODayRange(date), app.start_date));
 
-          return <Hours key={i} day={i} availability={availabilityMap?.get(i) || []} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
+          return <Hours key={`hours-${i}`} day={i} availability={availabilityMap?.get(i) || []} appointments={thisDayApps} setEditAppointment={setEditAppointment} />
         })}
       </div>
 

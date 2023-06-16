@@ -43,7 +43,7 @@ export const BusinessesList: React.FC<BusinessesListProps> = ({userId}) => {
   return (
     <>
       {businesses.map(b => (  
-        <ServicesList key={b.id} business={b} setSelectedService={setSelectedService} />
+        <ServicesList key={'service-list' + b.id} business={b} setSelectedService={setSelectedService} />
       ))}
       {loading && 
         <div className={styles.services_wrapper}>
