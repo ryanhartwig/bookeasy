@@ -57,13 +57,13 @@ export default function Loading() {
             {/* Calendar Days */}
             <div className='Calendar-fields-wrapper noselect'>
               <div className={styles.skeletonCalendar}>
-                {new Array(6).fill(
-                  <div className={styles.skeletonCalendarWeek}>
-                    {new Array(7).fill(
-                      <div className={styles.skeletonCalendarDay} />
-                    )}
+                {new Array(6).fill(true).map((i) => (
+                  <div key={'weeks' + i} className={styles.skeletonCalendarWeek}>
+                    {new Array(7).fill(true).map((i) => (
+                      <div key={'days' + i} className={styles.skeletonCalendarDay} />
+                    ))}
                   </div>
-                )}
+                ))}
               </div>
             </div>
           </div>
