@@ -338,7 +338,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({open, setOpen, userId, 
       </div>
       <hr />
       {error && <p className={styles.warning}>{error}</p>}
-      {!!initialService && <div className={styles.delete} onClick={() => setConfirmDelete(true)}>
+      {!!initialService && <div tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()} className={styles.delete} onClick={() => setConfirmDelete(true)}>
         <BsTrash3 />
         <p>Remove</p>
       </div>}
