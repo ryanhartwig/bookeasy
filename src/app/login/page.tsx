@@ -2,7 +2,7 @@
 
 import { Spinner } from "@/components/UI/Spinner/Spinner";
 import { useSession } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect, useRouter ,useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Login } from "./Login";
 import Register from "./register";
@@ -14,15 +14,13 @@ export default function Page() {
   const redirectId = params?.get('redirect_id');
   const callbackUrl = useMemo(() => `/home/dashboard${redirectId ? `?redirect_id=${redirectId}` : ''}`, [redirectId]);
 
+  const redirect = useRouter();
   const { data: session, status } = useSession();
   if (session) {
-    redirect(callbackUrl);
+    redirect.push(callbackUrl);
   }
 
-  if (status === 'loading') {
-    return <Spinner />
-  }
-
+  if (status === 'loading') return <Spinner />;
   return (
     <>
       {login
@@ -30,5 +28,5 @@ export default function Page() {
         : <Register onNavigate={() => setLogin(true)} callbackUrl={callbackUrl} />
       }
     </>
-  )
+  );
 }

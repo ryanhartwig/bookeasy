@@ -3,7 +3,6 @@ import { isValidEmail } from "@/utility/functions/validation/isValidEmail";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER_WITH_CREDENTIALS } from "@/utility/queries/userQueries";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import styles from './login.module.scss';
 import zxcvbn from "zxcvbn";
 import { Button } from "@/components/UI/Button/Button";
@@ -35,8 +34,6 @@ interface RegisterProps {
 }
 
 export default function Register({onNavigate, callbackUrl}: RegisterProps) {
-  const redirect = useRouter();
-  
   const [loadingElement, setLoadingElement] = useState<string>('');
   const [responseError, setResponseError] = useState<string>('');
   
@@ -105,7 +102,6 @@ export default function Register({onNavigate, callbackUrl}: RegisterProps) {
   const [registerUser, { reset }] = useMutation(REGISTER_USER_WITH_CREDENTIALS);
 
   const resetAll = useCallback(() => {
-    setFormData({name: '', email: '', password: '', confirmPassword: ''});
     setLoadingElement('');
     reset();
   }, [reset]);
@@ -119,9 +115,7 @@ export default function Register({onNavigate, callbackUrl}: RegisterProps) {
         valid = false;
       }
     });
-    if (!valid) {
-      return;
-    }
+    if (!valid) return;
 
     setLoadingElement('create');
 
@@ -141,17 +135,18 @@ export default function Register({onNavigate, callbackUrl}: RegisterProps) {
         if (!response || response.error) {
           return resetAll();
         };
-        
-        redirect.push(callbackUrl);
       } catch(e: any) {  
         if (e.message.includes('e:USER_EXISTS')) {
           setResponseError('A user already exists with the specified email.');
+        } else {
+          setResponseError('Something went wrong. Please try again.')
         }
         resetAll();
       }
     })();
   };
 
+  // password strength state and stages colors
   const [showStrength, setShowStrength] = useState<boolean>(false);
   const stages = ['grey', 'grey', 'rgb(205, 175, 109)', 'rgb(109, 205, 155)', 'rgb(205, 109, 189)'];
   
