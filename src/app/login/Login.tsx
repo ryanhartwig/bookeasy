@@ -58,13 +58,13 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
           }} 
           icon={<Image src={Google} alt="Google logo" />}
         >Log in with Google</Button>
-        <Button loading={loadingElement === 'facebook'}
+        {/* <Button loading={loadingElement === 'facebook'}
           onClick={() => {
             setLoadingElement('facebook')
             signIn('facebook', { callbackUrl });
           }} 
           icon={<Image src={Facebook} alt="Facebook logo" />}
-        >Log in with Facebook</Button>
+        >Log in with Facebook</Button> */}
         
         <div className={styles.divider}>
           <hr />

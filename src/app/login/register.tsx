@@ -161,13 +161,13 @@ export default function Register({onNavigate, callbackUrl}: RegisterProps) {
           }}  
           icon={<Image src={Google} alt="Google logo" />}
         >Sign up with Google</Button>
-        <Button loading={loadingElement === 'facebook'}
+        {/* <Button loading={loadingElement === 'facebook'}
           onClick={() => {
             setLoadingElement('facebook');
             signIn('facebook', { callbackUrl });
           }} 
           icon={<Image src={Facebook} alt="Facebook logo" />}
-        >Sign up with Facebook</Button>
+        >Sign up with Facebook</Button> */}
         
         <div className={styles.divider}><hr/><p>or</p><hr/></div>
 

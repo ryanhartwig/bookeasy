@@ -35,7 +35,7 @@ export const Login: React.FC<LoginProps> = ({url}) => {
         style={{borderRadius: 30, padding: 12}}
         icon={<Image src={Google} alt="Google logo" />}
       >Log in with Google</Button>
-      <Button className={styles.loginButton}
+      {/* <Button className={styles.loginButton}
         loading={loadingElement === 'facebook'}
         onClick={() => {
           setLoadingElement('facebook')
@@ -44,7 +44,7 @@ export const Login: React.FC<LoginProps> = ({url}) => {
         light
         style={{borderRadius: 30, padding: 12}}
         icon={<Image src={Facebook} alt="Facebook logo" />}
-      >Log in with Facebook</Button>
+      >Log in with Facebook</Button> */}
 
       <div className={styles.logo}>
         <Image className='Navigator_logo_icon' priority src={bookit.default} alt="Book it logo" />
