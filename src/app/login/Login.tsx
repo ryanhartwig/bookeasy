@@ -27,7 +27,7 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
   const [error, setError] = useState<string>('');
   const [loadingElement, setLoadingElement] = useState<string>('');
 
-  const redirect = useRouter()
+  // const redirect = useRouter()
 
   const onSubmit = useCallback(() => {
     setError('');
@@ -47,11 +47,11 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
         setError('Invalid credentials');
         setLoadingElement('');
       }
-      else if (response.url) {
-        redirect.push(callbackUrl);
-      }
+      // else if (response.url) {
+      //   redirect.push(callbackUrl);
+      // }
     })();
-  }, [callbackUrl, email, password, redirect]);
+  }, [email, password]);
 
   return (
     <>

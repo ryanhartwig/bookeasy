@@ -6,6 +6,6 @@ const poolInstance = new Pool({
   database: process.env.PG_DB,
   password: process.env.PG_PASS || '',
   port: Number(process.env.PG_PORT),
-});      
+});
 
 export default poolInstance;
