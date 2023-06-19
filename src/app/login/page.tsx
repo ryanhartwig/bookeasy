@@ -15,7 +15,8 @@ export default function Page() {
   const callbackUrl = useMemo(() => `/home/dashboard${redirectId ? `?redirect_id=${redirectId}` : ''}`, [redirectId]);
 
   console.log(process.env.NODE_ENV);
-
+  console.log(process.env.VERCEL);
+  
   const { data: session, status } = useSession();
   if (session) {
     redirect(callbackUrl);
