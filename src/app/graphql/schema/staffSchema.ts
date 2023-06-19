@@ -125,7 +125,7 @@ export const staffResolvers = {
         from: 'noreply.bookeasy@gmail.com',
         to: email,
         subject: `You've received an invitation to join ${team_name}!`,
-        html: generateTeamInviteHTML(`${getBaseUrl()}/login?redirect_id=${pending_registration_id}`)
+        html: generateTeamInviteHTML(`https://bookeasy.vercel.app/login?redirect_id=${pending_registration_id}`)
       });
       
       return response.rows[0];
