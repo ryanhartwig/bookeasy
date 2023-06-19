@@ -2,6 +2,7 @@ import db from "@/utility/db";
 import uuid from "react-uuid";
 import nodemailer from 'nodemailer';
 import { generateTeamInviteHTML } from "./emailHTML/generateTeamInviteHTML";
+import { getBaseUrl } from "@/utility/functions/misc/getBaseUrl";
 
 export const staffResolvers = {
   Query: {
@@ -124,7 +125,7 @@ export const staffResolvers = {
         from: 'noreply.bookeasy@gmail.com',
         to: email,
         subject: `You've received an invitation to join ${team_name}!`,
-        html: generateTeamInviteHTML(`http://localhost:3000/login?redirect_id=${pending_registration_id}`)
+        html: generateTeamInviteHTML(`${getBaseUrl()}/login?redirect_id=${pending_registration_id}`)
       });
       
       return response.rows[0];

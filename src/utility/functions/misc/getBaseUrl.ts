@@ -1,3 +1,3 @@
-export const getBaseUrl = () => process.env.VERCEL
+export const getBaseUrl = () => !!process.env.VERCEL
   ? "https://bookeasy.vercel.app"
-  : "http://localhost:3000"
+  : "http://localhost:3000";

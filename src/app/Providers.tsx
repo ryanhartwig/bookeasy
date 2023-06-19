@@ -7,6 +7,7 @@ import { BUSINESS_CLIENT_FRAGMENT } from "@/utility/queries/fragments/clientFrag
 import { SERVICE_FRAGMENT } from "@/utility/queries/fragments/serviceFragments";
 import { SessionProvider, useSession } from 'next-auth/react';
 import { BUSINESS_FRAGMENT } from "@/utility/queries/fragments/businessFragments";
+import { getBaseUrl } from "@/utility/functions/misc/getBaseUrl";
 
 const UserContext = createContext<{id: string}>({ id: '' })
 
@@ -24,7 +25,7 @@ export const useUser = () => useContext(UserContext);
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
 	const client = new ApolloClient({
-		uri: "http://localhost:3000/graphql",
+		uri: getBaseUrl() + '/graphql',
 		cache: new InMemoryCache({
 			fragments: createFragmentRegistry(gql`
 				${APPOINTMENT_DATA_FRAGMENT}

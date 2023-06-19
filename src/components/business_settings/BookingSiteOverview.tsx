@@ -1,4 +1,5 @@
 import { BookingSite } from '@/types/BookingSite';
+import { getBaseUrl } from '@/utility/functions/misc/getBaseUrl';
 import { GET_BOOKING_SITE } from '@/utility/queries/bookingSiteQueries';
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -20,7 +21,7 @@ export const BookingSiteOverview: React.FC<BookingSiteOverviewProps> = ({ bookin
   const { data: bookingSiteData } = useQuery(GET_BOOKING_SITE,  { variables: { id: bookingSiteId }});
   useEffect(() => bookingSiteData && setBookingSite(bookingSiteData.getBookingSite), [bookingSiteData]);
 
-  const url = useMemo(() => bookingSite ? 'http://localhost:3000/book/' + bookingSite.url : '', [bookingSite]); 
+  const url = useMemo(() => bookingSite ? getBaseUrl() + '/book/' + bookingSite.url : '', [bookingSite]); 
   const onCopyLink = useCallback(() => {
     ;(async () => {
       await navigator.clipboard.writeText(url);
