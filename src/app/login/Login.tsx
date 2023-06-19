@@ -1,6 +1,5 @@
 import { Input } from "@/components/UI/Input/Input"
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react"
 import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
@@ -27,8 +26,6 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
   const [error, setError] = useState<string>('');
   const [loadingElement, setLoadingElement] = useState<string>('');
 
-  const redirect = useRouter()
-
   const onSubmit = useCallback(() => {
     setError('');
     if (!email || !password || !isValidEmail(email)) {
@@ -47,11 +44,8 @@ export const Login: React.FC<LoginProps> = ({onNavigate, callbackUrl}) => {
         setError('Invalid credentials');
         setLoadingElement('');
       }
-      else if (response.url) {
-        redirect.push(callbackUrl);
-      }
     })();
-  }, [callbackUrl, email, password, redirect]);
+  }, [email, password]);
 
   return (
     <>
