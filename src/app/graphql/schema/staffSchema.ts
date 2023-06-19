@@ -2,7 +2,6 @@ import db from "@/utility/db";
 import uuid from "react-uuid";
 import nodemailer from 'nodemailer';
 import { generateTeamInviteHTML } from "./emailHTML/generateTeamInviteHTML";
-import { getBaseUrl } from "@/utility/functions/misc/getBaseUrl";
 
 export const staffResolvers = {
   Query: {
