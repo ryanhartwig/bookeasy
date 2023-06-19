@@ -12,7 +12,7 @@ const UserContext = createContext<{id: string}>({ id: '' })
 
 const UserProvider = ({children}: { children: React.ReactNode}) => {
 	const { data: session } = useSession();
-
+ 
 	return (
 		<UserContext.Provider value={{ id: session?.user.id || ''}}>
 			{children}
