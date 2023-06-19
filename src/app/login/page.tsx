@@ -16,6 +16,7 @@ export default function Page() {
 
   console.log(process.env.NODE_ENV);
   console.log(process.env.VERCEL);
+  console.log('user fro mclient: ', process.env.USER);
   
   const { data: session, status } = useSession();
   if (session) {
