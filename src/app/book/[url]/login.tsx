@@ -7,7 +7,6 @@ import Google from '@/assets/google.png';
 import Facebook from '@/assets/facebook.png';
 import * as bookit from '@/assets/logo_temp.svg';
 import { LoadingSplash } from '@/components/UI/LoadingSplash/LoadingSplash';
-import { getBaseUrl } from '@/utility/functions/misc/getBaseUrl';
 
 interface LoginProps {
   url: string
@@ -15,7 +14,7 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({url}) => {
   const [loadingElement, setLoadingElement] = useState<string>('');
-  const callbackUrl = `${getBaseUrl()}/book/${url}`;
+  const callbackUrl = `http://localhost:3000/book/${url}`;
   
   return (
   <div className={styles.background}>
